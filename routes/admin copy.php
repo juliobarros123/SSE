@@ -200,8 +200,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     //=============Matricula-Start=====================//
-    Route::get('Admin/pesquisarMatriculados', ['as' => 'admin.pesquisarMatriculados.pesquisar', 'uses' => 'Admin\MatriculaController@pesquisar']);
-    Route::post('Admin/recebeMatriculados', ['as' => 'admin.recebeMatriculados', 'uses' => 'Admin\MatriculaController@recebeMatriculados']);
+    Route::get('Admin/pesquisarMatriculados', ['as' => 'admin.matriculas.pesquisar', 'uses' => 'Admin\MatriculaController@pesquisar']);
+    Route::post('Admin/matriculados', ['as' => 'admin.matriculados', 'uses' => 'Admin\MatriculaController@matriculados']);
 
     Route::get('Admin/matriculas/listar/{anoLectivo}/{curso}/{vc_classe}', ['as' => 'admin.matriculas', 'uses' => 'Admin\MatriculaController@index']);
     Route::post('Admin/matriculas/salvar', ['as' => 'admin.matriculas.salvar', 'uses' => 'Admin\MatriculaController@salvar']);
@@ -276,7 +276,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('admin/alunos/{id}transferir', ['as' => 'admin.alunos.transferir', 'uses' => 'Admin\AlunnoController@transferir']);
     Route::get('admin/alunos/pesquisar', ['as' => 'admin.alunos.pesquisar', 'uses' => 'Admin\AlunnoController@pesquisar']);
-    Route::post('admin/alunos/recebealunos', ['as' => 'admin.alunos.recebealunos', 'uses' => 'Admin\AlunnoController@recebealunos']);
+    Route::post('admin/alunos/lista', ['as' => 'admin.alunos.lista', 'uses' => 'Admin\AlunnoController@lista']);
     Route::get('admin/alunos/listar/{anolectivo}/{curso}', ['as' => 'admin.alunos.listar', 'uses' => 'Admin\AlunnoController@listarAlunos']);
     Route::get('admin/aluno/pulgar/{id}', ['as' => 'admin.aluno.pulgar', 'uses' => 'Admin\AlunnoController@pulgar'])->middleware('access.controll.administrador');
 
@@ -373,7 +373,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Turmas
     Route::get('turmas/pesquisar', ['as' => 'admin.turmas.pesquisar', 'uses' => 'Admin\TurmaController@pesquisar']); //->middleware('access.controll.preparador');
-    Route::post('turmas/recebeturma', ['as' => 'admin.turmas.recebeturma', 'uses' => 'Admin\TurmaController@recebeturma']); //->middleware('access.controll.preparador');
+    Route::post('turmas/ver', ['as' => 'admin.turmas.ver', 'uses' => 'Admin\TurmaController@ver']); //->middleware('access.controll.preparador');
 
   //sddd
 
@@ -381,8 +381,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/{id}/professor', ['as' => 'turmas.professor', 'uses' => 'Admin\TurmaController@turmasProfessor']);
 
-        Route::get('/cadastrarTurmas', ['as' => 'turmas.cadastrarTurmas', 'uses' => 'Admin\TurmaController@cadastrarTurmas'])->name('turmas.cadastrarTurmas');
-        Route::post('/efectuarCadastroDaTurmas', ['as' => 'turmas.efectuarCadastroDaTurma', 'uses' => 'Admin\TurmaController@efectuarCadastroDaTurma']);
+        Route::get('/cadastrar', ['as' => 'turmas.cadastrar', 'uses' => 'Admin\TurmaController@cadastrar'])->name('turmas.cadastrar');
+        Route::post('/inserir', ['as' => 'turmas.efectuarCadastroDaTurma', 'uses' => 'Admin\TurmaController@efectuarCadastroDaTurma']);
         Route::get('/listarTurmas/{anolectivo}/{curso}', ['as' => 'admin.viewListarTurmas', 'uses' => 'Admin\TurmaController@listarTurmas']);
 
         Route::get('/{id}/editarTurmas', ['as' => 'turmas.editarTurmas', 'uses' => 'Admin\TurmaController@editarTurmas'])->middleware('access.controll.administrador');
@@ -412,7 +412,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Direitor de Turma
     Route::group(['prefix' => 'direitor-turma'], function () {
 
-        Route::get('/cadastrarDireitor', ['as' => 'turma.cadastrarDireitor', 'uses' => 'Admin\DireitorTurmaController@cadastrarDireitor'])->name('turmas.cadastrarTurmas');
+        Route::get('/cadastrarDireitor', ['as' => 'turma.cadastrarDireitor', 'uses' => 'Admin\DireitorTurmaController@cadastrarDireitor'])->name('turmas.cadastrar');
         Route::post('/efectuarCadastroDireitor', ['as' => 'turmas.efectuarCadastroDireitor', 'uses' => 'Admin\DireitorTurmaController@efectuarCadastroDireitor']);
         Route::get('/listarDireitores', ['as' => 'admin.viewListarDireitores', 'uses' => 'Admin\DireitorTurmaController@listarDireitores']);
 

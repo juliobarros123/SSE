@@ -1,5 +1,5 @@
 <div class="form-group col-md-3">
-    <label class="form-label" for="vc_nomedaTurma">Nome da turma:</label>
+    <label class="form-label" for="vc_nomedaTurma">Turma:</label>
     <input class="form-control border-secondary" name="vc_nomedaTurma" id="vc_nomedaTurma" type="text"
         value="{{ isset($turma) ? $turma->vc_nomedaTurma : '' }}" autocomplete="off"
         placeholder="Digita o nome da turma">
@@ -7,7 +7,7 @@
 
 
 <div class="form-group col-md-3">
-    <label class="form-label" for="vc_classeTurma">Classe da Turma</label>
+    <label class="form-label" for="vc_classeTurma">Classe:</label>
     <select class="form-control buscarClasse" name="vc_classeTurma" id="vc_classeTurma" required>
 
         <option value="{{ isset($turma) ? $turma->it_idClasse : '' }}" selected>
@@ -19,7 +19,7 @@
     </select>
 </div>
 <div class="form-group col-md-3">
-    <label class="form-label" for="vc_turnoTurma">Turno da Turma</label>
+    <label class="form-label" for="vc_turnoTurma">Turno:</label>
     <select class="form-control " name="vc_turnoTurma" id="vc_turnoTurma" required>
         @if (isset($turma))
             <option selected class="text-primary" value="{{ $turma->vc_turnoTurma }}">{{ $turma->vc_turnoTurma }}
@@ -37,7 +37,7 @@
 </div>
 
 <div class="form-group col-md-3">
-    <label class="form-label" for="vc_salaTurma">Sala da Turma</label>
+    <label class="form-label" for="vc_salaTurma">Sala:</label>
     <input class="form-control border-secondary" name="vc_salaTurma" id="vc_salaTurma" type="text"
     value="{{ isset($turma) ? $turma->vc_salaTurma : '' }}" autocomplete="off"
     placeholder="Digita a sala da turma">

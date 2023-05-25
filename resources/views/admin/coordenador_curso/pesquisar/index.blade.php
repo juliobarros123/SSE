@@ -13,7 +13,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('admin.turmas.recebeturma') }}" class="row" method="POST">
+            <form action="{{ route('admin.turmas.ver') }}" class="row" method="POST">
                 @csrf
                 <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>

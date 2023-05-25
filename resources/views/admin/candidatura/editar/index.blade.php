@@ -23,14 +23,13 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="POST" action="{{ url("candidatos/$candidato->id/update") }}" accept-charset="UTF-8" class="row">
+            <form method="POST" action="{{ url("candidatos/$candidato->slug/update") }}" accept-charset="UTF-8" class="row">
                 @method('PUT')
                 @csrf
-                @include('forms._formCandidato.index')
-                <div class="form-group col-md-12 text-center">
-                    <label for="" class="text-white form-label">.</label>
-                    <button type="submit" class="form-control mt-2 col-3 btn btn-success"><i
-                            class="fas fa-fw fa-check-circle"></i> Salvar Alterações</button>
+                @include('site.forms._formCandidatura.index')
+                <div class="form-group col-sm-12 d-flex justify-content-center">
+                       
+                    <button class="form-control btn btn-dark w-25">Editar</button>
                 </div>
             </form>
         </div>

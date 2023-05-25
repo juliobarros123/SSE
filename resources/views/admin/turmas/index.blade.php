@@ -14,9 +14,7 @@
             Auth::user()->vc_tipoUtilizador == 'Preparador')
         <div class="d-flex justify-content-end mb-3">
 
-            <a class="btn btn-dark ml-1" href="{{ route('turmas.eliminadas') }}">
-                <strong class="text-light">Eliminadas</strong>
-            </a>
+         
         </div>
     @endif
 
@@ -49,28 +47,19 @@
                 <tr class="text-center">
                     <td>{{ $row->id_turma ? $row->id_turma : $row->id }}</td>
                     <td>{{ $row->vc_nomedaTurma }}</td>
-                    <td>{{ $row->vc_classeTurma }}ª</td>
+                    <td>{{ $row->vc_classe }}ª Classe</td>
                     @if (Auth::user()->vc_tipoUtilizador == 'Professor')
                         <td>{{ $row->vc_nome }}</td>
                     @endif
 
                     <td>
-                        @if ($row->vc_turnoTurma == 'DIURNO')
-                            <b class="bg-warning">DIURNO</b>
-                        @elseif($row->vc_turnoTurma == 'NOITE')
-                            <b class="bg-dark">NOITE</b>
-                        @elseif($row->vc_turnoTurma == 'MANHÃ')
-                            <b class="bg-info">MANHÃ</b>
-                        @elseif($row->vc_turnoTurma == 'TARDE')
-                            <b class="bg-primary">TARDE</b>
-                        @elseif($row->vc_turnoTurma == 'Sabática')
-                            <b class="bg-secondary">Sabática</b>
-                        @else
-                            <b>{{ $row->vc_turnoTurma }}</b>
-                        @endif
+                      
+                        {{ $row->vc_turnoTurma }}
+                       
                     </td>
+                    {{-- @dump($row) --}}
                     <td>{{ $row->vc_salaTurma }}</td>
-                    <td class="text-left">{{ $row->vc_cursoTurma }}</td>
+                    <td class="text-left">{{ $row->vc_nomeCurso }}</td>
                     <td>{{ $row->it_qtdeAlunos - $row->it_qtMatriculados }}</td>
                     <td>{{ $row->it_qtMatriculados }}</td>
                     <td>{{ $row->it_qtdeAlunos }}</td>
@@ -103,7 +92,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                                     <a href="{{ route('turmas.gerarlistaTurmas', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                        class="dropdown-item" target="_blank">Listas</a>
+                                        class="dropdown-item" target="_blank">Alunos</a>
                                     <a href="{{ route('turmas.listaTurmas.xlsx', $row->id) }}" class="dropdown-item"
                                         target="_blank">Listas xls</a>
 
@@ -130,9 +119,7 @@
                                         <a href="{{ route('turmas.deletarTurmas', ['id' => $row->id_turma ? $row->id_turma : $row->id]) }}"
                                             class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
-                                        <a href="{{ route('turmas.purgar', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                            class="dropdown-item "
-                                            data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
+                                
                                     @endif
                                 </div>
                             @endif

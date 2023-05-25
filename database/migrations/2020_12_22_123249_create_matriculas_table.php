@@ -16,8 +16,8 @@ class CreateMatriculasTable extends Migration
         Schema::create('matriculas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('it_idTurma');
-            $table->string('vc_imagem');
-            $table->foreign('it_idTurma')->references('id')->on('turmas')->onDelete('cascade');
+    
+            $table->foreign('it_idTurma')->references('id')->on('turmas')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->foreignId('id_aluno')->constrained('alunnos')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
            

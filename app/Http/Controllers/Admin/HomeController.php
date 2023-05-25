@@ -52,7 +52,7 @@ class HomeController extends Controller
         //  dd(consultarRupePreCandidato_v3(13331780226));
         // $s=consultarRupe(22);
         // dd(isset($s["idOrigem"]));
-        $response['cabecalho'] = Cabecalho::orderby('id', 'desc')->first();
+        $response['cabecalho'] =fh_cabecalho()->get();
         $anolectivo = fh_ultimo_ano_lectivo();
         if ($anolectivo) {
             $response['ano_lectivo'] = AnoLectivoPublicado::find(1);
@@ -62,15 +62,15 @@ class HomeController extends Controller
 
 
 
-            $response['selecionados'] = Candidato2::where([['it_estado_aluno', 1], ['vc_anoLectivo', $data]])->count();
-            $response['candidaturas'] = Candidatura::where([['it_estado_candidato', 1], ['vc_anoLectivo', $data]])->count();
+            
+            $response['candidaturas'] = fh_candidatos()->where('candidatos.id_ano_lectivo',$response['ano_lectivo']->id_anoLectivo)->count() ;
             $response['matriculas'] = Matricula::count();
             $response['idadedecandidatura'] = 0;
 
 
             /* Gráficos */
             $response['Anosgraficos'] = AnoLectivo::orderby('id', 'asc')->get();
-            $response['Cursosgraficos'] = Candidatura::where('it_estado_candidato', 1)->orderBy('vc_nomeCurso', 'asc')->groupby('vc_nomeCurso')->get('vc_nomeCurso');
+            $response['Cursosgraficos'] = 0;
 
             /* ./Gráficos */
 

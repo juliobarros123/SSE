@@ -12,10 +12,10 @@
                         <h3>Lista de Candidatos</h3>
                     </div>
                     <!-- <div class="col-md-2">
-                            <a type="submit" href="{{ route('admin.candidatos-api.create') }}"
-                                class="btn btn-primary">Atualizar</a>
+                                                <a type="submit" href="{{ route('admin.candidatos-api.create') }}"
+                                                    class="btn btn-primary">Atualizar</a>
 
-                            </div>-->
+                                                </div>-->
                 </div>
 
 
@@ -27,130 +27,111 @@
             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
             Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
             Auth::user()->vc_tipoUtilizador == 'Preparador')
-        <div class="d-flex justify-content-end mb-3">
+        {{-- <div class="d-flex justify-content-end mb-3">
 
             <a class="btn btn-dark ml-1" href="{{ route('admin.candidatos.eliminadas') }}">
                 <strong class="text-light">Eliminados</strong>
             </a>
 
 
-        </div>
+        </div> --}}
     @endif
 
 
 
 
-   <div class="table-responsive">
-    <table id="example" class="display table table-hover">
-           <thead class="">
-            <tr class="text-center">
-                <th>INSCRIÇÃO Nº</th>
-                <th>NOME COMPLETO</th>
-                <th>BILHETE DE IDENTIDADE</th>
-                @if (Auth::user()->vc_tipoUtilizador != 'Comissão')
+    <div class="table-responsive">
+        <table id="example" class="display table table-hover">
+            <thead class="">
+                <tr class="text-center">
+                    <th>INSCRIÇÃO Nº</th>
+                    <th>NOME COMPLETO</th>
+                    <th>B.I/CÉDULA</th>
+                    <th>E-MAIL</th>
                     <th>IDADE</th>
-                @endif
-                <th>CURSO</th>
-                <th>VEZES CANDIDATADO</th>
-                <th>DATA DE CANDIDATURA</th>
-                <th>GÊNERO</th>
-                @if (Auth::user()->vc_tipoUtilizador != 'Comissão')
+                    <th>CURSO</th>
+                    <th>CLASSE</th>
+                    <th>DT. CANDIDATURA</th>
+                    <th>GÊNERO</th>
                     <th>MÉDIA</th>
-                @endif
-                <th>TELEFONE</th>
-                <th>ESTADO</th>
-                <th>ACÇÕES</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white">
-            <?php foreach ($candidatos as $candidato):?>
-            <tr class="text-center">
-                <td>{{ $candidato->id }}</td>
-                <td class="text-left">
-                    {{ $candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido }}
-                </td>
-                <td>{{ $candidato->vc_bi }}</td>
-                @if (Auth::user()->vc_tipoUtilizador != 'Comissão')
-                    <td>{{ date('Y') - date('Y', strtotime($candidato->dt_dataNascimento)) }} anos</td>
-                @endif
-                <td>{{ $candidato->vc_nomeCurso }}</td>
-                <td>{{ $candidato->vc_vezesdCandidatura }}</td>
-                <td>{{ date('d-m-Y', strtotime($candidato->created_at)) }}</td>
-                <td>{{ $candidato->vc_genero }}</td>
-                @if (Auth::user()->vc_tipoUtilizador != 'Comissão')
+                    <th>TELEFONE</th>
+                    <th>ESTADO</th>
+                    <th>ACÇÕES</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+
+                <?php foreach ($candidatos as $candidato):?>
+
+                <tr class="text-center">
+                    <td>{{ $candidato->id }}</td>
+                    <td class="text-left">
+                        {{ $candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido }}
+                    </td>
+                    <td>{{ $candidato->vc_bi }}</td>
+                    <td>{{ $candidato->vc_email }}</td>
+                    <td>{{ calcularIdade($candidato->dt_dataNascimento) }} anos</td>
+
+                    <td>{{ $candidato->vc_nomeCurso }}</td>
+                    <td>{{ $candidato->vc_classe }}ª Classe</td>
+                    <td>{{ date('d-m-Y', strtotime($candidato->created_at)) }}</td>
+                    <td>{{ $candidato->vc_genero }}</td>
+
                     <td>{{ $candidato->media }}</td>
-                @endif
-                <td>{{ $candidato->it_telefone }}</td>
 
-                @if ($candidato->state == 0)
-                    <td id='ok{{ $candidato->id }}' class="text-green">Transferido</td>
-                @else
-                    <td id='no{{ $candidato->id }}' class="text-danger">Não Selecionado</td>
-                @endif
+                    <td>{{ $candidato->it_telefone }}</td>
 
-                <td>
-                    @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                        @if (isset($eliminadas))
-                            <div class="dropdown">
-                                <button class="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="{{ route('admin.candidatos.recuperar', $candidato->id) }}"
-                                        class="dropdown-item ">Recuperar</a>
-                                    <a href="{{  url("candidatos/$candidato->id/pulgar") }}" class="dropdown-item "
-                                        data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
-                                </div>
-                            </div>
-                        @else
-                            <div class="dropdown">
-                                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-clone" aria-hidden="true"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item"
-                                        href='{{ url("candidatos/$candidato->id/visualizar") }}'>Ver</a>
-                                    <a class="dropdown-item" target="_blank"
-                                        href='{{ url("candidatos/$candidato->id") }}'>Ficha</a>
-                                    <a class="dropdown-item" href='{{ url("candidatos/$candidato->id/edit") }}'>Editar</a>
-                                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                                        <a class="dropdown-item" href='{{ url("candidatos/$candidato->id/eliminar") }}'
-                                            data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
-
-
-                                        <a class="dropdown-item" href='{{ url("candidatos/$candidato->id/pulgar") }}'
-                                            data-confirm="Tem certeza que deseja purgar?">Purgar</a>
-                                    @endif
-
-                                    @if ($candidato->state === 1)
-                                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                                                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                                                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                                                Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                                                Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico')
-                                            <a style="cursor: pointer;" codigo='{{ $candidato->id }}'
-                                                id="tag<%={{ $candidato->id }}%>"
-                                                class="dropdown-item p{{ $candidato->id }} candidato">transferir</a>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
+                    @if (candidado_transferido($candidato->id))
+                        <td class="text-green">Transferido</td>
+                    @else
+                        <td id="cnt{{ $candidato->id }}" class="text-danger">Não Selecionado</td>
                     @endif
 
+                    <td>
 
-                </td>
-            </tr>
+                        <div class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-clone" aria-hidden="true"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-            <?php endforeach;?>
+                                <a class="dropdown-item" target="_blank"
+                                    href='{{ url("candidatos/$candidato->slug/imprimir_ficha") }}'>Ficha</a>
+                                <a class="dropdown-item" href='{{ url("candidatos/$candidato->slug/edit") }}'>Editar</a>
+                                @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
+                                    <a class="dropdown-item" href='{{ url("candidatos/$candidato->slug/eliminar") }}'
+                                        data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
+                                @endif
+
+                                @if ($candidato->state === 1)
+                                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                                            Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                                            Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico')
+
+                                        @if (!candidado_transferido($candidato->id))
+                                            <a style="cursor: pointer;" id_candidato="{{ $candidato->id }}"
+                                                class="dropdown-item cand_para_aluno">Transferir</a>
+                                        @endif
+
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
 
 
-        </tbody>
+                    </td>
+                </tr>
 
-    </table>
-   </div>
+                <?php endforeach;?>
+
+
+            </tbody>
+
+        </table>
+    </div>
 
     <script src="{{ asset('/js/datatables/jquery-3.5.1.js') }}"></script>
     <script>

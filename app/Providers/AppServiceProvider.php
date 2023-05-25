@@ -40,9 +40,9 @@ class AppServiceProvider extends ServiceProvider
             session()->has('cabecalhos') ? session()->get('cabecalhos'):[''];
             $view->with('cab', $cab);
 
-            $response['permissao_nota'] = PermissaoNota::find(1);
-            $estadoPermissaoNota=$response['permissao_nota']->estado;
-            $view->with('estado_permissao_nota', $estadoPermissaoNota);
+            // $response['permissao_nota'] = PermissaoNota::find(1);
+            // $estadoPermissaoNota=$response['permissao_nota']->estado;
+            // $view->with('estado_permissao_nota', $estadoPermissaoNota);
             $anoslectivos = AnoLectivo::get();
             //dd($anoslectivos);
             if ($anoslectivos->count()==1) {

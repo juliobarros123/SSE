@@ -425,7 +425,7 @@ return [
 
                 [
                     'text' => 'Cadastrar',
-                    'url' => 'turmas/cadastrarTurmas',
+                    'url' => 'turmas/cadastrar',
                 ],
                 [
                     'text' => 'Listar',

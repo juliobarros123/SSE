@@ -41,7 +41,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ url('/turmas/efectuarCadastroDaTurmas') }}" accept-charset="UTF-8" class="row">
+            <form method="POST" action="{{ url('/turmas/inserir') }}" accept-charset="UTF-8" class="row">
                 @csrf
                 @include('forms._formTurma.index')
                 <div class="form-group col-md-3">

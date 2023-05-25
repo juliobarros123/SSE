@@ -40,7 +40,8 @@ class CreateCandidatosTable extends Migration
             $table->string('vc_bi', 14)->nullable();
             $table->date('dt_emissao')->nullable();
             $table->string('vc_localEmissao', 100)->nullable();
-            ;
+
+            $table->string('vc_municipio')->nullable();
 
 
             //dados academicos
@@ -50,11 +51,8 @@ class CreateCandidatosTable extends Migration
             ;
 
             //dados da nova escola
-            $table->string('vc_nomeCurso', 255)->nullable();
-            ;
-            $table->string('vc_classe', 3)->nullable();
-            ;
-            $table->string('vc_anoLectivo', 20)->nullable();
+
+            $table->string('tipo_candidato')->nullable();
             ;
             //estado de candidado
             $table->unsignedBigInteger('it_estado_candidato')->enum('0', '1')->default('1');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "835de2d07a4a282cf9df25369ab7cfa5",
+    "content-hash": "36932270f7afc11f37d8003b348b00b7",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1369,34 +1369,21 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-<<<<<<< HEAD
-            "version": "7.5.1",
+            "version": "7.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "b964ca597e86b752cd994f27293e9fa6b6a95ed9"
+                "reference": "fb7566caccf22d74d1ab270de3551f72a58399f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b964ca597e86b752cd994f27293e9fa6b6a95ed9",
-                "reference": "b964ca597e86b752cd994f27293e9fa6b6a95ed9",
-=======
-            "version": "7.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "8444a2bacf1960bc6a2b62ed86b8e72e11eebe51"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/8444a2bacf1960bc6a2b62ed86b8e72e11eebe51",
-                "reference": "8444a2bacf1960bc6a2b62ed86b8e72e11eebe51",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/fb7566caccf22d74d1ab270de3551f72a58399f5",
+                "reference": "fb7566caccf22d74d1ab270de3551f72a58399f5",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^1.5",
+                "guzzlehttp/promises": "^1.5.3 || ^2.0",
                 "guzzlehttp/psr7": "^1.9.1 || ^2.4.5",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
@@ -1408,7 +1395,8 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.1",
                 "ext-curl": "*",
-                "php-http/client-integration-tests": "^3.0",
+                "php-http/client-integration-tests": "dev-master#2c025848417c1135031fdf9c728ee53d0a7ceaee as 3.0.999",
+                "php-http/message-factory": "^1.1",
                 "phpunit/phpunit": "^8.5.29 || ^9.5.23",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
             },
@@ -1487,11 +1475,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/guzzle/guzzle/tree/7.5.1"
-=======
-                "source": "https://github.com/guzzle/guzzle/tree/7.6.1"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
+                "source": "https://github.com/guzzle/guzzle/tree/7.7.0"
             },
             "funding": [
                 {
@@ -1507,42 +1491,37 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2023-04-17T16:30:08+00:00"
-=======
-            "time": "2023-05-15T20:43:01+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
+            "time": "2023-05-21T14:04:53+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.5.2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598"
+                "reference": "3a494dc7dc1d7d12e511890177ae2d0e6c107da6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/b94b2807d85443f9719887892882d0329d1e2598",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/3a494dc7dc1d7d12e511890177ae2d0e6c107da6",
+                "reference": "3a494dc7dc1d7d12e511890177ae2d0e6c107da6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5"
+                "php": "^7.2.5 || ^8.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+                "bamarni/composer-bin-plugin": "^1.8.1",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5-dev"
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": false
                 }
             },
             "autoload": {
-                "files": [
-                    "src/functions_include.php"
-                ],
                 "psr-4": {
                     "GuzzleHttp\\Promise\\": "src/"
                 }
@@ -1579,7 +1558,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5.2"
+                "source": "https://github.com/guzzle/promises/tree/2.0.0"
             },
             "funding": [
                 {
@@ -1595,7 +1574,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T14:55:35+00:00"
+            "time": "2023-05-21T13:50:22+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2044,18 +2023,6 @@
         },
         {
             "name": "laravel/fortify",
-<<<<<<< HEAD
-            "version": "v1.17.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/fortify.git",
-                "reference": "76908639d6c58a4996ce8bbacea9ec7f610b2ec6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/fortify/zipball/76908639d6c58a4996ce8bbacea9ec7f610b2ec6",
-                "reference": "76908639d6c58a4996ce8bbacea9ec7f610b2ec6",
-=======
             "version": "v1.17.2",
             "source": {
                 "type": "git",
@@ -2066,7 +2033,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/fortify/zipball/fc4b9b00b0d657dd035751b286f412976596ba32",
                 "reference": "fc4b9b00b0d657dd035751b286f412976596ba32",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
                 "shasum": ""
             },
             "require": {
@@ -2117,11 +2083,7 @@
                 "issues": "https://github.com/laravel/fortify/issues",
                 "source": "https://github.com/laravel/fortify"
             },
-<<<<<<< HEAD
-            "time": "2023-04-19T15:48:59+00:00"
-=======
             "time": "2023-04-26T13:35:07+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
         },
         {
             "name": "laravel/framework",
@@ -2691,38 +2653,6 @@
         },
         {
             "name": "lcobucci/clock",
-<<<<<<< HEAD
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lcobucci/clock.git",
-                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/clock/zipball/039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
-                "reference": "039ef98c6b57b101d10bd11d8fdfda12cbd996dc",
-                "shasum": ""
-            },
-            "require": {
-                "php": "~8.1.0 || ~8.2.0",
-                "psr/clock": "^1.0"
-            },
-            "provide": {
-                "psr/clock-implementation": "1.0"
-            },
-            "require-dev": {
-                "infection/infection": "^0.26",
-                "lcobucci/coding-standard": "^9.0",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.9.4",
-                "phpstan/phpstan-deprecation-rules": "^1.1.1",
-                "phpstan/phpstan-phpunit": "^1.3.2",
-                "phpstan/phpstan-strict-rules": "^1.4.4",
-                "phpunit/phpunit": "^9.5.27"
-            },
-            "type": "library",
-=======
             "version": "2.3.0",
             "source": {
                 "type": "git",
@@ -2824,87 +2754,6 @@
                     "dev-master": "4.0-dev"
                 }
             },
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
-            "autoload": {
-                "psr-4": {
-                    "Lcobucci\\Clock\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Luís Cobucci",
-<<<<<<< HEAD
-                    "email": "lcobucci@gmail.com"
-=======
-                    "email": "lcobucci@gmail.com",
-                    "role": "Developer"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
-                }
-            ],
-            "description": "Yet another clock abstraction",
-            "support": {
-<<<<<<< HEAD
-                "issues": "https://github.com/lcobucci/clock/issues",
-                "source": "https://github.com/lcobucci/clock/tree/3.0.0"
-=======
-                "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/lcobucci",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/lcobucci",
-                    "type": "patreon"
-                }
-            ],
-<<<<<<< HEAD
-            "time": "2022-12-19T15:00:24+00:00"
-        },
-        {
-            "name": "lcobucci/jwt",
-            "version": "4.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "4d7de2fe0d51a96418c0d04004986e410e87f6b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/4d7de2fe0d51a96418c0d04004986e410e87f6b4",
-                "reference": "4d7de2fe0d51a96418c0d04004986e410e87f6b4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-hash": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "ext-openssl": "*",
-                "ext-sodium": "*",
-                "lcobucci/clock": "^2.0 || ^3.0",
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "infection/infection": "^0.21",
-                "lcobucci/coding-standard": "^6.0",
-                "mikey179/vfsstream": "^1.6.7",
-                "phpbench/phpbench": "^1.2",
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^1.4",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpstan/phpstan-strict-rules": "^1.0",
-                "phpunit/php-invoker": "^3.1",
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
@@ -2928,7 +2777,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.3.0"
+                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
             },
             "funding": [
                 {
@@ -2940,19 +2789,6 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-01-02T13:28:00+00:00"
-        },
-        {
-            "name": "league/commonmark",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "d44a24690f16b8c1808bf13b1bd54ae4c63ea048"
-            },
-            "dist": {
-                "type": "zip",
-=======
             "time": "2021-09-28T19:18:28+00:00"
         },
         {
@@ -2965,7 +2801,6 @@
             },
             "dist": {
                 "type": "zip",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
                 "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d44a24690f16b8c1808bf13b1bd54ae4c63ea048",
                 "reference": "d44a24690f16b8c1808bf13b1bd54ae4c63ea048",
                 "shasum": ""
@@ -4353,16 +4188,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.15.4",
+            "version": "v4.15.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "6bb5176bc4af8bcb7d926f88718db9b96a2d4290"
+                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/6bb5176bc4af8bcb7d926f88718db9b96a2d4290",
-                "reference": "6bb5176bc4af8bcb7d926f88718db9b96a2d4290",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/11e2663a5bc9db5d714eedb4277ee300403b4a9e",
+                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e",
                 "shasum": ""
             },
             "require": {
@@ -4403,9 +4238,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.4"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.5"
             },
-            "time": "2023-03-05T19:49:14+00:00"
+            "time": "2023-05-19T20:20:00+00:00"
         },
         {
             "name": "opis/closure",
@@ -4822,7 +4657,6 @@
             "time": "2022-06-13T21:57:56+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "psr/cache",
             "version": "3.0.0",
             "source": {
@@ -4872,8 +4706,6 @@
             "time": "2021-02-03T23:26:27+00:00"
         },
         {
-=======
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
             "name": "psr/clock",
             "version": "1.0.0",
             "source": {
@@ -5282,18 +5114,6 @@
         },
         {
             "name": "psy/psysh",
-<<<<<<< HEAD
-            "version": "v0.11.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/151b145906804eea8e5d71fea23bfb470c904bfb",
-                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb",
-=======
             "version": "v0.11.17",
             "source": {
                 "type": "git",
@@ -5304,7 +5124,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
                 "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
                 "shasum": ""
             },
             "require": {
@@ -5365,15 +5184,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.16"
-            },
-            "time": "2023-04-26T12:53:57+00:00"
-=======
                 "source": "https://github.com/bobthecow/psysh/tree/v0.11.17"
             },
             "time": "2023-05-05T20:02:42+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
         },
         {
             "name": "ralouphie/getallheaders",
@@ -5836,8 +5649,6 @@
                 }
             ],
             "time": "2023-02-09T10:38:43+00:00"
-<<<<<<< HEAD
-=======
         },
         {
             "name": "stella-maris/clock",
@@ -5885,7 +5696,6 @@
                 "source": "https://github.com/stella-maris-solutions/clock/tree/0.1.7"
             },
             "time": "2022-11-25T16:15:06+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -8782,18 +8592,6 @@
         },
         {
             "name": "fakerphp/faker",
-<<<<<<< HEAD
-            "version": "v1.21.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "92efad6a967f0b79c499705c69b662f738cc9e4d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/92efad6a967f0b79c499705c69b662f738cc9e4d",
-                "reference": "92efad6a967f0b79c499705c69b662f738cc9e4d",
-=======
             "version": "v1.22.0",
             "source": {
                 "type": "git",
@@ -8804,7 +8602,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/f85772abd508bd04e20bb4b1bbe260a68d0066d2",
                 "reference": "f85772abd508bd04e20bb4b1bbe260a68d0066d2",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
                 "shasum": ""
             },
             "require": {
@@ -8857,15 +8654,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.21.0"
-            },
-            "time": "2022-12-13T13:54:32+00:00"
-=======
                 "source": "https://github.com/FakerPHP/Faker/tree/v1.22.0"
             },
             "time": "2023-05-14T12:31:37+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
         },
         {
             "name": "filp/whoops",
@@ -9579,18 +9370,6 @@
         },
         {
             "name": "phpunit/phpunit",
-<<<<<<< HEAD
-            "version": "9.6.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c993f0d3b0489ffc42ee2fe0bd645af1538a63b2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c993f0d3b0489ffc42ee2fe0bd645af1538a63b2",
-                "reference": "c993f0d3b0489ffc42ee2fe0bd645af1538a63b2",
-=======
             "version": "9.6.8",
             "source": {
                 "type": "git",
@@ -9601,7 +9380,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/17d621b3aff84d0c8b62539e269e87d8d5baa76e",
                 "reference": "17d621b3aff84d0c8b62539e269e87d8d5baa76e",
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
                 "shasum": ""
             },
             "require": {
@@ -9675,11 +9453,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-<<<<<<< HEAD
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.7"
-=======
                 "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.8"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
             },
             "funding": [
                 {
@@ -9695,11 +9469,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2023-04-14T08:58:40+00:00"
-=======
             "time": "2023-05-11T05:14:45+00:00"
->>>>>>> 97f20587a2c6db78faaf20a91530ec517bd366f5
         },
         {
             "name": "sebastian/cli-parser",

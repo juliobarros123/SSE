@@ -33458,9 +33458,11 @@ li {
 input[type="text"],
 input[type="number"],
 input[type="email"],
-select,
+/* select, */
 input[type="password"],
-input[type="search"] 
+input[type="search"],
+input[type="date"] ,
+input[type="file"] 
 {
     color: black !important;
     background-color: white !important;
@@ -33502,3 +33504,4 @@ table tr td:last-child{
 /* button{
     background-color: var(--red)!important;
 } */
+

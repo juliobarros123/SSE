@@ -17,7 +17,8 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Matricula extends Model
 {
@@ -33,14 +34,13 @@ class Matricula extends Model
             $model->slug = $stringSemBarras;
         });
     }
-    protected $fillable = ['id_cabecalho','slug', 
-        'id', 'id_aluno',
+
+    protected $fillable = [
+        'id_cabecalho',
+        'slug',
+        'id',
+        'id_aluno',
         'it_idTurma',
-        'it_idClasse',
-        'it_idCurso',
-        'vc_anoLectivo',
-        'vc_imagem',
-        'it_estado_matricula'
     ];
 
     public function alunos()
@@ -61,7 +61,7 @@ class Matricula extends Model
     }
 
 
-    public  function StudentForCard($id)
+    public function StudentForCard($id)
     {
         $estudantes = DB::table('matriculas')
             ->join('turmas', 'matriculas.it_idTurma', '=', 'turmas.id')
@@ -74,7 +74,7 @@ class Matricula extends Model
             ->get();
         return $estudantes;
     }
-    public  function processosAluno($processo)
+    public function processosAluno($processo)
     {
         $estudantes = DB::table('matriculas')
             ->join('turmas', 'matriculas.it_idTurma', '=', 'turmas.id')
@@ -84,9 +84,9 @@ class Matricula extends Model
             ->Join('anoslectivos', 'turmas.it_idAnoLectivo', '=', 'anoslectivos.id')
             ->where([['alunnos.id', $processo]])
             ->where([['matriculas.it_estado_matricula', 1]])
-            ->select('matriculas.*','matriculas.vc_anoLectivo', 'turmas.vc_nomedaTurma', 'classes.vc_classe', 'cursos.vc_nomeCurso', 'alunnos.vc_primeiroNome', 'alunnos.vc_ultimoaNome','anoslectivos.ya_inicio','anoslectivos.ya_fim','matriculas.it_idTurma')
-           ->orderBy('anoslectivos.ya_fim','desc')
-            ;
+            ->select('matriculas.*', 'matriculas.vc_anoLectivo', 'turmas.vc_nomedaTurma', 'classes.vc_classe', 'cursos.vc_nomeCurso', 'alunnos.vc_primeiroNome', 'alunnos.vc_ultimoaNome', 'anoslectivos.ya_inicio', 'anoslectivos.ya_fim', 'matriculas.it_idTurma')
+            ->orderBy('anoslectivos.ya_fim', 'desc')
+        ;
         return $estudantes;
     }
 }

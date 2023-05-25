@@ -373,23 +373,7 @@
     </script>
 @endif
 
-<script>
-    function verificaMostraBotao() {
-        $('input[type=file]').each(function(index) {
-            if ($('input[type=file]').eq(index).val() != "") {
-                Swal.fire(
-                    'A imagen foi carregada',
-                    '',
-                    'info'
-                )
-            }
-        });
-    }
 
-    $('input[type=file]').on("change", function() {
-        verificaMostraBotao();
-    });
-</script>
 
 <script>
     $("#img-input").click(function() {
@@ -797,20 +781,20 @@
     });
 </script>
 <script>
-    $("a[id^='tag']").on("click", function() {
-        var id = $(this).attr('codigo');
-        let id_int = parseInt(id);
+    $(".cand_para_aluno").on("click", function() {
+        var id = $(this).attr('id_candidato');
         var url = "{{ url('/') }}";
-        //alert(url)
-        if (id_int) {
+        // alert(id);
+        if (id) {
             $.ajax({
                 type: 'GET',
-                url: url + `/admin/candidatos/${id_int}/admitir`,
+                url: url + `/admin/candidatos/${id}/transferir`,
                 success: function(data) {
-                    console.log(data);
-                    if (data.state == 0) {
-                        $("#no" + data.id).html('Selecionado').addClass('text-green');
-                        $(".p" + data.id).remove();
+
+                    if (data == 'candidato_transferido') {
+                        $("#cnt" + id).html('Tranferido').addClass('text-green');
+                        // $(`a[id_candidato='${id}'']`).hide();
+                        $('a[id_candidato="' + id + '"]').remove();
                     }
                 }
             });
@@ -1097,23 +1081,50 @@ vc_tipodaNota
 </script>
 
 <script>
-    $("#it_idAluno").on("keyup", function() {
+    $("#processo").on("keyup", function() {
         var processo = $(this).val();
-        console.log(processo == " ");
+        //    alert("ola");
         if (processo) {
             //var url = window.location.origin + `/aluno/${processo}`;
-            var url = "{{ url('/') }}" + `/aluno/${processo}`;
-            //alert(url);
+            var url = "{{ url('/') }}" + `/admin/aluno/${processo}`;
+            // alert(url);
             $.ajax({
                 type: 'GET',
                 url: url,
                 success: function(data) {
                     console.log(data);
-                    // let nome = imagePath
-                    alert(data)
-                    let image = document.getElementById("imageoption").src = "/" + data;
-                    // $request
-                    $("#input-file").attr("value", data);
+                    $("#card_aluno").empty();
+                    var selectTurmas = $('#id_turma');
+                    selectTurmas.empty();
+
+
+                    $("#card_aluno").append(`
+                   <img class="card-img-top" src="/${data.aluno.vc_imagem}" alt="Card image cap">
+                    <div class="card-body">
+                   <h5 class="card-title">Nome:${data.aluno.vc_primeiroNome}
+                    ${data.aluno.vc_nomedoMeio} ${data.aluno.vc_apelido}</h5>
+                   <p class="card-text">Curso: ${data.aluno.vc_shortName}</p>
+              
+               </div>
+                `);
+
+
+                    // Percorre o array de turmas e adiciona cada uma como uma opção no select
+                    $.each(data.turmas, function(index, turma) {
+                        if (turma.it_qtdeAlunos - turma.it_qtMatriculados > 0) {
+                            var option = $('<option>', {
+                                value: turma.id,
+                                text: `${turma.vc_nomedaTurma}/${turma.vc_classe}ª classe/${turma.vc_nomeCurso}/${turma.vc_turnoTurma}(${turma.ya_inicio}/${turma.ya_fim})`
+                            });
+                            selectTurmas.append(option);
+                        }
+                    });
+                    // console.log(data.aluno);
+                    // // let nome = imagePath
+                    // alert(data)
+                    // let image = document.getElementById("imageoption").src = "/" + data;
+                    // // $request
+                    // $("#input-file").attr("value", data);
                     // attr("value", data);
 
                 }
@@ -1219,6 +1230,11 @@ vc_tipodaNota
         </script>
     @endif
 @endif
+<script>
+    // $('select').on('select2:open', function() {
+    //     $('.select2-search__field').prop('required', true);
+    // });
+</script>
 </body>
 
 </html>

@@ -16,10 +16,10 @@ Email II: geral@itel.gov.ao*/
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Alunno extends Model
-
 {
     use HasFactory;
     protected static function boot()
@@ -34,45 +34,14 @@ class Alunno extends Model
         });
     }
 
-    protected $fillable = ['id_cabecalho','slug', 
-        'id', 'vc_primeiroNome', 'vc_nomedoMeio', 'vc_apelido','vc_ultimoaNome',
-        'dt_dataNascimento', 'vc_namePai', 'vc_nameMae', 'vc_genero', 'vc_dificiencia', 'vc_estadoCivil',
-        'it_telefone', 'vc_email', 'vc_residencia', 'vc_naturalidade', 'vc_provincia', 'vc_bi',
-        'dt_emissao', 'vc_localEmissao', 'vc_EscolaAnterior', 'ya_anoConclusao', 'vc_nomeCurso', 'it_classe',
-        'vc_anoLectivo', 'it_estado_aluno','tokenKey','foto','it_classeConclusao','dt_anoCandidatura','it_media'
+    protected $fillable = [
+        'processo',
+        'tipo_aluno',
+        'id_candidato',
+        'id_cabecalho',
+        'vc_imagem',
+        'slug'
     ];
-    
-
-    public function dec()
-    {
-        return $this->hasMany('App\Models\DeclaracaoComNotas');
-    }
-
-    
-    public function updates($data,$uri)
-    {
-
-            $post = [
-                'vc_curso' => $data->vc_nomeCurso,
-                'it_estado' => '1',
-            ];
-            $uriP ='http://192.168.1.63:8000/admin/turma/store';
-
-            $ch = curl_init($uri);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-
-            // execute!
-            $response = curl_exec($ch);
-
-            // close the connection, release resources used
-            curl_close($ch);
-
-             // do anything you want with your response
-             //   dd($response);
-
-    ///   dd($response);
 
 
-    }
 }

@@ -41,19 +41,20 @@ class MatriculaController extends Controller
 
     public function pesquisar()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        $response['cursos'] = fh_cursos()->get();
 
-        $response['classes'] = Classe::where([['it_estado_classe', 1]])->get();
+        $response['classes'] = fh_classes()->get();
         return view('admin.matriculas.pesquisarMatriculados.index', $response);
     }
 
     public function pesquisar_pdf()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
 
-        $response['classes'] = Classe::where([['it_estado_classe', 1]])->get();
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        $response['cursos'] = fh_cursos()->get();
+
+        $response['classes'] = fh_classes()->get();
         return view('admin.matriculas.pesquisar_pdf.index', $response);
     }
     public function lista_pdf(Request $request, Estudante $estudantes)
@@ -134,13 +135,27 @@ class MatriculaController extends Controller
         $mpdf->setFooter('{PAGENO}');
         $mpdf->Output("listasdCandidaturas.pdf", "I");
     }
-    public function recebeMatriculados(Request $request)
+    public function matriculados(Request $request)
     {
-        $anoLectivo =  $request->vc_anolectivo;
-        $curso = $request->vc_curso;
-        $vc_classe = $request->vc_classe;
+        $matriculas = fh_matriculas();
+        if ($request->id_ano_lectivo) {
 
-        return redirect("Admin/matriculas/listar/$anoLectivo/$curso/$vc_classe");
+            $matriculas = $matriculas->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
+        }
+
+        if ($request->id_curso) {
+            // dd(  $matriculas->get(),$request->id_curso);
+            $matriculas = $matriculas->where('turmas.it_idCurso', $request->id_curso);
+        }
+        if ($request->id_classe) {
+            // dd(  $matriculas->get(),$request->id_curso);
+            $matriculas = $matriculas->where('turmas.it_idClasse', $request->id_classe);
+        }
+        
+        $response['matriculas'] = $matriculas->get();
+        //   dd($response['matriculas']);
+        return view('admin.matriculas.index', $response);
+
     }
     public function index(Estudante $estudantes, $anoLectivo, $curso, $vc_classe)
     {
@@ -159,15 +174,17 @@ class MatriculaController extends Controller
      */
     public function cadastrar()
     {
-        $anoLectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
+        // $anoLectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
         // $turmas = Turma::where([['it_estado_turma', 1], ['vc_anoLectivo', $anoLectivo->ya_inicio . "-" . $anoLectivo->ya_fim]])->get();
-        $turmas = Turma::where([['it_estado_turma', 1]])->get();
-        $alunos = Alunno::where([['it_estado_aluno', 1]])->get();
-        $cadastrar = true;
+        $response['turmas'] = fh_turmas()->get();
+        $response['alunos'] = fh_alunos()->get();
+        // dd(fh_ano_lectivo_publicado());
+        // dd(  $alunos );
+        // $cadastrar = true;
         /*$classes = Classe::where([['it_estado_classe', 1]])->get();
         $cursos = Curso::where([['it_estado_curso', 1], ['it_estadodoCurso', 1]])->get();
         return view('admin.matriculas.cadastrar.index', compact('turmas', 'alunos', 'classes', 'cursos', 'anoLectivo'));*/
-        return view('admin.matriculas.cadastrar.index', compact('turmas', 'alunos', 'anoLectivo', 'cadastrar'));
+        return view('admin.matriculas.cadastrar.index', $response);
     }
 
 
@@ -183,117 +200,64 @@ class MatriculaController extends Controller
             /* Procura se existe esse dado que esta sendo introduzido na BD,
             se não existe pode introduzir, se existe não introduza */
             $nome_arquivo = null;
-            $ExisteSelecionado = Matricula::where([
-                ['it_estado_matricula', 1],
-                ['vc_anoLectivo', $request->vc_anoLectivo],
-                ['id_aluno', $request->it_idAluno],
-            ])->count();
+            // dd($request);
+            $aluno = $aluno = fh_aluno_processo($request->processo);
+            ;
+            $id_ano_lectivo = fh_ano_lectivo_publicado()->id_anoLectivo;
+            $cont = fh_matriculas()->where('alunnos.processo', $aluno->processo)
+                ->where('turmas.it_idAnoLectivo', $id_ano_lectivo)->count();
+            // dd($cont );
 
-            if ($ExisteSelecionado == 0) {
+            if ($cont == 0) {
                 $dados = $request->all();
-                // dd( $dados );
-                $request->validate([
-                    'id_aluno' => 'required',
-                    'it_idTurma' => 'required',
-                    /*'it_idClasse' => 'required',
-                    'it_idCurso' => 'required',*/
-                    'vc_anoLectivo' => 'required',
-                ]);
-                // dd($request->hasFile('vc_imagem'));
                 if ($request->hasFile('vc_imagem')) {
-
+                    // dd($request);
                     $image = $request->file('vc_imagem');
-                    $input['imagename'] =  $request->it_idAluno . '.' . $image->extension();
-                    $destinationPath = public_path('/images/matriculados');
+                    $input['imagename'] = $request->processo . '_' . fh_cabecalho()->vc_acronimo . '_' . $aluno->id . '.' . $image->extension();
+                    $destinationPath = public_path('/images/aluno/');
                     $img = Image::make($image->path())->orientate();
                     $img->resize(333, 310, function ($constraint) {
                     })->save($destinationPath . '/' . $input['imagename']);
-
-                    $dir = "images/matriculados";
+                    $dir = "images/aluno/";
                     $dados['vc_imagem'] = $dir . "/" . $input['imagename'];
-                } else {
-
-                    // dd("ola");
-                    $nome_arquivo = basename($request->vc_nameImage);
-                    // dd($nome_arquivo);  
-                    $origin = public_path("confirmados/$nome_arquivo");
-                    if (file_exists($origin)) {
-                        $destinationPath = $origin;
-                        $image_resize = Image::make($origin)->orientate();
-                        // dd("ola",$image_resize);
-                        $image_resize->resize(333, 310);
-                        $image_resize->save($destinationPath);
-                        $dir = "images/matriculados";
-                        $dados['vc_imagem'] = $dir . "/" . $nome_arquivo;
-                    } else {
-                        $destinationPath = public_path("/images/matriculados/$nome_arquivo");
-                   
-                        $dir = "images/matriculados";
-                        $dados['vc_imagem'] = $dir . "/" . $nome_arquivo;
-                    }
-                   
-
 
                 }
-                // else {
+                $turma = fh_turmas()->where('turmas.id', $request->it_idTurma)->first();
 
 
-                //     $origin = base_path() . "/public/confirmados/$request->vc_nameImage";
-                //     // dd( $origin);
-                //     $destinationPath = base_path() . "/public/images/matriculados/$request->vc_nameImage";
-                //     dd($destinationPath);
-                //     $image_resize = Image::make($origin)->orientate();
-                //     $image_resize->resize(333, 310);
-                //     $image_resize->save(public_path('/images/matriculados/' . $request->vc_nameImage));
-                //     $dir = "images/matriculados";
-                //     $dados['vc_imagem'] = $dir . "/" . $request->vc_nameImage;
-                // }
-
-
-                $verificaTurma = Turma::where([['it_estado_turma', 1]])->find($dados['it_idTurma']);
-                $incremente = $verificaTurma->it_qtMatriculados + 1;
-
-                $turmae_especifica = Turma::find($request->it_idTurma);
-
-                if ($verificaTurma->it_qtMatriculados >= $verificaTurma->it_qtdeAlunos) {
-                    return redirect()->back()->with('alert', '1');
+                if (($turma->it_qtdeAlunos - $turma->it_qtMatriculados) <= 0) {
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Turma fechada']);
                 } else {
-
-                    Turma::where([['it_estado_turma', 1]])->find($verificaTurma->id)->update([
-                        'it_qtMatriculados' => $incremente
-                    ]);
-                    //Matricula::create($dados);
-
-                    //   dd($request);
-                    $matricula =   Matricula::create([
-                        'id_aluno' =>  $request->it_idAluno,
+                    $matricula = Matricula::create([
+                        'id_aluno' => $aluno->id,
                         'it_idTurma' => $request->it_idTurma,
-                        'it_idClasse' => $turmae_especifica->it_idClasse,
-                        'it_idCurso' => $turmae_especifica->it_idCurso,
-                        'vc_anoLectivo' => $request->vc_anoLectivo,
-                        'vc_imagem' => $dados['vc_imagem']
+                        'id_cabecalho' => Auth::User()->id_cabecalho
                     ]);
 
                     if ($matricula) {
-                        Turma::where([['it_estado_turma', 1]])->find($verificaTurma->id)->update([
-                            'it_qtMatriculados' => $incremente
-                        ]);
+                        // dd($dados['vc_imagem']);
+                        if (isset($dados['vc_imagem'])) {
+                            Alunno::where('alunnos.id', $aluno->id)->update(['vc_imagem' => $dados['vc_imagem']]);
+                        }
+                        $this->aumentar_inscritos($request->it_idTurma, 1);
                     }
 
-                    $this->loggerData('Matriculou o(a) aluno(a) de processo ' . $request->it_idAluno . ' na turma de ' . Turma::find($request->it_idTurma)->vc_nomedaTurma . ' na ' . Classe::find($turmae_especifica->it_idClasse)->vc_classe . 'ª classe no curso de ' . Curso::find($turmae_especifica->it_idCurso)->vc_nomeCurso);
-                    return redirect()->back()->with('status', '1');
+                    $this->loggerData('Matriculou o(a) aluno(a) de processo ' . $request->processo . ' na turma de ' . $turma->vc_nomedaTurma . ' na ' . $turma->vc_classe . 'ª classe no curso de ' . $turma->vc_nomeCurso);
+                    return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Matricula efectuada com sucesso']);
+
                 }
 
-                $matricula = Alunno::where([['it_estado_aluno', 1]])->findOrFail($request->input('id'));
-                return view('admin.matriculas.ver.index', compact('matricula'))->with('status', '1');
+
             } else {
                 /* redirecionar e informar que o selecionado já foi introduzido */
-                dd("ola");
-                return redirect()->back()->with('ExisteSelecionado', '1');
+                // dd("ola");
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Aluno já está matriculado neste ano lectivo']);
+
             }
         } catch (\Exception $exception) {
-            dd($exception);
-            return redirect()->back()->with('aviso', '1');
+
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
     }
 
@@ -316,23 +280,25 @@ class MatriculaController extends Controller
      * @param  \App\Models\Matricula  $curso
      * @return \Illuminate\Http\Response
      */
-    public function editar($id)
+    public function editar($slug)
     {
-        $c = Matricula::where([['it_estado_matricula', 1]])->find($id);
-        if ($response['matricula'] = Matricula::where([['it_estado_matricula', 1]])->find($id)) :
-            $turmas = Turma::where([['it_estado_turma', 1]])->get();
-            $alunos = Alunno::where([['it_estado_aluno', 1]])->get();
-            $classes = Classe::where([['it_estado_classe', 1]])->get();
-            $cursos = Curso::where([['it_estado_curso', 1], ['it_estadodoCurso', 1]])->get();
-            $matricula = Matricula::where([['it_estado_matricula', 1]])->findOrFail($id);
-            $turma = Turma::where([['it_estado_turma', 1]])->find($matricula->it_idTurma);
-            $aluno = Alunno::where([['it_estado_aluno', 1]])->find($matricula->it_idAluno);
-            $classe = Classe::where([['it_estado_classe', 1]])->find($matricula->it_idClasse);
-            $curso = Curso::where([['it_estado_curso', 1]])->find($matricula->it_idCurso);
-            $anoLectivos = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
+        $matricula = fh_matriculas()->where('matriculas.slug', $slug)->first();
+        // dd($matricula);
+        if ($matricula):
 
-            return view('admin.matriculas.editar.index', compact('matricula', 'turma', 'aluno', 'classe', 'curso', 'alunos', 'turmas', 'classes', 'cursos', 'anoLectivos'));
-        else :
+            $response['anoslectivos'] = fh_anos_lectivos()->get();
+            $response['cursos'] = fh_cursos()->get();
+            $response['classes'] = fh_classes()->get();
+
+
+            $response['turmas'] = fh_turmas()->where('cursos.id', $matricula->it_idCurso)
+                ->where('anoslectivos.id', fh_ano_lectivo_publicado()->id_anoLectivo)
+                ->where('turmas.it_qtdeAlunos', '>', 0)
+                ->get();
+            $response['matricula'] = $matricula;
+
+            return view('admin.matriculas.editar.index', $response);
+        else:
             return redirect('Admin/matriculas/cadastrar')->with('matricula', '1');
 
         endif;
@@ -341,15 +307,15 @@ class MatriculaController extends Controller
 
     public function diminuir_inscritos($id_turma, $qt)
     {
-        $turma =  Turma::find($id_turma);
-        Turma::where([['it_estado_turma', 1]])->find($id_turma)->update([
+        $turma = Turma::find($id_turma);
+        Turma::find($id_turma)->update([
             'it_qtMatriculados' => $turma->it_qtMatriculados - $qt
         ]);
     }
     public function aumentar_inscritos($id_turma, $qt)
     {
-        $turma =  Turma::find($id_turma);
-        Turma::where([['it_estado_turma', 1]])->find($id_turma)->update([
+        $turma = Turma::find($id_turma);
+        Turma::find($id_turma)->update([
             'it_qtMatriculados' => $turma->it_qtMatriculados + $qt
         ]);
     }
@@ -360,105 +326,80 @@ class MatriculaController extends Controller
      * @param  \App\Models\Matricula  $curso
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(Request $request, $id)
+    public function atualizar(Request $request, $slug)
     {
+        try {
 
+            $aluno = fh_aluno_processo($request->processo);
 
-        $dados = $request->all();
-        $turmae_especifica = Turma::find($request->it_idTurma);
+            $id_ano_lectivo = fh_ano_lectivo_publicado()->id_anoLectivo;
 
-        if ($request->hasFile('vc_imagem')) {
-
-
-            $image = $request->file('vc_imagem');
-            $input['imagename'] =  $request->it_idAluno . '.' . $image->extension();
-            $destinationPath = public_path('/images/matriculados');
-            $img = Image::make($image->path())->orientate();
-            $img->resize(333, 310, function ($constraint) {
-            })->save($destinationPath . '/' . $input['imagename']);
-
-            $dir = "images/matriculados";
-            $dados['vc_imagem'] = $dir . "/" . $input['imagename'];
-
-            // $imagem = $request->file('vc_imagem');
-            // $num = rand(1111, 9999);
-            // $dir = "images/matriculados";
-            // $extensao = $imagem->guessClientExtension();
-            // $nomeImagem = $dados['id_aluno'] . "_" . $num . "." . $extensao;
-            // $imagem->move($dir, $nomeImagem);
-            // $dados['vc_imagem'] = $dir . "/" . $nomeImagem;
-        } else {
-            //dd($request);
-            /* $input_input = $request->input_file;
-            $ext =  extension_file_string($input_input);
-            $distino = "images/matriculados/$request->it_idAluno.$ext";
-            $estado = move_file_string($input_input, $distino);
-            $dados['vc_imagem'] = $distino; */
-        }
-
-
-
-        $verificaTurma = Turma::where([['it_estado_turma', 1]])->find($dados['it_idTurma']);
-
-        $verify = Matricula::where([['it_estado_matricula', 1]])->find($id);
-
-        $i = $verificaTurma->it_qtMatriculados;
-        $b = $verificaTurma->it_qtMatriculados;
-        $incremente = ++$i;
-        $decremente = $b--;
-
-
-        if ($verify->it_idTurma == $verificaTurma->id) {
-
-            Matricula::find($id)->update($dados);
-            $this->loggerData('Atualizou a matricula do(a) aluno(a) de processo ' . $request->it_idAluno . ' na turma de ' . Turma::find($request->it_idTurma)->vc_nomedaTurma . ' na ' . Classe::find($turmae_especifica->it_idClasse)->vc_classe . 'ª classe no curso de ' . Curso::find($turmae_especifica->it_idCurso)->vc_nomeCurso);
-            // dd("sdsd");
-
-            return redirect()->back()->with('editMatricula', 1);
-        } else if ($verificaTurma->it_qtMatriculados >= $verificaTurma->it_qtdeAlunos) {
-
-            return redirect()->back()->with('alert', $this->retorno['message']);
-        } else {
-
-            $this->diminuir_inscritos($verify->it_idTurma, 1);
-            $this->aumentar_inscritos($verificaTurma->id, 1);
-            // Turma::where([['it_estado_turma', 1]])->find($verificaTurma->id)->update([
-            //     'it_qtMatriculados' => $incremente
-            // ]);
-            // Turma::where([['it_estado_turma', 1]])->find($verify->it_idTurma)->update([
-            //     'it_qtMatriculados' => $decremente
-            // ]);
-
-            // $verificaTurma->it_qtMatriculados 
+            $dados = $request->all();
             $turmae_especifica = Turma::find($request->it_idTurma);
-            //dd($turmae_especifica);
+            if ($request->hasFile('vc_imagem')) {
+                // dd($request);
+                $image = $request->file('vc_imagem');
+                $input['imagename'] = $request->processo . '_' . fh_cabecalho()->vc_acronimo . '_' . $aluno->id . '.' . $image->extension();
+                $destinationPath = public_path('/images/aluno/');
+                $img = Image::make($image->path())->orientate();
+                $img->resize(333, 310, function ($constraint) {
+                })->save($destinationPath . '/' . $input['imagename']);
+                $dir = "images/aluno/";
+                $dados['vc_imagem'] = $dir . "/" . $input['imagename'];
 
-            //dd($dados);
-            if (isset($dados['vc_imagen'])) {
-                Matricula::where([['it_estado_matricula', 1]])->find($id)->update([
-                    'id_aluno' =>  $request->it_idAluno,
-                    'it_idTurma' => $request->it_idAluno,
-                    'it_idClasse' => $turmae_especifica->it_idClasse,
-                    'it_idCurso' => $turmae_especifica->it_idCurso,
-                    'vc_anoLectivo' => $request->vc_anoLectivo,
-                    'vc_imagem' => $dados['vc_imagem']
-                ]);
-                $this->loggerData('Atualizou a matricula do(a) aluno(a) de processo ' . $request->it_idAluno . ' na turma de ' . Turma::find($request->it_idTurma)->vc_nomedaTurma . ' na ' . Classe::find($turmae_especifica->it_idClasse)->vc_classe . 'ª classe no curso de ' . Curso::find($turmae_especifica->it_idCurso)->vc_nomeCurso);
-            } else {
-
-                Matricula::where([['it_estado_matricula', 1]])->find($id)->update([
-                    'id_aluno' =>  $request->it_idAluno,
-                    'it_idTurma' => $request->it_idTurma,
-                    'it_idClasse' => $turmae_especifica->it_idClasse,
-                    'it_idCurso' => $turmae_especifica->it_idCurso,
-                    'vc_anoLectivo' => $request->vc_anoLectivo,
-
-                ]);
-                $this->loggerData('Atualizou a matricula do(a) aluno(a) de processo ' . $request->it_idAluno . ' na turma de ' . Turma::find($request->it_idTurma)->vc_nomedaTurma . ' na ' . Classe::find($turmae_especifica->it_idClasse)->vc_classe . 'ª classe no curso de ' . Curso::find($turmae_especifica->it_idCurso)->vc_nomeCurso);
             }
-            return redirect()->back()->with('editMatricula', '1');
+            $turma_nova = fh_turmas()->where('turmas.id', $request->it_idTurma)->first();
+
+            $matricula_anterior = fh_matriculas()->where('matriculas.slug', $slug)->first();
+
+
+
+
+            if ($matricula_anterior->it_idTurma == $turma_nova->id) {
+
+                $matricula = Matricula::where('matriculas.slug', $slug)->update([
+                    'id_aluno' => $aluno->id,
+                    'it_idTurma' => $turma_nova->id
+                ]);
+                if (isset($dados['vc_imagem'])) {
+                    Alunno::where('alunnos.id', $aluno->id)->update(['vc_imagem' => $dados['vc_imagem']]);
+                }
+                $this->loggerData("Atualizou a matricula do aluno(a) com processo  $request->processo . ' na turma de ' . $turma_nova->vc_nomedaTurma . ' na ' . $turma_nova->vc_classe . 'ª classe no curso de ' . $turma_nova->vc_nomeCurso");
+                // dd("sdsd");
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Matricula actualizada com sucesso']);
+
+            } else if ($turma_nova->it_qtMatriculados >= $turma_nova->it_qtdeAlunos) {
+
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Turma fechada']);
+
+            } else {
+                // dd($turma_nova);
+                $matricula = Matricula::where('matriculas.slug', $slug)->update([
+                    'id_aluno' => $aluno->id,
+                    'it_idTurma' => $turma_nova->id
+                ]);
+
+                if ($matricula) {
+                    // dd($dados['vc_imagem']);
+                    if (isset($dados['vc_imagem'])) {
+                        Alunno::where('alunnos.id', $aluno->id)->update(['vc_imagem' => $dados['vc_imagem']]);
+                    }
+                    $this->diminuir_inscritos($matricula_anterior->it_idTurma, 1);
+                    $this->aumentar_inscritos($turma_nova->id, 1);
+                    $this->loggerData("Atualizou a matricula do aluno(a) com processo  $request->processo . ' na turma de ' . $turma_nova->vc_nomedaTurma . ' na ' . $turma_nova->vc_classe . 'ª classe no curso de ' . $turma_nova->vc_nomeCurso");
+                    // dd("sdsd");
+                    return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Matricula actualizada com sucesso']);
+                } else {
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+                }
+
+            }
+        } catch (\Exception $exception) {
+            dd($exception->getMessage());
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
-        return redirect()->back()->with('editMatricula', '1');
     }
 
 
@@ -479,23 +420,30 @@ class MatriculaController extends Controller
         //         ]);
     }
 
-    public function excluir($id)
+    public function excluir($slug)
     {
         // dd("ola");
 
 
 
         try {
+            $matricula = fh_matriculas()->where('matriculas.slug', $slug)->first();
+            $response = Matricula::where('matriculas.slug', $slug)->first();
 
-            $response = Matricula::find($id);
+            $m = Matricula::where('matriculas.slug', $slug)->delete();
+            if ($m) {
+                $this->diminuir_inscritos($matricula->it_idTurma, 1);
+                $this->loggerData("Eliminou a matricula do aluno(a) com processo  $matricula->processo . ' na turma de ' . $matricula->vc_nomedaTurma . ' na ' . $matricula->vc_classe . 'ª classe no curso de ' . $matricula->vc_nomeCurso");
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Matricula eliminada com sucesso']);
 
-            Matricula::where('id', $id)->delete();
-            $this->diminuir_inscritos($response->it_idTurma, 1);
-            $this->loggerData('Eliminou do(a) aluno(a) de processo ' . Alunno::find($response->it_idAluno)->id);
-            return redirect()->back()->with('matricula.eliminar.success', '1');
+            } else {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+            }
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('matricula.eliminar.error', '1');
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
     }
 
@@ -514,9 +462,9 @@ class MatriculaController extends Controller
     public function emitirboletim(Estudante $estudantes, $id)
     {
         $c = $estudantes->StudentForSearch($id);
-        if ($c->count()) :
+        if ($c->count()):
 
-            $data['academicos'] =  $c;
+            $data['academicos'] = $c;
             $data['cabecalho'] = Cabecalho::find(1);
             $data['dadosaluno'] = Alunno::where([['it_estado_aluno', 1]])->find($id);
             /*  $data["bootstrap"] = file_get_contents("css/boletim/bootstrap.min.css");
@@ -576,7 +524,7 @@ class MatriculaController extends Controller
             $html = view("admin/pdfs/boletim/index", $data);
             $mpdf->writeHTML($html);
             $mpdf->Output("boletim.pdf", "I");
-        else :
+        else:
             return redirect('admin/matriculas/pesquisar')->with('aviso', 'Não existe Estudante com este número de processo');
         endif;
     }
@@ -588,17 +536,17 @@ class MatriculaController extends Controller
         $matriculas = Matricula::all();
         foreach ($matriculas as $matricula) {
 
-            $count =  Matricula::where('id_aluno', $matricula->it_idAluno)
+            $count = Matricula::where('id_aluno', $matricula->it_idAluno)
                 ->where(
                     'vc_anoLectivo',
                     $matricula->vc_anoLectivo
                 )->count();
             if ($count >= 2) {
                 $cont1++;
-                $id_max =  Matricula::where('id_aluno', $matricula->it_idAluno)
+                $id_max = Matricula::where('id_aluno', $matricula->it_idAluno)
                     ->where('vc_anoLectivo', $matricula->vc_anoLectivo)
                     ->max('id');
-                $id_max =  Matricula::where('id_aluno', $matricula->it_idAluno)
+                $id_max = Matricula::where('id_aluno', $matricula->it_idAluno)
                     ->where('vc_anoLectivo', $matricula->vc_anoLectivo)
                     ->where('id', '!=', $id_max)
                     ->delete();
@@ -634,7 +582,7 @@ class MatriculaController extends Controller
 
         $response['users'] = User::where([['it_estado_user', 0]])->get();
         $response['eliminadas'] = "eliminadas";
-        return view('admin.users.index',  $response);
+        return view('admin.users.index', $response);
     }
 
     public function recuperar($id)

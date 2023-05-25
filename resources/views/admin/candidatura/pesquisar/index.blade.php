@@ -34,18 +34,18 @@
 
 
                     @if (isset($ano_lectivo_publicado))
-                        <select name="vc_anolectivo" id="vc_anolectivo" class="form-control" readonly>
-                            <option value="{{ $ano_lectivo_publicado }}">
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+                            <option value="{{ $id_anoLectivo_publicado }}">
                                 {{ $ano_lectivo_publicado }}
                             </option>
                         </select>
                         <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
                     @else
 
-                        <select name="vc_anolectivo" id="vc_anolectivo" class="form-control">
-                            <option value="Todos">Todos</option>
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
+                            <option value="" >Todos</option>
                             @foreach ($anoslectivos as $anolectivo)
-                                <option value="{{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}">
+                                <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
                                 </option>
                             @endforeach
@@ -55,11 +55,11 @@
 
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="vc_curso" class="form-label">Curso:</label>
-                    <select name="vc_curso" id="vc_curso" class="form-control">
-                        <option value="Todos">Todos</option>
+                    <label for="id_curso" class="form-label">Curso:</label>
+                    <select name="id_curso" id="id_curso" class="form-control">
+                        <option value="" >Todos</option>
                         @foreach ($cursos as $curso)
-                            <option value="{{ $curso->vc_nomeCurso }}">
+                            <option value="{{ $curso->id }}">
                                 {{ $curso->vc_nomeCurso }}
                             </option>
                         @endforeach

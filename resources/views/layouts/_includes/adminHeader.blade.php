@@ -481,7 +481,7 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarMatriculados') }}" class="nav-link">
+                        <a href="{{ url('Admin/matriculas/pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Lista de Matriculados</p>
                         </a>
@@ -1035,7 +1035,7 @@
                         Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
                         Auth::user()->vc_tipoUtilizador == 'Preparador')
                     <li class="nav-item">
-                        <a href="{{ url('turmas/cadastrarTurmas') }}" class="nav-link">
+                        <a href="{{ url('turmas/cadastrar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Cadastrar Turma</p>
                         </a>
@@ -1395,14 +1395,14 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    @if ($estado_permissao_nota == 1)
+                    {{-- @if ($estado_permissao_nota == 1) --}}
                         <li class="nav-item">
                             <a href="{{ url('nota_em_carga/buscar_alunos') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Inserir Notas</p>
                             </a>
                         </li>
-                    @endif
+                    {{-- @endif --}}
                     <li class="nav-item">
                         <a href="{{ url('nota_em_carga/pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>

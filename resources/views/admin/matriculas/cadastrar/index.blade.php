@@ -14,21 +14,20 @@
 
         <div class="card-body">
 
-            <h5>No acto da Matricula tenha em atenção: <br>
-                <ul>
-                    <li>Ao selecionar a Turma, tem que corresponder com o curso e a classe da turma escolhida.</li>
+            <h5>As turmas dependem do curso do aluno<br>
 
-                </ul>
             </h5>
-
+            
+           
             <form form action="{{ route('admin.matriculas.salvar') }}" method="post" class="row"
                 enctype="multipart/form-data">
                 @csrf
 
                 @include('forms._formMatricula.index')
 
-                <div class=" col-md-12 text-center">
-                    <input type="submit" class=" col-md-2 text-center btn btn-dark" value="Matricular">
+                <div class="d-flex justify-content-center col-md-12">
+
+                    <button class=" btn btn-dark w-25 ">Cadastrar</button>
                 </div>
             </form>
         </div>
@@ -36,7 +35,7 @@
     <!-- sweetalert -->
 
 
-    <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
+    <script src="{{ asset('/js/sweetalert2.all.min.js') }}"></script>
 
     @if (session('alert'))
         <script>
@@ -45,7 +44,6 @@
                 'Esta Turma não tem mais vagas!',
                 'error'
             )
-
         </script>
     @endif
     @if (session('status'))
@@ -55,7 +53,6 @@
                 '',
                 'success'
             )
-
         </script>
     @endif
 
@@ -66,10 +63,9 @@
                 'verifique o numero de processo!',
                 'error'
             )
-
         </script>
     @endif
-    <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
+    <script src="{{ asset('/js/sweetalert2.all.min.js') }}"></script>
     @if (session('ExisteSelecionado'))
         <script>
             Swal.fire(
@@ -77,7 +73,6 @@
                 'Aluno já foi Matriculado no corrente ano lectivo!',
                 'error'
             )
-
         </script>
     @endif
 
@@ -87,7 +82,6 @@
                 icon: 'error',
                 title: 'Aluno Inexistente',
             })
-
         </script>
     @endif
 

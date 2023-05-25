@@ -25,11 +25,17 @@
  </div>
  <div class="form-group col-md-3">
      <label for="vc_datanascimento" class="form-label">Data de Nascimento</label>
-
-     <input type="date" name="vc_datanascimento" id="vc_datanascimento" class="form-control border-secondary"
+@isset($idadesdecandidaturas->dt_limiteaesquerda)
+<input type="date" name="vc_datanascimento" id="vc_datanascimento" class="form-control border-secondary"
          value="{{ $candidato->dt_dataNascimento }}"
          max="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limiteaesquerda)); ?>"
          min="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limitemaxima)); ?>" />
+    @else
+    <input type="date" name="vc_datanascimento" id="vc_datanascimento" class="form-control border-secondary"
+    value="{{ $candidato->dt_dataNascimento }}"
+     />
+@endisset
+     
 
  </div>
 

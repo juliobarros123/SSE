@@ -56,21 +56,56 @@ class AlunnoController extends Controller
 
     public function pesquisar()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        $response['cursos'] = fh_cursos()->get();
         return view('admin/alunos/pesquisar/index', $response);
     }
-    public function recebealunos(Request $request)
+    public function aluno($processo)
     {
-        $anoLectivo = $request->vc_anolectivo;
-        $curso = $request->vc_curso;
+        try {
+            $turmas = [];
+            $aluno = fh_aluno_processo($processo);
 
-        return redirect("admin/alunos/listar/$anoLectivo/$curso");
+            if ($aluno) {
+                $turmas = fh_turmas()->where('cursos.id', $aluno->id_curso)
+                    ->where('anoslectivos.id', fh_ano_lectivo_publicado()->id_anoLectivo)
+                    ->where('turmas.it_qtdeAlunos', '>', 0)
+                    ->get();
+            }
+
+            return response()->json(['aluno' => $aluno, 'turmas' => $turmas]);
+        } catch (\Exception $ex) {
+            return response()->json($ex->getMessage());
+        }
+    }
+    public function ver(Request $request)
+    {
+
+        $alunos = fh_alunos();
+        // dd($alunos->get());
+        if ($request->id_ano_lectivo) {
+
+            $alunos = $alunos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
+        }
+
+        if ($request->id_curso) {
+            // dd( $alunos->get(),$request->id_curso);
+            $alunos = $alunos->where('candidatos.id_curso', $request->id_curso);
+        }
+
+        $response['alunos'] = $alunos->get();
+        // dd( $response['alunos']);
+
+        $response['anolectivo'] = request('id_ano_lectivo');
+        $response['curso'] = request('id_curso');
+
+        return view('admin.alunos.index', $response);
     }
 
 
     public function listarAlunos($anoLectivo, $curso)
     {
+        dd("Ola");
         $response['alunos'] = DB::table('alunnos');
 
         if ($anoLectivo != 'Todos') {
@@ -114,62 +149,24 @@ class AlunnoController extends Controller
         return view('admin.alunos.cadastrar.index');
     }
 
-    public function imprimirFicha($id)
+    public function imprimirFicha($slug)
     {
-        $response['alunno'] = DB::table('alunnos')
-            ->leftJoin('matriculas', 'matriculas.it_idAluno', 'alunnos.id')
-            ->leftJoin('turmas', 'matriculas.it_idTurma', 'turmas.id')
-            ->where([['it_estado_aluno', 1]])
-            ->orderBy('matriculas.id', 'desc')
-            ->where('alunnos.id', $id)
-            ->select('alunnos.id as processo', 'alunnos.*', 'matriculas.*', 'turmas.vc_nomedaTurma')
-            ->first();
-
-        $response['dados'] = DB::table('alunnos')->where('it_estado_aluno', 1)->where('id', $id)->get();
-        $response['cabecalho'] = $this->cabecalho;
-        //dd($response['cabecalho']);
+        dd(fh_matriculas()->get());
+        $response['alunno'] = fh_aluno_slug($slug);
+        // dd($response['alunno']);
+        // $response['dados'] = DB::table('alunnos')->where('it_estado_aluno', 1)->where('id', $id)->get();
+        $response['cabecalho'] = fh_cabecalho();
+        // dd($response['cabecalho']);
 
 
         if ($response['cabecalho'] != null) {
 
             $mpdf = new \Mpdf\Mpdf();
             /* $response['stylesheet'] = file_get_contents(__full_path().'css/recibo/style.css'); */
-            if ($response['cabecalho']->vc_nif == "5000298182") {
 
-                //$url = 'cartões/CorMarie/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "7301002327") {
+            //$url = 'images/cartao/aluno.jpg';
+            $response['stylesheet'] = file_get_contents('css/recibo/style.css');
 
-                //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "5000303399") {
-
-                //$url = 'cartões/negage/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "5000820440") {
-
-                //$url = 'cartões/Quilumosso/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "5000305308") {
-
-                //$url = 'cartões/Foguetao/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "7301002572") {
-
-                //$url = 'cartões/LiceuUíge/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "7301003617") {
-
-                //$url = 'cartões/ldc/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else if ($response['cabecalho']->vc_nif == "5000300926") {
-
-                //$url = 'cartões/imagu/aluno.png';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            } else {
-                //$url = 'images/cartao/aluno.jpg';
-                $response['stylesheet'] = file_get_contents(__full_path() . 'css/recibo/style.css');
-            }
             $html = view("admin/pdfs/alunno/ficha", $response);
             $mpdf->writeHTML($html);
             $this->loggerData('Imprimiu Ficha do Aluno(a)' . $response['alunno']->vc_primeiroNome . ' ' . $response['alunno']->vc_nomedoMeio . ' ' . $response['alunno']->vc_ultimoaNome);
@@ -560,15 +557,16 @@ class AlunnoController extends Controller
         // }
     }
 
-    public function delete($id)
+    public function delete($slug)
     {
         try {
-           
-          
-        $response = Alunno::find($id);
-        $response->update(['it_estado_aluno' => 0]);
 
-        $this->loggerData("Eliminou Aluno" . $response->vc_primeiroNome . '' . $response->vc_nomedoMeio . '' . $response->vc_apelido);
+
+            $response = fh_aluno_slug($slug);
+            // dd( $response );
+            fh_alunos()->where('alunnos.slug', $slug)->delete();
+
+            $this->loggerData("Eliminou Aluno" . $response->vc_primeiroNome . '' . $response->vc_nomedoMeio . '' . $response->vc_apelido);
             return redirect()->back()->with('aluno.eliminar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;
@@ -580,12 +578,12 @@ class AlunnoController extends Controller
     {
 
 
-       /*  try { */
+        /*  try { */
 
-            $response = Alunno::find($id);
-            Alunno::where('id', $id)->delete();
-            $this->loggerData("Purgou Aluno" . $response->vc_primeiroNome . '' . $response->vc_nomedoMeio . '' . $response->vc_apelido);
-            return redirect()->back()->with('aluno.purgar.success', '1');
+        $response = Alunno::find($id);
+        Alunno::where('id', $id)->delete();
+        $this->loggerData("Purgou Aluno" . $response->vc_primeiroNome . '' . $response->vc_nomedoMeio . '' . $response->vc_apelido);
+        return redirect()->back()->with('aluno.purgar.success', '1');
         /* } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('aluno.purgar.error', '1');
@@ -638,7 +636,7 @@ class AlunnoController extends Controller
 
             $response = Alunno::find($id);
             $response->update(['it_estado_aluno' => 1]);
-    
+
             $this->loggerData("Recuperou Aluno" . $response->vc_primeiroNome . '' . $response->vc_nomedoMeio . '' . $response->vc_apelido);
             return redirect()->back()->with('aluno.recuperar.success', '1');
         } catch (\Throwable $th) {

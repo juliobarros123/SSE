@@ -1,0 +1,1 @@
+elimanar classe,  curso(string) na tabela de candidatos

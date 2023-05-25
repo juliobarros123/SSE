@@ -20,13 +20,14 @@
 @endif
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('admin.matriculas.atualizar', $matricula->id) }}" method="post" class="row"
+            <form form action="{{ route('admin.matriculas.atualizar', $matricula->slug) }}" method="post" class="row"
                 enctype="multipart/form-data">
                 @method('put')
                 @csrf
                 @include('forms._formMatricula.index')
-                <div class="col-md-5 py-1  text-center ">
-                    <input type="submit" class="col-sm-6 btn btn-dark" value="Confirmar alterações">
+                <div class="d-flex justify-content-center col-md-12">
+
+                    <button class=" btn btn-dark w-25 ">Editar</button>
                 </div>
             </form>
         </div>

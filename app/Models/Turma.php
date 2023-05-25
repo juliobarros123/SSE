@@ -23,10 +23,7 @@ use App\Models\Disciplina_Terminal;
 class Turma extends Model
 {
   protected $fillable = ['id_cabecalho','slug', 
-    'vc_nomedaTurma',
-    'vc_classeTurma',
-    'vc_cursoTurma',
-    'vc_anoLectivo',
+   'vc_nomedaTurma',
     'it_qtdeAlunos',
     'it_qtMatriculados',
     'vc_turnoTurma',
@@ -35,8 +32,19 @@ class Turma extends Model
     'it_idAnoLectivo',
     'it_estado_turma',
     'vc_salaTurma'
-
+    
   ];
+  protected static function boot()
+  {
+      parent::boot();
+
+      static::creating(function ($model) {
+          $hash_bcrypt = '';
+          $hash_bcrypt = Hash::make(slug_gerar());
+          $stringSemBarras = str_replace('/', '', $hash_bcrypt);
+          $model->slug = $stringSemBarras;
+      });
+  }
   public function cursos()
   {
     return $this->belongsTo('App\Models\Curso', 'cursos');
