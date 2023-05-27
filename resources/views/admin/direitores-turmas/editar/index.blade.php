@@ -11,13 +11,14 @@
 
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('admin.atribuicoes.atualizar', $atribuicao->id) }}" method="post" class="row"
+            <form form action="{{ route('direitores-turmas.actualizar', $director_turma->slug) }}" method="post" class="row"
                 enctype="multipart/form-data">
                 @method('put')
                 @csrf
-                @include('forms._formAtribuicao.index')
-                <div class="col-md-5 py-1  text-center ">
-                    <input type="submit" class="col-sm-6 btn btn-dark" value="Confirmar alterações">
+                @include('forms._formDireitorTurma.index')
+                <div class="d-flex justify-content-center col-md-12">
+
+                    <button class=" btn btn-dark w-25 ">Editar</button>
                 </div>
             </form>
         </div>

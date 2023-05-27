@@ -49,48 +49,48 @@ class RelatorioAluno extends Controller
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
 
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
         
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         }
 
 
@@ -124,48 +124,48 @@ class RelatorioAluno extends Controller
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
 
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
         
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["style"] = file_get_contents(__full_path().'css/relatorio/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/relatorio/bootstrap.min.css');
+            $data["style"] = file_get_contents(.'css/relatorio/style.css');
+           $data['bootstrap'] = file_get_contents(.'css/relatorio/bootstrap.min.css');
         }
 
 
@@ -229,48 +229,48 @@ class RelatorioAluno extends Controller
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
 
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
         
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         }  else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-           $data['bootstrap'] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+           $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
         }
 
         $mpdf = new \Mpdf\Mpdf();

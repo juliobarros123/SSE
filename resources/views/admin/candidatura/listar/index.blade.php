@@ -43,18 +43,18 @@
     <div class="table-responsive">
         <table id="example" class="display table table-hover">
             <thead class="">
-                <tr class="text-center">
+                <tr>
                     <th>INSCRIÇÃO Nº</th>
                     <th>NOME COMPLETO</th>
                     <th>B.I/CÉDULA</th>
-                    <th>E-MAIL</th>
+                    
                     <th>IDADE</th>
                     <th>CURSO</th>
                     <th>CLASSE</th>
-                    <th>DT. CANDIDATURA</th>
+ 
                     <th>GÊNERO</th>
                     <th>MÉDIA</th>
-                    <th>TELEFONE</th>
+               
                     <th>ESTADO</th>
                     <th>ACÇÕES</th>
                 </tr>
@@ -63,24 +63,23 @@
 
                 <?php foreach ($candidatos as $candidato):?>
 
-                <tr class="text-center">
+                <tr class="">
                     <td>{{ $candidato->id }}</td>
-                    <td class="text-left">
+                    <td >
                         {{ $candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido }}
                     </td>
                     <td>{{ $candidato->vc_bi }}</td>
-                    <td>{{ $candidato->vc_email }}</td>
+                 
                     <td>{{ calcularIdade($candidato->dt_dataNascimento) }} anos</td>
 
                     <td>{{ $candidato->vc_nomeCurso }}</td>
                     <td>{{ $candidato->vc_classe }}ª Classe</td>
-                    <td>{{ date('d-m-Y', strtotime($candidato->created_at)) }}</td>
+                  
                     <td>{{ $candidato->vc_genero }}</td>
 
                     <td>{{ $candidato->media }}</td>
 
-                    <td>{{ $candidato->it_telefone }}</td>
-
+                
                     @if (candidado_transferido($candidato->id))
                         <td class="text-green">Transferido</td>
                     @else
@@ -100,11 +99,14 @@
                                     href='{{ url("candidatos/$candidato->slug/imprimir_ficha") }}'>Ficha</a>
                                 <a class="dropdown-item" href='{{ url("candidatos/$candidato->slug/edit") }}'>Editar</a>
                                 @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                                    <a class="dropdown-item" href='{{ url("candidatos/$candidato->slug/eliminar") }}'
+                                <a class="dropdown-item" href="#" type="button" data-toggle="modal"
+                                data-backdrop="static"
+                                data-target=".bd-example-modal-lg-{{ $candidato->id }}">Expandir</a>
+                                <a class="dropdown-item" href='{{ url("candidatos/$candidato->slug/eliminar") }}'
                                         data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                 @endif
 
-                                @if ($candidato->state === 1)
+                      
                                     @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
@@ -116,7 +118,6 @@
                                                 class="dropdown-item cand_para_aluno">Transferir</a>
                                         @endif
 
-                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -124,7 +125,80 @@
 
                     </td>
                 </tr>
+                <div class="modal fade bd-example-modal-lg-{{ $candidato->id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Nº de Inscrição: <b>{{ $candidato->id }}</b></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
 
+                                <h5 class="text-left mb-2 ml-2"><b>Dados Pessoais</b></h5>
+                                <p class="ml-4">
+                                    <b>Nome Completo:
+                                    </b>{{ $candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido }}<br>
+
+                                    <b>Data de Nascimento: </b>
+                                    {{ date('d-m-Y', strtotime($candidato->dt_dataNascimento)) }}<br>
+                                    <b>Idade: </b>
+                                    {{ calcularIdade($candidato->dt_dataNascimento)}} anos<br>
+
+                                    <b>Nome do Pai: </b>
+                                    {{ $candidato->vc_nomePai }}<br>
+                                    <b>Nome da Mãe: </b>
+                                    {{ $candidato->vc_nomeMae }}<br>
+                                    <b>Genero: </b>
+                                    {{ $candidato->vc_genero }}<br>
+                                    <b>Deficiênte Físico?: </b>
+                                    {{ $candidato->vc_dificiencia }}<br>
+                                    <b>Estado Civil: </b>
+                                    {{ $candidato->vc_estadoCivil }}<br>
+                                    <b>Telefone: </b>
+                                    {{ $candidato->it_telefone }}<br>
+                                    <b>Email: </b>
+                                    {{ $candidato->vc_email }}<br>
+                                    <b>Residência: </b>
+                                    {{ $candidato->vc_residencia }}<br>
+                                    <b>Naturalidade: </b>
+                                    {{ $candidato->vc_naturalidade }}<br>
+                                    <b>Provincia: </b>
+                                    {{ $candidato->vc_provincia }}<br>
+                                    <b>Bilhete de Identidade Nº: </b>
+                                    {{ $candidato->vc_bi }}<br>
+                                    <b>Data de emissão do bilhete de Identidade: </b>
+                                    {{ date('d-m-Y', strtotime($candidato->dt_emissao)) }}<br>
+                                    <b>Local de emissão do Bilhete de Identidade: </b>
+                                    {{ $candidato->vc_localEmissao }}<br>
+                                </p>
+                                {{-- <h5 class="text-left mb-2 mt-2 ml-2"><b>Dados Acadêmicos</b></h5> --}}
+                                <p class="ml-4">
+                                    <b>Escola Anterior: </b>
+                                    {{ $candidato->vc_EscolaAnterior }}<br>
+
+                                    <b>Ano de Conclusão: </b>
+                                    {{ $candidato->ya_anoConclusao }}
+                                </p>
+                                {{-- <h5 class="text-left mt-2 ml-2"><b>Dados da Nova Escola</b></h5> --}}
+                                <p class="ml-4">
+                                    <b>Curso escolhido: </b>
+                                    {{ $candidato->vc_nomeCurso }}<br>
+                                    <b>Classe Inicial: </b>
+                                    {{ $candidato->vc_classe}}ªClasse<br>
+                                    {{-- <b>Ano Lectivo de Inscrição: </b>
+                                    {{ $candidato-> }} --}}
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                 <?php endforeach;?>
 
 

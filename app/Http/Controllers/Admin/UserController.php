@@ -49,14 +49,14 @@ class UserController extends Controller
     {
         $this->loggerData("Listou os usuarios");
 
-        $users = User::where([['it_estado_user', 1]])->get();
+        $users = fh_users()->get();
         return view('admin.users.index', compact('users'));
     }
     public function imprimir_lista()
     {
         $data['cabecalho'] = Cabecalho::find(1);
-        $data["css"] = file_get_contents(__full_path().'css/listas/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/listas/bootstrap.min.css');
+        $data["css"] = file_get_contents('css/listas/style.css');
+        $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
 
         $mpdf = new \Mpdf\Mpdf();
 
@@ -86,15 +86,17 @@ class UserController extends Controller
             ])->validate();
             $this->user->store($dados);
             $this->loggerData("Adicionou Utilizador ");
-            return redirect()->back()->with('status', '1');
+            return redirect()->route('admin/users/listar')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador cadastrado com sucesso']);
+
         } catch (\Exception $exception) {
-            // dd($exception);
-            return redirect()->back()->with('aviso', '1');
+
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
     }
-    public function editar($id)
+    public function editar($slug)
     {
-        if ($user = User::where([['it_estado_user', 1]])->find($id)):
+        if ($user = fha_users($slug)):
 
             return view('admin.users.editar.index', compact('user'));
         else:
@@ -108,18 +110,34 @@ class UserController extends Controller
 
             return view('admin.users.editarPessoal.index', compact('user'));
         else:
-            return redirect('/')->with('teste', '1');
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Utilizador não existe']);
+
 
         endif;
     }
 
 
-    public function atualizar(Request $input, $id)
+    public function atualizar(Request $input, $slug)
     {
-        $dados[] = $input;
-        $this->user->update($dados, $id);
-        $this->loggerData("Actualizou Utilizador");
-        return redirect('admin/users/listar')->with('status', '1');
+        try {
+            $dados[] = $input;
+            // dd( $dados);
+            if ($user = fha_users($slug)):
+
+                $this->user->update($dados, $slug);
+                $this->loggerData("Actualizou Utilizador");
+
+                return redirect()->route('admin/users/listar')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador editado com sucesso']);
+
+            else:
+                return redirect('/')->with('teste', '1');
+
+            endif;
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+
+        }
     }
 
     public function atualizarPessoal(Request $input, $id)
@@ -130,15 +148,17 @@ class UserController extends Controller
         return redirect('/')->with('status', '1');
     }
 
-    public function excluir($id)
+    public function excluir($slug)
     {
         try {
             //User::find($id)->delete();
             //User::find($id)->delete();
-            $response = User::find($id);
-            $response->update(['it_estado_user' => 0]);
+            $response = fha_users($slug);
+            // dd($response);
+            User::where('users.slug', $slug)->delete();
             $this->loggerData("Eliminou Utilizador");
-            return redirect()->back()->with('user.eliminar.success', '1');
+            return redirect()->route('admin/users/listar')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador eliminado com sucesso']);
+
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('user.eliminar.error', '1');
@@ -164,26 +184,5 @@ class UserController extends Controller
         }
     }
 
-    public function eliminadas()
-    {
-        $this->loggerData("Listou os usuarios eliminados");
 
-        $response['users'] = User::where([['it_estado_user', 0]])->get();
-        $response['eliminadas']="eliminadas";
-        return view('admin.users.index',  $response);
-    }
-
-    public function recuperar($id)
-    {
-        try {
-           
-            $response = User::find($id);
-            $response->update(['it_estado_user' => 1]);
-            $this->loggerData("Recuperou Utilizador");
-            return redirect()->back()->with('user.recuperar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('user.recuperar.error', '1');
-        }
-    }
 }

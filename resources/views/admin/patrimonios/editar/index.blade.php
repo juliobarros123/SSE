@@ -19,7 +19,7 @@
                 @method('PUT')
                 @include('forms._formPatrimonios.index')
                 <div class="col-md-12 text-center mt-4">
-                    <button class="btn btn-success col-md-2" type="submit">Salvar Alterações</button>
+                    <button class="btn btn-success col-md-2" type="submit">Editar</button>
                 </div>
             </form>
 

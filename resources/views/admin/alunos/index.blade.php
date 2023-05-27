@@ -74,9 +74,8 @@
                                     data-backdrop="static"
                                     data-target=".bd-example-modal-lg-{{ $aluno->id }}">Expandir</a>
 
-                                <a class="dropdown-item" href="{{ route('admin.alunno.ficha', $aluno->slug) }}"
-                                    target="_blank">Ficha</a>
-                                <a class="dropdown-item" href="{{ route('aluno.update', $aluno->id) }}">Editar imagem</a>
+                               
+                                {{-- <a class="dropdown-item" href="{{ route('aluno.update', $aluno->id) }}">Editar imagem</a> --}}
                                 {{-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
                                     <a class="dropdown-item" href="{{ route('aluno.delete', $aluno->slug) }}"
                                         data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
@@ -133,7 +132,7 @@
                                         {{ $aluno->vc_provincia }}<br>
                                         <b>Bilhete de Identidade Nº: </b>
                                         {{ $aluno->vc_bi }}<br>
-                                        <b>Data de emissão do bilhete de Identidade: </b>
+                                        <b>Data de emissão do bilhete de Identidade/Cédula Pessoal de Identificação:</b>
                                         {{ date('d-m-Y', strtotime($aluno->dt_emissao)) }}<br>
                                         <b>Local de emissão do Bilhete de Identidade: </b>
                                         {{ $aluno->vc_localEmissao }}<br>

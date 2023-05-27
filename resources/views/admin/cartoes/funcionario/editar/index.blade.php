@@ -19,7 +19,7 @@
                 @method('PUT')
                 @include('forms._formFuncionario.index')
                 <div class="col-md-12 text-center mt-4">
-                    <button class="btn btn-success col-md-3" type="submit">Salvar Alterações</button>
+                    <button class="btn btn-success col-md-3" type="submit">Editar</button>
                 </div>
             </form>
 

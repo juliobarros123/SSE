@@ -52,7 +52,7 @@ class DispensaAdministrativaDocumentoController extends Controller
         $diferencaEmDias = $data1->diffInDays($data2);
         $data['diferencaEmDias'] = $diferencaEmDias;
         //dd($data['funcionario']);
-        $data["css"] = file_get_contents(__full_path() . 'css/pauta/style.css');
+        $data["css"] = file_get_contents('css/pauta/style.css');
         $mpdf = new \Mpdf\Mpdf([
             'format' => 'A4',
             'margin_right' => 13,

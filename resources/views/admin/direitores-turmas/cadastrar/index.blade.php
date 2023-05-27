@@ -20,7 +20,7 @@
 @endif
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('turmas.efectuarCadastroDireitor') }}" method="post" class="row">
+            <form form action="{{ route('direitores-turmas.cadastrar') }}" method="post" class="row">
                 @csrf
 
                 @include('forms._formDireitorTurma.index')

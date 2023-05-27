@@ -31,22 +31,24 @@ class DisciplinasController extends Controller
   {
     $this->Logger = new Logger();
   }
-  public function loggerData($mensagem){
-    $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-    $this->Logger->Log('info', $dados_Auth.$mensagem);
-}
+  public function loggerData($mensagem)
+  {
+    $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+    $this->Logger->Log('info', $dados_Auth . $mensagem);
+  }
   public function index()
   {
 
-    $response['desd'] = FacadesDB::table('turmas_users')
-      ->join('disciplinas', 'disciplinas.id', '=', 'turmas_users.it_idDisciplina')
-      ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
-      ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
-      ->select('disciplinas.id', 'turmas.vc_cursoTurma', 'turmas.vc_classeTurma', 'disciplinas.vc_nome', 'disciplinas.vc_acronimo')
-      ->where('turmas_users.it_idUser', Auth::user()->id)->distinct()
-      ->get();
+    // $response['desd'] = FacadesDB::table('turmas_users')
+    //   ->join('disciplinas', 'disciplinas.id', '=', 'turmas_users.it_idDisciplina')
+    //   ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
+    //   ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
+    //   ->select('disciplinas.id', 'turmas.vc_cursoTurma', 'turmas.vc_classeTurma', 'disciplinas.vc_nome', 'disciplinas.vc_acronimo')
+    //   ->where('turmas_users.it_idUser', Auth::user()->id)->distinct()
+    //   ->get();
 
-    $response['disciplinas'] = Disciplinas::where([['it_estado_disciplina', 1]])->get();
+    $response['disciplinas'] = fh_disciplinas()->get();
+    // dd( $response['disciplinas']);
     return view('admin.disciplinas.index', $response);
   }
 
@@ -59,95 +61,73 @@ class DisciplinasController extends Controller
 
   public function store(Request $request)
   {
-    $disciplinas = Disciplinas::where('vc_acronimo', '=',  $request->vc_acronimo)->first();
-
-    //if($disciplinas === null){
-      try {
+ 
+    try {
+      $d = Disciplinas::where('vc_nome', $request->vc_nome)
+        ->where('id_cabecalho', Auth::User()->id_cabecalho)->count();
+      if ($d) {
+        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Disciplina  já existe']);
+      } else {
         Disciplinas::create([
-            'vc_nome' => $request->vc_nome,
-            'vc_acronimo' => $request->vc_acronimo
+          'vc_nome' => $request->vc_nome,
+          'vc_acronimo' => $request->vc_acronimo,
+          'id_cabecalho'=>Auth::User()->id_cabecalho
 
-          ]);
+        ]);
+        $this->loggerData('Adicionou disciplina com o nome ' . $request->vc_nome);
+        return redirect()->route('admin.disciplinas.index')->with('feedback', ['type' => 'success', 'sms' => 'Disciplina cadastrada com sucesso']);
 
-          
+      }
 
-        }
-        catch (QueryException $th) {
-            return redirect()->back()->with("disciplina","1");
-
-        }
-    //}else{
-       // return redirect()->back()->with("disciplina","1");
-
-   // }
+    } catch (QueryException $th) {
+      // dd($th);
+      return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
 
 
+    }
 
-    $this->loggerData('Adicionou Uma Disciplina');
-    return redirect('/disciplina/ver')->with('status', '1');
   }
 
-  public function edit($id)
+  public function edit($slug)
   {
-    if ($disciplina = Disciplinas::find($id)) :
+$disciplina=fh_disciplinas('disciplinas.slug',$slug)->first();
+// dd($disciplina);
+    if ($disciplina):
 
       return view('admin.disciplinas.editar.index', compact('disciplina'));
-    else :
-      return redirect('/disciplina')->with('disciplina', '1');
+    else:
+      return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
 
     endif;
   }
 
-  public function update(Request $request, $id)
+  public function update(Request $request, $slug)
   {
 
-      try {
-        Disciplinas::find($id)->update([
-          'vc_nome' => $request->vc_nome,
-          'vc_acronimo' => $request->vc_acronimo
-        ]);
+    try {
+      Disciplinas::where('disciplinas.slug',$slug)->update([
+        'vc_nome' => $request->vc_nome,
+        'vc_acronimo' => $request->vc_acronimo
+      ]);
+      $this->loggerData('Actualizou  disciplina com o nome',$request->vc_nome);
+      return redirect()->route('admin.disciplinas.index')->with('feedback', ['type' => 'success', 'sms' => 'Disciplina actualizada com sucesso']);
 
-      }
-      catch (QueryException $th) {
-          return redirect()->back()->with("disciplina","1");
+    } catch (QueryException $th) {
+      return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 
-      }
-      $this->loggerData('Actualizou Uma Disciplina');
-      return redirect()->route('admin.disciplinas.index');
-  }
-
-  public function delete($id)
-  {
-    $response = Disciplinas::find($id);
-    $response->update(['it_estado_disciplina' => 0]);
-
-    $this->loggerData('Eliminou Uma Disciplina');
-    return redirect()->back()->with('feedback', ['status'=>'1','sms'=>'Disciplina eliminada com sucesso']);
-  }
-  public function eliminadas(){
-    $response['disciplinas']  = Disciplinas::where('it_estado_disciplina',0)->get();
-    $response['eliminadas']="eliminadas";
-    
-    return view('admin.disciplinas.index', $response);
- 
-  }
-  public function recuperar($id){
-    $response = Disciplinas::find($id);
-    $response->update(['it_estado_disciplina' => 1]);
-    $this->loggerData('Recuperou Uma Disciplina');
-    return redirect()->back()->with('feedback', ['status'=>'1','sms'=>'Disciplina recuperada com sucesso']);
-    return redirect()->back();
-  }
-  public function purgar($id){
-    // dd($id);
-    try{
-      $response = Disciplinas::find($id)->delete();
-      $this->loggerData('Purgou Uma Disciplina');
-      return redirect()->back()->with('feedback', ['status'=>'1','sms'=>'Disciplina purgada com sucesso']);
-      // return redirect()->back();
-    }catch(Exception $ex){
-      return redirect()->back()->with('feedback', ['error'=>'1','sms'=>'Erro,possivelmente essa disciplina está relacionada com curso e classe']);
     }
-    
+  
+
   }
+
+  public function delete($slug)
+  {
+    $response = Disciplinas::where('disciplinas.slug',$slug)->first();
+    Disciplinas::where('disciplinas.slug',$slug)->delete();
+    $this->loggerData('Eliminou  Disciplina com o nome ', $response->vc_nome);
+    return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Disciplina eliminada com sucesso']);
+  }
+
+  
 }

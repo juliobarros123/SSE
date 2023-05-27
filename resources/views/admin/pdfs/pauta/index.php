@@ -183,7 +183,7 @@ use Illuminate\Support\Facades\DB;
 <body>
     <div class="text-center">
         <p>
-            <img src="<?php echo __full_path() ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="" width="50" height="50">
+            <img src="<?php echo  ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="" width="50" height="50">
             <br>
             <?php echo $cabecalho->vc_republica; ?>
             <br>

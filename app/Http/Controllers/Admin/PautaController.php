@@ -108,93 +108,93 @@ class PautaController extends Controller
        if ($data['cabecalho']->vc_nif == "5000298182") {
 
         //$url = 'cartões/CorMarie/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
 
     } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
         //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
         //$url = 'cartões/negage/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000820440") {
     
         //$url = 'cartões/Quilumosso/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
         //$url = 'cartões/Foguetao/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
         //$url = 'cartões/LiceuUíge/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
         //$url = 'cartões/ldc/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
         //$url = 'cartões/imagu/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else {
         //$url = 'images/cartao/aluno.jpg';
-       /*  $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css'); */
+       /*  $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css'); */
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
 
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
         
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         }
     }
         $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
@@ -225,53 +225,53 @@ class PautaController extends Controller
         $datos['cabecalho'] = Cabecalho::find(1);
 
 
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
         /* $data["css"] = file_get_contents("css/pauta/style.css"); */
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else if ($data['cabecalho']->vc_nif == "5000820440") {
         
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-            /*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+            /*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
              */        }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents(.'css/pauta/style.css');
+/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
  */        }
         $mpdf = new \Mpdf\Mpdf(['format' => [210, 297]]);
         $mpdf->SetFont("arial");
@@ -334,48 +334,48 @@ class PautaController extends Controller
        if ($data['cabecalho']->vc_nif == "5000298182") {
 
         //$url = 'cartões/CorMarie/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
 
     } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
         //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
         //$url = 'cartões/negage/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000820440") {
     
         //$url = 'cartões/Quilumosso/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
         //$url = 'cartões/Foguetao/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
         //$url = 'cartões/LiceuUíge/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
         //$url = 'cartões/ldc/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
         //$url = 'cartões/imagu/aluno.png';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     } else {
         //$url = 'images/cartao/aluno.jpg';
-        $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+        $data["css"] = file_get_contents(.'css/pauta/style.css');
+        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
     }
         $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
         $mpdf->SetFont("arial");
@@ -434,48 +434,48 @@ class PautaController extends Controller
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
 
             } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
             
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
              } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else {
                 //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             }
 
             $mpdf = new \Mpdf\Mpdf();
@@ -522,48 +522,48 @@ class PautaController extends Controller
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
 
             } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
             
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
              } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             }else if ($data['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             } else {
                 //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents(__full_path().'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path().'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents(.'css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
             }
             $mpdf = new \Mpdf\Mpdf(['format' => 'A3-L']);
 

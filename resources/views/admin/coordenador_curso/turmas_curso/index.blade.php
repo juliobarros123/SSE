@@ -82,15 +82,15 @@
                                 <i class="fa fa-clone" aria-hidden="true"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a href="{{ route('turmas.gerarlistaTurmas', $row->id) }}"
+                                <a href="{{ route('turmas.imprimir_alunos', $row->id) }}"
                                     class="dropdown-item" target="_blank">Listas</a>
                                 <a href="{{ route('turmas.gerarcadernetaTurmas', $row->id) }}"
                                     class="dropdown-item" target="_blank">Cadernetas</a>
                                     <a href="{{ route('turmas.gerarcadernetaTurmas.xlsx', $row->id) }}"
                                         class="dropdown-item" target="_blank">Gerar xlsx</a>
-                                <a href="{{ route('turmas.editarTurmas', $row->id) }}"
+                                <a href="{{ route('turmas.editar', $row->id) }}"
                                     class="dropdown-item">Editar</a>
-                                <a href="{{ route('turmas.deletarTurmas', ['id' => $row->id]) }}"
+                                <a href="{{ route('turmas.eliminar', ['id' => $row->id]) }}"
                                     class="dropdown-item" data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                 var href = $(this).attr('href');
                 if (!$('#confirm-delete').length) {
                     $('table').append(
-                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende elimnar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
+                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende eliminar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
                     );
                 }
                 $('#dataConfirmOk').attr('href', href);

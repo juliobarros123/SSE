@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Relacionar Disciplina')
+@section('titulo', 'Cadastrar disciplinas/cursos/classes')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Relacionar Disciplina</h3>
+            <h3>Cadastrar disciplinas/cursos/classes</h3>
         </div>
     </div>
 
@@ -16,10 +16,9 @@
                 @csrf
 
                 @include('forms._formDisciplinaCursoClasse.index')
-                <div class="form-group col-md-3">
-                    <label for="" class="form-label text-white">.</label>
-                    <button class="form-control  btn btn-dark">Salvar Relacionamento</button>
+                <div class="d-flex justify-content-center col-md-12">
 
+                    <button class=" btn btn-dark w-25 ">Cadastrar</button>
                 </div>
             </form>
         </div>

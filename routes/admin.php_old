@@ -245,11 +245,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/inserir', ['as' => 'turmas.efectuarCadastroDaTurma', 'uses' => 'Admin\TurmaController@efectuarCadastroDaTurma']);
         Route::get('/listarTurmas/{anolectivo}/{curso}', ['as' => 'admin.viewListarTurmas', 'uses' => 'Admin\TurmaController@listarTurmas']);
 
-        Route::get('/{id}/editarTurmas', ['as' => 'turmas.editarTurmas', 'uses' => 'Admin\TurmaController@editarTurmas'])->middleware('access.controll.administrador');
-        Route::get('/{id}/deletarTurmas', ['as' => 'turmas.deletarTurmas', 'uses' => 'Admin\TurmaController@deletarTurmas'])->middleware('access.controll.administrador');
-        Route::put('/{id}/efectuarEdicaoDeTurma', ['as' => 'turmas.efectuarEdicaoDeTurma', 'uses' => 'Admin\TurmaController@efectuarEdicaoDeTurma'])->middleware('access.controll.administrador');
+        Route::get('/{id}/editar', ['as' => 'turmas.editar', 'uses' => 'Admin\TurmaController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{id}/eliminar', ['as' => 'turmas.eliminar', 'uses' => 'Admin\TurmaController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{id}/actualizar', ['as' => 'turmas.actualizar', 'uses' => 'Admin\TurmaController@actualizar'])->middleware('access.controll.administrador');
 
-        Route::get('/{id}/gerarlistaTurmas', ['as' => 'turmas.gerarlistaTurmas', 'uses' => 'Admin\TurmaController@gerarlista']);
+        Route::get('/{id}/imprimir_alunos', ['as' => 'turmas.imprimir_alunos', 'uses' => 'Admin\TurmaController@gerarlista']);
         Route::get('/{id}/gerarcadernetaTurmas', ['as' => 'turmas.gerarcadernetaTurmas', 'uses' => 'Admin\TurmaController@gerarcaderneta']);
     });
 

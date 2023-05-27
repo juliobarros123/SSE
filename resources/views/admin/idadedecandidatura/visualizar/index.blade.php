@@ -3,7 +3,7 @@
  @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Lista de Idades de Candidatura</h3>
+            <h3>Lista de Idades de admissão</h3>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                     <td>{{ $idadedecandidatura->id }}</td>
                     <td>{{ date('Y') - date('Y', strtotime($idadedecandidatura->dt_limiteaesquerda)) }} Anos</td>
                     <td>{{ date('Y') - date('Y', strtotime($idadedecandidatura->dt_limitemaxima)) }} Anos</td>
-                    <td>{{ $idadedecandidatura->vc_anolectivo }}</td>
+                    <td>{{ $idadedecandidatura->ya_inicio }}/{{ $idadedecandidatura->ya_fim }}</td>
                     <td>
 
                         @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
@@ -44,10 +44,10 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                                 <a class="dropdown-item"
-                                    href="{{ route('admin/idadedecandidatura/editar', $idadedecandidatura->id) }}">Editar
+                                    href="{{ route('admin/idadedecandidatura/editar', $idadedecandidatura->slug) }}">Editar
                                 </a>
                                 <a class="dropdown-item"
-                                    href="{{ route('admin/idadedecandidatura/eliminar', $idadedecandidatura->id) }}"  data-confirm="Tem certeza que deseja eliminar?">Eliminar
+                                    href="{{ route('admin/idadedecandidatura/eliminar', $idadedecandidatura->slug) }}"  data-confirm="Tem certeza que deseja eliminar?">Eliminar
                                 </a>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                 var href = $(this).attr('href');
                 if (!$('#confirm-delete').length) {
                     $('table').append(
-                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende elimnar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
+                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende eliminar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
                     );
                 }
                 $('#dataConfirmOk').attr('href', href);

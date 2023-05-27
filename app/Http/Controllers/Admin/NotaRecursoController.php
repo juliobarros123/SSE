@@ -75,7 +75,7 @@ class NotaRecursoController extends Controller
                     $matricula =  Matricula::where('id_aluno', $arraySplitkey[1])->first();
 
 
-                    $dcc = $this->get_DCC()
+                    $dcc = $this->fh_disciplinas_cursos_classes()
                         ->where('disciplinas.id',   $req->id_disciplina)
                         ->where('cursos.id', $matricula->it_idCurso)->first();
                     if ($dcc) {
@@ -101,7 +101,7 @@ class NotaRecursoController extends Controller
 
     // $divisor = $this->acharDivisor($nota->classe);
     // $mts = $this->dividirNota($nota->nota, $divisor);
-    public  function get_DCC()
+    public  function fh_disciplinas_cursos_classes()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
@@ -168,7 +168,7 @@ class NotaRecursoController extends Controller
         try {
             // if ($estudando == 0) {
                 $response['processosAluno'] = $this->matricula->processosAluno($processo)->first();
-                // $response['disciplinas'] = $this->get_DCC()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
+                // $response['disciplinas'] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
                 //     ->select("disciplinas.vc_nome", "disciplinas.id")
                 //     ->distinct()
                 //     ->pluck("disciplinas.vc_nome", "disciplinas.id");
@@ -180,7 +180,7 @@ class NotaRecursoController extends Controller
             //     $response['disciplinas'] = array();
 
             //     for ($i = 10; $i <= $ultimoProcesso->vc_classe - 1; $i++) {
-            //         $response['disciplinas']["classe$i"] = $this->get_DCC()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
+            //         $response['disciplinas']["classe$i"] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
             //             ->where('classes.vc_classe', $i)
             //             ->select("disciplinas.vc_nome", "disciplinas.id")
             //             ->pluck("disciplinas.vc_nome", "disciplinas.id");

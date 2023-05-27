@@ -17,7 +17,7 @@
                 @csrf
                 @include('forms._formAtribuicao.index')
                 <div class="col-md-5 py-1  text-center ">
-                    <input type="submit" class="col-sm-6 btn btn-dark" value="Confirmar alterações">
+                    <input type="submit" class="col-sm-6 btn btn-dark" value="Editar">
                 </div>
             </form>
         </div>

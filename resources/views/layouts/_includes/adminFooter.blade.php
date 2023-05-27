@@ -1231,10 +1231,43 @@ vc_tipodaNota
     @endif
 @endif
 <script>
-    // $('select').on('select2:open', function() {
-    //     $('.select2-search__field').prop('required', true);
-    // });
+    $("#dt_limiteaesquerda").change(function() {
+        // var dataNascimento = $(this).val();
+        var dataNascimento = new Date( $(this).val());
+// alert(dataNascimento);
+        // Obter a data atual
+        var dataAtual = new Date();
+
+        // Calcular a diferença entre as datas em milissegundos
+        var diferencaTempo = dataAtual - dataNascimento;
+
+        // Converter a diferença em anos
+        var idade = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24 * 365.25));
+        console.log(idade,"ol");
+        $("#dt_limiteaesquerda_span").text(idade+' anos');
+        // console.log(idade,"ol");
+    });
 </script>
+
+<script>
+    $("#dt_limitemaxima").change(function() {
+        // var dataNascimento = $(this).val();
+        var dataNascimento = new Date( $(this).val());
+// alert(dataNascimento);
+        // Obter a data atual
+        var dataAtual = new Date();
+
+        // Calcular a diferença entre as datas em milissegundos
+        var diferencaTempo = dataAtual - dataNascimento;
+
+        // Converter a diferença em anos
+        var idade = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24 * 365.25));
+        console.log(idade,"ol");
+        $("#dt_limitemaxima_span").text(idade+' anos');
+        // console.log(idade,"ol");
+    });
+</script>
+
 </body>
 
 </html>

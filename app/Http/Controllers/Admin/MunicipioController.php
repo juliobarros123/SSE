@@ -138,7 +138,8 @@ class MunicipioController extends Controller
       try {
         
         $response = Municipio::find($id);
-        $response->update(['it_estado_municipio' => 0]);
+        Municipio::find($id)->delete();
+        // $response->update(['it_estado_municipio' => 0]);
         $this->loggerData("Eliminou o municipio ".$response->vc_nome);
         return redirect()->route('admin.municipio')->with('municipio.eliminar.success',1);
       } catch (\Throwable $th) {

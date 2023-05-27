@@ -133,7 +133,7 @@ class ProvinciaController extends Controller
       try {
         
         $response = Provincia::find($id);
-        $response->update(['it_estado_provincia' => 0]);
+        Provincia::find($id)->delete();
         $this->loggerData("Eliminou a província ".$response->vc_nome);
         return redirect()->route('admin.provincia')->with('provincia.eliminar.success',1);
       } catch (\Throwable $th) {

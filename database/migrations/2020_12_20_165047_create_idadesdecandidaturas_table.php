@@ -17,7 +17,8 @@ class CreateIdadesdecandidaturasTable extends Migration
             $table->id();
             $table->date('dt_limiteaesquerda');
             $table->date('dt_limitemaxima');
-            $table->string('vc_anolectivo', 20);
+            $table->unsignedBigInteger('id_ano_lectivo');
+            $table->foreign('id_ano_lectivo')->references('id')->on('anoslectivos')->onDelete('cascade');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');    
             $table->timestamps();
  $table->string('slug')->unique();

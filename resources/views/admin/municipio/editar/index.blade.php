@@ -31,7 +31,7 @@
                 @include('forms._formMunicipio.index')
                 <div class="form-group col-sm-2">
                     <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Salvar Alterações</button>
+                    <button class="form-control btn btn-dark">Editar</button>
                 </div>
             </form>
 

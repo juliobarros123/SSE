@@ -100,8 +100,8 @@
         @else
             <option disabled value="" selected>selecione o gênero</option>
         @endisset
-        <option value="masculino">Masculino</option>
-        <option value="feminino">Feminino</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
     </select>
 </div>
 

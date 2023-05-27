@@ -183,7 +183,7 @@
 <body>
     <div class="container">
         <div class="cab-doc">
-            <img src="<?php echo __full_path(); ?>images/insignia.png" alt="" class="logo" width="100px" height="70px"
+            <img src="<?php echo ; ?>images/insignia.png" alt="" class="logo" width="100px" height="70px"
                 style="margin-top: -10px;">
 
             <p class="titles">

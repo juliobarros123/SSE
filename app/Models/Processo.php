@@ -20,7 +20,6 @@ class Processo extends Model
         });
     }
     protected $fillable = ['id_cabecalho','slug', 
-        'it_processo',
-        'it_estado_processo'
+        'it_processo'
     ];
 }

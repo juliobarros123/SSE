@@ -38,14 +38,15 @@ class CursoController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
 
-        $cursos = Curso::where([['it_estado_curso', 1]])->get();
+        $cursos = fh_cursos()->get();
         return view('admin/cursos/index/index', compact('cursos'));
     }
 
@@ -68,31 +69,23 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        $storeData = $request->validate([
-            'vc_nomeCurso' => 'required|max:255',
-            'vc_descricaodoCurso' => 'required|max:255',
-            'vc_shortName' => 'required|max:50'
-        ]);
+        $storeData = $request->all();
+        $storeData['id_cabecalho'] = Auth::User()->id;
 
         //$cursos = Curso::where('vc_nomeCurso', '=',  $request->vc_nomeCurso)->first();
         //if($cursos === null){
-            try {
-                $show = Curso::create($storeData);
-                $data = [
-                    'vc_curso' => $request->vc_nomeCurso,
-                    'it_estado' => '1',
-                ];
-              /*   $uri= 'http://192.168.1.63:8000/admin/curso/store';
-                $curso = new Curso();
-                $curso->updates($request ,$uri); */
+        try {
 
-                $this->loggerData("Adicionou Um Curso ".$request->vc_nomeCurso);
+            $show = Curso::create($storeData);
+            
 
-            }
+            $this->loggerData("Adicionou Um Curso " . $request->vc_nomeCurso);
+
+        }
         //}else{
-            catch (QueryException $th) {
-                return redirect()->back()->with('curso.existe','1');
-            }
+        catch (QueryException $th) {
+            return redirect()->back()->with('curso.existe', '1');
+        }
 
         //}
         //$this->Logger->Log('info', 'Adicionou Um Curso');
@@ -105,11 +98,11 @@ class CursoController extends Controller
      * @param  \App\Models\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
 
         $curso = Curso::get();
-      
+
         return view('admin/cursos/show/index', compact('curso'));
     }
 
@@ -119,13 +112,15 @@ class CursoController extends Controller
      * @param  \App\Models\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        if ($curso = Curso::where([['it_estado_curso', 1]])->find($id)) :
+        $curso = fh_cursos()->where('cursos.slug', $slug)->first();
+        if ($curso):
 
             return view('admin/cursos/edit/index', compact('curso'));
-        else :
-            return redirect('admin/cursos/create/index')->with('curso', '1');
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
 
         endif;
     }
@@ -138,27 +133,23 @@ class CursoController extends Controller
      * @param  \App\Models\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
 
-        $updateData = $request->validate([
-            'vc_nomeCurso' => 'required|max:255',
-            'vc_descricaodoCurso' => 'required|max:255',
-            'vc_shortName' => 'required|max:50',
-            'it_estadodoCurso' => 'required',
-        ]);
+        // $updateData 
         try {
-            Curso::whereId($id)->update($updateData);
-            $this->loggerData("Actualizou Um Curso ".$request->vc_nomeCurso);
+            $request=$request->except(['_token','_method']);
+            // dd($request);
+            Curso::where('cursos.slug', $slug)->update($request);
+            $this->loggerData("Actualizou Um Curso " . $request['vc_nomeCurso']);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Curso actualizado com sucesso']);
+
+        } catch (QueryException $th) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
 
         }
 
-    catch (QueryException $th) {
-        return redirect()->back()->with('curso','1');
-
-        }
-
-        return redirect('Admin/cursos/index/index')->with('successo!', 'Dados dos cursos atualizado com sucesso!');
+       
     }
 
 
@@ -177,10 +168,10 @@ class CursoController extends Controller
     public function destroy($id)
     {
         try {
-           
+
             $response = Curso::find($id);
             $response->update(['it_estado_curso' => 0]);
-            $this->loggerData("Eliminou Um Curso ".$response->vc_nomeCurso);
+            $this->loggerData("Eliminou Um Curso " . $response->vc_nomeCurso);
             return redirect()->back()->with('curso.eliminar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;
@@ -192,10 +183,10 @@ class CursoController extends Controller
     public function purgar($id)
     {
         try {
-            
+
             $response = Curso::find($id);
             $response2 = Curso::find($id)->delete();
-            $this->loggerData("Purgou o Curso ".$response->vc_nomeCurso);
+            $this->loggerData("Purgou o Curso " . $response->vc_nomeCurso);
             return redirect()->back()->with('curso.purgar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;
@@ -205,21 +196,21 @@ class CursoController extends Controller
 
     public function eliminadas()
     {
-        
+
 
         $response['cursos'] = Curso::where([['it_estado_curso', 0]])->get();
-        $response['eliminadas']="eliminadas";
-        return view('admin.cursos.index.index',  $response);
+        $response['eliminadas'] = "eliminadas";
+        return view('admin.cursos.index.index', $response);
     }
 
     public function recuperar($id)
     {
         try {
-           
+
             $response = Curso::find($id);
-             $response->update(['it_estado_curso' => 1]);
-        $this->loggerData("Recuperou Um Curso ".$response->vc_nomeCurso);
-        
+            $response->update(['it_estado_curso' => 1]);
+            $this->loggerData("Recuperou Um Curso " . $response->vc_nomeCurso);
+
             return redirect()->back()->with('curso.recuperar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;

@@ -23,26 +23,26 @@
         <?php
 
 if ($cabecalho->vc_nif == "5000298182") {
-   $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+   $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } else if ($cabecalho->vc_nif == "7301002327") {
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } else if ($cabecalho->vc_nif == "5000303399") {
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;;
 
 } else if ($cabecalho->vc_nif == "5000820440") {
 
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } else if ($cabecalho->vc_nif == "5000305308") {
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } else if ($cabecalho->vc_nif == "7301002572") {
- $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+ $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } else if ($cabecalho->vc_nif == "7301003617") {
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;
 
 } else if ($cabecalho->vc_nif == "5000300926") {
-    $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+    $aluno->vc_imagem = .''.$aluno->vc_imagem;
 }else {
-   $aluno->vc_imagem = __full_path().''.$aluno->vc_imagem;
+   $aluno->vc_imagem = .''.$aluno->vc_imagem;
 } ?>
         <div class="div-top">
             <div class="header-principal">

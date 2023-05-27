@@ -17,7 +17,7 @@
                 @csrf
                 @include('forms._formCredito.index')
                 <div class="col-md-12 py-1  text-center  d-flex justify-content-left">
-                    <input type="submit" class="col-md-2 btn btn-dark" value="Confirmar alterações">
+                    <input type="submit" class="col-md-2 btn btn-dark" value="Editar">
                 </div>
             </form>
         </div>

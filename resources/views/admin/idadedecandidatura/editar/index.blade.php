@@ -5,7 +5,7 @@
  @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Editar  <b>{{ $idadedecandidatura->id }}</b></h3>
+            <h3>Editar  Idades de admissão</b></h3>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <form action=" {{ route('admin/idadedecandidatura/atualizar', $idadedecandidatura->id) }}" method="post" class="row">
+            <form action=" {{ route('admin/idadedecandidatura/atualizar', $idadedecandidatura->slug) }}" method="post" class="row">
                 @csrf
                 @method('PUT')
 
@@ -29,9 +29,8 @@
                 </div>
 
                 @include('forms._formIdadedeCandidatura.index')
-                <div class="form-group col-sm-2">
-                    <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Salvar Alterações</button>
+                <div class=" d-flex justify-content-center w-100">
+                    <button class=" btn btn-dark w-25 ">Editar</button>
                 </div>
             </form>
 

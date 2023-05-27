@@ -36,7 +36,7 @@ class IdadedeCandidatura extends Model
     protected $fillable = ['id_cabecalho','slug', 
         'dt_limiteaesquerda',
         'dt_limitemaxima',
-        'vc_anolectivo',
+        'id_ano_lectivo',
         'it_estado_idadedecandidatura'
     ];
 }

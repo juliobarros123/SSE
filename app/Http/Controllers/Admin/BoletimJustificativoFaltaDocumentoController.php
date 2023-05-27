@@ -74,7 +74,7 @@ class BoletimJustificativoFaltaDocumentoController extends Controller
         $data['motivo_falta'] = $request->motivo;
         $data['n_ordem'] = $contador;
         
-        $data["css"] = file_get_contents(__full_path() . 'css/pauta/style.css');
+        $data["css"] = file_get_contents('css/pauta/style.css');
         $mpdf = new \Mpdf\Mpdf([
             'format' => 'A4-L',
             'margin_right' => 25,

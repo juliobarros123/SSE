@@ -34,152 +34,119 @@ class ClasseController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
 
-        $classes = Classe::where([['it_estado_classe', 1]])->get();
-        $class = FacadesDB::table('turmas_users')
-            ->leftjoin('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
-            ->leftJoin('classes', 'classes.id', '=', 'turmas_users.it_idClasse')
-            ->select('turmas.vc_classeTurma', 'classes.*', 'users.vc_email')
-            ->where([['it_estado_classe', 1]])
-            ->where('turmas_users.it_idUser', Auth::user()->id)->distinct()
-            ->get();
-        return view('admin.classes.index', compact('classes', 'class'));
+        $response['classes'] = fh_classes()->get();
+        return view('admin.classes.index', $response);
     }
 
-    public function show($id)
-    {
-        //$classes = Classe::where([['it_estado_classe', 1]])->get();
-        $classes = Classe::find($id);
-        //dd($classes);
-        return view('admin.classes.visualizar.index', compact('classes'));
-    }
 
     public function create()
     {
         return view('admin.classes.cadastrar.index');
     }
 
+
     public function store(Request $request)
     {
 
-                    if($request->vc_classe >= 1 && $request->vc_classe <=13){
-                        try {
-                            Classe::create([
-                            'vc_classe' => $request->vc_classe,
-                            // 'dt_dataCadastro' => $request->dt_date
-                            'dt_dataCadasto' => $request->dt_date,
-                            'it_estado_classe' => 1
-                        ]);
-                        }
-                        catch (QueryException $th) {
-                            return redirect()->back()->with("classe","1");
+        if ($request->vc_classe >= 1 && $request->vc_classe <= 13) {
+            try {
+                $c = Classe::where('vc_classe', $request->vc_classe)
+                    ->where('id_cabecalho', Auth::User()->id_cabecalho)->count();
+                if ($c) {
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Classe  já existe']);
 
-                        }
-                        $this->loggerData('Adicionou a Classe de numero '.$request->vc_classe);
-                        $class = new Classe();
-                        $uri = 'http://192.168.1.63:8000/admin/classe/store';
-                        $class->postClasse($request,$uri);
+                } else {
+                    Classe::create([
+                        'vc_classe' => $request->vc_classe,
+                        'id_cabecalho' => Auth::User()->id_cabecalho
+                    ]);
+                    $this->loggerData('Adicionou a Classe de numero ' . $request->vc_classe);
+                }
 
-                        return redirect('/admin/classes')->with('status', '1');
-                    }
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Classe  cadastrada com sucesso']);
 
-                    else
-                    return redirect()->back()->with("classe","1");
+            } catch (QueryException $th) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);
 
 
+            }
+
+        } else {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Classe fora dos parâmetros.']);
+
+        }
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
 
-        if ($classe = Classe::where([['it_estado_classe', 1]])->find($id)) :
-            return view('admin.classes.editar.index', compact('classe'));
-        else :
-            return redirect('/admin/classes/cadastrar')->with('classe', '1');
+        $response['classe'] = fh_classes()->where('classes.slug', $slug)->first();
+        if ($response['classe']):
+            return view('admin.classes.editar.index', $response);
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Classe fora dos parâmetros.']);
+
 
         endif;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        try {
-                Classe::find($id)->update([
-                'vc_classe' => $request->vc_classe
-                ]);
+        if ($request->vc_classe >= 1 && $request->vc_classe <= 13) {
+            try {
+                $c = Classe::where('vc_classe', $request->vc_classe)
+                    ->where('id_cabecalho', Auth::User()->id_cabecalho)->count();
+                if ($c) {
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Classe  já existe']);
+
+                } else {
+                    Classe::where('classes.slug', $slug)->update([
+                        'vc_classe' => $request->vc_classe,
+
+                    ]);
+                    $this->loggerData('actualizou Classe de numero ' . $request->vc_classe);
+                }
+
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Classe  actualizada com sucesso']);
+
+            } catch (QueryException $th) {
+                // dd($th);
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);
+
+
             }
 
-        catch (QueryException $th) {
-            return redirect()->back()->with("classe","1");
-            }
-            $this->loggerData('Actualizou a Classe de numero '.$request->vc_classe);
+        } else {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Classe fora dos parâmetros.']);
 
-        return redirect()->route('admin/classes');
+        }
     }
 
-    public function remover($id)
+    public function eliminar($slug)
     {
         try {
             // Classe::find($id)->delete();
-            $response = Classe::find($id);
-            $response->update(['it_estado_classe' => 0]);
-            $this->loggerData('Eliminou a Classe de numero '.$response->vc_classe);
+            $response = Classe::where('classes.slug', $slug)->first();
+            // dd($response);
+            Classe::where('classes.slug', $slug)->delete();
+            $this->loggerData('Eliminou a Classe de numero ' . $response->vc_classe);
 
-            return redirect()->route('admin/classes');
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Classe  eliminada com sucesso']);
+
         } catch (\Exception $e) {
-            return redirect("/admin/classes/cadastrar");
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
         }
     }
 
 
-    public function purgar($id)
-    {
-        /* try { */
-           
-            $response = Classe::find($id);
-            $response2 = Classe::find($id)->delete();
-            $this->loggerData("Purgou a Classe");
-            return redirect()->back()->with('classe.purgar.success', '1');
-        /* } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('classe.purgar.error', '1');
-        } */
-    }
-
-    public function eliminadas()
-    {
-       
-
-        $response['classes'] = Classe::where([['it_estado_classe', 0]])->get();
-        $response['class'] = FacadesDB::table('turmas_users')
-            ->leftjoin('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
-            ->leftJoin('classes', 'classes.id', '=', 'turmas_users.it_idClasse')
-            ->select('turmas.vc_classeTurma', 'classes.*', 'users.vc_email')
-            ->where([['it_estado_classe', 0]])
-            ->where('turmas_users.it_idUser', Auth::user()->id)->distinct()
-            ->get();
-        $response['eliminadas']="eliminadas";
-        return view('admin.classes.index',  $response);
-    }
-
-    public function recuperar($id)
-    {
-        try {
-           
-            $response = Classe::find($id);
-            $response->update(['it_estado_classe' => 1]);
-            $this->loggerData("Recuperou  a Classe de numero ".$response->vc_classe);
-            return redirect()->back()->with('classe.recuperar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('classe.recuperar.error', '1');
-        }
-    }
 }

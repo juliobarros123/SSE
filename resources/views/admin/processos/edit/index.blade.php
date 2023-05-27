@@ -25,14 +25,13 @@
         <div class="card-body">
 
 
-            <form method="POST" action="{{ url('/Admin/processos/update', $processo->id) }}" class="row">
+            <form method="POST" action="{{ url('/Admin/processos/update', $processo->slug) }}" class="row">
                 @csrf
                 @method('PUT')
                 @include('forms._formProcessos.index')
                 <div class="form-group col-md-3">
                     <label class="form-label text-white">.</label>
-                    <button class="form-control btn btn-dark" type="submit">Salvar
-                        Alterações</button>
+                    <button class="form-control btn btn-dark" type="submit">Editar</button>
                 </div>
 
             </form>

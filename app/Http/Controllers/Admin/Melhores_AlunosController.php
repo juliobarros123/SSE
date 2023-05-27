@@ -61,9 +61,9 @@ class Melhores_AlunosController extends Controller
             $data['cabecalho'] = Cabecalho::find(1);
             $data['classe'] = Classe::find($classe)->vc_classe;
             $data['id_classe'] =$classe;
-            $data["bootstrap"] = file_get_contents(__full_path().'css/Aluno_melhor/bootstrap.min.css');
+            $data["bootstrap"] = file_get_contents(.'css/Aluno_melhor/bootstrap.min.css');
             if ($formato == 'A3') {
-                $data["css"] = file_get_contents(__full_path().'css/Aluno_melhor/A3.css');
+                $data["css"] = file_get_contents(.'css/Aluno_melhor/A3.css');
                 $mpdf = new \Mpdf\Mpdf([
                     'mode' => 'utf-8', 'margin_top' => 0,
                     'margin_left' => 5,
@@ -78,7 +78,7 @@ class Melhores_AlunosController extends Controller
                 $mpdf->writeHTML($html);
                 $mpdf->Output("Melhores Alunos.pdf", "I");
             } else {
-                $data["css"] = file_get_contents(__full_path().'css/Aluno_melhor/style.css');
+                $data["css"] = file_get_contents(.'css/Aluno_melhor/style.css');
                 $mpdf = new \Mpdf\Mpdf([
                     'mode' => 'utf-8', 'margin_top' => 0,
                     'margin_left' => 5,

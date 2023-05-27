@@ -77,47 +77,47 @@ class MatriculaController extends Controller
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
 
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(__full_path() . 'css/listas/style.css');
-            $data["bootstrap"] = file_get_contents(__full_path() . 'css/listas/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/listas/style.css');
+            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         }
 
 
@@ -178,7 +178,7 @@ class MatriculaController extends Controller
         // $turmas = Turma::where([['it_estado_turma', 1], ['vc_anoLectivo', $anoLectivo->ya_inicio . "-" . $anoLectivo->ya_fim]])->get();
         $response['turmas'] = fh_turmas()->get();
         $response['alunos'] = fh_alunos()->get();
-        // dd(fh_ano_lectivo_publicado());
+        // dd(fha_ano_lectivo_publicado());
         // dd(  $alunos );
         // $cadastrar = true;
         /*$classes = Classe::where([['it_estado_classe', 1]])->get();
@@ -203,7 +203,7 @@ class MatriculaController extends Controller
             // dd($request);
             $aluno = $aluno = fh_aluno_processo($request->processo);
             ;
-            $id_ano_lectivo = fh_ano_lectivo_publicado()->id_anoLectivo;
+            $id_ano_lectivo = fha_ano_lectivo_publicado()->id_anoLectivo;
             $cont = fh_matriculas()->where('alunnos.processo', $aluno->processo)
                 ->where('turmas.it_idAnoLectivo', $id_ano_lectivo)->count();
             // dd($cont );
@@ -261,6 +261,31 @@ class MatriculaController extends Controller
         }
     }
 
+    public function imprimirFicha($slug)
+    {
+        $response['matricula']=fh_matriculas()->where('matriculas.slug',$slug)->first();
+        // dd($response['matricula']);
+        // $response['alunno'] = fh_aluno_slug($slug);
+        // dd($response['alunno']);
+        // $response['dados'] = DB::table('alunnos')->where('it_estado_aluno', 1)->where('id', $id)->get();
+        $response['cabecalho'] = fh_cabecalho();
+        // dd($response['cabecalho']);
+
+
+    
+
+            $mpdf = new \Mpdf\Mpdf();
+            /* $response['stylesheet'] = file_get_contents(.'css/recibo/style.css'); */
+
+            //$url = 'images/cartao/aluno.jpg';
+            $response['css'] = file_get_contents('css/lista/style-2.css');
+
+            $html = view("admin/pdfs/matricula/ficha", $response);
+            $mpdf->writeHTML($html);
+            $this->loggerData('Imprimiu Ficha do Aluno(a)' . $response['matricula']->vc_primeiroNome . ' ' . $response['matricula']->vc_nomedoMeio . ' ' . $response['matricula']->vc_apelido);
+            $mpdf->Output("ficha.pdf", "I");
+        
+    }
 
     /**
      * Display the specified resource.
@@ -292,7 +317,7 @@ class MatriculaController extends Controller
 
 
             $response['turmas'] = fh_turmas()->where('cursos.id', $matricula->it_idCurso)
-                ->where('anoslectivos.id', fh_ano_lectivo_publicado()->id_anoLectivo)
+                ->where('anoslectivos.id', fha_ano_lectivo_publicado()->id_anoLectivo)
                 ->where('turmas.it_qtdeAlunos', '>', 0)
                 ->get();
             $response['matricula'] = $matricula;
@@ -332,7 +357,7 @@ class MatriculaController extends Controller
 
             $aluno = fh_aluno_processo($request->processo);
 
-            $id_ano_lectivo = fh_ano_lectivo_publicado()->id_anoLectivo;
+            $id_ano_lectivo = fha_ano_lectivo_publicado()->id_anoLectivo;
 
             $dados = $request->all();
             $turmae_especifica = Turma::find($request->it_idTurma);
@@ -473,47 +498,47 @@ class MatriculaController extends Controller
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
 
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             } else {
                 //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents(__full_path() . 'css/boletim/style.css');
-                $data["bootstrap"] = file_get_contents(__full_path() . 'css/boletim/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/boletim/style.css');
+                $data["bootstrap"] = file_get_contents('css/boletim/bootstrap.min.css');
             }
 
             $mpdf = new \Mpdf\Mpdf();

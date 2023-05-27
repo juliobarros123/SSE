@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\Activador_da_candidatura;
 use App\Models\Alunno;
 use App\Models\AnoLectivoPublicado;
 use App\Models\Candidatura;
 use App\Models\Classe;
+use App\Models\DireitorTurma;
 use App\Models\Disciplinas;
 use App\Models\IdadedeCandidatura;
 use App\Models\Nota;
@@ -92,6 +94,9 @@ function fh_alunos()
     return fh_candidatos()
         ->join('alunnos', 'alunnos.id_candidato', 'candidatos.id')
         ->where('alunnos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->orderby('candidatos.vc_primeiroNome', 'asc')
+        ->orderby('candidatos.vc_nomedoMeio', 'asc')
+        ->orderby('candidatos.vc_apelido', 'asc')
         ->select('alunnos.*', 'candidatos.*', 'cursos.*', 'anoslectivos.*', 'classes.vc_classe as vc_classe', 'alunnos.id as id', 'alunnos.slug as slug');
 
 
@@ -110,7 +115,7 @@ function fh_matriculas()
         ->join('matriculas', 'matriculas.id_aluno', 'alunnos.id')
         ->join('turmas', 'matriculas.it_idTurma', '=', 'turmas.id')
         ->where('alunnos.id_cabecalho', Auth::User()->id_cabecalho)
-        ->select('matriculas.*', 'alunnos.*', 'candidatos.*', 'cursos.*', 'anoslectivos.*', 'classes.vc_classe as vc_classe', 'turmas.*', 'matriculas.slug as slug','matriculas.id as id');
+        ->select('matriculas.*', 'alunnos.*', 'candidatos.*', 'cursos.*', 'anoslectivos.*', 'classes.vc_classe as vc_classe', 'turmas.*', 'matriculas.slug as slug', 'matriculas.id as id');
 }
 
 
@@ -128,6 +133,79 @@ function fh_turmas()
 
 
 }
+
+function fha_turma_alunos($slug)
+{
+    return fh_matriculas()->where('turmas.slug', $slug)
+        ->select(
+            'turmas.*',
+            'cursos.*',
+            'anoslectivos.*',
+            'alunnos.id as id_aluno',
+            'alunnos.*',
+            'classes.*',
+            'turmas.slug as slug',
+            'turmas.id as id',
+            'candidatos.vc_primeiroNome',
+            'candidatos.vc_nomedoMeio',
+            'candidatos.vc_apelido',
+            'candidatos.dt_dataNascimento',
+            'candidatos.vc_genero',
+            'candidatos.vc_dificiencia',
+            'vc_estadoCivil',
+            'candidatos.it_telefone',
+            'candidatos.vc_email',
+
+            'candidatos.vc_bi',
+        )
+
+        ->get();
+
+
+
+
+
+}
+
+function fha_turma_professores($slug)
+{
+    $response['atribuicoes'] = DB::table('turmas_users')
+        ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
+        ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
+        ->where('users.vc_tipoUtilizador', '=', 'professor')
+        ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
+        ->distinct()
+        ->select(
+            'turmas_users.it_idUser',
+            'turmas_users.id as ident',
+            'users.vc_primemiroNome',
+            'users.vc_apelido',
+            'turmas.vc_nomedaTurma',
+            'turmas.it_qtMatriculados',
+            'turmas.it_qtdeAlunos',
+            'turmas.id as id_turma',
+            'disciplinas.id as id_disciplina',
+
+            'disciplinas.vc_nome as disciplina'
+
+        )
+        ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->where('turmas.slug', $slug)
+        ->where('users.vc_tipoUtilizador', '=', 'professor')->get();
+    // dd(   $response['atribuicoes']);
+
+    $response['disciplinas'] = DB::table('turmas_users')
+        ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
+        ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
+        ->where('users.vc_tipoUtilizador', '=', 'professor')
+        ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->distinct()
+        ->select(
+            'turmas_users.it_idUser',
+            'disciplinas.vc_nome as disciplina'
+        )->get();
+    return $response;
+}
 function fh_turmas_slug($slug)
 {
 
@@ -136,7 +214,7 @@ function fh_turmas_slug($slug)
         ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
         ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
         ->where('turmas.slug', $slug)
-        ->select('turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'turmas.slug as slug','turmas.id as id');
+        ->select('turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'turmas.slug as slug', 'turmas.id as id');
 
 
 
@@ -148,6 +226,7 @@ function fh_aluno_processo($processo)
 
         ->where('alunnos.processo', $processo)
         ->select('alunnos.*', 'candidatos.*', 'cursos.*', 'anoslectivos.*', 'classes.vc_classe as vc_classe', 'alunnos.id as id', 'alunnos.slug as slug')
+
         ->first();
 }
 
@@ -165,7 +244,10 @@ function fh_provincias()
 {
     return Provincia::orderBy('vc_nome', 'asc');
 }
-
+function fh_processo_actual()
+{
+    return Processo::where('id_cabecalho', Auth::User()->id);
+}
 function resultados_final_alunos($matriculas)
 {
     $resultados = array();
@@ -215,14 +297,36 @@ function fh_cursos()
         return Curso::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
 }
-function fh_ano_lectivo_publicado()
+function fha_ano_lectivo_publicado()
 {
 
     return AnoLectivoPublicado::orderBy('id', 'desc')
         ->where('id_cabecalho', Auth::User()->id_cabecalho)->first();
 
 }
+function fh_idades_admissao()
+{
 
+    return IdadedeCandidatura::where('idadesdecandidaturas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->join('anoslectivos', 'anoslectivos.id', 'idadesdecandidaturas.id_ano_lectivo')
+        ->select('anoslectivos.*', 'idadesdecandidaturas.*', 'idadesdecandidaturas.id as id', 'idadesdecandidaturas.slug as slug');
+
+
+}
+function fh_anos_lectivos_publicado()
+{
+
+    return AnoLectivoPublicado::orderBy('id', 'desc')
+        ->where('id_cabecalho', Auth::User()->id_cabecalho);
+
+}
+function fh_cadiado_candidatura()
+{
+
+    return Activador_da_candidatura::orderBy('id', 'desc')
+        ->where('activadores_das_candidaturas.id_cabecalho', Auth::User()->id_cabecalho);
+
+}
 function fh_classes()
 {
     // dd("ola");
@@ -231,6 +335,82 @@ function fh_classes()
     } else {
         return Classe::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
+}
+function fh_disciplinas()
+{
+
+    if (Auth::User()->desenvolvedor == 2) {
+        return Disciplinas::orderBy('id', 'desc');
+    } else {
+        return Disciplinas::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
+    }
+}
+
+
+
+function fh_users()
+{
+    return User::where('users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('users.*');
+
+
+}
+function fh_professores()
+{
+    return User::where('users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->where('vc_tipoUtilizador', 'Professor')
+        ->select('users.*');
+
+
+}
+function fh_directores_turmas()
+{
+
+    return
+        DireitorTurma::join('turmas', 'direitor_turmas.id_turma', 'turmas.id')
+            ->join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+            ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+            ->join('users', 'direitor_turmas.id_user', 'users.id')
+            ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
+            ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+            ->select(
+                'cursos.*',
+                'anoslectivos.*',
+                'turmas.*',
+                'users.vc_primemiroNome',
+                'users.vc_apelido',
+            
+                'users.vc_email',
+                'cursos.vc_nomeCurso',
+                'classes.vc_classe',
+                'direitor_turmas.*',
+                'direitor_turmas.id as id',
+                'direitor_turmas.slug as slug'
+            );
+
+
+
+
+
+}
+function fha_users($slug)
+{
+    return User::where('users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->where('users.slug', $slug)
+        ->select('users.*')->first();
+
+
+}
+function fh_disciplinas_cursos_classes()
+{
+    return Disciplina_Curso_Classe::join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
+        ->join('cursos', 'disciplinas_cursos_classes.it_curso', '=', 'cursos.id')
+        ->join('classes', 'disciplinas_cursos_classes.it_classe', '=', 'classes.id')
+        ->orderBy('id', 'desc')
+        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas_cursos_classes.*', 'disciplinas.vc_nome', 'disciplinas.vc_acronimo', 'cursos.vc_nomeCurso', 'classes.vc_classe');
+
+
 }
 function fh_idadedeCandidatura()
 {
@@ -246,14 +426,19 @@ function fh_candidatos()
         return DB::table('candidatos')->leftjoin('cursos', 'cursos.id', 'candidatos.id_curso')
             ->leftjoin('anoslectivos', 'anoslectivos.id', 'candidatos.id_ano_lectivo')
             ->leftjoin('classes', 'classes.id', 'candidatos.id_classe')
-            ->orderBy('candidatos.id', 'desc')
+            // ->orderBy('candidatos.id', 'desc')
+            ->orderby('candidatos.vc_primeiroNome', 'asc')
+            ->orderby('candidatos.vc_nomedoMeio', 'asc')
+            ->orderby('candidatos.vc_apelido', 'asc')
             ->select('candidatos.*', 'cursos.*', 'classes.*', 'anoslectivos.*', 'candidatos.id as id', 'candidatos.slug as slug');
 
     } else {
         return DB::table('candidatos')->leftjoin('cursos', 'cursos.id', 'candidatos.id_curso')
             ->leftjoin('anoslectivos', 'anoslectivos.id', 'candidatos.id_ano_lectivo')
             ->leftjoin('classes', 'classes.id', 'candidatos.id_classe')
-            ->orderBy('candidatos.id', 'desc')
+            ->orderby('candidatos.vc_primeiroNome', 'asc')
+            ->orderby('candidatos.vc_nomedoMeio', 'asc')
+            ->orderby('candidatos.vc_apelido', 'asc')
             ->select('candidatos.*', 'cursos.*', 'classes.*', 'anoslectivos.*', 'candidatos.id as id', 'candidatos.slug as slug')
             ->where('candidatos.id_cabecalho', Auth::User()->id_cabecalho);
 
@@ -319,15 +504,15 @@ function move_file_string($idOrigem, $distino)
     //     return false;
     // }
 }
-function __full_path()
-{
-    $caminho_file_model = CaminhoFicheiro::orderBy('id', 'desc')->get()->first();
-    if (isset($caminho_file_model->vc_caminho)) {
-        return $caminho_file_model->vc_caminho;
-    } else {
-        return '';
-    }
-}
+// function 
+// {
+//     $caminho_file_model = CaminhoFicheiro::orderBy('id', 'desc')->get()->first();
+//     if (isset($caminho_file_model->vc_caminho)) {
+//         return $caminho_file_model->vc_caminho;
+//     } else {
+//         return '';
+//     }
+// }
 function calcularIdade($data)
 {
     // dd($data);

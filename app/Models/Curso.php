@@ -76,6 +76,6 @@ class Curso extends Model
     {
 
         $DCC = new Disciplina_Curso_Classe;
-        return $DCC->get_DCC()->where('cursos.id',  $id_curso);
+        return $DCC->fh_disciplinas_cursos_classes()->where('cursos.id',  $id_curso);
     }
 }

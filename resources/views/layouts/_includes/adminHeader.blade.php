@@ -813,7 +813,7 @@
                 <a href="{{ url('/admin/idadedecandidatura') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Idades de Candidatura
+                        Idades de admissão
 
                     </p>
                 </a>
@@ -926,45 +926,7 @@
             </li>
         @endif
 
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-            <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Nota|Idade|Candidatura
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                            Auth::user()->vc_tipoUtilizador == 'Preparador')
-                        {{-- <li class="nav-item">
-                                                <a href="{{ route('permissao_selecao.criar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar</p>
-                                                </a>
-                                            </li> --}}
-                        <li class="nav-item">
-                            <a href="{{ url('admin/permissao_selecao/index/index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lista de Permissões</p>
-                            </a>
-                        </li>
-                    @endif
-                    {{-- <li class="nav-item">
-                                        <a href="{{ route('admin.disciplina_curso_classe') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Disciplinas Relacionadas</p>
-                                        </a>
-                                    </li> --}}
-
-                </ul>
-            </li>
-
-        @endif
+     
 
         @if (Auth::user()->vc_tipoUtilizador != 'Professor')
             <li class="nav-item has-treeview">
@@ -1053,7 +1015,7 @@
 
                 @if ($director_turma_composer->where('id_user', Auth::id())->count())
                     <li class="nav-item">
-                        <a href="{{ route('direitor-turma.consultar_turmas') }}" class="nav-link">
+                        <a href="{{ route('direitores-turmas.consultar_turmas') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Como director</p>
                         </a>
@@ -1093,7 +1055,7 @@
 
         @if (Auth::user()->vc_tipoUtilizador != 'Professor')
             <li class="nav-item has-treeview">
-                <a href="{{ route('admin.viewListarDireitores') }}" class="nav-link">
+                <a href="{{ route('direitores-turmas.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
                         Director de Turma
@@ -1103,7 +1065,7 @@
                 {{-- <ul class="nav nav-treeview">
                                         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
                                             <li class="nav-item">
-                                                <a href="{{ url('/direitor-turma/cadastrarDireitor') }}"
+                                                <a href="{{ url('/direitores-turmas/cadastrar') }}"
                                                     class="nav-link">
                                                     <i class="far fa-circle nav-icon"></i>
                                                     <p>Atribuir Director</p>
@@ -1111,7 +1073,7 @@
                                             </li>
                                         @endif
                                         <li class="nav-item">
-                                            <a href="{{ route('admin.viewListarDireitores') }}"
+                                            <a href="{{ route('admin.viewindex') }}"
                                                 class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Lista de Directores</p>
@@ -1157,108 +1119,17 @@
 
 
 
-        <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard"></i>
-                <p>
-                    Coordenador|Curso
-
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                        Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                        Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                        Auth::user()->vc_tipoUtilizador == 'Preparador')
-                    <li class="nav-item">
-                        <a href="{{ url('coordernadores_cursos/criar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Cadastrar</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('coordernadores_cursos') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Listar</p>
-                        </a>
-                    </li>
-                @endif
-                @if (Auth::user()->vc_tipoUtilizador == 'Professor')
-                    <li class="nav-item">
-                        <a href="{{ url('coordernadores_cursos/meus_coordenadores') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Listar</p>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </li>
+    
 
 
-        <li class="nav-item has-treeview">
-            <a href="{{ url('coordernadores_turno') }}" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard"></i>
-                <p>
-                    Coordenador|Turno
 
-                </p>
-            </a>
-            {{-- <ul class="nav nav-treeview">
-                                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                        <li class="nav-item">
-                                            <a href="{{ url('coordernadores_turno/criar') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar</p>
-                                            </a>
-                                        </li>
-                                    @endif
-                                    <li class="nav-item">
-                                        <a href="{{ url('coordernadores_turno') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Listar</p>
-                                        </a>
-                                    </li>
-
-                                </ul> --}}
-        </li>
-
-        @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-            <li class="nav-item has-treeview">
-                <a href="{{ route('admin.disciplinaTerminal.list.get') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Disciplinas Terminais
-
-                    </p>
-                </a>
-                {{--                                     <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                            <li class="nav-item">
-                                                <a href="{{ route('admin.disciplinaTerminal.criar.get') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Relacionar</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.disciplinaTerminal.list.get') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
-            </li>
-        @endif
+   
         @if (Auth::user()->vc_tipoUtilizador != 'Professor')
             <li class="nav-item has-treeview">
                 <a href="{{ route('admin.disciplina_curso_classe') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Relacionar Disciplinas
+                        Disciplina\Curso\Classe
 
                     </p>
                 </a>
@@ -1285,33 +1156,7 @@
             </li>
         @endif
 
-        @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-
-            <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Cadeados de Notas
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                            Auth::user()->vc_tipoUtilizador == 'Preparador')
-                        <li class="nav-item">
-                            <a href="{{ route('permissao.editar') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Editar</p>
-                            </a>
-                        </li>
-                    @endif
-
-
-                </ul>
-            </li>
-        @endif
+      
         {{-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
                                 <li class="nav-item has-treeview ">
                                     <a href="#" class="nav-link ">

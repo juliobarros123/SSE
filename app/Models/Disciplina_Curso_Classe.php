@@ -24,19 +24,9 @@ class Disciplina_Curso_Classe extends Model
     protected $table = 'disciplinas_cursos_classes';
     protected $fillable = ['id_cabecalho','slug', 'it_disciplina', 'it_curso', 'it_classe', 'it_estado_dcc','terminal'];
 
-    public  function get_DCC()
-    {
-        $datas = DB::table('disciplinas_cursos_classes')
-            ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
-            ->join('cursos', 'disciplinas_cursos_classes.it_curso', '=', 'cursos.id')
-            ->join('classes', 'disciplinas_cursos_classes.it_classe', '=', 'classes.id')
-            ->where([['disciplinas_cursos_classes.it_estado_dcc', 1]])
-            ->select('disciplinas_cursos_classes.*', 'disciplinas.vc_nome', 'disciplinas.vc_acronimo', 'cursos.vc_nomeCurso', 'classes.vc_classe');
+  
 
-        return $datas;
-    }
-
-    public  function get_DCC2()
+    public  function disciplinas_cursos_classes2()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
@@ -52,7 +42,7 @@ class Disciplina_Curso_Classe extends Model
     
         $array_limpo = $array->except('_token','_method');
     
-        $estado=Disciplina_Curso_Classe::where($array_limpo)->where('it_estado_dcc',1)->count();
+        $estado=Disciplina_Curso_Classe::where($array_limpo)->count();
         if($estado){
             throw new Exception('Registro já existe!');
            }

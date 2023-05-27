@@ -146,7 +146,7 @@
 </head>
 
 <body
-    style="background-image: url('<?php echo __full_path(); ?>images/anulacao_matricula/liceu/anulacao_matricula.png');background-position: top left;
+    style="background-image: url('<?php echo ; ?>images/anulacao_matricula/liceu/anulacao_matricula.png');background-position: top left;
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">
@@ -638,7 +638,7 @@ background-image-resolution: from-image;">
 </head>
 
 <body
-    style="background-image: url('<?php echo __full_path(); ?>images/anulacao_matricula/liceu/anulacao_matricula.png');background-position: top left;
+    style="background-image: url('<?php echo ; ?>images/anulacao_matricula/liceu/anulacao_matricula.png');background-position: top left;
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">

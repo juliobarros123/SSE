@@ -44,7 +44,7 @@ class AnulacaoMatriculaDocumentoController extends Controller
             ->orderBy('matriculas.it_idTurma', 'desc')->first();
         $data['ano_lectivo'] = AnoLectivo::find($data['matricula']->it_idAnoLectivo);
         //dd( $data['ano_lectivo']);
-        $data["css"] = file_get_contents(__full_path() . 'css/pauta/style.css');
+        $data["css"] = file_get_contents('css/pauta/style.css');
         $mpdf = new \Mpdf\Mpdf([
             'format' => 'A4',
             'margin_right' => 30,

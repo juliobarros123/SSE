@@ -120,7 +120,7 @@
 </head>
 
 <body
-    style="background-image: url('<?php echo __full_path(); ?>images/boletim_justificativo_falta/instituto/boletim_justificativo_falta.png');background-position: top left;
+    style="background-image: url('<?php echo ; ?>images/boletim_justificativo_falta/instituto/boletim_justificativo_falta.png');background-position: top left;
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">

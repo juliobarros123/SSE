@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Idade Candidatura/Cadastrar')
+@section('titulo', 'Cadastrar Idades de admissão')
 
  @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Cadastrar Idade de Candidatura</h3>
+            <h3>Cadastrar Idades de admissão</h3>
         </div>
     </div>
     <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
@@ -29,9 +29,8 @@
             <form action="{{ route('admin/idadedecandidatura/cadastrar') }}" method="post" class="row">
                 @csrf
                 @include('forms._formIdadedeCandidatura.index')
-                <div class="form-group col-sm-3">
-                    <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Cadastrar</button>
+                <div class=" d-flex justify-content-center w-100">
+                    <button class="form-control btn btn-dark w-25">Cadastrar</button>
                 </div>
             </form>
 

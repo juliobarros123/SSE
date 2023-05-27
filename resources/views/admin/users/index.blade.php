@@ -28,17 +28,7 @@
                 <strong class="text-light">Cadastrar Utilizador</strong>
             </a>
 
-            @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-            Auth::user()->vc_tipoUtilizador == 'Preparador')
-           
-    
-                <a class="btn btn-dark ml-1" href="{{route('admin.users.eliminadas')}}">
-                    <strong class="text-light">Eliminados</strong>
-                </a>
-    
-        @endif
+         
         </div>
     @endif
 
@@ -47,7 +37,7 @@
 
     <table id="example" class=" table ">
         <thead class="">
-            <tr class="text-center">
+            <tr >
                 <th>ID</th>
                 <th>NOME</th>
                 <th>E-MAIL</th>
@@ -61,7 +51,7 @@
 
 
                 @foreach ($users as $user)
-                    <tr class="text-center">
+                    <tr>
                         <th>{{ $user->id }}</th>
                         <th>{{ $user->vc_primemiroNome . ' ' . $user->vc_apelido }}</th>
 
@@ -102,13 +92,12 @@
                                         <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a href="{{ route('admin.users.editar', $user->id) }}"
+                                        <a href="{{ route('admin.users.editar', $user->slug) }}"
                                             class="dropdown-item">Editar</a>
-                                        <a href="{{ route('admin.users.excluir', $user->id) }}" class="dropdown-item"
+                                        <a href="{{ route('admin.users.excluir', $user->slug) }}" class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                         
-                                            <a href="{{ route('admin.users.purgar', $user->id) }}"
-                                                class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
+                                            
                                     </div>
                                 </div>
                             @endif
@@ -132,7 +121,7 @@
                 var href = $(this).attr('href');
                 if (!$('#confirm-delete').length) {
                     $('table').append(
-                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende elimnar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
+                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende eliminar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
                     );
                 }
                 $('#dataConfirmOk').attr('href', href);

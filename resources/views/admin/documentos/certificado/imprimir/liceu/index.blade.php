@@ -324,7 +324,7 @@ padding-left: 6px;
 </head>
 
 <body
-    style="background-image: url('<?php echo __full_path(); ?>images/certificado/liceu/certificado.png');background-position: top left;
+    style="background-image: url('<?php echo ; ?>images/certificado/liceu/certificado.png');background-position: top left;
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">

@@ -15,7 +15,7 @@
 <body>
     <div class="text-center">
         <div class="ensignia">
-            <img src="<?php __full_path()?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="" width="40" height="40">
+            <img src="<?php ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="" width="40" height="40">
             <br>
             <?php echo $cabecalho->vc_republica; ?>
             <br>

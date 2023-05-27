@@ -16,7 +16,7 @@ class Turmas extends Migration
         Schema::create('turmas', function (Blueprint $table) {
             $table->id();
 
-            $table->id();
+          
          
             $table->string('vc_nomedaTurma');
             $table->unsignedBigInteger('it_idClasse');

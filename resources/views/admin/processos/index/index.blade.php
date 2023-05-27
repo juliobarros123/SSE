@@ -30,8 +30,8 @@
             <tr>
 
                 <th>ID</th>
-                <th>Processo</th>
-                <th>ESTADO </th>
+                <th>PROCESSO</th>
+        
                 <th>ACÇÕES</th>
             </tr>
         </thead>
@@ -41,13 +41,7 @@
 
                     <td>{{ $processo->id }}</td>
                     <td>{{ $processo->it_processo }}</td>
-                    <td>
-                        @if ($processo->it_estado_processo == 1)
-                            <b class="text-primary">ACTIVADO</b>
-                        @else
-                            <b class="text-danger">DESACTIVADO</b>
-                        @endif
-                    </td>
+               
                     <td>
 
 
@@ -61,17 +55,11 @@
                                     <i class="fa fa-clone" aria-hidden="true"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#" type="button" data-toggle="modal"
-                                        data-backdrop="static"
-                                        data-target=".bd-example-modal-lg-{{ $processo->id }}">Expandir Dados</a>
-
+               
                                     <a class="dropdown-item"
-                                        href="{{ url('Admin/processos/edit/index', $processo->id) }}">@lang('Editar')
+                                        href="{{ url('Admin/processos/edit/index', $processo->slug) }}">@lang('Editar')
                                     </a>
-                                    <a class="dropdown-item"
-                                        href="{{ url('Admin/processos/destroy/index', $processo->id) }}">@lang('Eliminar')
-                                    </a>
-
+       
 
 
                                 </div>

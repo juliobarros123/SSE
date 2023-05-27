@@ -3,7 +3,7 @@
          <img src="images/logotipo/logo.png" width="55" height="55" class="logo" />
     </div>
     <div style="width: 50%; float:left">
-        <img src="<?php __full_path()?>images/ensignia/<?php echo $pegaCabecalho->vc_ensignia?>.png" width="50" height="50" class="logo" />
+        <img src="<?php ?>images/ensignia/<?php echo $pegaCabecalho->vc_ensignia?>.png" width="50" height="50" class="logo" />
     </div>
 
     <div style="clear:both"></div>

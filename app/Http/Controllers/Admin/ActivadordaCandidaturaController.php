@@ -21,14 +21,15 @@ class ActivadordaCandidaturaController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
         //
-        $activadores = Activador_da_candidatura::all();
+        $activadores = fh_cadiado_candidatura()->get();
         return view('admin.activador.index', compact('activadores'));
     }
 
@@ -75,7 +76,7 @@ class ActivadordaCandidaturaController extends Controller
         //
         $activador = Activador_da_candidatura::find($id);
         return view('admin.activador.visualizar.index', compact('activador'));
-  
+
     }
 
     /**
@@ -84,21 +85,29 @@ class ActivadordaCandidaturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function mudar_estado($slug, $estado)
     {
-   
-        $c = Activador_da_candidatura::find($id);
-        if($response['activador'] = Activador_da_candidatura::find($id)):
-        $activador = Activador_da_candidatura::find($id);
-       
-        return view('admin.activador.editar.index', compact('activador'));
-     
-    else:
-         return redirect('/admin/activador/cadastrar')->with('Activador', 'Activador Inexistente');
-       
-        endif;
-    
-    
+        $palavra = "";
+        if ($estado) {
+            $estado = 0;
+            $palavra = "Fechado";
+        } else {
+            $estado = 1;
+            $palavra = "Aberto";
+        }
+        if (Activador_da_candidatura::where('slug', $slug)->count()) {
+            $c = Activador_da_candidatura::where('slug', $slug)->update([
+                'it_estado' => $estado,
+            ]);
+            $this->loggerData("Actualizou o cadeado de  candidatura para  $palavra");
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => "Cadeado mudado para $palavra com sucesso"]);
+
+        } else {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+        }
+
+
     }
 
     /**
@@ -111,16 +120,15 @@ class ActivadordaCandidaturaController extends Controller
     public function update(Request $request, $id)
     {
         //
-        try{
-        Activador_da_candidatura::find($id)->update([
-            'it_estado' => $request->it_estado,
-        ]);
-        $this->loggerData("Actualizou o Activador candidatura");
-        return redirect()->route('admin/activador')->with('status', '1');
-         } catch(\Exception $exception)
-        {
-        return redirect()->back()->with('aviso', '1');
-         }
+        try {
+            Activador_da_candidatura::find($id)->update([
+                'it_estado' => $request->it_estado,
+            ]);
+            $this->loggerData("Actualizou o Activador candidatura");
+            return redirect()->route('admin/activador')->with('status', '1');
+        } catch (\Exception $exception) {
+            return redirect()->back()->with('aviso', '1');
+        }
     }
 
     /**

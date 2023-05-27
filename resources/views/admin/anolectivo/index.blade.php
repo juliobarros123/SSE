@@ -14,17 +14,7 @@
             <strong class="text-light">Cadastrar Ano Lectivo</strong>
         </a>
 
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-            Auth::user()->vc_tipoUtilizador == 'Preparador')
-           
-    
-                <a class="btn btn-dark ml-1" href="{{route('admin.anolectivo.eliminadas')}}">
-                    <strong class="text-light">Eliminados</strong>
-                </a>
-    
-        @endif
+       
     </div>
 @endif
 
@@ -55,21 +45,7 @@
 
                         @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
 
-                        @if (isset($eliminadas))
-                        <div class="dropdown">
-                            <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a href="{{ route('admin.anolectivo.recuperar', $anolectivo->id) }}"
-                                    class="dropdown-item ">Recuperar</a>
-                                <a href="{{ route('admin.anolectivo.purgar', $anolectivo->id) }}"
-                                    class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
-                            </div>
-                        </div>
-                         @else
+                      
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -78,27 +54,23 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                                 <a class="dropdown-item"
-                                    href="{{ route('admin/anolectivo/editar', $anolectivo->id) }}">Editar </a>
-                                <a class="dropdown-item"
-                                    href="{{ route('admin/anolectivo/visualizar', $anolectivo->id) }}">Visualizar</a>
-
+                                    href="{{ route('admin/anolectivo/editar', $anolectivo->slug) }}">Editar </a>
+                             
                                     @if(isset($id_anoLectivo_publicado) && $anolectivo->id==$id_anoLectivo_publicado)
                                     <a class="dropdown-item"
-                                    href="{{ route('admin.configurar.ano_lectivo.ocultar',$anolectivo->id) }}"  >Ocultar</a>
+                                    href="{{ route('admin.configurar.ano_lectivo.ocultar',$anolectivo->slug) }}"  >Ocultar</a>
                                     @else
                                     <a class="dropdown-item"
-                                    href="{{ route('admin.configurar.ano_lectivo.disponibilizar',$anolectivo->id) }}"  >Disponibilizar</a>
+                                    href="{{ route('admin.configurar.ano_lectivo.disponibilizar',$anolectivo->slug) }}"  >Disponibilizar</a>
                                     @endif
                                     <a class="dropdown-item"
-                                    href="{{ route('admin/anolectivo/eliminar', $anolectivo->id) }}"  data-confirm="Tem certeza que deseja eliminar?">Eliminar </a>
+                                    href="{{ route('admin/anolectivo/eliminar', $anolectivo->slug) }}"  data-confirm="Tem certeza que deseja eliminar?">Eliminar </a>
 
-                                    <a href="{{ route('admin.anolectivo.purgar', $anolectivo->id) }}"
-                                        class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
                                     
                             </div>
                         </div>
                         @endif
-                        @endif
+                  
 
                     </td>
                 </tr>
@@ -128,7 +100,7 @@
                 var href = $(this).attr('href');
                 if (!$('#confirm-delete').length) {
                     $('table').append(
-                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende elimnar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
+                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende eliminar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
                     );
                 }
                 $('#dataConfirmOk').attr('href', href);

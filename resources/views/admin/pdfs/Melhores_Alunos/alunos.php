@@ -16,7 +16,7 @@
 
     <div class=" text-center">
         <p class="center">
-            <img src="<?php __full_path() ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="ensignia">
+            <img src="<?php  ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="ensignia">
             <br>
             <span class="Texto">
                 <?php echo $cabecalho->vc_republica; ?>
@@ -168,7 +168,7 @@
                     <span> Curso: </span> <?php echo mb_strimwidth(pri_ultimo_nome($al->vc_nomeCurso)[0], 0, 4, ".") . ' '
                                                 . pri_ultimo_nome($al->vc_nomeCurso)[1];  ?><br>
                     <span> Média: </span> <?php echo $al->media ?><br>
-                    <img class="right" src="<?php __full_path()?>images/images.jpg" alt="">
+                    <img class="right" src="<?php ?>images/images.jpg" alt="">
 
                 </div>
             </div>

@@ -20,7 +20,7 @@
                 @csrf
                 @include('forms._formselecionado.index')
                 <div class="col-sm-12 mt-2 text-center">
-                    <input type="submit" class=" col-sm-3 btn btn-success" value="Confirmar alterações">
+                    <input type="submit" class=" col-sm-3 btn btn-success" value="Editar">
                 </div>
             </form>
         </div>

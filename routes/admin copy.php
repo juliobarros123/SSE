@@ -385,11 +385,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/inserir', ['as' => 'turmas.efectuarCadastroDaTurma', 'uses' => 'Admin\TurmaController@efectuarCadastroDaTurma']);
         Route::get('/listarTurmas/{anolectivo}/{curso}', ['as' => 'admin.viewListarTurmas', 'uses' => 'Admin\TurmaController@listarTurmas']);
 
-        Route::get('/{id}/editarTurmas', ['as' => 'turmas.editarTurmas', 'uses' => 'Admin\TurmaController@editarTurmas'])->middleware('access.controll.administrador');
-        Route::get('/{id}/deletarTurmas', ['as' => 'turmas.deletarTurmas', 'uses' => 'Admin\TurmaController@deletarTurmas'])->middleware('access.controll.administrador');
-        Route::put('/{id}/efectuarEdicaoDeTurma', ['as' => 'turmas.efectuarEdicaoDeTurma', 'uses' => 'Admin\TurmaController@efectuarEdicaoDeTurma'])->middleware('access.controll.administrador');
+        Route::get('/{id}/editar', ['as' => 'turmas.editar', 'uses' => 'Admin\TurmaController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{id}/eliminar', ['as' => 'turmas.eliminar', 'uses' => 'Admin\TurmaController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{id}/actualizar', ['as' => 'turmas.actualizar', 'uses' => 'Admin\TurmaController@actualizar'])->middleware('access.controll.administrador');
 
-        Route::get('/{id}/gerarlistaTurmas', ['as' => 'turmas.gerarlistaTurmas', 'uses' => 'Admin\TurmaController@gerarlista']);
+        Route::get('/{id}/imprimir_alunos', ['as' => 'turmas.imprimir_alunos', 'uses' => 'Admin\TurmaController@gerarlista']);
         Route::get('/{id}/gerarcadernetaTurmas', ['as' => 'turmas.gerarcadernetaTurmas', 'uses' => 'Admin\TurmaController@gerarcaderneta']);
 
         Route::get('/{id}/gerarcadernetaTurmas/xlsx', ['as' => 'turmas.gerarcadernetaTurmas.xlsx', 'uses' => 'Admin\ExportController@exports']);
@@ -410,17 +410,17 @@ Route::middleware('auth:sanctum')->group(function () {
     //End Turmas
 
     //Direitor de Turma
-    Route::group(['prefix' => 'direitor-turma'], function () {
+    Route::group(['prefix' => 'direitores-turmas'], function () {
 
-        Route::get('/cadastrarDireitor', ['as' => 'turma.cadastrarDireitor', 'uses' => 'Admin\DireitorTurmaController@cadastrarDireitor'])->name('turmas.cadastrar');
-        Route::post('/efectuarCadastroDireitor', ['as' => 'turmas.efectuarCadastroDireitor', 'uses' => 'Admin\DireitorTurmaController@efectuarCadastroDireitor']);
-        Route::get('/listarDireitores', ['as' => 'admin.viewListarDireitores', 'uses' => 'Admin\DireitorTurmaController@listarDireitores']);
+        Route::get('/cadastrar', ['as' => 'turma.cadastrar', 'uses' => 'Admin\DireitorTurmaController@cadastrar'])->name('turmas.cadastrar');
+        Route::post('/cadastrar', ['as' => 'turmas.cadastrar', 'uses' => 'Admin\DireitorTurmaController@cadastrar']);
+        Route::get('/index', ['as' => 'admin.viewindex', 'uses' => 'Admin\DireitorTurmaController@index']);
 
         Route::get('/{id}/editarDireitor', ['as' => 'turmas.editarDireitor', 'uses' => 'Admin\DireitorTurmaController@editarDireitor'])->middleware('access.controll.administrador');
         Route::get('/{id}/deletarDireitor', ['as' => 'turmas.deletarDireitor', 'uses' => 'Admin\DireitorTurmaController@deletarDireitor'])->middleware('access.controll.administrador');
         Route::put('/{id}/efectuarEdicaoDireitor', ['as' => 'turmas.efectuarEdicaoDireitor', 'uses' => 'Admin\DireitorTurmaController@efectuarEdicaoDireitor'])->middleware('access.controll.administrador');
-        Route::get('consultar_turmas', ['as' => 'direitor-turma.consultar_turmas', 'uses' => 'Admin\DireitorTurmaController@consultar_turmas']);
-        Route::post('turmas', ['as' => 'direitor-turma.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
+        Route::get('consultar_turmas', ['as' => 'direitores-turmas.consultar_turmas', 'uses' => 'Admin\DireitorTurmaController@consultar_turmas']);
+        Route::post('turmas', ['as' => 'direitores-turmas.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
 
     });
     // End Direitor de Turma

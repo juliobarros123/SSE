@@ -78,7 +78,7 @@ class DeclaracaoFrequenciaDocumentoController extends Controller
         $data['n_ordem'] = $contador;
         }
 
-        $data["css"] = file_get_contents(__full_path() . 'css/pauta/style.css');
+        $data["css"] = file_get_contents('css/pauta/style.css');
         $mpdf = new \Mpdf\Mpdf([
             'format' => 'A4',
             'margin_right' => 28,

@@ -24,14 +24,14 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ url("turmas/$turma->id/efectuarEdicaoDeTurma") }}" accept-charset="UTF-8"
+            <form method="POST" action="{{ url("turmas/$turma->slug/actualizar") }}" accept-charset="UTF-8"
                 class="row">
                 @method('PUT')
                 @csrf
                 @include('forms._formTurma.index')
                 <div class="form-group col-md-3">
                     <label class="form-label text-white">.</label><br>
-                    <button class="btn btn-dark form-control" type="submit">Salvar Alterações</button>
+                    <button class="btn btn-dark form-control" type="submit">Editar</button>
                 </div>
             </form>
 

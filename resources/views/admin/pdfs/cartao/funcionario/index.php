@@ -18,29 +18,29 @@
         <?php
         $ur = '';
         if ($cabecalho->vc_nif == "5000298182") {
-            $url = __full_path() . 'cartões/CorMarie/funcionario.png';
+            $url =  . 'cartões/CorMarie/funcionario.png';
         } else if ($cabecalho->vc_nif == "7301002327") {
-            $url = __full_path() . 'cartões/InstitutoPolitécnicodoUIGE/funcionario.png';
+            $url =  . 'cartões/InstitutoPolitécnicodoUIGE/funcionario.png';
         } else if ($cabecalho->vc_nif == "7301000626") {
-            $url = __full_path() . 'cartões/negage/funcionario.png';
+            $url =  . 'cartões/negage/funcionario.png';
         } else if ($cabecalho->vc_nif == "5000820440") {
-            $url = __full_path() . 'cartões/Quilumosso/funcionario.png';
+            $url =  . 'cartões/Quilumosso/funcionario.png';
         } else if ($cabecalho->vc_nif == "5000305308") {
-            $url = __full_path() . 'cartões/Foguetao/funcionario.png';
+            $url =  . 'cartões/Foguetao/funcionario.png';
         } else if ($cabecalho->vc_nif == "7301002572") {
-            $url = __full_path() . 'cartões/LiceuUíge/funcionario.png';
+            $url =  . 'cartões/LiceuUíge/funcionario.png';
         } else if ($cabecalho->vc_nif == "7301003617") {
-            $url = __full_path() . 'cartões/ldc/funcionario.png';
+            $url =  . 'cartões/ldc/funcionario.png';
         } else if ($cabecalho->vc_nif == "5000300926") {
-            $url = __full_path() . 'cartões/imagu/funcionario.png';
+            $url =  . 'cartões/imagu/funcionario.png';
         } else {
-            $path =  __full_path();
+            $path =  ;
             // echo $parent_directory; // Output: "cecnhq"
             $parent_directory = basename(dirname($path));
-            if (is_dir(__full_path() . "cartões/$parent_directory/")) {
-                $url = __full_path() . "cartões/$parent_directory";
+            if (is_dir( . "cartões/$parent_directory/")) {
+                $url =  . "cartões/$parent_directory";
             } else {
-                $url = __full_path() . "cartões/" . strtoupper($parent_directory);
+                $url =  . "cartões/" . strtoupper($parent_directory);
             }
             $url =  $url . "/funcionario.png";
         } ?>
@@ -49,24 +49,24 @@
         <?php
 
         if ($cabecalho->vc_nif == "5000298182") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "7301002327") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "5000303399") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "5000820440") {
 
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "5000305308") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "7301002572") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "7301003617") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else if ($cabecalho->vc_nif == "5000300926") {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } else {
-            $response->vc_foto = __full_path() . '' . $response->vc_foto;
+            $response->vc_foto =  . '' . $response->vc_foto;
         } ?>
 
         <body style="background-image: url(<?php echo $url ?>);background-position: top left;

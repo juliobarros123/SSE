@@ -13,7 +13,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('direitor-turma.turmas') }}" class="row" method="POST">
+            <form action="{{ route('direitores-turmas.turmas') }}" class="row" method="POST">
                 @csrf
                 <div class="form-group col-md-4">
                     <label for="id_anolectivo" class="form-label">Ano Lectivo:</label>

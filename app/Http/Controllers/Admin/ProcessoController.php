@@ -8,6 +8,7 @@ use App\Models\Processo;
 use App\Models\Logger;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+
 class ProcessoController extends Controller
 {
     /**
@@ -20,9 +21,10 @@ class ProcessoController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
@@ -50,25 +52,38 @@ class ProcessoController extends Controller
      */
     public function store(Request $request)
     {
-        $storeData = $request->validate([
-            'it_processo' => 'required'
+        // $storeData = $request->validate([
+        //     'it_processo' => 'required'
 
-        ]);
+        // ]);
 
         //$processos = Processo::where('vc_nomeProcesso', '=',  $request->vc_nomeProcesso)->first();
         //if($processos === null){
         try {
-            $show = Processo::create($storeData);
-            $this->loggerData('Adicionou o Processo '.$request->it_processo);
+            // dd($request);
+            $processo = fh_processo_actual()->count();
+            if ($processo) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Já existe um processo actual']);
+
+            } else {
+                Processo::create([
+                    'id_cabecalho' => Auth::User()->id_cabecalho,
+                    'it_processo' => $request->it_processo
+                ]);
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Processo cadastrado com sucesso']);
+
+            }
+            // $show = Processo::create($storeData);
+            // $this->loggerData('Adicionou o Processo '.$request->it_processo);
         }
         //}else{
         catch (QueryException $th) {
-            return redirect()->back()->with('id_aluno', '1');
+            // dd($th);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
         }
 
-        //}
-        //$this->Logger->Log('info', 'Adicionou Um Processo');
-        return redirect('Admin/processos/index/index')->with('processoCadastrado', '1');
+
     }
 
     /**
@@ -90,14 +105,15 @@ class ProcessoController extends Controller
      * @param  \App\Models\Processo  $processo
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-       
-        if ($processo = Processo::where([['it_estado_processo', 1]])->find($id)) :
+        $processo = fh_processo_actual()->where('processos.slug', $slug)->first();
+        if ($processo):
 
-            return view('admin/processos/edit/index', compact('id_aluno'));
-        else :
-            return redirect('admin/processos/create/index')->with('id_aluno', '1');
+            return view('admin/processos/edit/index', compact('processo'));
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
 
         endif;
     }
@@ -110,22 +126,23 @@ class ProcessoController extends Controller
      * @param  \App\Models\Processo  $processo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
 
-        $updateData = $request->validate([
-            'it_processo' => 'required',
-            'it_estado_processo' => 'required'
-        ]);
-        
+      
+
         try {
-            Processo::whereId($id)->update($updateData);
-            $this->loggerData('Actualizou o Processo '.$request->it_processo.' para o estado '.$request->it_estado_processo);
+        fh_processo_actual()->where('processos.slug',$slug)->update( $request->except(['_token','_method']));
+            $this->loggerData('Actualizou o Processo actual para ' . $request->it_processo);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Processo actualizado com sucesso']);
+        
         } catch (QueryException $th) {
-            return redirect()->back()->with('id_aluno', '1');
+            // dd($th->getMessage());
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+            
         }
 
-        return redirect('Admin/processos/index/index')->with('processoUP', '1');;
+      
     }
 
 
@@ -141,13 +158,5 @@ class ProcessoController extends Controller
      * @param  \App\Models\Processo  $processo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //$processo = Processo::findOrFail($id);
-        //$processo->delete();
-        $response = Processo::find($id);
-        $response->delete();
-        $this->loggerData('Eliminou o Processo '.$response->it_processo);
-        return redirect('Admin/processos/index/index')->with('processoEliminado', '1');
-    }
+  
 }

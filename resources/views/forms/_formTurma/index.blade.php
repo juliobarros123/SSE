@@ -8,12 +8,12 @@
 
 <div class="form-group col-md-3">
     <label class="form-label" for="vc_classeTurma">Classe:</label>
-    <select class="form-control buscarClasse" name="vc_classeTurma" id="vc_classeTurma" required>
+    <select class="form-control " name="vc_classeTurma" id="vc_classeTurma" required>
 
         <option value="{{ isset($turma) ? $turma->it_idClasse : '' }}" selected>
-            {{ isset($turma) ? $turma->vc_classeTurma : 'Selecione a classe:' }}</option>
+            {{ isset($turma) ? $turma->vc_classe.'ª classe' : 'Selecione a classe:' }}</option>
         @foreach ($classes as $classe)
-            <option value="{{ $classe->id }}">{{ $classe->vc_classe }}ªclasse </option>
+            <option value="{{ $classe->id }}">{{ $classe->vc_classe }}ª classe </option>
             </option>
         @endforeach
     </select>
@@ -44,12 +44,12 @@
 </div>
 {{-- 
 @dump($cursos) --}}
-
+{{-- @dump($turma) --}}
 <div class="form-group col-md-3">
     <label class="form-label">Curso:</label>
     <select class="form-control " name="vc_cursoTurma" required>
         <option value="{{ isset($turma) ? $turma->it_idCurso : '' }}" selected>
-            {{ isset($turma) ? $turma->vc_cursoTurma : 'Selecione o curso:' }}</option>
+            {{ isset($turma) ? $turma->vc_shortName: 'Selecione o curso:' }}</option>
         @foreach ($cursos as $curso)
             <option value="{{ $curso->id }}">{{ $curso->vc_nomeCurso }} </option>
       

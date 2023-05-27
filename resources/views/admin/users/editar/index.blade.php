@@ -12,12 +12,12 @@
 
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('admin.users.atualizar', $user->id) }}" method="post" class="row">
+            <form form action="{{ route('admin.users.atualizar', $user->slug) }}" method="post" class="row">
                 @method('put')
                 @csrf
                 @include('forms._formUser.index')
                 <div class="col-md-12 py-1  text-center  d-flex justify-content-center">
-                    <input type="submit" class="col-md-2 btn btn-dark" value="Confirmar alterações">
+                    <input type="submit" class="col-md-2 btn btn-dark" value="Editar">
                 </div>
             </form>
         </div>

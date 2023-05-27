@@ -30,7 +30,7 @@ Route::get('notas-seca/vrf_disciplina_terminal/{id_disciplina}/{id_turma}/{estad
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('candidatura', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@create']);
     Route::post('candidatura/', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@store']);
-    Route::post('uploadToGPEU',  ['as' => 'admin.uploadToGPEU', 'uses' => 'Admin\GPEUController@uploadToGPEU']);
+    Route::post('uploadToGPEU', ['as' => 'admin.uploadToGPEU', 'uses' => 'Admin\GPEUController@uploadToGPEU']);
     // Route::get('/admitido', ['as' => 'admitido', 'uses' => 'Admin\ConfirmacaoController@confirmar'])->middleware('access.controll.pedagogia');
 
     Route::group(['prefix' => 'url_estatistica'], function () {
@@ -225,10 +225,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/users/listar/imprimir', ['as' => 'admin.users.listar.imprimir', 'uses' => 'Admin\UserController@imprimir_lista'])->middleware('access.controll.administrador');
     Route::post('admin/users/salvar', ['as' => 'admin.users.salvar', 'uses' => 'Admin\UserController@salvar'])->middleware('access.controll.administrador');
     Route::get('admin/users/cadastrar', ['as' => 'admin.users.cadastrar', 'uses' => 'Admin\UserController@create'])->middleware('access.controll.administrador');
-    Route::get('admin/users/excluir/{id}', ['as' => 'admin.users.excluir', 'uses' => 'Admin\UserController@excluir'])->middleware('access.controll.administrador');
-    Route::put('admin/users/atualizar/{id}', ['as' => 'admin.users.atualizar', 'uses' => 'Admin\UserController@atualizar'])->middleware('access.controll.administrador');
-    Route::get('admin/users/ver/{id}', ['as' => 'users', 'uses' => 'Admin\UserController@ver'])->middleware('access.controll.administrador');
-    Route::get('admin/users/editar/{id}', ['as' => 'admin.users.editar', 'uses' => 'Admin\UserController@editar'])->middleware('access.controll.administrador');
+    Route::get('admin/users/excluir/{slug}', ['as' => 'admin.users.excluir', 'uses' => 'Admin\UserController@excluir'])->middleware('access.controll.administrador');
+    Route::put('admin/users/atualizar/{slug}', ['as' => 'admin.users.atualizar', 'uses' => 'Admin\UserController@atualizar'])->middleware('access.controll.administrador');
+    Route::get('admin/users/ver/{slug}', ['as' => 'users', 'uses' => 'Admin\UserController@ver'])->middleware('access.controll.administrador');
+    Route::get('admin/users/editar/{slug}', ['as' => 'admin.users.editar', 'uses' => 'Admin\UserController@editar'])->middleware('access.controll.administrador');
 
     Route::get('admin/user/editar/{id}', ['as' => 'admin.user.editar', 'uses' => 'Admin\UserController@editarPessoal']);
     Route::put('admin/user/atualizar/{id}', ['as' => 'admin.user.atualizar', 'uses' => 'Admin\UserController@atualizarPessoal']);
@@ -256,7 +256,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/atribuicoes/ver/{id}', ['as' => 'admin.atribuicoes.ver', 'uses' => 'Admin\TurmaUserController@ver']);
     Route::get('admin/atribuicoes/editar/{id}', ['as' => 'admin.atribuicoes.editar', 'uses' => 'Admin\TurmaUserController@editar'])->middleware('access.controll.administrador');
     Route::get('admin/atribuicoes/lecionar/{id}', ['as' => 'admin.atribuicao.lecionar', 'uses' => 'Admin\TurmaUserController@lecionado']);
-    Route::get('admin/atribuicoes/professores/{id}', ['as' => 'admin.atribuicao.professores', 'uses' => 'Admin\TurmaUserController@professores']);
+    Route::get('admin/atribuicoes/professores/{slug}', ['as' => 'admin.atribuicao.professores', 'uses' => 'Admin\TurmaUserController@professores']);
 
     Route::get('admin/atribuicoes/eliminadas', ['as' => 'admin.atribuicao.eliminadas', 'uses' => 'Admin\TurmaUserController@eliminadas'])->middleware('access.controll.administrador');
     Route::get('admin/atribuicoes/purgar/{id}', ['as' => 'admin.atribuicao.purgar', 'uses' => 'Admin\TurmaUserController@purgar'])->middleware('access.controll.administrador');
@@ -267,24 +267,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('Admin/cursos/index/index', ['as' => 'cursos', 'uses' => 'Admin\CursoController@index']);
     Route::post('Admin/cursos/store', ['as' => 'cursos.store', 'uses' => 'Admin\CursoController@store']);
     Route::get('Admin/cursos/create/index', ['as' => 'cursos.create', 'uses' => 'Admin\CursoController@create']);
-    Route::get('Admin/cursos/destroy/{id}', ['as' => 'cursos.destroy', 'uses' => 'Admin\CursoController@destroy'])->middleware('access.controll.administrador');
-    Route::put('Admin/cursos/update/{id}', ['as' => 'cursos.update', 'uses' => 'Admin\CursoController@update'])->middleware('access.controll.administrador');
-    Route::get('Admin/cursos/show/index/{id}', ['as' => 'cursos.show', 'uses' => 'Admin\CursoController@show'])->middleware('access.controll.administrador');
-    Route::get('Admin/cursos/edit/index/{id}', ['as' => 'cursos.edit', 'uses' => 'Admin\CursoController@edit'])->middleware('access.controll.administrador');
+    Route::get('Admin/cursos/destroy/{slug}', ['as' => 'cursos.destroy', 'uses' => 'Admin\CursoController@destroy'])->middleware('access.controll.administrador');
+    Route::put('Admin/cursos/update/{slug}', ['as' => 'cursos.update', 'uses' => 'Admin\CursoController@update'])->middleware('access.controll.administrador');
+    Route::get('Admin/cursos/show/index/{slug}', ['as' => 'cursos.show', 'uses' => 'Admin\CursoController@show'])->middleware('access.controll.administrador');
+    Route::get('Admin/cursos/edit/index/{slug}', ['as' => 'cursos.edit', 'uses' => 'Admin\CursoController@edit'])->middleware('access.controll.administrador');
 
-    Route::get('admin/cursos/eliminadas', ['as' => 'admin.cursos.eliminadas', 'uses' => 'Admin\CursoController@eliminadas'])->middleware('access.controll.administrador');
-    Route::get('admin/cursos/purgar/{id}', ['as' => 'admin.cursos.purgar', 'uses' => 'Admin\CursoController@purgar'])->middleware('access.controll.administrador');
-    Route::get('admin/cursos/recuperar/{id}', ['as' => 'admin.cursos.recuperar', 'uses' => 'Admin\CursoController@recuperar'])->middleware('access.controll.administrador');
     //=============Curso-End======================//
 
     //=============Processo-Start=====================//
     Route::get('Admin/processos/index/index', ['as' => 'processos', 'uses' => 'Admin\ProcessoController@index']);
     Route::post('Admin/processos/store', ['as' => 'processos.store', 'uses' => 'Admin\ProcessoController@store']);
     Route::get('Admin/processos/create/index', ['as' => 'processos.create', 'uses' => 'Admin\ProcessoController@create']);
-    Route::get('Admin/processos/destroy/index/{id}', ['as' => 'processos.destroy', 'uses' => 'Admin\ProcessoController@destroy'])->middleware('access.controll.administrador');
-    Route::put('Admin/processos/update/{id}', ['as' => 'processos.update', 'uses' => 'Admin\ProcessoController@update'])->middleware('access.controll.administrador');
-    Route::get('Admin/processos/show/index/{id}', ['as' => 'processos.show', 'uses' => 'Admin\ProcessoController@show'])->middleware('access.controll.administrador');
-    Route::get('Admin/processos/edit/index/{id}', ['as' => 'processos.edit', 'uses' => 'Admin\ProcessoController@edit'])->middleware('access.controll.administrador');
+
+    Route::put('Admin/processos/update/{slug}', ['as' => 'processos.update', 'uses' => 'Admin\ProcessoController@update'])->middleware('access.controll.administrador');
+
+    Route::get('Admin/processos/edit/index/{slug}', ['as' => 'processos.edit', 'uses' => 'Admin\ProcessoController@edit'])->middleware('access.controll.administrador');
     //=============Processo-End======================//
 
 
@@ -306,6 +303,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/matriculas/pesquisar', ['as' => 'admin.matriculas.pesquisar', 'uses' => 'Admin\MatriculaController@pesquisaraluno']);
     Route::post('/admin/matriculas/send/', ['as' => 'admin.matriculas.send', 'uses' => 'Admin\MatriculaController@recebeAluno']);
     Route::get('/admin/matriculas/emitirboletim/{id}', ['as' => 'admin.matriculas.emitirboletim', 'uses' => 'Admin\MatriculaController@emitirboletim']);
+    Route::get('admin/matriculas/ficha/{slug}', ['as' => 'admin.matriculas.ficha', 'uses' => 'Admin\MatriculaController@imprimirFicha']);
+
     //=============Matricula-End======================//
 
 
@@ -313,28 +312,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/classes', ['as' => 'admin/classes', 'uses' => 'Admin\ClasseController@index']);
     Route::get('/admin/classes/cadastrar', ['as' => 'admin/classes/cadastrar/post', 'uses' => 'Admin\ClasseController@create']);
     Route::post('/admin/classes/cadastrar', ['as' => 'admin/classes/cadastrar', 'uses' => 'Admin\ClasseController@store']);
-    Route::get('/admin/visualizar/{id}', ['as' => 'admin/classes/visualizar', 'uses' => 'Admin\ClasseController@show']);
-    Route::get('/admin/aditar/{id}', ['as' => 'admin/classes/editar', 'uses' => 'Admin\ClasseController@edit'])->middleware('access.controll.administrador');
-    Route::put('/admin/editar/{id}', ['as' => 'admin/classes/atualizar', 'uses' => 'Admin\ClasseController@update'])->middleware('access.controll.administrador');
-    Route::get('/admin/eliminar/{id}', ['as' => 'admin/classes/eliminar', 'uses' => 'Admin\ClasseController@remover'])->middleware('access.controll.administrador');
+    Route::get('/admin/aditar/{slug}', ['as' => 'admin/classes/editar', 'uses' => 'Admin\ClasseController@edit'])->middleware('access.controll.administrador');
+    Route::put('/admin/editar/{slug}', ['as' => 'admin/classes/atualizar', 'uses' => 'Admin\ClasseController@update'])->middleware('access.controll.administrador');
+    Route::get('/admin/eliminar/{slug}', ['as' => 'admin/classes/eliminar', 'uses' => 'Admin\ClasseController@eliminar'])->middleware('access.controll.administrador');
 
-    Route::get('admin/classes/eliminadas', ['as' => 'admin.classes.eliminadas', 'uses' => 'Admin\ClasseController@eliminadas'])->middleware('access.controll.administrador');
-    Route::get('admin/classes/purgar/{id}', ['as' => 'admin.classes.purgar', 'uses' => 'Admin\ClasseController@purgar'])->middleware('access.controll.administrador');
-    Route::get('admin/classes/recuperar/{id}', ['as' => 'admin.classes.recuperar', 'uses' => 'Admin\ClasseController@recuperar'])->middleware('access.controll.administrador');
+
     // End Classe
 
     // Start Ano Lectivo
     Route::get('/admin/anolectivo', ['as' => 'admin/anolectivo', 'uses' => 'Admin\AnoLectivoController@index']);
     Route::get('/admin/anolectivo/cadastrar', ['as' => 'admin/anolectivo/cadastrar', 'uses' => 'Admin\AnoLectivoController@create']);
     Route::post('/admin/anolectivo/cadastrar', ['as' => 'admin/anolectivo/cadastrar', 'uses' => 'Admin\AnoLectivoController@store']);
-    Route::get('/admin/anolectivo/visualizar/{id}', ['as' => 'admin/anolectivo/visualizar', 'uses' => 'Admin\AnoLectivoController@show']);
-    Route::get('/admin/anolectivo/aditar/{id}', ['as' => 'admin/anolectivo/editar', 'uses' => 'Admin\AnoLectivoController@edit'])->middleware('access.controll.administrador');
-    Route::put('/admin/anolectivo/editar/{id}', ['as' => 'admin/anolectivo/atualizar', 'uses' => 'Admin\AnoLectivoController@update'])->middleware('access.controll.administrador');
-    Route::get('/admin/anolectivo/eliminar/{id}', ['as' => 'admin/anolectivo/eliminar', 'uses' => 'Admin\AnoLectivoController@destroy'])->middleware('access.controll.administrador');
 
-    Route::get('admin/anolectivo/eliminadas', ['as' => 'admin.anolectivo.eliminadas', 'uses' => 'Admin\AnoLectivoController@eliminadas'])->middleware('access.controll.administrador');
-    Route::get('admin/anolectivo/purgar/{id}', ['as' => 'admin.anolectivo.purgar', 'uses' => 'Admin\AnoLectivoController@purgar'])->middleware('access.controll.administrador');
-    Route::get('admin/anolectivo/recuperar/{id}', ['as' => 'admin.anolectivo.recuperar', 'uses' => 'Admin\AnoLectivoController@recuperar'])->middleware('access.controll.administrador');
+    Route::get('/admin/anolectivo/aditar/{slug}', ['as' => 'admin/anolectivo/editar', 'uses' => 'Admin\AnoLectivoController@edit'])->middleware('access.controll.administrador');
+    Route::put('/admin/anolectivo/editar/{slug}', ['as' => 'admin/anolectivo/atualizar', 'uses' => 'Admin\AnoLectivoController@update'])->middleware('access.controll.administrador');
+    Route::get('/admin/anolectivo/eliminar/{slug}', ['as' => 'admin/anolectivo/eliminar', 'uses' => 'Admin\AnoLectivoController@destroy'])->middleware('access.controll.administrador');
+
+
+    // Route::get('admin/anolectivo/purgar/{slug}', ['as' => 'admin.anolectivo.purgar', 'uses' => 'Admin\AnoLectivoController@purgar'])->middleware('access.controll.administrador');
+
     // End Ano Lectivo
 
 
@@ -368,8 +364,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Start Activadores de Candidatura
     Route::get('/admin/cadeado_candidatura', ['as' => 'admin/cadeado_candidatura', 'uses' => 'Admin\ActivadordaCandidaturaController@index']);
-    Route::get('/admin/cadeado_candidatura/aditar/{id}', ['as' => 'admin/cadeado_candidatura/editar', 'uses' => 'Admin\ActivadordaCandidaturaController@edit'])->middleware('access.controll.administrador');
-    Route::put('/admin/cadeado_candidatura/editar/{id}', ['as' => 'admin/cadeado_candidatura/atualizar', 'uses' => 'Admin\ActivadordaCandidaturaController@update'])->middleware('access.controll.administrador');
+    Route::get('/admin/cadeado_candidatura/mudar_estado/{slug}/{estado}', ['as' => 'admin.cadeado_candidatura.mudar_estado', 'uses' => 'Admin\ActivadordaCandidaturaController@mudar_estado'])->middleware('access.controll.administrador');
+    // Route::put('/admin/cadeado_candidatura/editar/{id}', ['as' => 'admin/cadeado_candidatura/atualizar', 'uses' => 'Admin\ActivadordaCandidaturaController@update'])->middleware('access.controll.administrador');
     // End Activadores de Candidatura
 
     // Start Cabeçalho da Escola
@@ -387,9 +383,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/idadedecandidatura', ['as' => 'admin/idadedecandidatura', 'uses' => 'Admin\IdadedeCandidaturaController@index']);
     Route::get('/admin/idadedecandidatura/cadastrar', ['as' => 'admin/idadedecandidatura/cadastrar', 'uses' => 'Admin\IdadedeCandidaturaController@create']);
     Route::post('/admin/idadedecandidatura/cadastrar', ['as' => 'admin/idadedecandidatura/cadastrar', 'uses' => 'Admin\IdadedeCandidaturaController@store']);
-    Route::get('/admin/idadedecandidatura/editar/{id}', ['as' => 'admin/idadedecandidatura/editar', 'uses' => 'Admin\IdadedeCandidaturaController@edit'])->middleware('access.controll.administrador');
-    Route::put('/admin/idadedecandidatura/editar/{id}', ['as' => 'admin/idadedecandidatura/atualizar', 'uses' => 'Admin\IdadedeCandidaturaController@update'])->middleware('access.controll.administrador');
-    Route::get('/admin/idadedecandidatura/eliminar/{id}', ['as' => 'admin/idadedecandidatura/eliminar', 'uses' => 'Admin\IdadedeCandidaturaController@destroy'])->middleware('access.controll.administrador');
+    Route::get('/admin/idadedecandidatura/editar/{slug}', ['as' => 'admin/idadedecandidatura/editar', 'uses' => 'Admin\IdadedeCandidaturaController@edit'])->middleware('access.controll.administrador');
+    Route::put('/admin/idadedecandidatura/editar/{slug}', ['as' => 'admin/idadedecandidatura/atualizar', 'uses' => 'Admin\IdadedeCandidaturaController@update'])->middleware('access.controll.administrador');
+    Route::get('/admin/idadedecandidatura/eliminar/{slug}', ['as' => 'admin/idadedecandidatura/eliminar', 'uses' => 'Admin\IdadedeCandidaturaController@destroy'])->middleware('access.controll.administrador');
     // End Idade de Candidatura
 
 
@@ -408,7 +404,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/alunos/eliminar/{slug}', 'Admin\AlunnoController@delete')->name('aluno.delete');
     Route::get('admin/alunos/editar/{id}', 'Admin\AlunnoController@edit')->name('aluno.edit');
     Route::put('admin/alunos/editar/{id}', 'Admin\AlunnoController@update')->name('aluno.update');
-    Route::get('admin/aluno/ficha/{slug}', ['as' => 'admin.alunno.ficha', 'uses' => 'Admin\AlunnoController@imprimirFicha']);
 
     Route::post('admin/alunos/recebeBI', ['as' => 'admin.alunos.recebeBI', 'uses' => 'Admin\AlunnoController@recebeBI']);
     Route::get('admin/alunos/trazerCandidato/{BI}', ['as' => 'admin.alunos.trazerCandidato', 'uses' => 'Admin\AlunnoController@trazerCandidato']);
@@ -419,8 +414,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/selecionados/lista/{anolectivo}/{curso}', ['as' => 'admin.alunos.selecionados', 'uses' => 'Admin\AlunnoController@listas']);
 
     Route::get('admin/aluno/{processo}', ['as' => 'admin.aluno.por_processo', 'uses' => 'Admin\AlunnoController@aluno']);
-    
-    
+
+
     ///alunos fim
     ///alunos fim
 
@@ -433,7 +428,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Lista PDF dos Candidatos
     Route::get('Admin/pesquisarCandidaturas', ['as' => 'admin.ListadCandidatura.pesquisarCandidaturas', 'uses' => 'Admin\ListadCandidatura@pesquisar']);
-    Route::post('Admin/recebeCandidaturas', ['as' => 'admin.ListadCandidatura.recebeCandidaturas', 'uses' => 'Admin\ListadCandidatura@recebeCandidaturas']);
+    Route::any('Admin/recebeCandidaturas', ['as' => 'admin.ListadCandidatura.recebeCandidaturas', 'uses' => 'Admin\ListadCandidatura@recebeCandidaturas']);
 
     Route::get('Admin/listas/candidaturas/{anoLectivo}/{curso}', ['as' => 'admin.ListadCandidatura.lista', 'uses' => 'Admin\ListadCandidatura@index']);
 
@@ -475,7 +470,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('candidatos/{slug}/update', ['as' => 'admin.candidatos.update', 'uses' => 'Admin\CandidaturaController@update']);
     Route::get('candidatos/{slug}/eliminar', ['as' => 'admin.candidatos.eliminar', 'uses' => 'Admin\CandidaturaController@eliminar'])->middleware('access.controll.administrador');
     Route::get('admin/candidatos/{id}/transferir', ['as' => 'admin.candidatos.transferir', 'uses' => 'Admin\CandidaturaController@transferir']);
-    
+
     Route::get('admin/candidatos/filtro', ['as' => 'admin.candidatos.filtro', 'uses' => 'Admin\CandidaturaController@filtro']);
     Route::post('admin/candidatos/filtro_cadidatos', ['as' => 'admin.candidatos.filtro_cadidatos', 'uses' => 'Admin\CandidaturaController@filtro_cadidatos']);
 
@@ -501,11 +496,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/inserir', ['as' => 'turmas.inserir', 'uses' => 'Admin\TurmaController@inserir']);
         Route::get('/listarTurmas/{anolectivo}/{curso}', ['as' => 'admin.viewListarTurmas', 'uses' => 'Admin\TurmaController@listarTurmas']);
 
-        Route::get('/{id}/editarTurmas', ['as' => 'turmas.editarTurmas', 'uses' => 'Admin\TurmaController@editarTurmas'])->middleware('access.controll.administrador');
-        Route::get('/{id}/deletarTurmas', ['as' => 'turmas.deletarTurmas', 'uses' => 'Admin\TurmaController@deletarTurmas'])->middleware('access.controll.administrador');
-        Route::put('/{id}/efectuarEdicaoDeTurma', ['as' => 'turmas.efectuarEdicaoDeTurma', 'uses' => 'Admin\TurmaController@efectuarEdicaoDeTurma'])->middleware('access.controll.administrador');
+        Route::get('/{id}/editar', ['as' => 'turmas.editar', 'uses' => 'Admin\TurmaController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{slug}/eliminar', ['as' => 'turmas.eliminar', 'uses' => 'Admin\TurmaController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{slug}/actualizar', ['as' => 'turmas.actualizar', 'uses' => 'Admin\TurmaController@actualizar'])->middleware('access.controll.administrador');
 
-        Route::get('/{id}/gerarlistaTurmas', ['as' => 'turmas.gerarlistaTurmas', 'uses' => 'Admin\TurmaController@gerarlista']);
+        Route::get('/{id}/imprimir_alunos', ['as' => 'turmas.imprimir_alunos', 'uses' => 'Admin\TurmaController@imprimir_alunos']);
         Route::get('/{id}/gerarcadernetaTurmas', ['as' => 'turmas.gerarcadernetaTurmas', 'uses' => 'Admin\TurmaController@gerarcaderneta']);
 
         Route::get('/{id}/gerarcadernetaTurmas/xlsx', ['as' => 'turmas.gerarcadernetaTurmas.xlsx', 'uses' => 'Admin\ExportController@exports']);
@@ -516,9 +511,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}/gerarBoletimTurma/xlsx/view', ['as' => 'turmas.boletimTurmas.xlsx.view', 'uses' => 'Admin\BoletimTurmaController@exportsView']);
         Route::get('/{id}/verBoletim', ['as' => 'turmas.boletimTurmas.xlsxview', 'uses' => 'Admin\BoletimTurmaController@exportsView']);
 
-        Route::get('/{id}/gerarListaTurma/xlsx', ['as' => 'turmas.listaTurmas.xlsx', 'uses' => 'Admin\ListaCadastroSiteController@exports']);
-        Route::get('/{id}/gerarListaTurma/xlsx/view', ['as' => 'turmas.listaTurmas.xlsx.view', 'uses' => 'Admin\ListaCadastroSiteController@exportsView']);
-        Route::get('/{id}/verLista', ['as' => 'turmas.listaTurmas.xlsxview', 'uses' => 'Admin\ListaCadastroSiteController@exportsView']);
+
         Route::get('eliminadas/', ['as' => 'turmas.eliminadas', 'uses' => 'Admin\TurmaController@eliminadas'])->middleware('access.controll.administrador');
         Route::get('recuperar/{id}', ['as' => 'turmas.recuperar', 'uses' => 'Admin\TurmaController@recuperar'])->middleware('access.controll.administrador');
         Route::get('purgar/{id}', ['as' => 'turmas.purgar', 'uses' => 'Admin\TurmaController@purgar'])->middleware('access.controll.administrador');
@@ -527,17 +520,15 @@ Route::middleware('auth:sanctum')->group(function () {
     //End Turmas
 
     //Direitor de Turma
-    Route::group(['prefix' => 'direitor-turma'], function () {
+    Route::group(['prefix' => 'direitores-turmas'], function () {
 
-        Route::get('/cadastrarDireitor', ['as' => 'turma.cadastrarDireitor', 'uses' => 'Admin\DireitorTurmaController@cadastrarDireitor'])->name('turmas.cadastrar');
-        Route::post('/efectuarCadastroDireitor', ['as' => 'turmas.efectuarCadastroDireitor', 'uses' => 'Admin\DireitorTurmaController@efectuarCadastroDireitor']);
-        Route::get('/listarDireitores', ['as' => 'admin.viewListarDireitores', 'uses' => 'Admin\DireitorTurmaController@listarDireitores']);
-
-        Route::get('/{id}/editarDireitor', ['as' => 'turmas.editarDireitor', 'uses' => 'Admin\DireitorTurmaController@editarDireitor'])->middleware('access.controll.administrador');
-        Route::get('/{id}/deletarDireitor', ['as' => 'turmas.deletarDireitor', 'uses' => 'Admin\DireitorTurmaController@deletarDireitor'])->middleware('access.controll.administrador');
-        Route::put('/{id}/efectuarEdicaoDireitor', ['as' => 'turmas.efectuarEdicaoDireitor', 'uses' => 'Admin\DireitorTurmaController@efectuarEdicaoDireitor'])->middleware('access.controll.administrador');
-        Route::get('consultar_turmas', ['as' => 'direitor-turma.consultar_turmas', 'uses' => 'Admin\DireitorTurmaController@consultar_turmas']);
-        Route::post('turmas', ['as' => 'direitor-turma.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
+        Route::get('/criar', ['as' => 'direitores-turmas.criar', 'uses' => 'Admin\DireitorTurmaController@criar']);
+        Route::post('/cadastrar', ['as' => 'direitores-turmas.cadastrar', 'uses' => 'Admin\DireitorTurmaController@cadastrar']);
+        Route::get('/index', ['as' => 'direitores-turmas.index', 'uses' => 'Admin\DireitorTurmaController@index']);
+        Route::get('/{slug}/editar', ['as' => 'direitores-turmas.editar', 'uses' => 'Admin\DireitorTurmaController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{slug}/eliminar', ['as' => 'direitores-turmas.eliminar', 'uses' => 'Admin\DireitorTurmaController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{slug}/actualizar', ['as' => 'direitores-turmas.actualizar', 'uses' => 'Admin\DireitorTurmaController@actualizar'])->middleware('access.controll.administrador');
+        Route::post('turmas', ['as' => 'direitores-turmas.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
     });
     // End Direitor de Turma
 
@@ -641,16 +632,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //disciplinas
     Route::get('/disciplina/ver', ['as' => 'admin.disciplinas.index', 'uses' => 'Admin\DisciplinasController@index']);
-    Route::get('/disciplina/singular/{id}/{classe}', ['as' => 'admin.disciplinas.singular', 'uses' => 'Admin\DisciplinasController@singular']);
     Route::get('/disciplina', ['as' => 'admin.disciplinas.cadastrar.index', 'uses' => 'Admin\DisciplinasController@create']);
     Route::post('/disciplina', ['as' => 'admin.disciplinas.cadastrar.index', 'uses' => 'Admin\DisciplinasController@store']);
-    Route::get('/disciplina/editar/{id}', ['as' => 'admin.disciplinas.editar.index', 'uses' => 'Admin\DisciplinasController@edit'])->middleware('access.controll.administrador');
-    Route::put('/disciplina/editar/{id}', ['as' => 'admin.disciplinas.editar.index', 'uses' => 'Admin\DisciplinasController@update'])->middleware('access.controll.administrador');
-    Route::get('/disciplina/deletar/{id}', ['as' => 'admin.eliminarDisciplina', 'uses' => 'Admin\DisciplinasController@delete'])->middleware('access.controll.administrador');
-    Route::get('/disciplina/eliminadas/', ['as' => 'disciplina.eliminadas', 'uses' => 'Admin\DisciplinasController@eliminadas'])->middleware('access.controll.administrador');
+    Route::get('/disciplina/editar/{slug}', ['as' => 'admin.disciplinas.editar.index', 'uses' => 'Admin\DisciplinasController@edit'])->middleware('access.controll.administrador');
+    Route::put('/disciplina/editar/{slug}', ['as' => 'admin.disciplinas.editar.index', 'uses' => 'Admin\DisciplinasController@update'])->middleware('access.controll.administrador');
+    Route::get('/disciplina/deletar/{slug}', ['as' => 'admin.eliminarDisciplina', 'uses' => 'Admin\DisciplinasController@delete'])->middleware('access.controll.administrador');
 
-    Route::get('/disciplina/recuperar/{id}', ['as' => 'disciplina.recuperar', 'uses' => 'Admin\DisciplinasController@recuperar'])->middleware('access.controll.administrador');
-    Route::get('/disciplina/purgar/{id}', ['as' => 'disciplina.purgar', 'uses' => 'Admin\DisciplinasController@purgar'])->middleware('access.controll.administrador');
+
+
     //disciplinas fim
 
     //disciplinas relacionadas start

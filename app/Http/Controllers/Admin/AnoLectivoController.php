@@ -20,14 +20,15 @@ class AnoLectivoController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
 
-        $anoslectivos = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
+        $anoslectivos = fh_anos_lectivos()->get();
         return view('admin.anolectivo.index', compact('anoslectivos'));
     }
 
@@ -55,18 +56,22 @@ class AnoLectivoController extends Controller
 
 
             if ($request->ya_inicio > $request->ya_fim) {
-                return redirect()->back()->with('aviso', '1');
-            } else {
 
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ano de inicio não pode ser maoir que o ano de fim']);
+
+            } else {
+                // dd("ol");
                 AnoLectivo::create([
                     'ya_inicio' => $request->ya_inicio,
-                    'ya_fim' => $request->ya_fim
+                    'ya_fim' => $request->ya_fim,
+                    'id_cabecalho' => Auth::user()->id
                 ]);
-                $this->loggerData("Adicionou Ano Lectivo ".$request->ya_inicio.' '.$request->ya_fim);
+                $this->loggerData("Adicionou Ano Lectivo " . $request->ya_inicio . ' ' . $request->ya_fim);
                 return redirect('/admin/anolectivo')->with('status', '1');
             }
         } catch (\Exception $exception) {
-            return redirect()->back()->with('aviso', '1');
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
     }
 
@@ -81,7 +86,7 @@ class AnoLectivoController extends Controller
         //
         //$anolectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
         $anolectivo = AnoLectivo::find($id);
-        
+
         return view('admin.anolectivo.visualizar.index', compact('anolectivo'));
     }
 
@@ -91,12 +96,14 @@ class AnoLectivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        if ($anolectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->find($id)) :
+        $anolectivo = fh_anos_lectivos()->where('anoslectivos.slug', $slug)->first();
+        if ($anolectivo):
             return view('admin.anolectivo.editar.index', compact('anolectivo'));
-        else :
-            return redirect('/admin/anolectivo/cadastrar')->with('ano', '1');
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
 
         endif;
     }
@@ -108,15 +115,21 @@ class AnoLectivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         //
-        AnoLectivo::find($id)->update([
-            'ya_inicio' => $request->ya_inicio,
-            'ya_fim' => $request->ya_fim
-        ]);
-        $this->loggerData("Actualizou Ano Lectivo ".$request->ya_inicio.' '.$request->ya_fim);
-        return redirect()->route('admin/anolectivo');
+        if ($request->ya_inicio > $request->ya_fim) {
+
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ano de inicio não pode ser maoir que o ano de fim']);
+
+        } else {
+            AnoLectivo::where('anoslectivos.slug', $slug)->update([
+                'ya_inicio' => $request->ya_inicio,
+                'ya_fim' => $request->ya_fim
+            ]);
+            $this->loggerData("Actualizou Ano Lectivo " . $request->ya_inicio . ' ' . $request->ya_fim);
+            return redirect()->route('admin/anolectivo')->with('feedback', ['type' => 'success', 'sms' => 'Ano lectivo actualizado com sucesso']);
+        }
     }
 
     /**
@@ -125,16 +138,18 @@ class AnoLectivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
+        // dd($slug);  
         //
         // AnoLectivo::find($id)->delete();
-       
+
         try {
-            
-            $response = AnoLectivo::find($id);
-            $response->update(['it_estado_anoLectivo' => 0]);
-            $this->loggerData("Eliminou Ano Lectivo ".$response->ya_inicio.' '.$response->ya_fim);
+
+            $response = fh_anos_lectivos()->where('anoslectivos.slug', $slug)->first();
+            fh_anos_lectivos()->where('anoslectivos.slug', $slug)->delete();
+            ;
+            $this->loggerData("Eliminou Ano Lectivo " . $response->ya_inicio . ' ' . $response->ya_fim);
             return redirect()->back()->with('anolectivo.eliminar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;
@@ -146,10 +161,10 @@ class AnoLectivoController extends Controller
     public function purgar($id)
     {
         try {
-            
+
             $response = AnoLectivo::find($id);
             $response2 = AnoLectivo::find($id)->delete();
-            $this->loggerData("Purgou Ano Lectivo ".$response->ya_inicio.' '.$response->ya_fim);
+            $this->loggerData("Purgou Ano Lectivo " . $response->ya_inicio . ' ' . $response->ya_fim);
             return redirect()->back()->with('anolectivo.purgar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;
@@ -162,17 +177,17 @@ class AnoLectivoController extends Controller
 
 
         $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 0]])->get();
-        $response['eliminadas']="eliminadas";
-        return view('admin.anolectivo.index',  $response);
+        $response['eliminadas'] = "eliminadas";
+        return view('admin.anolectivo.index', $response);
     }
 
     public function recuperar($id)
     {
         try {
-            
+
             $response = AnoLectivo::find($id);
             $response->update(['it_estado_anoLectivo' => 1]);
-            $this->loggerData("Recuperou Ano Lectivo ".$response->ya_inicio.' '.$response->ya_fim);
+            $this->loggerData("Recuperou Ano Lectivo " . $response->ya_inicio . ' ' . $response->ya_fim);
             return redirect()->back()->with('anolectivo.recuperar.success', '1');
         } catch (\Throwable $th) {
             //throw $th;

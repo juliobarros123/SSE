@@ -68,7 +68,7 @@ class AlunnoController extends Controller
 
             if ($aluno) {
                 $turmas = fh_turmas()->where('cursos.id', $aluno->id_curso)
-                    ->where('anoslectivos.id', fh_ano_lectivo_publicado()->id_anoLectivo)
+                    ->where('anoslectivos.id', fha_ano_lectivo_publicado()->id_anoLectivo)
                     ->where('turmas.it_qtdeAlunos', '>', 0)
                     ->get();
             }
@@ -149,32 +149,7 @@ class AlunnoController extends Controller
         return view('admin.alunos.cadastrar.index');
     }
 
-    public function imprimirFicha($slug)
-    {
-        dd(fh_matriculas()->get());
-        $response['alunno'] = fh_aluno_slug($slug);
-        // dd($response['alunno']);
-        // $response['dados'] = DB::table('alunnos')->where('it_estado_aluno', 1)->where('id', $id)->get();
-        $response['cabecalho'] = fh_cabecalho();
-        // dd($response['cabecalho']);
-
-
-        if ($response['cabecalho'] != null) {
-
-            $mpdf = new \Mpdf\Mpdf();
-            /* $response['stylesheet'] = file_get_contents(__full_path().'css/recibo/style.css'); */
-
-            //$url = 'images/cartao/aluno.jpg';
-            $response['stylesheet'] = file_get_contents('css/recibo/style.css');
-
-            $html = view("admin/pdfs/alunno/ficha", $response);
-            $mpdf->writeHTML($html);
-            $this->loggerData('Imprimiu Ficha do Aluno(a)' . $response['alunno']->vc_primeiroNome . ' ' . $response['alunno']->vc_nomedoMeio . ' ' . $response['alunno']->vc_ultimoaNome);
-            $mpdf->Output("ficha.pdf", "I");
-        } else {
-            return redirect()->back();
-        }
-    }
+  
 
 
 

@@ -14,30 +14,30 @@
 <?php
 $ur = '';
 if ($cabecalho->vc_nif == "5000298182") {
-    $url = __full_path() . 'cartões/CorMarie/aluno.png';
+    $url =  . 'cartões/CorMarie/aluno.png';
 } else if ($cabecalho->vc_nif == "7301002327") {
-    $url = __full_path() . 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
+    $url =  . 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
 } else if ($cabecalho->vc_nif == "7301000626") {
-    $url = __full_path() . 'cartões/negage/aluno.png';
+    $url =  . 'cartões/negage/aluno.png';
 } else if ($cabecalho->vc_nif == "5000820440") {
 
-    $url = __full_path() . 'cartões/Quilumosso/aluno.png';
+    $url =  . 'cartões/Quilumosso/aluno.png';
 } else if ($cabecalho->vc_nif == "5000305308") {
-    $url = __full_path() . 'cartões/Foguetao/aluno.png';
+    $url =  . 'cartões/Foguetao/aluno.png';
 } else if ($cabecalho->vc_nif == "7301002572") {
-    $url = __full_path() . 'cartões/LiceuUíge/aluno.png';
+    $url =  . 'cartões/LiceuUíge/aluno.png';
 } else if ($cabecalho->vc_nif == "7301003617") {
-    $url = __full_path() . 'cartões/ldc/aluno.png';
+    $url =  . 'cartões/ldc/aluno.png';
 } else if ($cabecalho->vc_nif == "5000300926") {
-    $url = __full_path() . 'cartões/imagu/aluno.png';
+    $url =  . 'cartões/imagu/aluno.png';
 } else {
-    $path =  __full_path();
+    $path =  ;
     // echo $parent_directory; // Output: "cecnhq"
     $parent_directory = basename(dirname($path));
-    if (is_dir(__full_path() . "cartões/$parent_directory/")) {
-        $url = __full_path() . "cartões/$parent_directory";
+    if (is_dir( . "cartões/$parent_directory/")) {
+        $url =  . "cartões/$parent_directory";
     } else {
-        $url = __full_path() . "cartões/" . strtoupper($parent_directory);
+        $url =  . "cartões/" . strtoupper($parent_directory);
     }
     $url =  $url . "/aluno.png";
 } ?>
@@ -55,24 +55,24 @@ if ($cabecalho->vc_nif == "5000298182") {
         <?php
 
         if ($cabecalho->vc_nif == "5000298182") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "7301002327") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "5000303399") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;;
         } else if ($cabecalho->vc_nif == "5000820440") {
 
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "5000305308") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "7301002572") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "7301003617") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else if ($cabecalho->vc_nif == "5000300926") {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } else {
-            $aluno->vc_imagem = __full_path() . '' . $aluno->vc_imagem;
+            $aluno->vc_imagem =  . '' . $aluno->vc_imagem;
         } ?>
         <div class="position-relative">
 

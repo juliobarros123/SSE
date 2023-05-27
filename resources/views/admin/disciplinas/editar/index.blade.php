@@ -22,19 +22,14 @@
 
     <div class="card">
         <div class="card-body">
-            <form class="row" action="{{ route('admin.disciplinas.editar.index', $disciplina->id) }}" method="POST">
+            <form class="row" action="{{ route('admin.disciplinas.editar.index', $disciplina->slug) }}" method="POST">
                 @method('PUT')
                 @csrf
-                <div class="form-group col-md-1">
-                    <label for="id" class="form-label">Id</label>
-                    <input class="form-control border-secondary" name="id"
-                        value="{{ isset($disciplina->id) ? $disciplina->id : '' }}" id="id" disabled />
-                </div>
+            
                 @include('forms._formDisciplina.index')
+                <div class="d-flex justify-content-center col-md-12">
 
-                <div class="form-group col-md-2">
-                    <label for="" class="form-label text-white">.</label>
-                    <button class="form-control btn btn-dark">Salvar Alterações</button>
+                    <button class=" btn btn-dark w-25 ">Editar</button>
                 </div>
 
             </form>

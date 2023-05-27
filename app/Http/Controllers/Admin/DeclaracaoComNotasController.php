@@ -139,49 +139,49 @@ class DeclaracaoComNotasController extends Controller
         
         $html = view('admin.declaracaoComNotas.buscarAluno.index', compact('DadosDoAluno1', 'ref'), ['filtroDadosDoAlunoeDaEscola' => $filtroDadosDoAlunoeDaEscola]);
         //return PDF::loadView('admin.declaracaoComNotas.buscarAluno.index',compact('DadosDoAluno1'),[ 'filtroDadosDoAlunoseDaEscola'=>$filtroDadosDoAlunoseDaEscola])->setPaper('A4')->stream('pdf_file.pdf');
-       /*  $css = file_get_contents(__full_path().'css/Declaração/declaracao.css'); */
+       /*  $css = file_get_contents(.'css/Declaração/declaracao.css'); */
        $response['cabecalho'] = $this->cabecalho;
         // dd($response);
         if ($response['cabecalho'] != null) {
 
             $mpdf = new \Mpdf\Mpdf();
-            /* $response['stylesheet'] = file_get_contents(__full_path().'css/Declaração/declaracao.css'); */
+            /* $response['stylesheet'] = file_get_contents(.'css/Declaração/declaracao.css'); */
             if ($response['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
 
             } else if ($response['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             } else if ($response['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             } else if ($response['cabecalho']->vc_nif == "5000820440") {
             
                 //$url = 'cartões/Quilumosso/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             } else if ($response['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             } else if ($response['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
              } else if ($response['cabecalho']->vc_nif == "7301003617") {
 
               //$url = 'cartões/ldc/aluno.png';
-             $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+             $css = file_get_contents(.'css/Declaração/declaracao.css');
           } else if ($response['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             }  else {
                 //$url = 'images/cartao/aluno.jpg';
-               $css = file_get_contents(__full_path().'css/Declaração/declaracao.css');
+               $css = file_get_contents(.'css/Declaração/declaracao.css');
             }
           }else {
               return redirect('declaracao');

@@ -1,5 +1,5 @@
 
-<div style="text-align:center"><img src="<?php __full_path()?>images/ensignia/<?php echo $pegaCabecalho->vc_ensignia?>.png" width="100" height="100" class="logo" /></div>
+<div style="text-align:center"><img src="<?php ?>images/ensignia/<?php echo $pegaCabecalho->vc_ensignia?>.png" width="100" height="100" class="logo" /></div>
 		<p><div style="text-align:center"><?php echo $pegaCabecalho->vc_republica ?></div>
         <div style="text-align:center"><?php echo $pegaCabecalho->vc_ministerio?></div>
         <div style="text-align:center"><?php echo $pegaCabecalho->vc_escola.' '.$pegaCabecalho->vc_acronimo?></div>

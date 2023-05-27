@@ -430,7 +430,7 @@ class CandidaturaController extends Controller
             ]);
 
             $this->loggerData('Actualizou o(a) Candidato(a)' . $request->vc_primeiroNome . ' ' . $request->vc_nomedoMeio . ' ' . $request->vc_Apelido);
-            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Candidato actualizado com sucesso']);
+            return redirect()->route('admin.candidatos.recebecandidaturas')->with('feedback', ['type' => 'success', 'sms' => 'Candidato actualizado com sucesso']);
 
 
         } catch (\Exception $exception) {

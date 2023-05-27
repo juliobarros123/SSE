@@ -33,7 +33,7 @@ class NotaSecaController extends Controller
         $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
  
-    public  function get_DCC()
+    public  function fh_disciplinas_cursos_classes()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
@@ -271,7 +271,7 @@ class NotaSecaController extends Controller
     {
         $id_curso = Turma::find($id_turma)->it_idCurso;
         $id_classe = Turma::find($id_turma)->it_idClasse;
-        $disciplinas = $this->get_DCC()->where('classes.id',     $id_classe)
+        $disciplinas = $this->fh_disciplinas_cursos_classes()->where('classes.id',     $id_classe)
             ->where('cursos.id',  $id_curso)->get();
         return     $disciplinas;
     }
@@ -288,7 +288,7 @@ class NotaSecaController extends Controller
         for ($cont = $nota->classe; $cont >= 10; $cont--) {
             $turma = Turma::find($nota->id_turma);
             $classe = Classe::where('vc_classe', $cont)->first();
-            $dcc = $this->get_DCC()->where('classes.id',    $classe->id)
+            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id',    $classe->id)
                 ->where('disciplinas.id',   $nota->disciplina)
                 ->where('cursos.id', $turma->it_idCurso)->first();
             $this->updateNota($nota->processo, $nota,  $turma->it_idClasse,  $turma->it_idAnoLectivo,   $dcc->id, $turma->id);
@@ -309,7 +309,7 @@ class NotaSecaController extends Controller
         $tllClassesInseridas = 0;
         foreach ($processosAluno as $processo) {
 
-            $dcc = $this->get_DCC()->where('classes.id',    $processo->it_idClasse)
+            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id',    $processo->it_idClasse)
                 ->where('cursos.id', $processo->it_idCurso)
                 ->where('disciplinas.id',   $id_disciplina)
                 ->first();
@@ -468,7 +468,7 @@ class NotaSecaController extends Controller
         try {
             if ($estudando == 0) {
                 $response['processosAluno'] = $this->matricula->processosAluno($processo)->first();
-                $response['disciplinas'] = $this->get_DCC()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
+                $response['disciplinas'] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
                     ->select("disciplinas.vc_nome", "disciplinas.id")
                     ->distinct()
                     ->pluck("disciplinas.vc_nome", "disciplinas.id");
@@ -480,7 +480,7 @@ class NotaSecaController extends Controller
                 $response['disciplinas'] = array();
 
                 for ($i = 10; $i <= $ultimoProcesso->vc_classe - 1; $i++) {
-                    $response['disciplinas']["classe$i"] = $this->get_DCC()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
+                    $response['disciplinas']["classe$i"] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
                         ->where('classes.vc_classe', $i)
                         ->select("disciplinas.vc_nome", "disciplinas.id")
                         ->pluck("disciplinas.vc_nome", "disciplinas.id");

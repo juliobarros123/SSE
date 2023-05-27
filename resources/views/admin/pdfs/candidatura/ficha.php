@@ -26,12 +26,12 @@
                 <?php echo date('d-m-Y', strtotime($candidato->created_at)); ?>
             </b><br>
             Inscrição para o Ano Lectivo: <b>
-                <?php echo $candidato->vc_anoLectivo ?>
+            <?php echo $candidato->ya_inicio.'/'.$candidato->ya_fim ?>
             </b><br>
             Nome do candidato: <b>
                 <?php echo ($candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido); ?>
             </b><br>
-            Bilhete de Identidade Nº <b>
+            Bilhete de Identidade Nº/Cédula Pessoal de Identificação <b>
                 <?php echo $candidato->vc_bi; ?>
             </b> <br>
             Curso escolhido: <b>
@@ -94,12 +94,12 @@
                 <?php echo date('d-m-Y', strtotime($candidato->created_at)); ?>
             </b><br>
             Inscrição para o Ano Lectivo: <b>
-                <?php echo $candidato->vc_anoLectivo ?>
+                <?php echo $candidato->ya_inicio.'/'.$candidato->ya_fim ?>
             </b><br>
             Nome do candidato: <b>
                 <?php echo ($candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido); ?>
             </b><br>
-            Bilhete de Identidade Nº <b>
+            Bilhete de Identidade Nº/Cédula Pessoal de Identificação<b>
                 <?php echo $candidato->vc_bi; ?>
             </b> <br>
             Curso escolhido: <b>

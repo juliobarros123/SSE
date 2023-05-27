@@ -19,7 +19,7 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <form action=" {{ route('admin/anolectivo/atualizar', $anolectivo->id) }}" method="post" class="row">
+            <form action=" {{ route('admin/anolectivo/atualizar', $anolectivo->slug) }}" method="post" class="row">
                 @csrf
                 @method('PUT')
 
@@ -31,7 +31,7 @@
                 @include('forms._formAnoLectivo.index')
                 <div class="form-group col-sm-2">
                     <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Salvar Alterações</button>
+                    <button class="form-control btn btn-dark">Editar</button>
                 </div>
             </form>
 

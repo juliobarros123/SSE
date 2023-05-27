@@ -80,34 +80,19 @@
                                 <i class="fa fa-clone" aria-hidden="true"></i>
                             </button>
 
-                            @if (isset($eliminadas))
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="{{ route('turmas.recuperar', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                        class="dropdown-item ">Recuperar</a>
-                                    <a href="{{ route('turmas.purgar', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                        class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
-
-                                </div>
-                            @else
+                       
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                    <a href="{{ route('turmas.gerarlistaTurmas', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                        class="dropdown-item" target="_blank">Alunos</a>
-                                    <a href="{{ route('turmas.listaTurmas.xlsx', $row->id) }}" class="dropdown-item"
-                                        target="_blank">Listas xls</a>
-
-
-                                    <a href="{{ route('turmas.gerarcadernetaTurmas.xlsx', $row->id) }}"
-                                        class="dropdown-item" target="_blank">Caderneta xls</a>
-                                    <a href="{{ route('turmas.gerarcadernetaTurmas.xlsx', $row->id_turma ? $row->id_turma : $row->id) }}"
-                                        class="dropdown-item" target="_blank">Gerar xlsx</a>
-                                    <a href="{{ route('admin.atribuicao.professores', $row->id_turma ? $row->id_turma : $row->id) }}"
+                                    <a href="{{ route('turmas.imprimir_alunos', $row->slug ) }}"
+                                        class="dropdown-item" target="_blank">Lista</a>
+                                 
+                                    <a href="{{ route('admin.atribuicao.professores', $row->slug) }}"
                                         class="dropdown-item" target="_blank">Professores</a>
                                     <a href="{{ route('admin.pautaFinal.gerar', $row->id_turma ? $row->id_turma : $row->id) }}"
                                         class="dropdown-item" target="_blank">Pauta final</a>
 
                                     @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-                                        <a href="{{ route('turmas.editarTurmas', $row->id_turma ? $row->id_turma : $row->id) }}"
+                                        <a href="{{ route('turmas.editar',  $row->slug) }}"
                                             class="dropdown-item">Editar</a>
                                             @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
@@ -116,13 +101,13 @@
                                         <a href="{{ route('notas-seca.inserir', $row->id_turma ? $row->id_turma : $row->id) }}"
                                             class="dropdown-item">Inserir nota seca</a>
                                             @endif
-                                        <a href="{{ route('turmas.deletarTurmas', ['id' => $row->id_turma ? $row->id_turma : $row->id]) }}"
+                                        <a href="{{ route('turmas.eliminar', ['slug' => $row->slug]) }}"
                                             class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                 
                                     @endif
                                 </div>
-                            @endif
+                        
                         </div>
 
                     </td>
@@ -170,7 +155,7 @@
                 var href = $(this).attr('href');
                 if (!$('#confirm-delete').length) {
                     $('table').append(
-                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende elimnar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
+                        '<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Eliminar os dados</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">Tem certeza que pretende eliminar?</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> <a  class="btn btn-info" id="dataConfirmOk">Eliminar</a> </div></div></div></div>'
                     );
                 }
                 $('#dataConfirmOk').attr('href', href);

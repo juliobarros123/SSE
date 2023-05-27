@@ -107,8 +107,8 @@ class FolhaSalarioFuncionarioMensalController extends Controller
 
     public function ImprimirFolha($it_id_mes,$ano){
 
-    $response["bootstrap"] = file_get_contents(__full_path()."css/relatorio/bootstrap.min.css");
-    $response["style"] = file_get_contents(__full_path()."css/relatorio/style.css");
+    $response["bootstrap"] = file_get_contents(."css/relatorio/bootstrap.min.css");
+    $response["style"] = file_get_contents(."css/relatorio/style.css");
     $response["pegaCabecalho"] =$pegaCabecalho=Cabecalho::find(1);
     $response["folhaSalarioFuncionarios"] =$folhaSalarioFuncionarios=$this->folhaSalarioFuncionarioMensal->pegarFuncionarioSalarioMensal($it_id_mes,$ano);
 

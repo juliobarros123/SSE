@@ -34,7 +34,7 @@
 
                 <div class="form-group col-md-2">
                     <label for="" class="form-label text-white">.</label>
-                    <button class="form-control btn btn-dark">Salvar Alterações</button>
+                    <button class="form-control btn btn-dark">Editar</button>
                 </div>
 
             </form>

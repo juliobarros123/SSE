@@ -3,198 +3,188 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\AnoLectivo;
+use App\Models\AnoLectivoPublicado;
 use App\Models\Classe;
 use App\Models\Curso;
-use App\Models\Disciplinas;
-use App\Models\Disciplina_Curso_Classe;
-use App\Models\Logger;
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Turma;
+use App\Models\DireitorTurma;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
-class DisciplinaCursoClasse extends Controller
+
+class DireitorTurmaController extends Controller
 {
-    private $Logger;
-    private $disciplina_Curso_Classe;
+    private $director_turma;
     public function __construct()
     {
-        $this->Logger = new Logger();
-        $this->disciplina_Curso_Classe = new Disciplina_Curso_Classe();
+        $this->director_turma = new DireitorTurma();
+
+
     }
 
-    
-  
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Disciplina_Curso_Classe $middle)
+    public function criar()
     {
-        //
-        $response['respostas'] = $middle->get_DCC()->get();
-        return view('admin.disciplina_curso_classe.index', $response);
+        $response['anoslectivos'] = fh_anos_lectivos_publicado()->first();
+        $anoLectivoPublicado = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
+
+        $data['users'] = fh_professores()->get();
+
+        $data['turmas'] = fh_turmas()->get();
+
+
+        return view('admin.direitores-turmas.cadastrar.index', $data);
+        //dd($data);
+
+
     }
-    public function loggerData($mensagem)
+    public function cadastrar(Request $request)
     {
-        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
-        $this->Logger->Log('info', $dados_Auth . $mensagem);
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        // dd($request);
 
-            $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
-            $response['disciplinas'] = Disciplinas::orderby('vc_nome', 'asc')->where([['it_estado_disciplina', 1]])->get();
-            $response['classes'] = Classe::where([['it_estado_classe', 1]])->get();
-
-        
-
-        return view('admin.disciplina_curso_classe.cadastrar.index', $response);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    
         try {
-           $this->disciplina_Curso_Classe->tem_registro($request);
-            
-            Disciplina_Curso_Classe::create($request->all());
-            $this->loggerData('Adicionou um relacionamento de Disciplina, Curso, Classe');
-            return redirect()->route('admin.disciplina_curso_classe')->with('status', '1');
+            $data = $request->all();
+
+            if ($this->tem_registro($request)) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'O professor já é diretor desta turma.']);
+
+            }
+            //
+            if ($this->turma_tem_director($request->id_turma)) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Esta turma já possui um diretor']);
+
+            }
+
+
+
+            DireitorTurma::create(
+                [
+                    'id_turma' => $request->id_turma,
+                    'id_user' => $request->id_user,
+                    'id_cabecalho' => Auth::User()->id
+                ]
+            );
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Director de turma cadastrado com sucesso']);
+
+
+
 
         } catch (Exception $e) {
-            return redirect()->back()->with('mensagem_dinamica', '' . $e->getMessage())->with('tipo', 'error')->with('obs', 'Provavelmente este registro já existe!');
+
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
 
         }
-
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function actualizar(Request $request, $slug)
     {
-        //
-    }
+        // dd($request);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-
-        $response['resposta'] = Disciplina_Curso_Classe::where([['it_estado_dcc', 1], ['id', $id]])->first();
-
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
-        $response['disciplinas'] = Disciplinas::orderby('vc_nome', 'asc')->where([['it_estado_disciplina', 1]])->get();
-        $response['classes'] = Classe::where([['it_estado_classe', 1]])->get();
-        return view('admin.disciplina_curso_classe.editar.index', $response);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
         try {
-        
-            $this->disciplina_Curso_Classe->tem_registro($request);
-             
-        Disciplina_Curso_Classe::find($id)->update($request->all());
-        $this->Logger->Log('info', 'Actualizou Uma Disciplina');
+            $data = $request->all();
 
-        return redirect()->route('admin.disciplina_curso_classe');
-        
-    } catch (Exception $e) {
-   
-        return redirect()->back()->with('mensagem_dinamica', '' .$e->getMessage())->with('tipo', 'error')->with('obs', 'Provavelmente este registro já existe!');
+            if ($this->tem_registro($request)) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'O professor já é diretor desta turma.']);
 
-    }
-    }
+            }
+            //
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-       
-        try {
-           
-            $response = Disciplina_Curso_Classe::find($id);
-            $response->update(['it_estado_dcc' => 0]);
-    
-            $this->loggerData('Eliminou o relacionamento de Disciplina, Curso, Classe');
-            return redirect()->back()->with('disciplina_curso_classe.eliminar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('disciplina_curso_classe.eliminar.error', '1');
+
+
+
+            DireitorTurma::where('slug', $slug)->update(
+                [
+                    'id_turma' => $request->id_turma,
+                    'id_user' => $request->id_user,
+
+                ]
+            );
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Director de turma actualizado com sucesso']);
+
+
+
+
+        } catch (Exception $e) {
+            // dd($e);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+
         }
     }
-
-    public function purgar($id)
+    //
+    public function editar($slug)
     {
-        try {
-           
-            $response = Disciplina_Curso_Classe::find($id);
-            $response2 = Disciplina_Curso_Classe::find($id)->delete();
-            $this->loggerData("Purgou o relacionamento de Disciplina, Curso, Classe");
-            return redirect()->back()->with('disciplina_curso_classe.purgar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('disciplina_curso_classe.purgar.error', '1');
-        }
+        $director_turma = fh_directores_turmas()->where('direitor_turmas.slug', $slug)->first();
+        if ($director_turma):
+            // dd($director_turma);
+            $data['director_turma'] = $director_turma;
+            $data['users'] = fh_professores()->get();
+
+            $data['turmas'] = fh_turmas()->get();
+
+            return view('admin.direitores-turmas.editar.index', $data);
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+        endif;
     }
 
-    public function eliminadas(Disciplina_Curso_Classe $middle)
+    public function tem_registro($array)
     {
-      
+        $array_limpo = $array->except(['_token', '_method']);
+        return DireitorTurma::where($array_limpo)->count();
+        // if($estado){
+        //     throw new Exception('Registro já existe!');
+        //    }
 
-      
-        $response['respostas'] = $middle->get_DCC2()->get();
-       
-        $response['eliminadas']="eliminadas";
-        return view('admin.disciplina_curso_classe.index', $response);
+    }
+    public function turma_tem_director($id_turma)
+    {
+
+        return DireitorTurma::where('id_turma', $id_turma)->count();
+
+
+    }
+    public function cadastro_existe($dados)
+    {
+        return DB::table('coordenador_cursos')
+            ->join('users', 'users.id', 'coordenador_cursos.id_user')
+            ->join('cursos', 'cursos.id', 'coordenador_cursos.id_curso')
+            ->where('coordenador_cursos.id_user', $dados->id_user)
+            ->where('coordenador_cursos.id_curso', $dados->id_curso)
+            ->count();
     }
 
-    public function recuperar($id)
+
+
+    public function eliminar($slug)
     {
-        try {
-           
-            $response = Disciplina_Curso_Classe::find($id);
-            $response->update(['it_estado_dcc' => 1]);
-            $this->loggerData("Recuperou o relacionamento de Disciplina, Curso, Classe");
-            return redirect()->back()->with('disciplina_curso_classe.recuperar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('disciplina_curso_classe.recuperar.error', '1');
-        }
+
+
+        $director_turma = fh_directores_turmas()->where('direitor_turmas.slug', $slug)->first();
+        if ($director_turma):
+            $this->loggerData('Eliminou  director de turma com id  ', $$director_turma->id);
+            return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Atribuição eliminada com sucesso']);
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+        endif;
+
+
     }
+  public function index()
+    {
+        $data['direitores'] = fh_directores_turmas()->get();
+
+
+        //  dd($data);
+        return view('admin.direitores-turmas.index', $data);
+    }
+
 }

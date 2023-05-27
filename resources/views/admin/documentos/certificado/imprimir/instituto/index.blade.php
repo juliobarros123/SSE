@@ -319,7 +319,7 @@
 </head>
 
 <body
-    style="background-image: url('<?php echo __full_path(); ?>images/certificado/instituto/certificado.png');background-position: top left;
+    style="background-image: url('<?php echo ; ?>images/certificado/instituto/certificado.png');background-position: top left;
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">

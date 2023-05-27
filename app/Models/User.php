@@ -15,24 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens;
-    use HasFactory;
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $hash_bcrypt = '';
-            $hash_bcrypt = Hash::make(slug_gerar());
-            $stringSemBarras = str_replace('/', '', $hash_bcrypt);
-            $model->slug = $stringSemBarras;
-        });
-    }
-    use HasProfilePhoto;
-    use HasTeams;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
-
+   
     /**
      * The attributes that are mass assignable.
      *
@@ -51,8 +34,17 @@ class User extends Authenticatable implements JWTSubject
         'it_estado_user',
         'desenvolvedor'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
-
+        static::creating(function ($model) {
+            $hash_bcrypt = '';
+            $hash_bcrypt = Hash::make(slug_gerar());
+            $stringSemBarras = str_replace('/', '', $hash_bcrypt);
+            $model->slug = $stringSemBarras;
+        });
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();

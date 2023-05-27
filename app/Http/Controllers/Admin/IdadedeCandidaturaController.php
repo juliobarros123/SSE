@@ -36,15 +36,16 @@ class IdadedeCandidaturaController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
         //
-        $idadesdecandidaturas = IdadedeCandidatura::get();
-        return view('admin.idadedecandidatura.visualizar.index', compact('idadesdecandidaturas'));
+        $response['idadesdecandidaturas'] = fh_idades_admissao()->get();
+        return view('admin.idadedecandidatura.visualizar.index', $response);
     }
 
     /**
@@ -55,8 +56,9 @@ class IdadedeCandidaturaController extends Controller
     public function create()
     {
         //
-        $anoslectivos = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        return view('admin.idadedecandidatura.cadastrar.index', compact('anoslectivos'));
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        // dd($response['anoslectivos']);
+        return view('admin.idadedecandidatura.cadastrar.index', $response);
     }
 
     /**
@@ -71,16 +73,19 @@ class IdadedeCandidaturaController extends Controller
         //
 
         if ($request->dt_limitemaxima >= $request->dt_limiteaesquerda) {
-            return redirect()->back()->with('aviso', '1');
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Idade mínima não pode ser maior que idade máxima']);
+
         } else {
             $response = IdadedeCandidatura::create([
                 'dt_limiteaesquerda' => $request->dt_limiteaesquerda,
                 'dt_limitemaxima' => $request->dt_limitemaxima,
-                'vc_anolectivo' => $request->vc_anolectivo
+                'id_ano_lectivo' => $request->id_ano_lectivo,
+                'id_cabecalho' => Auth::User()->id
             ]);
             if ($response) {
                 $this->loggerData('adicionou idade de candidatura');
-                return redirect('/admin/idadedecandidatura')->with('status', '1');;
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Idades de admissão cadastradas com sucesso']);
+
             }
         }
     }
@@ -91,14 +96,16 @@ class IdadedeCandidaturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        if ($response['idadedecandidatura'] = IdadedeCandidatura::where([['it_estado_idadedecandidatura', 1]])->find($id)) :
+        $response['idadedecandidatura'] = fh_idadedeCandidatura()->where('idadesdecandidaturas.slug', $slug)->first();
+        if ($response['idadedecandidatura']):
             /*      $response['idadedecandidatura'] = IdadedeCandidatura::find($id); */
-            $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
+            $response['anoslectivos'] = fh_anos_lectivos()->get();
             return view('admin.idadedecandidatura.editar.index', $response);
-        else :
-            return redirect('/admin/idadedecandidatura/cadastrar')->with('idade', '1');
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
 
         endif;
     }
@@ -110,16 +117,22 @@ class IdadedeCandidaturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         //
-        IdadedeCandidatura::find($id)->update([
-            'dt_limiteaesquerda' => $request->dt_limiteaesquerda,
-            'dt_limitemaxima' => $request->dt_limitemaxima,
-            'vc_anolectivo' => $request->vc_anolectivo
-        ]);
-        $this->loggerData('Editou idade de candidatura de id '.$id);
-        return redirect()->route('admin/idadedecandidatura');
+        if ($request->dt_limitemaxima >= $request->dt_limiteaesquerda) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Idade mínima não pode ser maior que idade máxima']);
+
+        } else {
+            $i = IdadedeCandidatura::where('idadesdecandidaturas.slug', $slug)->first();
+            IdadedeCandidatura::where('idadesdecandidaturas.slug', $slug)->update([
+                'dt_limiteaesquerda' => $request->dt_limiteaesquerda,
+                'dt_limitemaxima' => $request->dt_limitemaxima,
+                'id_ano_lectivo' => $request->id_ano_lectivo
+            ]);
+            $this->loggerData('Editou idade de admissão de id ' . $i->id);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Idades de admissão actualizadas com sucesso']);
+        }
     }
 
     /**
@@ -128,13 +141,13 @@ class IdadedeCandidaturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
 
         //IdadedeCandidatura::find($id)->delete();
         $response = IdadedeCandidatura::find($id)->delete();
 
-        $this->loggerData('Eliminou idade de candidatura de id '.$id);
+        $this->loggerData('Eliminou idade de candidatura de id ' . $id);
         return redirect()->route('admin/idadedecandidatura');
     }
 }

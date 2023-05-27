@@ -19,6 +19,17 @@ use Illuminate\Support\Facades\Hash;use Illuminate\Database\Eloquent\Factories\H
 
 class Disciplinas extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $hash_bcrypt = '';
+            $hash_bcrypt = Hash::make(slug_gerar());
+            $stringSemBarras = str_replace('/', '', $hash_bcrypt);
+            $model->slug = $stringSemBarras;
+        });
+    }
 
     protected $fillable = ['id_cabecalho','slug', 
         'vc_nome',
