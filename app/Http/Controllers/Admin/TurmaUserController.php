@@ -50,7 +50,7 @@ class TurmaUserController extends Controller
     }
     public function professores($slug)
     {
-    
+
         $data['professores'] = fha_turma_professores($slug)['atribuicoes'];
         $data['disciplinas'] = fha_turma_professores($slug)['disciplinas'];
         $data['turma'] = fh_turmas_slug($slug)->first();
@@ -70,53 +70,12 @@ class TurmaUserController extends Controller
     public function index()
     {
 
-        $response['anoslectivos'] = AnoLectivoPublicado::find(1);
+        $response['anoslectivos'] = fha_ano_lectivo_publicado();
         //dd();
         $anoLectivoPublicado = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
-        //dd($anoLectivoPublicado);
-        $response['atribuicoes'] = DB::table('turmas_users')
-            ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
-            ->distinct()
-            ->select(
-                'turmas_users.it_idUser',
-                'turmas_users.id as ident',
-                'users.vc_primemiroNome',
-                'users.vc_apelido',
-                'turmas.vc_nomedaTurma',
-                'turmas.vc_classeTurma',
-                'turmas.vc_cursoTurma',
-                'turmas.vc_salaTurma',
-                'turmas.vc_anoLectivo',
-                'turmas.it_qtMatriculados',
-                'turmas.it_qtdeAlunos',
-                'turmas.id as id_turma',
-                'disciplinas.id as id_disciplina',
 
-                'disciplinas.vc_nome as disciplina'
-
-            )
-
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            /* ->where('turmas.vc_anoLectivo', $anoLectivoPublicado) */
-            ->where('turmas_users.it_estado_turma_user', 1)
-            ->get();
-        // dd(   $response['atribuicoes']);
-
-        $response['disciplinas'] = DB::table('turmas_users')
-            ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            ->distinct()
-            ->select(
-                'turmas_users.it_idUser',
-                'disciplinas.vc_nome as disciplina'
-            )
-
-            ->get();
-
+        $response['atribuicoes'] = fh_turmas_professores()->get();
+        $response['disciplinas'] = fh_professores_disciplinas()->get();
 
         return view('admin.atribuicoes.index', $response);
     }
@@ -132,52 +91,57 @@ class TurmaUserController extends Controller
         ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.vc_anoLectivo')->orderByRaw('id DESC')->limit(1)
         ->select('turmas.id', 'turmas.vc_nome')
         ->get();*/
-        $response['anoslectivos'] = AnoLectivoPublicado::find(1);
+        $response['anoslectivos'] = fha_ano_lectivo_publicado();
         //dd();
-        $anoLectivoPublicado = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
-        $turmas = Turma::where([['it_estado_turma', 1], ['vc_anoLectivo', $anoLectivoPublicado]])->get();
-
-        $disciplinas = Disciplinas::where([['it_estado_disciplina', 1]])->get();
-        $classes = Classe::where([['it_estado_classe', 1]])->get();
-        $users = User::where('vc_tipoUtilizador', '=', 'professor')->get();
-        return view('admin.atribuicoes.cadastrar.index', compact('turmas', 'users', 'disciplinas', 'classes'));
+        $response['anoLectivoPublicado'] = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
+        $response['turmas'] = fh_turmas()->get();
+        // dd(  $response['turmas'] );
+        $response['disciplinas'] = fh_disciplinas()->get();
+        $response['classes'] = fh_classes()->get();
+        $response['users'] = fh_professores()->get();
+        return view('admin.atribuicoes.cadastrar.index', $response);
     }
     public function tem_registro($array)
     {
 
         /*   dd($array); */
 
-        return TurmaUser::where($array)->where('it_estado_turma_user', 1)->count();
+        return TurmaUser::where($array)->count();
 
 
     }
     public function salvar(Request $request)
     {
-        // try {
+        try {
 
 
-        //TurmaUser::create($request->all());
-        $array['it_idDisciplina'] = $request->it_idDisciplina;
-        $array['it_idTurma'] = $request->it_idTurma;
+            //TurmaUser::create($request->all());
+            $array['it_idDisciplina'] = $request->it_idDisciplina;
+            $array['it_idTurma'] = $request->it_idTurma;
 
-        if ($this->tem_registro($array)) {
-            return redirect()->back()->with("error_tem_registro", 1);
+            if ($this->tem_registro($array)) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Atribuição existe']);
+
+            }
+            TurmaUser::create([
+                'it_idTurma' => $request->it_idTurma,
+                'it_idUser' => $request->it_idUser,
+                //'it_idClasse'=>$request->it_idClasse,
+                'it_idClasse' => Turma::find($request->it_idTurma)->it_idClasse,
+                'it_idDisciplina' => $request->it_idDisciplina,
+                'id_cabecalho' => Auth::User()->id_cabecalho
+
+            ]);
+
+
+            $this->loggerData("Adicionou Turma ao Utilizador " . User::find($request->it_idUser)->vc_nomeUtilizador);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Professor foi atribuido a turma com sucesso']);
+
+        } catch (\Exception $exception) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+
         }
-        TurmaUser::create([
-            'it_idTurma' => $request->it_idTurma,
-            'it_idUser' => $request->it_idUser,
-            //'it_idClasse'=>$request->it_idClasse,
-            'it_idClasse' => Turma::find($request->it_idTurma)->it_idClasse,
-            'it_idDisciplina' => $request->it_idDisciplina,
-
-        ]);
-
-
-        $this->loggerData("Adicionou Turma ao Utilizador " . User::find($request->it_idUser)->vc_nomeUtilizador);
-        return redirect()->back()->with('status', '1');
-        //} catch (\Exception $exception) {
-        return redirect()->back()->with('aviso', '1');
-        //}
     }
     /**
      * Display the specified resource.
@@ -197,79 +161,65 @@ class TurmaUserController extends Controller
      * @param  \App\Models\TurmaUser  $curso
      * @return \Illuminate\Http\Response
      */
-    public function editar($id)
+    public function editar($slug)
     {
         //try {
-        $response['anoslectivos'] = AnoLectivoPublicado::find(1);
-        //dd();
-        $anoLectivoPublicado = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
-        $c = TurmaUser::find($id);
-        //dd($c);
-        if ($response['atribuicao'] = TurmaUser::find($id)) {
-            //dd($c);
-            $atribuicao = TurmaUser::findOrFail($id);
-            $turma = Turma::find($atribuicao->it_idTurma);
-            $turmas = Turma::where([['it_estado_turma', 1]])->where('vc_anoLectivo', $anoLectivoPublicado)->get();
-            $classe = Classe::find($atribuicao->it_idClasse);
-            $classes = Classe::where([['it_estado_classe', 1]])->get();
-            $disciplinas = Disciplinas::where([['it_estado_disciplina', 1]])->get();
-            $disciplina = Disciplinas::find($atribuicao->it_idDisciplina);
-            $user = User::find($atribuicao->it_idUser);
-            $users = User::where('vc_tipoUtilizador', '=', 'professor')->get();
-            $dados['atribuicao'] = $atribuicao;
-            $dados['turma'] = $turma;
-            $dados['turmas'] = $turmas;
-            $dados['classe'] = $classe;
-            $dados['classes'] = $classes;
-            $dados['disciplinas'] = $disciplinas;
-            $dados['disciplina'] = $disciplina;
-            $dados['user'] = $user;
-            $dados['users'] = $users;
-            //$dados['']=$;
-            //return view("admin.atribuicoes.editar.index", compact('atribuicao', 'turma', 'user', 'turmas', 'users', 'classe', 'classes', 'disciplina', 'disciplinas'));
-            //dd($dados);
-            return view("admin.atribuicoes.editar.index", $dados)->with('status', '1');
-            //dd($dados);
-        } else {
-            return redirect('admin/atribuicoes/cadastrar')->with('atribuicao', '1');
+        try {
+            $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug)->first();
+            // dd($c);
+            if ($turma_professor):
+                // dd($turma_professor);
+// dd( $turma_professor);
+                $atribuicao = $turma_professor;
+                $turma = fh_turmas()->where('turmas.id', $turma_professor->it_idTurma)->first();
+
+                $alp = fha_ano_lectivo_publicado();
+
+                $turmas = fh_turmas()->where('turmas.it_idAnoLectivo', $alp->id_anoLectivo)->get();
+                $classe = Classe::find($atribuicao->it_idClasse);
+                $classes = fh_classes()->get();
+                $disciplinas = fh_disciplinas()->get();
+                $disciplina = Disciplinas::find($atribuicao->it_idDisciplina);
+                // dd(  $disciplina );
+                $user = User::find($atribuicao->it_idUser);
+                $users = fh_professores()->get();
+                $dados['atribuicao'] = $atribuicao;
+                $dados['turma'] = $turma;
+                $dados['turmas'] = $turmas;
+                $dados['classe'] = $classe;
+                $dados['classes'] = $classes;
+                $dados['disciplinas'] = $disciplinas;
+                $dados['disciplina'] = $disciplina;
+                $dados['user'] = $user;
+                $dados['users'] = $users;
+                $dados['turma'] = $turma;
+                $dados['classes'] = fh_classes()->get();
+                // $dados['anos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
+                $dados['cursos'] = fh_cursos()->get();
+                $dados['ano_letivos'] = fh_anos_lectivos()->get();
+                // dd( $dados['classes']);
+
+                return view("admin.atribuicoes.editar.index", $dados);
+
+            else:
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+            endif;
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
         }
+
+
+
 
         /*} catch (\Exception $exception) {
         return redirect()->back()->with('aviso', '1');
         }*/
     }
 
-    public function listarTurmas($anoLectivo, $curso)
-    {
-        if ($anoLectivo == 'Todos') {
-            $anoLectivo = '';
-        }
-        if ($curso == 'Todos') {
-            $curso = '';
-        }
 
-        $response['anolectivo'] = $anoLectivo;
-        if ($anoLectivo && $curso) {
-            $response['turmas'] = TurmaUser::where([
-                ['it_estado_turma_user', 1],
-                ['vc_anoLectivo', '=', $anoLectivo],
-                ['vc_cursoTurma', '=', $curso]
-            ])->get();
-        } elseif ($anoLectivo && !$curso) {
-            $response['turmas'] = TurmaUser::where([
-                ['it_estado_turma_user', 1],
-                ['vc_anoLectivo', '=', $anoLectivo]
-            ])->get();
-        } elseif (!$anoLectivo && $curso) {
-            $response['turmas'] = TurmaUser::where([
-                ['it_estado_turma_user', 1],
-                ['vc_cursoTurma', '=', $curso]
-            ])->get();
-        } else {
-            $response['turmas'] = TurmaUser::where([['it_estado_turma_user', 1]])->get();
-        }
-        return view('admin.turmas.index', $response);
-    }
 
 
     /**
@@ -279,7 +229,7 @@ class TurmaUserController extends Controller
      * @param  \App\Models\TurmaUser  $curso
      * @return \Illuminate\Http\Response
      */
-    public function atualizar(Request $request, $id)
+    public function atualizar(Request $request, $slug)
     {
 
         $dados = $request->all();
@@ -289,14 +239,16 @@ class TurmaUserController extends Controller
 
 
         if ($this->tem_registro($array)) {
-            return redirect()->back()->with("error_tem_registro", 1);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Atribuição já existe']);
+
         }
-        $cf = TurmaUser::find($id);
+        $cf = TurmaUser::where('slug', $slug)->first();
         $tem = $this->disciplina_tem_professor($request);
         if (!$tem) {
             $cf->update($dados);
         } else {
-            return redirect()->back()->with('error', 1);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Disciplina já está sendo lecciona por outro professor nesta turma']);
+
         }
 
 
@@ -307,7 +259,10 @@ class TurmaUserController extends Controller
 
     public function disciplina_tem_professor($request)
     {
-        return TurmaUser::where('it_idTurma', $request->it_idTurma)->where('it_idDisciplina', $request->it_idDisciplina)->where('it_idUser', $request->it_idUser)->count();
+        return TurmaUser::where('it_idTurma', $request->it_idTurma)
+            ->where('it_idDisciplina', $request->it_idDisciplina)
+            ->where('id_cabecalho', Auth::User()->id_cabecalho)
+            ->where('it_idUser', $request->it_idUser)->count();
     }
     /**
      * Remove the specified resource from storage.
@@ -315,18 +270,28 @@ class TurmaUserController extends Controller
      * @param  \App\Models\TurmaUser  $curso
      * @return \Illuminate\Http\Response
      */
-    public function excluir($id)
+    public function excluir($slug)
     {
         try {
-            $cf = TurmaUser::find($id);
-            //dd(TurmaUser::find($id));
-            $user = User::find($cf->it_idUser);
-            TurmaUser::find($id)->update(['it_estado_turma_user' => 0]);
-            $this->loggerData("Eliminou Turma do Utilizador " . $user->vc_nomeUtilizador);
-            return redirect()->back()->with('atribuicao.eliminar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('atribuicao.eliminar.error', '1');
+            // dd("ola");
+            $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug)->first();
+            if ($turma_professor):
+                //dd(TurmaUser::find($id));
+                $user = User::find($turma_professor->it_idUser);
+                //    $d= fh_turmas_professores()->where('turmas_users.slug', $slug)->first();
+                // dd($d);
+                TurmaUser::where('slug', $slug)->delete();
+                $this->loggerData("Eliminou professor da turma com nome de " . $user->vc_nomeUtilizador);
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Atribuição eliminada com sucesso']);
+
+            else:
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+            endif;
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
         }
     }
 
@@ -345,68 +310,5 @@ class TurmaUserController extends Controller
         }
     }
 
-    public function eliminadas()
-    {
-        $this->loggerData("Listou as Turma dos Professores eliminadas");
 
-        $response['atribuicoes'] = DB::table('turmas_users')
-            ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            ->leftJoin('turmas', 'turmas.id', '=', 'turmas_users.it_idTurma')
-            ->distinct()
-            ->select(
-                'turmas_users.it_idUser',
-                'turmas_users.id as ident',
-                'users.vc_primemiroNome',
-                'users.vc_apelido',
-                'turmas.vc_nomedaTurma',
-                'turmas.vc_classeTurma',
-                'turmas.vc_cursoTurma',
-                'turmas.vc_salaTurma',
-                'turmas.vc_anoLectivo',
-                'turmas.it_qtMatriculados',
-                'turmas.it_qtdeAlunos',
-                'turmas.id as id_turma',
-                'disciplinas.id as id_disciplina',
-
-                'disciplinas.vc_nome as disciplina'
-
-            )
-
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            /* ->where('turmas.vc_anoLectivo', $anoLectivoPublicado) */
-            ->where('turmas_users.it_estado_turma_user', 0)
-            ->get();
-
-        $response['disciplinas'] = DB::table('turmas_users')
-            ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
-            ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
-            ->where('users.vc_tipoUtilizador', '=', 'professor')
-            ->distinct()
-            ->select(
-                'turmas_users.it_idUser',
-                'disciplinas.vc_nome as disciplina'
-            )
-
-            ->get();
-
-        $response['eliminadas'] = "eliminadas";
-        return view('admin.atribuicoes.index', $response);
-    }
-
-    public function recuperar($id)
-    {
-        try {
-            //User::find($id)->delete();
-            //User::find($id)->delete();
-            $response = TurmaUser::find($id);
-            $response->update(['it_estado_turma_user' => 1]);
-            $this->loggerData("Recuperou Turma do Professor");
-            return redirect()->back()->with('atribuicao.recuperar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('atribuicao.recuperar.error', '1');
-        }
-    }
 }

@@ -32,6 +32,7 @@ use App\Models\Disciplina_Curso_Classe;
 use App\Models\Disciplina_Terminal;
 use App\Models\Matricula;
 use Carbon\Carbon;
+use App\Models\TurmaUser;
 
 function ficha($vc_bi)
 {
@@ -206,6 +207,54 @@ function fha_turma_professores($slug)
         )->get();
     return $response;
 }
+
+
+
+function fh_turmas_professores()
+{
+    $atribuicoes = fh_turmas()
+        ->join('turmas_users', 'turmas_users.it_idTurma', 'turmas.id')
+        ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
+        ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
+        ->where('users.vc_tipoUtilizador', '=', 'professor')
+        ->distinct()
+        ->select(
+            'cursos.*',
+            'anoslectivos.*',
+            'classes.*',
+            'turmas_users.id as id',
+            'users.vc_primemiroNome',
+            'users.vc_apelido',
+            'turmas.vc_nomedaTurma',
+            'turmas.it_qtMatriculados',
+            'turmas.it_qtdeAlunos',
+            'turmas.id as id_turma',
+            'disciplinas.id as id_disciplina',
+            'disciplinas.vc_nome as disciplina',
+            'turmas_users.*',
+            'turmas_users.id as id',
+            'turmas_users.slug as slug'
+        )
+        ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho);
+
+
+    // dd(   $atribuicoes);
+    return $atribuicoes;
+
+}
+function fh_professores_disciplinas()
+{
+    $disciplinas = TurmaUser::join('users', 'users.id', '=', 'turmas_users.it_idUser')
+        ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
+        ->where('users.vc_tipoUtilizador', '=', 'professor')
+        ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)
+        ->distinct()
+        ->select(
+            'turmas_users.it_idUser',
+            'disciplinas.vc_nome as disciplina'
+        );
+    return $disciplinas;
+}
 function fh_turmas_slug($slug)
 {
 
@@ -246,7 +295,7 @@ function fh_provincias()
 }
 function fh_processo_actual()
 {
-    return Processo::where('id_cabecalho', Auth::User()->id);
+    return Processo::where('id_cabecalho', Auth::User()->id_cabecalho);
 }
 function resultados_final_alunos($matriculas)
 {
@@ -379,7 +428,7 @@ function fh_directores_turmas()
                 'turmas.*',
                 'users.vc_primemiroNome',
                 'users.vc_apelido',
-            
+
                 'users.vc_email',
                 'cursos.vc_nomeCurso',
                 'classes.vc_classe',

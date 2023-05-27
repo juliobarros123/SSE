@@ -63,7 +63,7 @@ class DireitorTurmaController extends Controller
                 [
                     'id_turma' => $request->id_turma,
                     'id_user' => $request->id_user,
-                    'id_cabecalho' => Auth::User()->id
+                    'id_cabecalho' => Auth::User()->id_cabecalho
                 ]
             );
             return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Director de turma cadastrado com sucesso']);

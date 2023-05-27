@@ -58,7 +58,8 @@ class AppServiceProvider extends ServiceProvider
                     );
                 }
             }
-            $response['ano_lectivo']=AnoLectivoPublicado::find(1);
+            $response['ano_lectivo']=fha_ano_lectivo_publicado();
+            // dd( $response['ano_lectivo']);
             if(isset($response['ano_lectivo']->id_anoLectivo)){
                 $view->with('id_anoLectivo_publicado',$response['ano_lectivo']->id_anoLectivo);
                 $view->with('ano_lectivo_publicado',$response['ano_lectivo']->ya_inicio . '-' . $response['ano_lectivo']->ya_fim);

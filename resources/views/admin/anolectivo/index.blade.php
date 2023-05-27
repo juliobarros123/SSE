@@ -56,9 +56,10 @@
                                 <a class="dropdown-item"
                                     href="{{ route('admin/anolectivo/editar', $anolectivo->slug) }}">Editar </a>
                              
-                                    @if(isset($id_anoLectivo_publicado) && $anolectivo->id==$id_anoLectivo_publicado)
-                                    <a class="dropdown-item"
-                                    href="{{ route('admin.configurar.ano_lectivo.ocultar',$anolectivo->slug) }}"  >Ocultar</a>
+                            
+                                    @if($anolectivo->id==fha_ano_lectivo_publicado()->id_anoLectivo)
+                                    {{-- <a class="dropdown-item"
+                                    href="{{ route('admin.configurar.ano_lectivo.ocultar',$anolectivo->slug) }}"  >Ocultar</a> --}}
                                     @else
                                     <a class="dropdown-item"
                                     href="{{ route('admin.configurar.ano_lectivo.disponibilizar',$anolectivo->slug) }}"  >Disponibilizar</a>

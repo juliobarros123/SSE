@@ -21,18 +21,17 @@
         Auth::user()->vc_tipoUtilizador == 'Preparador')
        
 
-            <a class="btn btn-dark ml-1" href="{{route('admin.atribuicao.eliminadas')}}">
-                <strong class="text-light">Eliminadas</strong>
-            </a>
+          
 
     @endif
     </div>
 @endif
+{{-- @dump($atribuicoes) --}}
 
 
     <table id="example" class="display table table-hover">
            <thead class="">
-            <tr class="text-center">
+            <tr >
                 <th>ID</th>
                 <th>PROFESSOR</th>
                 <th>CURSO</th>
@@ -44,64 +43,50 @@
                 <th>ACÇÕES</th>
             </tr>
         </thead>
-        <tbody class="bg-white">
+        <tbody >
             @if ($atribuicoes)
                 @foreach ($atribuicoes as $atribuicao)
-                    <tr class="text-center">
-                        <th>{{ $atribuicao->ident }}</th>
+              
+                    <tr class="">
+                        <th>{{ $atribuicao->id }}</th>
                         <th>{{ $atribuicao->vc_primemiroNome }} {{ $atribuicao->vc_apelido }}</th>
-                        <td>{{ $atribuicao->vc_cursoTurma }}</td>
-                        <td>{{ $atribuicao->vc_anoLectivo }}</td>
+                        <td>{{ $atribuicao->vc_nomeCurso }}</td>
+                        <td>{{ $atribuicao->ya_inicio }}/{{ $atribuicao->ya_fim }}</td>
                         <td>{{ $atribuicao->vc_nomedaTurma }}</td>
-                        <td>{{ $atribuicao->vc_classeTurma }}ªClasse</td>
+                        <td>{{ $atribuicao->vc_classe }}ª Classe</td>
                         <td>{{ $atribuicao->it_qtMatriculados }} </td>
                         <td>{{ $atribuicao->disciplina }} </td>
 
                         <td>
 
                             @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                            @if (isset($eliminadas))
-                            <div class="dropdown">
-                                <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="{{ route('admin.atribuicao.recuperar', $atribuicao->ident) }}"
-                                        class="dropdown-item ">Recuperar</a>
-                                    <a href="{{ route('admin.atribuicao.purgar', $atribuicao->ident) }}"
-                                        class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
-                                </div>
-                            </div>
-                             @else
+                          
                                 <div class="dropdown">
                                     <button class="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a href="{{ route('admin.atribuicoes.editar', $atribuicao->ident) }}"
+                                        <a href="{{ route('admin.atribuicoes.editar', $atribuicao->slug) }}"
                                             class="dropdown-item">Editar</a>
-                                        <a href="{{ route('admin.atribuicoes.excluir', $atribuicao->ident) }}"
+                                        <a href="{{ route('admin.atribuicoes.excluir', $atribuicao->slug) }}"
                                             class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                             <a href=""
-                                        class="dropdown-item" data-toggle="modal" data-target=".bd-example-modal-sm{{$atribuicao->ident}}" >Pauta</a>
-                                        <a href="{{ route('admin.atribuicao.purgar', $atribuicao->ident) }}"
-                                            class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
+                                        class="dropdown-item" data-toggle="modal" data-target=".bd-example-modal-sm{{$atribuicao->id}}" >Pauta</a>
+                                    
                                         {{-- <a data-toggle="modal" data-target=".bd-example-modal-lg{{ $atribuicao->ident }}"
                                             class="dropdown-item">Disciplinas</a> --}}
                                     </div>
                                 </div>
-                            @endif
+                        
                             @endif
 
                         </td>
                     </tr>
 
 
-                    <div class="modal fade bd-example-modal-lg{{ $atribuicao->ident }}" tabindex="-1" role="dialog"
+                    <div class="modal fade bd-example-modal-lg{{ $atribuicao->id }}" tabindex="-1" role="dialog"
                         aria-labelledby="myLargeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -134,7 +119,7 @@
                     </div>
 
 
-                    <div class="modal fade bd-example-modal-sm{{$atribuicao->ident}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal fade bd-example-modal-sm{{$atribuicao->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-sm">
                           <div class="modal-content">
                            <div class="modal-header">

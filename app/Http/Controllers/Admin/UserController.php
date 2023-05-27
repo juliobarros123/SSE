@@ -84,13 +84,14 @@ class UserController extends Controller
                 'vc_email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => $this->passwordRules(),
             ])->validate();
-            $this->user->store($dados);
+        
             $this->loggerData("Adicionou Utilizador ");
+            $this->user->store($dados);
             return redirect()->route('admin/users/listar')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador cadastrado com sucesso']);
 
         } catch (\Exception $exception) {
-
-            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+dd($exception);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado. Não foi possível repetir o e-mail, utilizador ou telefone']);
 
         }
     }

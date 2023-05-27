@@ -1,14 +1,20 @@
 <div class="col-sm-4">
     <div class="form-group">
         <label>Turma</label>
-        <select name="it_idTurma" class="form-control select-dinamico"  >
+        <select name="it_idTurma" class="form-control" required>
             @isset($turma)
-                <option value="{{ $turma->id }}">{{ $turma->vc_nomedaTurma }} </option>
+                <option value="{{ $turma->id }}">{{ $turma->vc_nomedaTurma }}/
+                    {{ $turma->vc_classe }}ª
+                    classe/{{ $turma->vc_nomeCurso }}/{{ $turma->vc_turnoTurma }}({{ $turma->ya_inicio }}/{{ $turma->ya_fim }})
+                </option>
             @else
-                <option>seleciona a turma</option>
+                <option>Seleciona a turma</option>
             @endisset
             @foreach ($turmas as $turma)
-                <option value="{{ $turma->id }}" >{{ $turma->vc_nomedaTurma }} || {{ $turma->vc_classeTurma }}ªclasse || {{ $turma->vc_cursoTurma }}</option>
+                <option value="{{ $turma->id }}">{{ $turma->vc_nomedaTurma }}/
+                    {{ $turma->vc_classe }}ª
+                    classe/{{ $turma->vc_nomeCurso }}/{{ $turma->vc_turnoTurma }}({{ $turma->ya_inicio }}/{{ $turma->ya_fim }})
+                </option>
             @endforeach
         </select>
 
@@ -31,18 +37,19 @@
 
     </div>
 </div> --}}
-
+{{-- @dump($disciplinas) --}}
+{{-- @dump($disciplina) --}}
 <div class="col-sm-4">
     <div class="form-group">
         <label>Disciplina</label>
-        <select name="it_idDisciplina" class="form-control select2">
+        <select name="it_idDisciplina" class="form-control " required>
             @isset($disciplina)
-                <option value="{{ $disciplina->id }}">{{ $disciplina->vc_nome }}</option>
+                <option selected value="{{ $disciplina->id }}">{{ $disciplina->vc_nome }}</option>
             @else
-                <option>seleciona a disciplina</option>
+                <option>Seleciona a disciplina</option>
             @endisset
             @foreach ($disciplinas as $disciplina)
-                <option value="{{ $disciplina->id }}" >{{ $disciplina->vc_nome }}</option>
+                <option value="{{ $disciplina->id }}">{{ $disciplina->vc_nome }}</option>
             @endforeach
         </select>
 
@@ -51,7 +58,7 @@
 <div class="col-sm-4">
     <div class="form-group ">
         <label>Professor</label>
-        <select name="it_idUser" class="form-control  select-dinamico">
+        <select name="it_idUser" class="form-control  " required>
             @isset($user)
                 <option value="{{ $user->id }}">{{ $user->vc_primemiroNome }} {{ $user->vc_apelido }}</option>
             @else
@@ -88,15 +95,13 @@
         top: 3px;
         width: auto;
     }
-
 </style>
 <script>
     var msg = '{{ Session::get('
-    alert ') }}';
+        alert ') }}';
     var exist = '{{ Session::has('
-    alert ') }}';
+        alert ') }}';
     if (exist) {
         alert(msg);
     }
-
 </script>

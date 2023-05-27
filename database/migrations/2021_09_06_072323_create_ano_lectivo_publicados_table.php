@@ -15,13 +15,14 @@ class CreateAnoLectivoPublicadosTable extends Migration
     {
         Schema::create('ano_lectivo_publicados', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_anoLectivo');
+        
             $table->year('ya_inicio');
             $table->year('ya_fim');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
+            $table->foreignId('id_anoLectivo')->constrained('anoslectivos')->onDelete('CASCADE')->onUpgrade('CASCADE');
 
             $table->timestamps();
- $table->string('slug')->unique();
+            $table->string('slug')->unique();
         });
     }
 

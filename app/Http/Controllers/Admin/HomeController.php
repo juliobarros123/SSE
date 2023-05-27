@@ -53,11 +53,12 @@ class HomeController extends Controller
         // $s=consultarRupe(22);
         // dd(isset($s["idOrigem"]));
         $response['cabecalho'] =fh_cabecalho()->get();
-        $anolectivo = fh_ultimo_ano_lectivo();
+        $anolectivo = fha_ano_lectivo_publicado();
         if ($anolectivo) {
-            $response['ano_lectivo'] = AnoLectivoPublicado::find(1);
-            $data = AnoLectivoPublicado::find(1) ? $response['ano_lectivo']->ya_inicio . "-" . $response['ano_lectivo']->ya_fim : $anolectivo->ya_inicio . "-" . $anolectivo->ya_fim;
-
+            $response['ano_lectivo'] = $anolectivo;
+            // dd(   $response['ano_lectivo']);
+            $data =$response['ano_lectivo']->ya_inicio . "-" . $response['ano_lectivo']->ya_fim ;
+// dd($data);
             $response['AnoLectivo'] = $data;
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnoLectivo;
+use App\Models\AnoLectivoPublicado;
 use Illuminate\Http\Request;
 use App\Models\Logger;
 use Illuminate\Support\Facades\Auth;
@@ -61,11 +62,22 @@ class AnoLectivoController extends Controller
 
             } else {
                 // dd("ol");
-                AnoLectivo::create([
+                $ano_lectivo = AnoLectivo::create([
                     'ya_inicio' => $request->ya_inicio,
                     'ya_fim' => $request->ya_fim,
-                    'id_cabecalho' => Auth::user()->id
+                    'id_cabecalho' => Auth::User()->id_cabecalho
                 ]);
+                if (AnoLectivo::count() == 1) {
+
+                    AnoLectivoPublicado::create(
+                        [
+                            'id_anoLectivo' => $ano_lectivo->id,
+                            'ya_inicio' => $ano_lectivo->ya_inicio,
+                            'ya_fim' => $ano_lectivo->ya_fim,
+                            'id_cabecalho' => Auth::User()->id_cabecalho
+                        ]
+                    );
+                }
                 $this->loggerData("Adicionou Ano Lectivo " . $request->ya_inicio . ' ' . $request->ya_fim);
                 return redirect('/admin/anolectivo')->with('status', '1');
             }
@@ -145,16 +157,40 @@ class AnoLectivoController extends Controller
         // AnoLectivo::find($id)->delete();
 
         try {
+            if (fh_anos_lectivos()->count()) {
+                $ano_lectivo_maior = $this->ano_lectivo_maior();
+                $response = fh_anos_lectivos()->where('anoslectivos.slug', $slug)->first();
+                if ($response->ya_fim == $ano_lectivo_maior->ya_fim) {
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Não podes eliminar o último ano lectivo']);
+                }
+                if(fha_ano_lectivo_publicado()->id_anoLectivo==$response->id){
+                    AnoLectivoPublicado::create(
+                        [
+                            'id_anoLectivo' => $ano_lectivo_maior->id,
+                            'ya_inicio' => $ano_lectivo_maior->ya_inicio,
+                            'ya_fim' => $ano_lectivo_maior->ya_fim,
+                            'id_cabecalho' => Auth::User()->id_cabecalho
+                        ]
+                    );
+                }
+            //   dd("ola");
+                fh_anos_lectivos()->where('anoslectivos.slug', $slug)->delete();
+                ;
+                $this->loggerData("Eliminou Ano Lectivo " . $response->ya_inicio . ' ' . $response->ya_fim);
+                return redirect()->back()->with('anolectivo.eliminar.success', '1');
+            } else {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Não podes eliminar todos anos lectivos']);
 
-            $response = fh_anos_lectivos()->where('anoslectivos.slug', $slug)->first();
-            fh_anos_lectivos()->where('anoslectivos.slug', $slug)->delete();
-            ;
-            $this->loggerData("Eliminou Ano Lectivo " . $response->ya_inicio . ' ' . $response->ya_fim);
-            return redirect()->back()->with('anolectivo.eliminar.success', '1');
+            }
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('anolectivo.eliminar.error', '1');
         }
+    }
+    public function ano_lectivo_maior()
+    {
+        $ano_lectivo = fh_anos_lectivos()->orderBy('anoslectivos.ya_fim', 'desc')->first();
+        return $ano_lectivo;
     }
 
 

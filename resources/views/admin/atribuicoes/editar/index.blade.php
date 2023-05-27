@@ -11,7 +11,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('admin.atribuicoes.atualizar', $atribuicao->id) }}" method="post" class="row"
+            <form form action="{{ route('admin.atribuicoes.atualizar', $atribuicao->slug) }}" method="post" class="row"
                 enctype="multipart/form-data">
                 @method('put')
                 @csrf

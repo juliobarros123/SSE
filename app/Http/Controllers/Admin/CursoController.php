@@ -70,7 +70,7 @@ class CursoController extends Controller
     public function store(Request $request)
     {
         $storeData = $request->all();
-        $storeData['id_cabecalho'] = Auth::User()->id;
+        $storeData['id_cabecalho'] = Auth::User()->id_cabecalho;
 
         //$cursos = Curso::where('vc_nomeCurso', '=',  $request->vc_nomeCurso)->first();
         //if($cursos === null){

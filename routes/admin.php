@@ -252,15 +252,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('admin/atribuicoes/salvar', ['as' => 'admin.atribuicoes.salvar', 'uses' => 'Admin\TurmaUserController@salvar']);
     Route::get('admin/atribuicoes/cadastrar', ['as' => 'admin.atribuicoes.cadastrar', 'uses' => 'Admin\TurmaUserController@cadastrar']);
     Route::get('admin/atribuicoes/excluir/{id}', ['as' => 'admin.atribuicoes.excluir', 'uses' => 'Admin\TurmaUserController@excluir'])->middleware('access.controll.administrador');
-    Route::put('admin/atribuicoes/atualizar/{id}', ['as' => 'admin.atribuicoes.atualizar', 'uses' => 'Admin\TurmaUserController@atualizar'])->middleware('access.controll.administrador');
-    Route::get('admin/atribuicoes/ver/{id}', ['as' => 'admin.atribuicoes.ver', 'uses' => 'Admin\TurmaUserController@ver']);
-    Route::get('admin/atribuicoes/editar/{id}', ['as' => 'admin.atribuicoes.editar', 'uses' => 'Admin\TurmaUserController@editar'])->middleware('access.controll.administrador');
-    Route::get('admin/atribuicoes/lecionar/{id}', ['as' => 'admin.atribuicao.lecionar', 'uses' => 'Admin\TurmaUserController@lecionado']);
+    Route::put('admin/atribuicoes/atualizar/{slug}', ['as' => 'admin.atribuicoes.atualizar', 'uses' => 'Admin\TurmaUserController@atualizar'])->middleware('access.controll.administrador');
+    Route::get('admin/atribuicoes/ver/{slug}', ['as' => 'admin.atribuicoes.ver', 'uses' => 'Admin\TurmaUserController@ver']);
+    Route::get('admin/atribuicoes/editar/{slug}', ['as' => 'admin.atribuicoes.editar', 'uses' => 'Admin\TurmaUserController@editar'])->middleware('access.controll.administrador');
+  
     Route::get('admin/atribuicoes/professores/{slug}', ['as' => 'admin.atribuicao.professores', 'uses' => 'Admin\TurmaUserController@professores']);
 
-    Route::get('admin/atribuicoes/eliminadas', ['as' => 'admin.atribuicao.eliminadas', 'uses' => 'Admin\TurmaUserController@eliminadas'])->middleware('access.controll.administrador');
-    Route::get('admin/atribuicoes/purgar/{id}', ['as' => 'admin.atribuicao.purgar', 'uses' => 'Admin\TurmaUserController@purgar'])->middleware('access.controll.administrador');
-    Route::get('admin/atribuicoes/recuperar/{id}', ['as' => 'admin.atribuicao.recuperar', 'uses' => 'Admin\TurmaUserController@recuperar'])->middleware('access.controll.administrador');
     //=============Turma-User-End======================//
 
     //=============Curso-Start=====================//

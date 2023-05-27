@@ -76,11 +76,12 @@ class IdadedeCandidaturaController extends Controller
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Idade mínima não pode ser maior que idade máxima']);
 
         } else {
+
             $response = IdadedeCandidatura::create([
                 'dt_limiteaesquerda' => $request->dt_limiteaesquerda,
                 'dt_limitemaxima' => $request->dt_limitemaxima,
                 'id_ano_lectivo' => $request->id_ano_lectivo,
-                'id_cabecalho' => Auth::User()->id
+                'id_cabecalho' => Auth::User()->id_cabecalho
             ]);
             if ($response) {
                 $this->loggerData('adicionou idade de candidatura');

@@ -218,6 +218,7 @@ class CandidaturaController extends Controller
      */
     public function create()
     {
+        // dd("ol");
         $activador = Activador_da_candidatura::orderby('id', 'desc')->first();
         if ($activador->it_estado == 1) {
             //envia os cursos e classes para popular os selects
@@ -233,7 +234,7 @@ class CandidaturaController extends Controller
             // dd($response['provincias']);
             return view('site/candidatura', $response);
         } else {
-            return redirect('site')->with('activadoroff', '1');
+            return redirect()->back()->with('activadoroff', '1');
         }
     }
 
