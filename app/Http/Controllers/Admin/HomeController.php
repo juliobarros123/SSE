@@ -47,24 +47,26 @@ class HomeController extends Controller
     public function raiz()
     {
         // dd('2022-08-18');
-
+        if (Auth::user()->vc_tipoUtilizador == 'Candidato') {
+            return redirect('candidatura');
+        }
 
         //  dd(consultarRupePreCandidato_v3(13331780226));
         // $s=consultarRupe(22);
         // dd(isset($s["idOrigem"]));
-        $response['cabecalho'] =fh_cabecalho()->get();
+        $response['cabecalho'] = fh_cabecalho()->get();
         $anolectivo = fha_ano_lectivo_publicado();
         if ($anolectivo) {
             $response['ano_lectivo'] = $anolectivo;
             // dd(   $response['ano_lectivo']);
-            $data =$response['ano_lectivo']->ya_inicio . "-" . $response['ano_lectivo']->ya_fim ;
-// dd($data);
+            $data = $response['ano_lectivo']->ya_inicio . "-" . $response['ano_lectivo']->ya_fim;
+            // dd($data);
             $response['AnoLectivo'] = $data;
 
 
 
-            
-            $response['candidaturas'] = fh_candidatos()->where('candidatos.id_ano_lectivo',$response['ano_lectivo']->id_anoLectivo)->count() ;
+
+            $response['candidaturas'] = fh_candidatos()->where('candidatos.id_ano_lectivo', $response['ano_lectivo']->id_anoLectivo)->count();
             $response['matriculas'] = Matricula::count();
             $response['idadedecandidatura'] = 0;
 

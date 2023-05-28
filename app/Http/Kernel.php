@@ -76,6 +76,8 @@ class Kernel extends HttpKernel
         'access.controll.rh'=>\App\Http\Middleware\AccessControllRH::class,
         'access.controll.preparador'=>\App\Http\Middleware\AccessControllPreparador::class,
         'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
+        'restrictCandidatoAccess' => \App\Http\Middleware\RestrictCandidatoAccess::class,
+
 
     ];
 }

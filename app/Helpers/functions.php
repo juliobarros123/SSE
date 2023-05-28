@@ -124,6 +124,7 @@ function fh_matriculas()
 
 function fh_turmas()
 {
+    // dd("ola");
 
     return Turma::join('classes', 'turmas.it_idClasse', '=', 'classes.id')
         ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
@@ -139,6 +140,7 @@ function fha_turma_alunos($slug)
 {
     return fh_matriculas()->where('turmas.slug', $slug)
         ->select(
+            'matriculas.*',
             'turmas.*',
             'cursos.*',
             'anoslectivos.*',
@@ -156,7 +158,6 @@ function fha_turma_alunos($slug)
             'vc_estadoCivil',
             'candidatos.it_telefone',
             'candidatos.vc_email',
-
             'candidatos.vc_bi',
         )
 
@@ -186,8 +187,10 @@ function fha_turma_professores($slug)
             'turmas.it_qtdeAlunos',
             'turmas.id as id_turma',
             'disciplinas.id as id_disciplina',
-
-            'disciplinas.vc_nome as disciplina'
+            'turmas.it_idCurso',
+            'disciplinas.vc_nome as disciplina',
+            'turmas.it_idAnoLectivo as id_ano_lectivo',
+            
 
         )
         ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)
@@ -212,7 +215,10 @@ function fha_turma_professores($slug)
 
 function fh_turmas_professores()
 {
-    $atribuicoes = fh_turmas()
+    $atribuicoes = Turma::join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+        ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+        ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
+        ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
         ->join('turmas_users', 'turmas_users.it_idTurma', 'turmas.id')
         ->join('users', 'users.id', '=', 'turmas_users.it_idUser')
         ->join('disciplinas', 'turmas_users.it_idDisciplina', '=', 'disciplinas.id')
@@ -228,7 +234,11 @@ function fh_turmas_professores()
             'turmas.vc_nomedaTurma',
             'turmas.it_qtMatriculados',
             'turmas.it_qtdeAlunos',
+            'turmas.it_idCurso',
             'turmas.id as id_turma',
+            
+            'turmas.it_idCurso',
+            'turmas.it_idAnoLectivo as id_ano_lectivo',
             'disciplinas.id as id_disciplina',
             'disciplinas.vc_nome as disciplina',
             'turmas_users.*',
@@ -237,7 +247,10 @@ function fh_turmas_professores()
         )
         ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho);
 
+    if (Auth::User()->vc_tipoUtilizador == 'Professor') {
 
+        $atribuicoes = $atribuicoes->where('users.id', Auth::User()->id);
+    }
     // dd(   $atribuicoes);
     return $atribuicoes;
 
@@ -340,12 +353,31 @@ function users()
 }
 function fh_cursos()
 {
+    if (Auth::User()->vc_tipoUtilizador == 'Professor') {
+        return fh_turmas_professores()->select('cursos.*')
+            ->where('users.id', Auth::User()->id);
+    }
     if (Auth::User()->desenvolvedor == 2) {
         return Curso::orderBy('id', 'desc');
     } else {
         return Curso::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
+
+
+
+
 }
+// function fh_cursos()
+// {
+//     if (Auth::User()->desenvolvedor == 2) {
+//         return Curso::orderBy('id', 'desc');
+//     } else {
+//         return Curso::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
+//     }
+
+
+
+// }
 function fha_ano_lectivo_publicado()
 {
 
@@ -358,7 +390,17 @@ function fh_idades_admissao()
 
     return IdadedeCandidatura::where('idadesdecandidaturas.id_cabecalho', Auth::User()->id_cabecalho)
         ->join('anoslectivos', 'anoslectivos.id', 'idadesdecandidaturas.id_ano_lectivo')
+        ->orderBy('idadesdecandidaturas.id', 'desc')
         ->select('anoslectivos.*', 'idadesdecandidaturas.*', 'idadesdecandidaturas.id as id', 'idadesdecandidaturas.slug as slug');
+
+
+}
+function fh_activador_candidatura()
+{
+
+    return Activador_da_candidatura::where('activadores_das_candidaturas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->orderBy('activadores_das_candidaturas.id', 'desc')
+        ->select('activadores_das_candidaturas.*');
 
 
 }

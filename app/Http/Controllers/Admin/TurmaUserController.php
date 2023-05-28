@@ -44,10 +44,12 @@ class TurmaUserController extends Controller
 
     public function pesquisar()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
-        return view('admin.matriculas.pesquisarAtribuidos.index', $response);
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        $response['cursos'] = fh_cursos()->get();
+        return view('admin/atribuicoes/pesquisar/index', $response);
+
     }
+
     public function professores($slug)
     {
 
@@ -67,16 +69,29 @@ class TurmaUserController extends Controller
         $mpdf->writeHTML($html);
         $mpdf->Output("listasdDiplomados.pdf", "I");
     }
-    public function index()
+
+
+    public function index(Request $request)
     {
 
         $response['anoslectivos'] = fha_ano_lectivo_publicado();
         //dd();
         $anoLectivoPublicado = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
 
-        $response['atribuicoes'] = fh_turmas_professores()->get();
+        $atribuicoes = fh_turmas_professores();
         $response['disciplinas'] = fh_professores_disciplinas()->get();
 
+        if ($request->id_ano_lectivo) {
+
+            $atribuicoes = $atribuicoes->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
+        }
+
+        if ($request->id_curso) {
+            // dd(  $atribuicoes->get(),$request->id_curso);
+            $atribuicoes = $atribuicoes->where('turmas.it_idCurso', $request->id_curso);
+        }
+        $response['atribuicoes'] = $atribuicoes->get();
+        // dd( $response['atribuicoes']);
         return view('admin.atribuicoes.index', $response);
     }
 

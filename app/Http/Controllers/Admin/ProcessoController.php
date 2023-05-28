@@ -29,7 +29,7 @@ class ProcessoController extends Controller
     public function index()
     {
 
-        $processos = Processo::all();
+        $processos = fh_processo_actual()->get();
         return view('admin/processos/index/index', compact('processos'));
     }
 

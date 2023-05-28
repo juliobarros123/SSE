@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 Route::get('admin/cidadao/{bi}', ['as' => 'admin.cidadao', 'uses' => 'Admin\AlunnoController@cidadao']);
 
 Route::get('/', ['as' => 'raiz', 'uses' => 'Admin\HomeController@raiz']);
@@ -27,9 +26,12 @@ Route::get('/{id}/{trimestre}/gerarBoletimTurma/xlsx', ['as' => 'turmas.boletimT
 Route::get('notas-seca/aluno-processos/{processo}/{estudando}', ['as' => 'aluno-processoS', 'uses' => 'Admin\NotaSecaController@alunoProcesso']);
 Route::get('notas-seca/vrf_disciplina_terminal/{id_disciplina}/{id_turma}/{estado}/{processo}/{classe}', ['as' => 'vrf_disciplina_terminal', 'uses' => 'Admin\NotaSecaController@vrf_disciplina_terminal']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('candidatura', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@create']);
     Route::post('candidatura/', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@store']);
+
+});
+Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function () {
     Route::post('uploadToGPEU', ['as' => 'admin.uploadToGPEU', 'uses' => 'Admin\GPEUController@uploadToGPEU']);
     // Route::get('/admitido', ['as' => 'admitido', 'uses' => 'Admin\ConfirmacaoController@confirmar'])->middleware('access.controll.pedagogia');
 
@@ -248,15 +250,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('Admin/pesquisarAtribuidos', ['as' => 'admin.pesquisarAtribuidos', 'uses' => 'Admin\TurmaUserController@pesquisar']);
     Route::get('turmas/listar/{id}', ['as' => 'user.turma', 'uses' => 'admin\ProfessorController@listarTurmas']);
 
-    Route::get('admin/atribuicoes/listar', ['as' => 'admin.atribuicoes', 'uses' => 'Admin\TurmaUserController@index']);
+    Route::any('admin/atribuicoes/listar', ['as' => 'admin.atribuicoes', 'uses' => 'Admin\TurmaUserController@index']);
     Route::post('admin/atribuicoes/salvar', ['as' => 'admin.atribuicoes.salvar', 'uses' => 'Admin\TurmaUserController@salvar']);
     Route::get('admin/atribuicoes/cadastrar', ['as' => 'admin.atribuicoes.cadastrar', 'uses' => 'Admin\TurmaUserController@cadastrar']);
     Route::get('admin/atribuicoes/excluir/{id}', ['as' => 'admin.atribuicoes.excluir', 'uses' => 'Admin\TurmaUserController@excluir'])->middleware('access.controll.administrador');
     Route::put('admin/atribuicoes/atualizar/{slug}', ['as' => 'admin.atribuicoes.atualizar', 'uses' => 'Admin\TurmaUserController@atualizar'])->middleware('access.controll.administrador');
     Route::get('admin/atribuicoes/ver/{slug}', ['as' => 'admin.atribuicoes.ver', 'uses' => 'Admin\TurmaUserController@ver']);
     Route::get('admin/atribuicoes/editar/{slug}', ['as' => 'admin.atribuicoes.editar', 'uses' => 'Admin\TurmaUserController@editar'])->middleware('access.controll.administrador');
-  
+
     Route::get('admin/atribuicoes/professores/{slug}', ['as' => 'admin.atribuicao.professores', 'uses' => 'Admin\TurmaUserController@professores']);
+    Route::get('admin/atribuicoes/pesquisar', ['as' => 'admin.atribuicoes.pesquisar', 'uses' => 'Admin\TurmaUserController@pesquisar']);
 
     //=============Turma-User-End======================//
 
@@ -712,10 +715,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => 'nota_em_carga'], function () {
         Route::get('/buscar_alunos', ['as' => 'nota_em_carga.buscar_alunos', 'uses' => 'Admin\NotaDinamca@buscar_alunos']);
         Route::post('/mostrar_alunos', ['as' => 'nota_em_carga.mostrar_alunos', 'uses' => 'Admin\NotaDinamca@mostrar_alunos']);
-        Route::post('/{it_idCurso}/{it_idClasse}/{t_idTurma}/{id_anoLectivo}/{vc_tipodaNota}/{it_disciplina}/inserir', ['as' => 'nota_em_carga.inserir', 'uses' => 'Admin\NotaDinamca@inserir']);
+        Route::post('inserir', ['as' => 'nota_em_carga.inserir', 'uses' => 'Admin\NotaDinamca@inserir']);
         Route::get('/buscar_notas', ['as' => 'nota_em_carga.buscar_notas', 'uses' => 'Admin\NotaDinamca@buscar_notas']);
         Route::get('/pesquisar', ['as' => 'nota_em_carga.pesquisar', 'uses' => 'Admin\NotaDinamca@pesquisar']);
         Route::post('nota_em_carga/ver/', ['as' => 'nota_em_carga.ver', 'uses' => 'Admin\NotaDinamca@ver']);
+        Route::get('alunos/{slug_turma_user}/{trimestre}', ['as' => 'nota_em_carga.alunos', 'uses' => 'Admin\NotaDinamca@alunos']);
+       
+        // alunos($slug_turma_user,$trimistre)
     });
     /* nota_dinamica */
 

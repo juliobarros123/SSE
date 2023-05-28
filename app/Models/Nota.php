@@ -43,7 +43,7 @@ class Nota extends Model
         'fl_nota1',
         'fl_nota2',
         'id_aluno',
-        'it_idDeclaracao',
+        'id_disciplina_curso_classe',
         'id_turma',
         'vc_tipodaNota',
         'fl_media',

@@ -37,30 +37,26 @@
 
 <body class="hold-transition sidebar-mini ">
 
-    <div class="content">
-        <div class="col-12">
-            <!-- Main content -->
-            <section class="content mt-5">
-                <div class="error-page" style="margin-top: 250px">
-                    <h2 class="headline text-warning"> 404</h2>
-
-                    <div class="error-content">
-                        <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Página não encontrada.</h3>
-
-                        <p>
-                            Não foi possível encontrar a página que você estava procurando. Enquanto isso, você pode
-                            retornar ao painel
-                        </p>
-
-                        <a type="button" href="{{ url('/') }}"
-                            class="btn btn-dark form-control col-4 text-center ml-5">voltar ao painel</a>
-                    </div>
-                    <!-- /.error-content -->
-                </div>
-                <!-- /.error-page -->
-            </section>
-            <!-- /.content -->
-        </div>
-    </div>
-
+ 
+    <style>
+        /* Personalize o estilo da página de erro */
+        body {
+          background-color: #f8f9fa;
+          padding-top: 50px;
+          text-align: center;
+        }
+        h1 {
+          font-size: 4rem;
+        }
+        p {
+          font-size: 1.5rem;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Erro 404</h1>
+        <p>Desculpe, a página que você está procurando não foi encontrada.</p>
+        <a href="{{ url('/') }}" class="btn btn-primary">Voltar para a página inicial</a>
+      </div>
 </body>

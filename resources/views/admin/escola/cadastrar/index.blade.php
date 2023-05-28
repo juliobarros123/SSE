@@ -23,7 +23,8 @@
 
             <form action="{{ route('admin/escola/cadastrar') }}" method="post" class="row">
                 @csrf
-                @include('forms._formPermissaoNotas.index')
+                @include('forms._formEscola.index')
+
                 <div class="form-group col-sm-4">
                     <label for="" class="text-white form-label">.</label>
                     <button class="form-control btn btn-dark">Actualizar</button>

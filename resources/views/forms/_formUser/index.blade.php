@@ -62,6 +62,8 @@
         <option value="Preparador">Preparador</option>
         <option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>
         <option value="Gabinete Pedagógico">Gabinete Pedagógico</option>
+        <option value="Candidato">Candidato</option>
+   
     </select>
 </div>
 <div class="col-md-2">

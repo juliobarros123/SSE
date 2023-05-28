@@ -17,11 +17,11 @@
          
         </div>
     @endif
-
+    {{-- @dump($turmas ) --}}
    <div class="table-responsive">
     <table id="example" class="display table table-hover">
            <thead class="">
-            <tr class="text-center">
+            <tr >
                 <th>ID</th>
                 <th>TURMA</th>
                 <th>CLASSE</th>
@@ -41,15 +41,15 @@
                 <th>AÇÕES</th>
             </tr>
         </thead>
-        <tbody class="bg-white">
+        <tbody class="">
 
             @foreach ($turmas as $row)
-                <tr class="text-center">
+                <tr class="">
                     <td>{{ $row->id_turma ? $row->id_turma : $row->id }}</td>
                     <td>{{ $row->vc_nomedaTurma }}</td>
                     <td>{{ $row->vc_classe }}ª Classe</td>
                     @if (Auth::user()->vc_tipoUtilizador == 'Professor')
-                        <td>{{ $row->vc_nome }}</td>
+                        <td>{{ $row->disciplina }}</td>
                     @endif
 
                     <td>

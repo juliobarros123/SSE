@@ -20,7 +20,7 @@ class Notas extends Migration
             $table->float('fl_mac')->nullable()->default('0');
             $table->unsignedBigInteger('id_aluno');
             $table->foreign('id_aluno')->references('id')->on('alunnos')->onDelete('CASCADE')->onUpgrade('CASCADE');
-            $table->foreignId('it_disciplina')->constrained('disciplinas_cursos_classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
+            $table->foreignId('id_disciplina_curso_classe')->constrained('disciplinas_cursos_classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->unsignedBigInteger('id_classe');
             $table->foreign('id_classe')->references('id')->on('classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->unsignedBigInteger('id_turma');
@@ -30,7 +30,7 @@ class Notas extends Migration
             $table->unsignedBigInteger('id_ano_lectivo');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->timestamps();
- $table->string('slug')->unique();
+            $table->string('slug')->unique();
         });
     }
 

@@ -39,7 +39,7 @@ Route::get('monitoramento',['as'=>'post.monitoring','uses'=>'Admin\Monitoramento
 
 
 //site inicial inicio
-Route::get('site', ['as' => 'site.site', 'uses' => 'SiteController@index']);
+// Route::get('site', ['as' => 'site.site', 'uses' => 'SiteController@index']);
 //site inicial fim
 //formulário de candidatura inicio
 

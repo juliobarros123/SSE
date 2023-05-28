@@ -51,7 +51,11 @@
 
     </div>
     {{-- @dump($idadesdecandidaturas) --}}
-    @if (isset($idadesdecandidaturas) && count($idadesdecandidaturas))
+
+    @php
+       $idadesdecandidaturas= fh_idades_admissao()->first();
+    @endphp
+        @if ($idadesdecandidaturas)
         <div class="form-group col-md-4">
             <div class="form-date">
                 <label for="dt_dataNascimento" class="form-label">Data de Nascimento <small
@@ -116,7 +120,7 @@
             @else
                 <option value="" selected disabled>Selecione uma provincia</option>
             @endisset
-            @foreach ($provincias as $provincia)
+            @foreach (fh_provincias()->get() as $provincia)
                 <option value="{{ $provincia['vc_nome'] }}">{{ $provincia['vc_nome'] }}</option>
             @endforeach
         </select>
@@ -145,7 +149,7 @@
                 <option value="" selected disabled>Selecione uma provincia</option>
             @endisset
 
-            @foreach ($provincias as $provincia)
+            @foreach (fh_provincias()->get() as $provincia)
                 <option value="{{ $provincia->vc_nome }}">{{ $provincia->vc_nome }}</option>
             @endforeach
         </select>
@@ -177,7 +181,7 @@
                 <option value="" selected disabled>Selecione um curso</option>
             @endisset
 
-            @foreach ($cursos as $curso)
+            @foreach (fh_cursos()->get() as $curso)
                 <option value="{{ $curso->id }}">{{ $curso->vc_nomeCurso }}</option>
             @endforeach
         </select>
@@ -196,7 +200,7 @@
                 <option value="" selected disabled>Selecione uma classe</option>
             @endisset
 
-            @foreach ($classes as $classe)
+            @foreach (fh_classes()->get() as $classe)
                 <option value="{{ $classe->id }}">{{ $classe->vc_classe }}ªclasse</option>
             @endforeach
         </select>

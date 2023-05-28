@@ -1,40 +1,82 @@
 @extends('layouts.admin')
-
-@section('titulo', 'Matricula/Gerar Boletim')
+@section('titulo', 'Pesquisar atribuicoes de turmas para professores')
 
  @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Gerar Boletim</h3>
+            <h3>Pesquisar atribuicoes de turmas para professores</h3>
         </div>
     </div>
 
 
- 
-    @if (session('aviso'))
-        <h5 class="text-center alert alert-danger">{{ session('aviso') }}</h5>
-    @endif
+
+
     <div class="card">
         <div class="card-body">
-            <form method="post" class="row justify-content-center" action="{{ url('admin/matriculas/send/') }}"
-                target="_blank">
+            <form action="{{ route('admin.atribuicoes') }}" class="row" method="POST">
                 @csrf
-                <div class="col-md-4">
-                    <label for="processo" class="form-label">Nº de Processo</label>
-                    <input type="number" autocomplete="off" name="processo" placeholder="Introduza o número de processo"
-                        class="form-control border-secondary" id="processo" required>
+                <div class="form-group col-md-6">
+                    <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
+
+
+                    @if (isset($ano_lectivo_publicado))
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+                            <option value="{{ $id_anoLectivo_publicado }}">
+                                {{ $ano_lectivo_publicado }}
+                            </option>
+                        </select>
+                        <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
+                    @else
+
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
+                            <option value="" >Todos</option>
+                            @foreach ($anoslectivos as $anolectivo)
+                                <option value="{{ $anolectivo->id }}">
+                                    {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
+
+
                 </div>
-                <div class="col-md-2">
-                    <label for="" class="form-label text-white">.</label>
-                    <button id="submit" class="form-control btn btn-success">Gerar Boletim</button>
+                <div class="form-group col-md-6">
+                    <label for="id_curso" class="form-label">Curso:</label>
+                    <select name="id_curso" id="id_curso" class="form-control">
+                        <option value="" >Todos</option>
+                        @foreach ($cursos as $curso)
+                            <option value="{{ $curso->id }}">
+                                {{ $curso->vc_nomeCurso }}
+                            </option>
+                        @endforeach
+                    </select>
+
                 </div>
+
+
+                <div class="form-group col-md-12 d-flex justify-content-center">
+
+                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
+                </div>
+
+
             </form>
         </div>
     </div>
 
-
     @include('admin.layouts.footer')
+    <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
 
+    @if (session('aviso'))
+        <script>
+            Swal.fire(
+                'Aviso',
+                'Não existe nenhum Aluno nesta turma',
+                'error'
+            )
+
+        </script>
+    @endif
 @endsection
 
 
