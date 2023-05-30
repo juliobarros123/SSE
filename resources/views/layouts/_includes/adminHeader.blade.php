@@ -173,11 +173,6 @@
 
                 <!-- Sidebar -->
                 <div class="sidebar">
-                    <!-- Sidebar user panel (optional) -->
-
-
-
-                    <!-- Sidebar Menu -->
 
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -201,7 +196,7 @@
                                         Auth::user()->vc_tipoUtilizador == 'Visitante' ||
                                         Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                                         Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico')
-                            <li class="nav-header">Utilizadores</li>
+                            <li class="nav-header">Mod. de Gestão de Participantes</li>
                             <li class="nav-item has-treeview ">
                                 <a href="{{ url('admin/users/listar') }}" class="nav-link">
                                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -211,27 +206,8 @@
                                     </p>
                                 </a>
 
-                                {{-- <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('admin/users/cadastrar') }}" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Utilizador</p>
-                                                </a>
-                                            </li>
-                                        @endif
 
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/users/listar') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Utilizadores</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
                             </li>
-
-                            <li class="nav-header"> Funcionários</li>
                             <li class="nav-item has-treeview ">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -241,36 +217,35 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-                                    {{-- @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('/admin/funcionario/cadastrar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-dot-circle nav-icon"></i>
-                                                    <p>Cadastrar</p>
-                                                </a>
-                                            </li>
-                                        @endif --}}
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('/admin/funcionario/cadastrar') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Cadastrar</p>
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
                                             <i class="far fa-dot-circle nav-icon"></i>
                                             <p>Listar</p>
                                         </a>
                                     </li>
-                                    @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                        <li class="nav-item">
-                                            <a href="{{ url('/admin/funcionarios') }}" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Emissão de Cartão</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/funcionarios/listas/imprimir') }}"
-                                                class="nav-link" target="_blank">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Imprimir Listas</p>
-                                            </a>
-                                        </li>
-                                    @endif
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('/admin/funcionarios') }}" class="nav-link">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Cartão</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('admin/funcionarios/listas/imprimir') }}" class="nav-link"
+                                            target="_blank">
+                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <p>Imprimir Listas</p>
+                                        </a>
+                                    </li>
+
 
 
                                 </ul>
@@ -279,30 +254,16 @@
 
 
                             </li>
-                            <li class="nav-header">Registros de Actidades</li>
                             <li class="nav-item has-treeview ">
                                 <a href="{{ url('admin/logs/pesquisar') }}" class="nav-link ">
                                     <i class="nav-icon fas fa-chalkboard"></i>
                                     <p>
-                                        Registros
+                                        Logs do Sistema
 
                                     </p>
                                 </a>
-                                {{-- <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="{{ url('admin/logs/pesquisar') }}" class="nav-link ">
-                                            <i class="nav-icon fas fa-chalkboard"></i>
-                                            <p>Registros de Actividades</p>
-                                        </a>
-                                    </li>
 
-
-                                </ul> --}}
                             </li>
-
-
-
-
         @endif
 
 
@@ -317,7 +278,7 @@
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Visitante')
-            <li class="nav-header">Candidatos</li>
+            <li class="nav-header">Mód. de Gestão de Matrículas</li>
 
             <li class="nav-item has-treeview ">
                 <a href="#" class="nav-link ">
@@ -328,113 +289,54 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    @if (Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                        <li class="nav-item">
-                            <a href="{{ url('admin/candidatos/filtro') }}" class="nav-link ">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Candidatos</p>
-                            </a>
-                        </li>
-                    @endif
-                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                            Auth::user()->vc_tipoUtilizador == 'Comissão' ||
-                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                            Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                            Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
-                            Auth::user()->vc_tipoUtilizador == 'Visitante')
-                        <li class="nav-item">
-                            <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lista de Candidatos</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ url('Admin/pesquisarCandidaturas') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Imprimir Lista</p>
-                            </a>
-                        </li>
-                    @endif
+                    <li class="nav-item">
+                        <a href="{{ url('admin/candidatos/filtro') }}" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Candidatos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Lista de Candidatos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('Admin/pesquisarCandidaturas') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Imprimir Lista</p>
+                        </a>
+                    </li>
                 </ul>
-            </li>
-            @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                    Auth::user()->vc_tipoUtilizador == 'Comissão' ||
-                    Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                    Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                    Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                    Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
-                    Auth::user()->vc_tipoUtilizador == 'Visitante')
-
-
-                <li class="nav-item has-treeview ">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard"></i>
-                        <p>
-                            Selecção de Candidatos
-
-                        </p>
-                    </a>
-
-                    <ul class="nav nav-treeview">
-                        @if (Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                            <li class="nav-item">
-                                <a href="{{ url('admin/admitidos/filtro') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Admitidos</p>
-                                </a>
-                            </li>
-                        @endif
-                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                                Auth::user()->vc_tipoUtilizador == 'Comissão' ||
-                                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                                Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                                Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
-                                Auth::user()->vc_tipoUtilizador == 'Visitante')
-
-                            @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                <li class="nav-item">
-                                    <a href="{{ url('admin/candidatos/selecionar') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Selecionar manualmente</p>
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li class="nav-item">
-                                <a href="{{ url('admin/selecionados/pesquisar') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Lista de Admitidos</p>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a href="{{ route('admin.ListadSelecionado.pesquisar_selecionados') }}"
-                                    class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Imprimir Lista</p>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-
-
-                </li>
-            @endif
-            <li class="nav-header">Alunos</li>
             <li class="nav-item has-treeview ">
-                <a href="{{ route('admitido') }}" class="nav-link">
+                <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Adicionar aluno
+                        Alunos
 
                     </p>
                 </a>
+                <ul class="nav nav-treeview">
+
+                    <li class="nav-item">
+                        <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Lista de Alunos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('Admin/pesquisarSelecionados') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Imprimir Lista</p>
+                        </a>
+                    </li>
+
+                </ul>
             </li>
+
+            </li>
+
+
             <li class="nav-item has-treeview ">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -472,29 +374,13 @@
                 </ul>
             </li>
             <li class="nav-item has-treeview ">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.alunos.importar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Alunos
+                       Importar
 
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Lista de Alunos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarSelecionados') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Imprimir Lista</p>
-                        </a>
-                    </li>
-
-                </ul>
             </li>
 
 
@@ -504,7 +390,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
                         <p>
-                            Emissão de Cartão
+                            Cartão
 
                         </p>
                     </a>
@@ -556,57 +442,12 @@
 
         @endif
 
-        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-
-        <!-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                Auth::user()->vc_tipoUtilizador == 'Preparador' ||
-                Auth::user()->vc_tipoUtilizador == 'Visitante')
-<li class="nav-header">Diplomados</li>
-                                <li class="nav-item has-treeview ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="nav-icon fas fa-user-plus"></i>
-                                        <p>
-                                            Diplomados
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-<li class="nav-item">
-                                                <a href="{{ route('admin.diplomados.cadastrar') }}"
-                                                    class="nav-link ">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Diplomado</p>
-                                                </a>
-                                            </li>
-@endif
-
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.diplomados.listar') }}" class="nav-link ">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Diplomados</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.diplomados.imprimir') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Imprimir Lista</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-@endif  -->
-
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Visitante')
-            <li class="nav-header">Relatórios Estatísticos</li>
+            <li class="nav-header">Mod. de Geração de Relatórios</li>
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -629,12 +470,6 @@
                         </a>
                     </li>
 
-                    {{-- <li class="nav-item">
-                                            <a href="{{ url('Admin/pesquisarRem') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Matriculas/Alunos</p>
-                                            </a>
-                                        </li> --}}
                     <li class="nav-item">
                         <a href="{{ url('Admin/relatorio/matricula/pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
@@ -652,59 +487,15 @@
                 </ul>
             </li>
         @endif
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Visitante')
-            <li class="nav-header">Estatística</li>
-            {{-- <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-
-                                <i class="nav-icon fas fa-bolt"></i>
-                                <p>
-                                    Notas
-                                    
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ url('estatisticas/nota') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ver</p>
-                                    </a>
-                                </li>
 
 
 
-                            </ul>
-                        </li> --}}
-
-            <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-
-                    <p>
-                        Quadro de honra
-
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('admin.quadros.honra') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Ver</p>
-                        </a>
-                    </li>
 
 
 
-                </ul>
-            </li>
-        @endif
-        <li class="nav-header">Dependências do sistema</li>
         @if (acc_admin_desenvolvedor())
+            <li class="nav-header">Mod. de Configuração P.A.E</li>
+
             <li class="nav-item has-treeview">
                 <a href="{{ route('admin.provincia') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -726,40 +517,7 @@
                 </a>
 
             </li>
-        @endif
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Preparador' ||
-                Auth::user()->vc_tipoUtilizador == 'Visitante')
-            <li class="nav-item has-treeview">
-                <a href="{{ url('/admin/anolectivo') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Anos Lectivo
 
-                    </p>
-                </a>
-                {{--   <ul class="nav nav-treeview">
-
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('/admin/anolectivo/cadastrar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Ano Lectivo</p>
-                                                </a>
-                                            </li>
-                                        @endif
-
-                                        <li class="nav-item">
-                                            <a href="{{ url('/admin/anolectivo') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista dos Anos Lectivos</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
-            </li>
 
             <li class="nav-item has-treeview">
                 <a href="{{ url('admin/escola') }}" class="nav-link">
@@ -769,19 +527,55 @@
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
 
-
-
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/escola') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista escola</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
             </li>
+        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+            <li class="nav-header">Mod. de Configuração básica</li>
+            <li class="nav-item has-treeview">
+                <a href="{{ url('/admin/anolectivo') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Anos Lectivo
+
+                    </p>
+                </a>
+
+            </li>
+
+
             <li class="nav-item has-treeview">
                 <a href="{{ url('/admin/idadedecandidatura') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -790,25 +584,7 @@
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
 
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('/admin/idadedecandidatura/cadastrar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Idade</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ url('/admin/idadedecandidatura') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Idades</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
             </li>
 
             <li class="nav-item has-treeview">
@@ -818,26 +594,9 @@
                         Cadeado de Candidatura
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
 
-                                        <li class="nav-item">
-                                            <a href="{{ url('/admin/cadeado_candidatura') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Chave</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
             </li>
-        @endif
 
-
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                Auth::user()->vc_tipoUtilizador == 'Preparador' ||
-                Auth::user()->vc_tipoUtilizador == 'Visitante')
             <li class="nav-item has-treeview">
                 <a href="{{ url('Admin/cursos/index/index') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -846,25 +605,7 @@
 
                     </p>
                 </a>
-                {{--  <ul class="nav nav-treeview">
 
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('Admin/cursos/create/index') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Curso</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ url('Admin/cursos/index/index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Cursos</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
             </li>
 
             <li class="nav-item has-treeview">
@@ -875,33 +616,8 @@
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
 
-
-                                        @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                            <li class="nav-item">
-                                                <a href="{{ url('Admin/processos/create/index') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Processo</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ url('Admin/processos/index/index') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Processos</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
             </li>
-        @endif
-
-
-
-        @if (Auth::user()->vc_tipoUtilizador != 'Professor')
             <li class="nav-item has-treeview">
                 <a href="{{ url('/admin/classes') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -910,31 +626,37 @@
 
                     </p>
                 </a>
-                {{--  <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                            <li class="nav-item">
-                                                <a href="{{ url('/admin/classes/cadastrar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Cadastrar Classe</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ url('/admin/classes') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Classes</p>
-                                            </a>
-                                        </li>
 
-                                    </ul> --}}
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ url('disciplina/ver') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Disciplinas
+
+                    </p>
+                </a>
+
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('admin.disciplina_curso_classe') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Disciplina\Curso\Classe
+
+                    </p>
+                </a>
+
             </li>
         @endif
 
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+
+        <li class="nav-header">Mod. de Gestão de Turmas</li>
+
+        @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                Auth::user()->vc_tipoUtilizador == 'Preparador')
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -966,25 +688,6 @@
 
 
             </li>
-        @endif
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-                Auth::user()->vc_tipoUtilizador == 'Preparador' ||
-                Auth::user()->vc_tipoUtilizador == 'Professor')
-            <li class="nav-item has-treeview ">
-                <a href="{{ route('admin.atribuicoes.pesquisar') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Professores-Turmas
-
-
-                    </p>
-                </a>
-
-            </li>
-        @endif
-        @if (Auth::user()->vc_tipoUtilizador != 'Professor')
             <li class="nav-item has-treeview">
                 <a href="{{ route('direitores-turmas.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -993,265 +696,62 @@
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                            <li class="nav-item">
-                                                <a href="{{ url('/direitores-turmas/cadastrar') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Atribuir Director</p>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.viewindex') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Directores</p>
-                                            </a>
-                                        </li>
 
-                                    </ul> --}}
             </li>
         @endif
-
-
-
-        <li class="nav-item has-treeview">
-            <a href="{{ url('disciplina/ver') }}" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard"></i>
-                <p>
-                    Disciplinas
-
-                </p>
-            </a>
-            {{--  <ul class="nav nav-treeview">
-                                    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                        <li class="nav-item">
-                                            <a href="{{ url('disciplina') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Disciplina</p>
-                                            </a>
-                                        </li>
-                                    @endif
-                                    <li class="nav-item">
-                                        <a href="{{ url('disciplina/ver') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Lista das Disciplinas</p>
-                                        </a>
-                                    </li>
-
-                                </ul> --}}
-        </li>
-
-
-
-
-
-
-
-
-
-
-
-
-        @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-            <li class="nav-item has-treeview">
-                <a href="{{ route('admin.disciplina_curso_classe') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Disciplina\Curso\Classe
-
-                    </p>
-                </a>
-                {{-- <ul class="nav nav-treeview">
-                                        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
-                                            <li class="nav-item">
-                                                <a href="{{ route('admin.disciplina_curso_classe.create') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Relacionar Disciplina</p>
-                                                </a>
-                                            </li>
-                                        @endif
-
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.disciplina_curso_classe') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Disciplinas Relacionadas</p>
-                                            </a>
-                                        </li>
-
-                                    </ul> --}}
-            </li>
-        @endif
-
-
-        {{-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-                                <li class="nav-item has-treeview ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="nav-icon fas fa-shield-alt"></i>
-                                        <p>
-                                            Políticas de Aprovação
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/politica_de_aprovacao/cadastrar') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Política</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                            @endif --}}
-
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-            <li class="nav-header">Pautas</li>
-            <li class="nav-item has-treeview">
-                <a href="{{ url('admin/pauta/pesquisar') }}" class="nav-link">
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Professor')
+            <li class="nav-item has-treeview ">
+                <a href="{{ route('admin.atribuicoes.pesquisar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Pautas
+                        Turmas(Professores)
+
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/pauta/pesquisar') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Visualizar Pautas</p>
-                                            </a>
-                                        </li>
-                                    </ul> --}}
 
             </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('direitores-turmas.meus') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Turmas (Diretor)
 
+                    </p>
+                </a>
 
-
-            {{-- <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                          <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p>
-                                            Pauta Final
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href=""
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Visualizar Pautas</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                </li> --}}
+            </li>
         @endif
 
 
-        @if (Auth::user()->vc_tipoUtilizador == 'Professor' ||
-                Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+
+
+
+        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+            <li class="nav-header"> Mod. de Recuperação(Aluno)</li>
+
             <li class="nav-item has-treeview">
-                <a href="" class="nav-link">
+                <a href="{{ route('admin.notas-recurso.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Notas
+                        Notas(Recurso/Exame)
 
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-                    {{-- @if ($estado_permissao_nota == 1) --}}
-                    <li class="nav-item">
-                        <a href="{{ url('nota_em_carga/buscar_alunos') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Inserir Notas</p>
-                        </a>
-                    </li>
-                    {{-- @endif --}}
-                    <li class="nav-item">
-                        <a href="{{ url('nota_em_carga/pesquisar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Visualizar Notas</p>
-                        </a>
-                    </li>
-                </ul>
+
             </li>
-
-            @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                    Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                    Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                    Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-                <li class="nav-item has-treeview">
-                    <a href="{{ route('admin.notas-recurso.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard"></i>
-                        <p>
-                            Notas(Recurso/Exame)
-
-                        </p>
-                    </a>
-                    {{-- <ul class="nav nav-treeview">
-
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.notas-recurso.inserir') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Inserir Nota</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('admin.notas-recurso.index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Notas</p>
-                                            </a>
-                                        </li>
-
-
-                                    </ul> --}}
-                </li>
-            @endif
-            {{-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-
-
-
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                          <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p>
-                                            Notas(Diplomado/Exame...)
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-
-                                            <li class="nav-item">
-                                                <a href="{{ url('notas-seca/inserir') }}"
-                                                    class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
-                                                    <p>Inserir Nota</p>
-                                                </a>
-                                            </li>
-
-                                    </ul>
-                                </li>
-                                @endif
-                                --}}
         @endif
 
         @if (Auth::user()->vc_tipoUtilizador == 'Secretaria' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral')
-            <li class="nav-header">Documentos</li>
+            <li class="nav-header">Mod. de Documentos</li>
             <li class="nav-item has-treeview">
                 <a href="{{ url('Declaracoes/paginaListar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -1260,47 +760,9 @@
 
                     </p>
                 </a>
-                {{-- <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('Declaracoes/paginaCadastrar') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('Declaracoes/paginaListar') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar</p>
-                                            </a>
-                                        </li>
 
-                                    </ul> --}}
             </li>
-            {{-- <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                         <i class="nav-icon fas fa-chalkboard"></i>
-                                        <p>
-                                            Declarações Com Notas
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('declaracaoComNotas/home') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Requisitar</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('declaracaoComNotas/listar') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Requisitadas</p>
-                                            </a>
-                                        </li>
 
-                                    </ul>
-                                </li> --}}
 
             <li class="nav-item has-treeview">
                 <a href="{{ route('documentos.certificados.emitir') }}" class="nav-link">
@@ -1383,222 +845,10 @@
                 </a>
             </li>
         @endif
-        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-            <li class="nav-header">Configurações técnica</li>
-            <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Caminho /Ficheiro
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('caminho-files.criar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Cadastrar</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('caminho-files') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Listar</p>
-                        </a>
-                    </li>
-
-                </ul>
-            </li>
-        @endif
 
 
 
 
-        {{--
-                            @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                                <li class="nav-header">Gestão de Patrimónios</li>
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-university"></i>
-                                        <p>
-                                            Gestão de Patrimonio
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/patrimonios/cadastrar') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Património</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('admin/patrimonios/visualizar') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Lista de Patrimónios</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('Admin/pesquisarPatrimonios') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Imprimir Listas</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                            @endif --}}
-
-        {{-- @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                                <li class="nav-header">Finanças</li>
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="fas fa-tools"></i>
-                                        <p>
-                                            Manutenção de Seviços
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('verCadastrarServico') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Serviço</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarServico') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Serviços</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('verCadastrarManutecaoServico') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Fazer Manuteção</p>
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarManutecaoServico') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Manuteção</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="fab fa-readme"></i>
-                                        <p>
-                                            Folhas de Salario
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarFolhaSalarioFuncionario') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Gerar Folha de Sálarios</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('verFolhaSalarioFuncionarioMensal') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Ver Folha de Sálarios</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-arrow-down"></i>
-                                        <p>
-                                            Entradas
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('verCadastrarCredito') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Entrada</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarCredito') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Entradas</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa fa-arrow-up"></i>
-                                        <p>
-                                            Saídas
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('verCadastrarDebito') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Cadastrar Saída</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarDebito') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Saídas</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-
-                                <li class="nav-item has-treeview mb-4">
-                                    <a href="#" class="nav-link">
-                                        <i class="fas fa-balance-scale"></i>
-                                        <p>
-                                            Balanço Mensal
-                                            
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="{{ route('verCadastrarTotalEntradaGastosRemanescente') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Criar Balanço</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('listarTotalEntradaGastosRemanescente') }}"
-                                                class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Listar Balanço</p>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <!-- <a href="{{ route('admin.alunos.post') }}"
-                                    class="btn btn-success text-white">Conexão</a> -->
-
-                            @endif --}}
 
         </ul>
         </nav>

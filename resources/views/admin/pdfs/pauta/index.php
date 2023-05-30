@@ -282,12 +282,12 @@ use Illuminate\Support\Facades\DB;
 
                                 /*  ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id') */
 
-                                ->join('disciplinas_cursos_classes', 'notas.it_disciplina', '=', 'disciplinas_cursos_classes.id')
+                                ->join('disciplinas_cursos_classes', 'notas.id_disciplina_curso_classe', '=', 'disciplinas_cursos_classes.id')
                                 ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
                                 ->orderby('disciplinas.vc_nome', 'asc')
                                 ->select(
                                     'notas.fl_media',
-                                    'notas.it_disciplina'
+                                    'notas.id_disciplina_curso_classe'
 
                                 )->get();
                             // dd(  $corpoNotas );

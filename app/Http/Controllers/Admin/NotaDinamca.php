@@ -153,12 +153,15 @@ class NotaDinamca extends Controller
 
     public function alunos($slug_turma_user, $trimestre)
     {
-        $turma_professor = fh_turmas_professores('turmas_users.slug', $slug_turma_user)->first();
-
-        $turma = Turma::find($turma_professor->id_turma);
-        // dd(  $turma );
+        // dd("ola");
+        $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
+// dd( $turma_professor);
+        $turma = fh_turmas()->where('turmas.id',$turma_professor->id_turma)->first();
+     
         $alunos = fha_turma_alunos($turma->slug);
 
+        $nota=fhap_media_geral(113, $turma_professor->it_idClasse,$turma_professor->id_ano_lectivo);
+        dd(  $nota );
         $response['trimestre'] = $trimestre;
         $response['alunos'] = $alunos;
         $response['turma'] = $turma;
@@ -205,17 +208,17 @@ class NotaDinamca extends Controller
     public function inserir(Request $request)
     {
 
-        $turma_professor = fh_turmas_professores('turmas_users.slug', $request->slug_turma_professor)->first();
+        $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $request->slug_turma_professor)->first();
         $turma = Turma::find($turma_professor->id_turma);
 
         $alunos = fha_turma_alunos($turma->slug);
-// dd( $turma_professor->it_idClasse);
+        // dd( $turma_professor->it_idClasse);
         $disciplina_curso_classe = fh_disciplinas_cursos_classes()
             ->where('disciplinas_cursos_classes.it_disciplina', $turma_professor->id_disciplina)
             ->where('disciplinas_cursos_classes.it_curso', $turma_professor->it_idCurso)
             ->where('disciplinas_cursos_classes.it_classe', $turma_professor->it_idClasse)
-            ->select('disciplinas_cursos_classes.id as id')->first();
-// dd($disciplina_curso_classe);
+            ->select('disciplinas_cursos_classes.*')->first();
+        // dd($disciplina_curso_classe);
         // dd($alunos);
         try {
             if (!$disciplina_curso_classe) {
@@ -223,10 +226,10 @@ class NotaDinamca extends Controller
             }
             foreach ($alunos as $aluno) {
                 $notas = $request->all();
-                $nota1 = $notas["fl_nota1_$aluno->processo"];
-                $nota2 = $notas["fl_nota2_$aluno->processo"];
-                $mac = $notas["fl_mac_$aluno->processo"];
-                $mediana = (($nota1 + $nota2 + $mac) / 3);
+                $nota1 =fh_arredondar( $notas["fl_nota1_$aluno->processo"]);
+                $nota2 = fh_arredondar($notas["fl_nota2_$aluno->processo"]);
+                $mac = fh_arredondar($notas["fl_mac_$aluno->processo"]);
+                $mediana =fh_arredondar( (($nota1 + $nota2 + $mac) / 3));
 
                 $linha = Nota::join('alunnos', 'alunnos.id', 'notas.id_aluno')
                     ->where('id_classe', $turma_professor->it_idClasse)
@@ -246,7 +249,7 @@ class NotaDinamca extends Controller
                         'fl_nota2' => $nota2,
                         'fl_mac' => $mac,
                         'fl_media' => $mediana,
-                     
+
                     ]);
 
                 } else {
@@ -261,15 +264,17 @@ class NotaDinamca extends Controller
                         'id_aluno' => $aluno->id_aluno,
                         'fl_media' => $mediana,
                         'id_ano_lectivo' => $turma_professor->id_ano_lectivo,
-                        'id_cabecalho'=>Auth::User()->id_cabecalho
+                        'id_cabecalho' => Auth::User()->id_cabecalho
                     ]);
                 }
 
             }
 
-            dd("Ola");
-            $result = Disciplina_Curso_Classe::find($disciplina_curso_classe->id);
-            return redirect('admin/pautas/mini/disciplina/' . $it_idTurma . '/' . $vc_tipodaNota . '/' . $result->it_disciplina);
+            // dd("Ola");
+            $slug_turma_user =$request->slug_turma_professor;
+            $trimestre = $request->trimestre;
+            $slug_disciplina_curso_classe = $disciplina_curso_classe->slug;
+            return redirect('admin/pautas/mini/disciplina/' . $slug_turma_user . '/' . $trimestre . '/' . $slug_disciplina_curso_classe);
 
         } catch (Exception $ex) {
             //       dd($it_disciplina);
@@ -338,7 +343,7 @@ class NotaDinamca extends Controller
             ->join('turmas_users', 'turmas_users.it_idTurma', '=', 'turmas.id')
             ->leftJoin('notas', 'notas.it_idAluno', '=', 'alunnos.id')
             ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-            ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+            ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
             ->join('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
             ->orderby('alunnos.vc_primeiroNome', 'asc')
             ->orderby('alunnos.vc_nomedoMeio', 'asc')

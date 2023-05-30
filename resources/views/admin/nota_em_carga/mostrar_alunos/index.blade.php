@@ -7,6 +7,26 @@
     <div class="card mt-3">
         <div class="card-body">
             <h3>Inserir Notas em Carga</h3>
+            <div class="dates">
+                <strong>Turma:</strong>
+                {{$turma->vc_nomedaTurma}}
+                &nbsp;
+                <strong>Turno:</strong>
+                {{$turma->vc_turnoTurma}}
+                &nbsp;
+                <strong>Classe:</strong>
+                {{$turma->vc_classe}}ª
+                &nbsp;
+                <strong>Curso:</strong>
+                {{$turma->vc_shortName}}
+                &nbsp;
+                
+                <strong>Ano Lectivo:</strong>
+                {{$turma->ya_inicio.'/'.$turma->ya_fim}}
+                <strong>Trimestre:</strong>
+                {{$trimestre}}
+                
+            </div>
         </div>
     </div>
 
@@ -18,7 +38,7 @@
                 <input type="text" name="slug_turma_professor" value="{{ $turma_professor->slug }}" hidden>
 
                 <?php $contador = 1; ?>
-
+              
                 <table class="table table-hover ">
                     <thead>
                         <tr>

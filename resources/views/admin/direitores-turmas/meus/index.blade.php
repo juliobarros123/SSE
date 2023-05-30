@@ -1,28 +1,16 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Lista de Atribuição de Turmas')
+@section('titulo', 'Meus Directores de turmas')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Lista de Atribuição de Direitores de Turma</h3>
+            <h3>Meus Directores de turmas</h3>
         </div>
     </div>
 
 
 
-    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-        Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-        Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-        Auth::user()->vc_tipoUtilizador == 'Preparador')
-        
-
-        <div class="d-flex justify-content-end mb-3">
-            <a class="btn btn-dark" href="{{ route('direitores-turmas.criar') }}">
-                <strong class="text-light">Atribuir Director</strong>
-            </a>
-        </div>
-    @endif
 
 
     <table id="example" class="display table table-hover">
@@ -34,7 +22,7 @@
                 <th>TURNO</th>
                 <th>CURSO</th>
                 <th>CLASSE</th>
-                <th>ACÇÕES</th>
+            
             </tr>
         </thead>
         <tbody class="bg-white">
@@ -43,32 +31,14 @@
                 {{-- @dump($dt) --}}
                     <tr class="text-center">
                         <th>{{ $dt->id }}</th>
-                        <th>{{ $dt->vc_primemiroNome }} {{ $dt->vc_apelido }}</th>
-                        <td>{{ $dt->vc_nomedaTurma }}</td>
-                        <td>{{ $dt->vc_turnoTurma }}</td>
+                        <th>{{ $dt->director }}</th>
+                        <td>{{ $dt->turma }}</td>
+                        <td>{{ $dt->turno }}</td>
                  
-                        <td>{{ $dt->vc_nomeCurso }}</td>
-                        <td>{{ $dt->vc_classe }}ª classe</td>
+                        <td>{{ $dt->curso }}</td>
+                        <td>{{ $dt->classe }}ª classe</td>
                      
-                        <td>
-
-                            @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                <div class="dropdown">
-                                    <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a href="{{ route('direitores-turmas.editar', $dt->slug) }}"
-                                            class="dropdown-item">Editar</a>
-                                        <a href="{{ route('direitores-turmas.eliminar', $dt->slug) }}" class="dropdown-item"
-                                            data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
-                                    </div>
-                                </div>
-                            @endif
-
-                        </td>
+                     
                     </tr>
                 @endforeach
             @endif

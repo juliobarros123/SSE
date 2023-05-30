@@ -43,35 +43,35 @@
         </thead>
         <tbody class="">
 
-            @foreach ($turmas as $row)
+            @foreach ($turmas as $turma)
                 <tr class="">
-                    <td>{{ $row->id_turma ? $row->id_turma : $row->id }}</td>
-                    <td>{{ $row->vc_nomedaTurma }}</td>
-                    <td>{{ $row->vc_classe }}ª Classe</td>
+                    <td>{{ $turma->id_turma ? $turma->id_turma : $turma->id }}</td>
+                    <td>{{ $turma->vc_nomedaTurma }}</td>
+                    <td>{{ $turma->vc_classe }}ª Classe</td>
                     @if (Auth::user()->vc_tipoUtilizador == 'Professor')
-                        <td>{{ $row->disciplina }}</td>
+                        <td>{{ $turma->disciplina }}</td>
                     @endif
 
                     <td>
                       
-                        {{ $row->vc_turnoTurma }}
+                        {{ $turma->vc_turnoTurma }}
                        
                     </td>
-                    {{-- @dump($row) --}}
-                    <td>{{ $row->vc_salaTurma }}</td>
-                    <td class="text-left">{{ $row->vc_nomeCurso }}</td>
-                    <td>{{ $row->it_qtdeAlunos - $row->it_qtMatriculados }}</td>
-                    <td>{{ $row->it_qtMatriculados }}</td>
-                    <td>{{ $row->it_qtdeAlunos }}</td>
+                    {{-- @dump($turma) --}}
+                    <td>{{ $turma->vc_salaTurma }}</td>
+                    <td class="text-left">{{ $turma->vc_nomeCurso }}</td>
+                    <td>{{ $turma->it_qtdeAlunos - $turma->it_qtMatriculados }}</td>
+                    <td>{{ $turma->it_qtMatriculados }}</td>
+                    <td>{{ $turma->it_qtdeAlunos }}</td>
                     <td>
-                        @if ($row->it_qtdeAlunos == $row->it_qtMatriculados)
+                        @if ($turma->it_qtdeAlunos == $turma->it_qtMatriculados)
                             <b class="text-primary">Fechada</b>
                         @else
                             <b class="text-success">Aberta</b>
                         @endif
                     </td>
                     @if (!$anolectivo)
-                        <td>{{ $row->vc_anoLectivo }}</td>
+                        <td>{{ $turma->vc_anoLectivo }}</td>
                     @endif
                     <td>
                         <div class="dropdown">
@@ -83,25 +83,27 @@
                        
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                    <a href="{{ route('turmas.imprimir_alunos', $row->slug ) }}"
+                                    <a href="{{ route('turmas.imprimir_alunos', $turma->slug ) }}"
                                         class="dropdown-item" target="_blank">Lista</a>
                                  
-                                    <a href="{{ route('admin.atribuicao.professores', $row->slug) }}"
+                                    <a href="{{ route('admin.atribuicao.professores', $turma->slug) }}"
                                         class="dropdown-item" target="_blank">Professores</a>
-                                    <a href="{{ route('admin.pautaFinal.gerar', $row->id_turma ? $row->id_turma : $row->id) }}"
+                                        <a href="" class="dropdown-item" data-toggle="modal"
+                                        data-target=".bd-example-modal-sm{{ $turma->id }}">Pauta Trimestral</a>
+                                    <a href="{{ route('admin.pautaFinal.gerar', $turma->id_turma ? $turma->id_turma : $turma->id) }}"
                                         class="dropdown-item" target="_blank">Pauta final</a>
-
+                                       
                                     @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-                                        <a href="{{ route('turmas.editar',  $row->slug) }}"
+                                        <a href="{{ route('turmas.editar',  $turma->slug) }}"
                                             class="dropdown-item">Editar</a>
                                             @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                                             Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' 
                                     )
-                                        <a href="{{ route('notas-seca.inserir', $row->id_turma ? $row->id_turma : $row->id) }}"
+                                        <a href="{{ route('notas-seca.inserir', $turma->id_turma ? $turma->id_turma : $turma->id) }}"
                                             class="dropdown-item">Inserir nota seca</a>
                                             @endif
-                                        <a href="{{ route('turmas.eliminar', ['slug' => $row->slug]) }}"
+                                        <a href="{{ route('turmas.eliminar', ['slug' => $turma->slug]) }}"
                                             class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                 
@@ -111,6 +113,36 @@
                         </div>
 
                     </td>
+
+                    
+                    <div class="modal fade bd-example-modal-sm{{ $turma->id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">TRIMESTRES</h5>
+                                  
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                             
+                                <div class="modal-body">
+                                    <a target="_blank"
+                                        href="{{ route('admin.pauta.trimestral', ['slug_turma' => $turma->slug, 'trimestre' => 'I']) }}"
+                                        class="dropdown-item">Iº TRIMESTRE</a>
+                                    <a target="_blank"
+                                        href="{{ route('admin.pauta.trimestral', ['slug_turma' => $turma->slug, 'trimestre' => 'II']) }}"
+                                        class="dropdown-item">IIº TRIMESTRE</a>
+                                    <a target="_blank"
+                                        href="{{ route('admin.pauta.trimestral', ['slug_turma' => $turma->slug, 'trimestre' => 'III']) }}"
+                                        class="dropdown-item">IIIº TRIMESTRE</a>
+                               
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </tr>
             @endforeach
         </tbody>

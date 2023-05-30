@@ -201,7 +201,7 @@ class MatriculaController extends Controller
             se não existe pode introduzir, se existe não introduza */
             $nome_arquivo = null;
             // dd($request);
-            $aluno = $aluno = fh_aluno_processo($request->processo);
+            $aluno = $aluno = fha_aluno_processo($request->processo);
             ;
             $id_ano_lectivo = fha_ano_lectivo_publicado()->id_anoLectivo;
             $cont = fh_matriculas()->where('alunnos.processo', $aluno->processo)
@@ -275,7 +275,7 @@ class MatriculaController extends Controller
     
 
             $mpdf = new \Mpdf\Mpdf();
-            /* $response['stylesheet'] = file_get_contents(.'css/recibo/style.css'); */
+            /* $response['stylesheet'] = file_get_contents('css/recibo/style.css'); */
 
             //$url = 'images/cartao/aluno.jpg';
             $response['css'] = file_get_contents('css/lista/style-2.css');
@@ -355,7 +355,7 @@ class MatriculaController extends Controller
     {
         try {
 
-            $aluno = fh_aluno_processo($request->processo);
+            $aluno = fha_aluno_processo($request->processo);
 
             $id_ano_lectivo = fha_ano_lectivo_publicado()->id_anoLectivo;
 

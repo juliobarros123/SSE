@@ -101,7 +101,7 @@ class Nota extends Model
         $notas = DB::table('notas')
             ->join('alunnos', 'alunnos.id', '=', 'notas.it_idAluno')
 
-            ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+            ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
             ->select('notas.*', 'alunnos.vc_ultimoaNome', 'alunnos.vc_nomedoMeio', 'alunnos.vc_primeiroNome', 'disciplinas.vc_nome')
             ->distinct()
@@ -110,7 +110,7 @@ class Nota extends Model
             ->where([['notas.vc_tipodaNota', '=', $trimestre]])
             ->where([['notas.it_classe', '=', $classe]])
             ->where([['notas.vc_nomedaTurma', '=', $turma]])
-            ->where([['notas.it_disciplina', '=', $disciplina]]);
+            ->where([['notas.id_disciplina_curso_classe', '=', $disciplina]]);
 
         return $notas->get();
     }
@@ -320,7 +320,7 @@ class Nota extends Model
             $notas = DB::table('notas')
                 ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
                 ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-                ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+                ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
                 ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
                 // ->orderBy('notas.id', 'desc')
                 // ->distinct()
@@ -338,7 +338,7 @@ class Nota extends Model
             $notas = DB::table('notas')
                 ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
                 ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-                ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+                ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
                 ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
                 ->where([['notas.id_turma', $turma->id]])
                 ->where([['notas.id_ano_lectivo', $turma->it_idAnoLectivo]])
@@ -357,7 +357,7 @@ class Nota extends Model
         $notas = DB::table('notas')
             ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
             ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
             ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
             ->distinct()
             ->where([['notas.it_estado_nota', 1]])
@@ -393,7 +393,7 @@ class Nota extends Model
         $notas = DB::table('notas')
             ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
             ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
             ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
             ->join('alunnos', 'alunnos.id', '=', 'notas.it_idAluno')
             ->distinct();
@@ -441,7 +441,7 @@ class Nota extends Model
         $notas = DB::table('notas')
             ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
             ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+            ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
             ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
             ->join('alunnos', 'alunnos.id', '=', 'notas.it_idAluno')
             ->distinct()

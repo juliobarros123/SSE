@@ -90,24 +90,33 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">TRIMESTRES</h5>
-                                    {{-- <small class="text-info">Clica no trimestre</small> --}}
+
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <a target="_blank"
-                                        href="{{ route('admin.pauta.mini.disciplina', ['id' => $atribuicao->id_turma ? $atribuicao->id_turma : $atribuicao->id, 'trimestre' => 'I', 'id_disciplina' => $atribuicao->id_disciplina]) }}"
-                                        class="dropdown-item">Iº TRIMESTRE</a>
-                                    <a target="_blank"
-                                        href="{{ route('admin.pauta.mini.disciplina', ['id' => $atribuicao->id_turma ? $atribuicao->id_turma : $atribuicao->id, 'trimestre' => 'II', 'id_disciplina' => $atribuicao->id_disciplina]) }}"
-                                        class="dropdown-item">IIº TRIMESTRE</a>
-                                    <a target="_blank"
-                                        href="{{ route('admin.pauta.mini.disciplina', ['id' => $atribuicao->id_turma ? $atribuicao->id_turma : $atribuicao->id, 'trimestre' => 'III', 'id_disciplina' => $atribuicao->id_disciplina]) }}"
-                                        class="dropdown-item">IIIº TRIMESTRE</a>
-                                    <a target="_blank"
-                                        href="{{ route('admin.pauta.mini.geral.disciplina', ['id' => $atribuicao->id_turma ? $atribuicao->id_turma : $atribuicao->id, 'trimestre' => 'Geral', 'id_disciplina' => $atribuicao->id_disciplina]) }}"
-                                        class="dropdown-item">Geral</a>
+                                @php
+                                    $disciplina_curso_classe = fhap_disciplinas_cursos_classes($atribuicao->id_disciplina, $atribuicao->it_idCurso, $atribuicao->it_idClasse);
+                                    //    dd(                                $disciplina_curso_classe);
+                                @endphp
+                               
+                                    @if ($disciplina_curso_classe)
+                                        <a target="_blank"
+                                            href="{{ route('admin.pauta.mini.disciplina', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I', 'slug_disciplina_curso_classe' => $disciplina_curso_classe->slug]) }}"
+                                            class="dropdown-item">Iº TRIMESTRE</a>
+
+                                        <a target="_blank"
+                                            href="{{ route('admin.pauta.mini.disciplina', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'II', 'slug_disciplina_curso_classe' => $disciplina_curso_classe->slug]) }}"
+                                            class="dropdown-item">IIº TRIMESTRE</a>
+
+                                        <a target="_blank"
+                                            href="{{ route('admin.pauta.mini.disciplina', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'III', 'slug_disciplina_curso_classe' => $disciplina_curso_classe->slug]) }}"
+                                            class="dropdown-item">IIIº TRIMESTRE</a>
+                                    @else
+                                        <small class="text-danger w-100">Para inserir nota, configura( Disciplina\Curso\Classe)
+                                        </small>
+                                    @endif
+
                                 </div>
 
                             </div>
@@ -126,19 +135,23 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <a target="_blank"
-                                        href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I']) }}"
-                                        class="dropdown-item">Iº TRIMESTRE</a>
-                                    <a target="_blank"
-                                        href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->id_turma, 'trimestre' => 'II']) }}"
-                                        class="dropdown-item">IIº TRIMESTRE</a>
-                                    <a target="_blank"
-                                        href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->id_turma, 'trimestre' => 'III']) }}"
-                                        class="dropdown-item">IIIº TRIMESTRE</a>
+                                @if ($disciplina_curso_classe)
+                                    <div class="modal-body">
+                                        <a target="_blank"
+                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I']) }}"
+                                            class="dropdown-item">Iº TRIMESTRE</a>
+                                        <a target="_blank"
+                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'II']) }}"
+                                            class="dropdown-item">IIº TRIMESTRE</a>
+                                        <a target="_blank"
+                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'III']) }}"
+                                            class="dropdown-item">IIIº TRIMESTRE</a>
 
-                                </div>
-
+                                    </div>
+                                    @else
+                                    <small class="text-danger">Para inserir nota, configura( Disciplina\Curso\Classe)
+                                    </small>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -399,7 +399,7 @@ class NotaDinamicaDiplomadoController extends Controller
        
          ->leftJoin('notas', 'notas.it_idAluno', '=', 'alunnos.id')
          ->leftJoin('anoslectivos', 'notas.id_ano_lectivo', '=', 'anoslectivos.id')
-         ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.it_disciplina')
+         ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
          ->join('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
          ->orderby('alunnos.vc_primeiroNome', 'asc')
          ->orderby('alunnos.vc_nomedoMeio', 'asc')

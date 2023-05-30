@@ -190,7 +190,7 @@ function fha_turma_professores($slug)
             'turmas.it_idCurso',
             'disciplinas.vc_nome as disciplina',
             'turmas.it_idAnoLectivo as id_ano_lectivo',
-            
+
 
         )
         ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)
@@ -236,7 +236,7 @@ function fh_turmas_professores()
             'turmas.it_qtdeAlunos',
             'turmas.it_idCurso',
             'turmas.id as id_turma',
-            
+
             'turmas.it_idCurso',
             'turmas.it_idAnoLectivo as id_ano_lectivo',
             'disciplinas.id as id_disciplina',
@@ -255,6 +255,35 @@ function fh_turmas_professores()
     return $atribuicoes;
 
 }
+function fha_meus_director_turmas()
+{
+    $meus_directores = collect();
+    $turmas_professores = fh_turmas_professores()
+        ->get();
+
+    $index = 0;
+    foreach ($turmas_professores as $turma) {
+        $director_turma = fh_directores_turmas()->where('turmas.id', $turma->it_idTurma)->first();
+
+        $std = new stdClass();
+        $std->id = $director_turma->id;
+
+        $std->curso = $director_turma->vc_nomeCurso;
+        $std->curso = $director_turma->vc_nomeCurso;
+        $std->curso_nome_curto = $director_turma->vc_shortName;
+        $std->vc_nomeCurso = $director_turma->vc_nomeCurso;
+        $std->id_cabecalho = $director_turma->id_cabecalho;
+        $std->director = $director_turma->vc_primemiroNome . ' ' . $director_turma->vc_apelido;
+        $std->classe = $director_turma->vc_classe;
+        $std->turma = $director_turma->vc_nomedaTurma;
+        $std->turno = $director_turma->vc_turnoTurma;
+        $meus_directores->push($std);
+    }
+    // dd($turmas_professores);
+    return $meus_directores;
+    // return $minhas_turma;
+}
+
 function fh_professores_disciplinas()
 {
     $disciplinas = TurmaUser::join('users', 'users.id', '=', 'turmas_users.it_idUser')
@@ -282,7 +311,7 @@ function fh_turmas_slug($slug)
 
 }
 
-function fh_aluno_processo($processo)
+function fha_aluno_processo($processo)
 {
     return fh_alunos()
 
@@ -503,6 +532,30 @@ function fh_disciplinas_cursos_classes()
 
 
 }
+
+
+function fh_turma_disciplina($slug_turma)
+{
+    $turma = Turma::where('slug', $slug_turma)->first();
+
+    return fh_disciplinas_cursos_classes()
+        ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
+        ->where('disciplinas_cursos_classes.it_classe', $turma->it_idClasse)
+        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas.*');
+}
+function fhap_disciplinas_cursos_classes($id_disciplina, $it_idCurso, $it_idClasse)
+{
+    return fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_disciplina', $id_disciplina)
+        ->where('disciplinas_cursos_classes.it_curso', $it_idCurso)
+        ->where('disciplinas_cursos_classes.it_classe', $it_idClasse)
+        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas_cursos_classes.*')->first();
+}
+function fh_arredondar($numero)
+{
+    return round($numero, 0, PHP_ROUND_HALF_UP);
+}
 function fh_idadedeCandidatura()
 {
     if (Auth::User()->desenvolvedor == 2) {
@@ -535,6 +588,153 @@ function fh_candidatos()
 
     }
 }
+
+
+// Start Metodos Notas
+
+function fh_notas()
+{
+    return DB::table('notas')
+        ->leftJoin('turmas', 'turmas.id', '=', 'notas.id_turma')
+        ->join('alunnos', 'notas.id_aluno', '=', 'alunnos.id')
+        ->leftJoin('disciplinas_cursos_classes', 'disciplinas_cursos_classes.id', '=', 'notas.id_disciplina_curso_classe')
+        ->leftJoin('disciplinas', 'disciplinas.id', '=', 'disciplinas_cursos_classes.it_disciplina')
+        ->join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+        ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+        ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
+        ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas.*', 'alunnos.*', 'turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'disciplinas_cursos_classes.*', 'notas.*');
+
+}
+function fh_notas_por_discipina($processo, $id_disciplina)
+{
+
+    return fh_notas()->where('alunnos.processo', $processo)
+        ->where('disciplinas_cursos_classes.it_disciplina', $id_disciplina);
+}
+function fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+{
+    return fh_notas()->where('alunnos.processo', $processo)
+        ->where('disciplinas_cursos_classes.it_disciplina', $id_disciplina)
+        ->where('notas.vc_tipodaNota', $trimestre)
+        ->where('notas.id_ano_lectivo', $id_ano_lectivo)
+        ->select('notas.*');
+
+}
+function fha_nota1_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+{
+    $n = fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+        ->select('notas.fl_nota1')
+        ->first();
+    // dd($n);
+
+    $nota = isset($n->fl_nota1) && $n->fl_nota1 ? $n->fl_nota1 : 0;
+    return fh_arredondar($nota);
+
+}
+function fha_nota2_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+{
+    $n = fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+        ->select('notas.fl_nota2')
+        ->first();
+    // dd($n);
+    $nota = isset($n->fl_nota2) && $n->fl_nota2 ? $n->fl_nota2 : 0;
+    return fh_arredondar($nota);
+
+
+}
+function fha_mac_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+{
+    $n = fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+        ->select('notas.fl_mac')
+        ->first();
+    // dd($n);
+    $nota = isset($n->fl_mac) && $n->fl_mac ? $n->fl_mac : 0;
+    return fh_arredondar($nota);
+
+
+}
+function fha_media_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+{
+    $n = fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
+        ->select('notas.fl_media')
+        ->first();
+    // dd($n);
+    $nota = isset($n->fl_media) && $n->fl_media ? $n->fl_media : 0;
+    return fh_arredondar($nota);
+}
+
+
+function fhap_media_trimestre_disciplinas($processo, $trimestre, $id_classe, $id_ano_lectivo)
+{
+    // dd($processo, $trimestre, $id_classe, $id_ano_lectivo);
+    $notas = array();
+    $aluno = fha_aluno_processo($processo);
+    $disciplinas = fh_disciplinas_cursos_classes()
+        ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
+        ->where('disciplinas_cursos_classes.it_classe', $id_classe)
+        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas.*')
+        ->get();
+    // dd($disciplinas);
+    foreach ($disciplinas as $disciplina) {
+        $nota = fha_media_trimestre_por_ano($processo, $disciplina->id, $trimestre, $id_ano_lectivo);
+        array_push($notas, $nota);
+    }
+
+    $nota = media($notas);
+    return fh_arredondar($nota);
+
+}
+function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $id_ano_lectivo)
+{
+    $notas = array();
+
+    foreach ($trimestre_array as $t) {
+        $nota = fh_mt_trimestre_por_ano($processo, $id_disciplina, $t, $id_ano_lectivo)
+            ->select('notas.fl_media')
+            ->first();
+        // dd(  $nota);
+        $nota = isset($nota->fl_media) && $nota->fl_media ? $nota->fl_media : 0;
+        array_push($notas, $nota);
+
+        // dd($n);
+        ;
+
+    }
+    // dd($notas);
+    $media = media($notas);
+
+    return fh_arredondar($media);
+
+
+}
+
+function fhap_media_geral($processo, $id_classe, $id_ano_lectivo)
+{
+    // dd($processo, $trimestre, $id_classe, $id_ano_lectivo);
+    $notas = array();
+    $aluno = fha_aluno_processo($processo);
+    $disciplinas = fh_disciplinas_cursos_classes()
+        ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
+        ->where('disciplinas_cursos_classes.it_classe', $id_classe)
+        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas.*')
+        ->get();
+    // dd($disciplinas);
+    foreach ($disciplinas as $disciplina) {
+        $media_trimestral_geral = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
+        $nota = $media_trimestral_geral;
+        array_push($notas, $nota);
+    }
+
+    $nota = media($notas);
+    return fh_arredondar($nota);
+
+}
+
+
+// End Metodos Notas
 function consultarRupe($idOrigem)
 {
 

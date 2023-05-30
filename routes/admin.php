@@ -414,6 +414,10 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('admin/selecionados/lista/{anolectivo}/{curso}', ['as' => 'admin.alunos.selecionados', 'uses' => 'Admin\AlunnoController@listas']);
 
     Route::get('admin/aluno/{processo}', ['as' => 'admin.aluno.por_processo', 'uses' => 'Admin\AlunnoController@aluno']);
+    Route::get('admin/alunos/importar', ['as' => 'admin.alunos.importar', 'uses' => 'Admin\AlunnoController@importar']);
+    Route::get('admin/alunos/cadastrar', ['as' => 'admin.alunos.cadastrar', 'uses' => 'Admin\AlunnoController@cadastrar']);
+    
+    
 
 
     ///alunos fim
@@ -529,6 +533,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
         Route::get('/{slug}/eliminar', ['as' => 'direitores-turmas.eliminar', 'uses' => 'Admin\DireitorTurmaController@eliminar'])->middleware('access.controll.administrador');
         Route::put('/{slug}/actualizar', ['as' => 'direitores-turmas.actualizar', 'uses' => 'Admin\DireitorTurmaController@actualizar'])->middleware('access.controll.administrador');
         Route::post('turmas', ['as' => 'direitores-turmas.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
+        Route::get('/meus', ['as' => 'direitores-turmas.meus', 'uses' => 'Admin\DireitorTurmaController@meus']);
+    
     });
     // End Direitor de Turma
 
@@ -679,10 +685,10 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('admin/pauta/pesquisar', ['as' => 'admin.pauta.pesquisar', 'uses' => 'Admin\PautaController@index']);
     Route::post('/admin/pauta/recebepautas', ['as' => 'admin.pauta.recebepautas', 'uses' => 'Admin\PautaController@store']);
     Route::get('/admin/pauta/listas/{anolectivo}/{curso}', ['as' => 'admin.pauta.listas', 'uses' => 'Admin\PautaController@show']);
-    Route::get('/admin/pauta/gerar/{id}/{trimestre}', ['as' => 'admin.pauta.gerar', 'uses' => 'Admin\PautaController@create1']);
-    Route::get('/admin/pauta_final/gerar/{id}/{tipo}', ['as' => 'admin.pauta_final.gerar', 'uses' => 'Admin\PautaController@creatEnd']);
-    Route::get('/admin/pautas/mini/disciplina/{id}/{trimestre}/{id_disciplina}', ['as' => 'admin.pauta.mini.disciplina', 'uses' => 'Admin\PautaController@disciplina']);
-    Route::get('/admin/pautas/mini/geral/disciplina/{id}/{trimestre}/{id_disciplina}', ['as' => 'admin.pauta.mini.geral.disciplina', 'uses' => 'Admin\PautaController@disciplina_geral']);
+    Route::get('/admin/pauta/trimestral/{slug_turma}/{trimestre}', ['as' => 'admin.pauta.trimestral', 'uses' => 'Admin\PautaController@trimestral']);
+    // Route::get('/admin/pauta_final/gerar/{id}/{tipo}', ['as' => 'admin.pauta_final.gerar', 'uses' => 'Admin\PautaController@creatEnd']);
+    Route::get('/admin/pautas/mini/disciplina/{slug_turma_user}/{trimestre}/{slug_disciplina_curso_classe}', ['as' => 'admin.pauta.mini.disciplina', 'uses' => 'Admin\PautaController@disciplina']);
+    // Route::get('/admin/pautas/mini/geral/disciplina/{id}/{trimestre}/{id_disciplina}', ['as' => 'admin.pauta.mini.geral.disciplina', 'uses' => 'Admin\PautaController@disciplina_geral']);
 
     //End Pauta
 

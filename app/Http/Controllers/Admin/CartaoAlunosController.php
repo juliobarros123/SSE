@@ -51,8 +51,8 @@ class CartaoAlunosController extends Controller
         $c = $estudantes->StudentForCard($id);
         // dd(  $c);
         $data['anoValidade']= AnoValidadeCartao::orderBy('id','desc')->where('vc_TipoCartao','Aluno')->first();
-        $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+        $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+        $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
         if ($c->count()) :
             //Metodo que gera o cartão do aluno
             $data['alunos'] =  $c;
@@ -63,40 +63,40 @@ class CartaoAlunosController extends Controller
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
 
             } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
             
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
              }else if ($data['cabecalho']->vc_nif == "7301003617") {
 
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             }else{
-                $data["css"] = file_get_contents(.'css/cartao/aluno/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/cartao/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             }
             $mpdf = new \Mpdf\Mpdf([
                 'mode' => 'utf-8', 'margin_top' => 0,

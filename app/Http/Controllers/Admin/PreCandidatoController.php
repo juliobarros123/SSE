@@ -389,45 +389,45 @@ class PreCandidatoController extends Controller
         if ($response['cabecalho'] != null) {
 
             $mpdf = new \Mpdf\Mpdf();
-            /* $response['stylesheet'] = file_get_contents(.'css/recibo/style.css'); */
+            /* $response['stylesheet'] = file_get_contents('css/recibo/style.css'); */
 
             if ($response['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
 
             } else if ($response['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             } else if ($response['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             } else if ($response['cabecalho']->vc_nif == "5000820440") {
             
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             } else if ($response['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             } else if ($response['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
              } else if ($response['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             }else if ($response['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
             } else {
                 //$url = 'images/cartao/aluno.jpg';
-                $response["stylesheet"] = file_get_contents(.'css/recibo/style.css');
-                $response["bootstrap"] = file_get_contents(.'css/recibo/bootstrap.min.css');
+                $response["stylesheet"] = file_get_contents('css/recibo/style.css');
+                $response["bootstrap"] = file_get_contents('css/recibo/bootstrap.min.css');
             }
             $html = view("admin/pdfs/pre_candidatura/ficha", $response);
             $mpdf->writeHTML($html);

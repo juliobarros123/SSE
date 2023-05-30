@@ -90,7 +90,7 @@ class DisciplinasController extends Controller
 
   public function edit($slug)
   {
-$disciplina=fh_disciplinas('disciplinas.slug',$slug)->first();
+$disciplina=fh_disciplinas()->where('disciplinas.slug',$slug)->first();
 // dd($disciplina);
     if ($disciplina):
 

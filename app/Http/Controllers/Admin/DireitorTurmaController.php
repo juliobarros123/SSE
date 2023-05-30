@@ -179,10 +179,14 @@ class DireitorTurmaController extends Controller
 
 
     }
+public function meus(){
+   $response['directores']= fha_meus_director_turmas();
+   return view('admin.direitores-turmas.meus.index', $response);
 
+}
     public function index()
     {
-        $data['direitores'] = fh_directores_turmas()->get();
+        $data['directores'] = fh_directores_turmas()->get();
 
 
         //  dd($data);

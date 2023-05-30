@@ -146,7 +146,7 @@ class NotaController extends Controller
     $notas = Nota::findOrFail($id);
     $searchs = $estudantes->StudentForNota($id);
     $disciplinas  = DB::table('notas')
-      ->join('disciplinas', 'disciplinas.id', '=', 'notas.it_disciplina')
+      ->join('disciplinas', 'disciplinas.id', '=', 'notas.id_disciplina_curso_classe')
       ->select('disciplinas.vc_nome')
       ->where([['it_estado_nota', 1]])
       ->where([['notas.id', $id]])

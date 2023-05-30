@@ -60,7 +60,7 @@ class PautaController extends Controller
     public function store(Request $request)
     {
         //
-        $anoLectivo =  $request->vc_anolectivo;
+        $anoLectivo = $request->vc_anolectivo;
         $curso = $request->vc_curso;
         return redirect("/admin/pauta/listas/$anoLectivo/$curso");
     }
@@ -75,7 +75,8 @@ class PautaController extends Controller
         if ($anoLectivo && $curso) {
             $dadosDaTabelaTurma = Turma::where([
                 ['it_estado_turma', 1],
-                ['vc_anoLectivo', '=', $anoLectivo], ['vc_cursoTurma', '=', $curso]
+                ['vc_anoLectivo', '=', $anoLectivo],
+                ['vc_cursoTurma', '=', $curso]
             ])->get();
         } elseif ($anoLectivo && !$curso) {
             $dadosDaTabelaTurma = Turma::where([
@@ -104,99 +105,99 @@ class PautaController extends Controller
 
         // dd( $response['notas']);
         // $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
-       /*  $data["css"] = file_get_contents("css/pauta/style.css"); */
-       if ($data['cabecalho']->vc_nif == "5000298182") {
-
-        //$url = 'cartões/CorMarie/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-
-    } else if ($data['cabecalho']->vc_nif == "7301002327") {
-
-        //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000303399") {
-
-        //$url = 'cartões/negage/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000820440") {
-    
-        //$url = 'cartões/Quilumosso/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000305308") {
-
-        //$url = 'cartões/Foguetao/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "7301002572") {
-
-        //$url = 'cartões/LiceuUíge/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "7301003617") {
-
-        //$url = 'cartões/ldc/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    }else if ($data['cabecalho']->vc_nif == "5000300926") {
-
-        //$url = 'cartões/imagu/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else {
-        //$url = 'images/cartao/aluno.jpg';
-       /*  $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css'); */
+        /*  $data["css"] = file_get_contents("css/pauta/style.css"); */
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
 
         } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
             //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
             //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
-        
+
             //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
             //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
             //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
             //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-        }else if ($data['cabecalho']->vc_nif == "5000300926") {
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else {
             //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            /*  $data["css"] = file_get_contents('css/pauta/style.css');
+             $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css'); */
+            if ($data['cabecalho']->vc_nif == "5000298182") {
+
+                //$url = 'cartões/CorMarie/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+
+            } else if ($data['cabecalho']->vc_nif == "7301002327") {
+
+                //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "5000303399") {
+
+                //$url = 'cartões/negage/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "5000820440") {
+
+                //$url = 'cartões/Quilumosso/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "5000305308") {
+
+                //$url = 'cartões/Foguetao/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "7301002572") {
+
+                //$url = 'cartões/LiceuUíge/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "7301003617") {
+
+                //$url = 'cartões/ldc/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "5000300926") {
+
+                //$url = 'cartões/imagu/aluno.png';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else {
+                //$url = 'images/cartao/aluno.jpg';
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            }
         }
-    }
         $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
         $mpdf->SetFont("arial");
         $mpdf->setHeader();
@@ -208,83 +209,40 @@ class PautaController extends Controller
 
 
 
-    public function disciplina($id_turma, $trimestre, $id_disciplina)
+    public function disciplina($slug_turma_user, $trimestre, $slug_disciplina_curso_classe)
     {
-        // dd($id_turma, $trimestre, $id_disciplina);
-        // dd("ola");
-        $data['turmaProfessor'] = $this->notaDinamca->turmasProfessor()->where('id_disciplina', $id_disciplina)->where('id_turma', $id_turma)->first();
-    //  dd($data['turmaProfessor']);
-        $data['cabecalho'] = Cabecalho::find(1);
-        $data['disciplina'] = Disciplinas::find($id_disciplina);
-        $data['trimestre'] = $trimestre;
-        $datos['detalhes_turma'] = $data['detalhes_turma'] = $this->detalhes_turma($id_turma);    //    dd( $response['notas']);
-        $datos['disciplina'] = $data['disciplina']->vc_nome;
-        $data['notas'] = $this->notas->object_notas_disciplina($id_turma, $trimestre, $id_disciplina);
-       
-        $datos['trimestre'] = $trimestre;
-        $datos['cabecalho'] = Cabecalho::find(1);
+        //   $n=  ;
 
+        $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
 
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-        /* $data["css"] = file_get_contents("css/pauta/style.css"); */
-        if ($data['cabecalho']->vc_nif == "5000298182") {
+        $turma = fh_turmas()->where('turmas.id', $turma_professor->id_turma)->first();
+        // dd(  $turma_professor );
+        $alunos = fha_turma_alunos($turma->slug);
 
-            //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */
-        } else if ($data['cabecalho']->vc_nif == "7301002327") {
+        $response['trimestre'] = $trimestre;
+        $response['alunos'] = $alunos;
+        $response['turma'] = $turma;
+        $response['turma_professor'] = $turma_professor;
+        $response['trimestre'] = $trimestre;
+        $response['cabecalho'] = fh_cabecalho();
+        // dd($response['turma_professor']);
+        $response["css"] = file_get_contents('css/lista/style-2.css');
 
-            //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else if ($data['cabecalho']->vc_nif == "5000303399") {
+        // $mpdf = new \Mpdf\Mpdf(['format' => [210, 297]]);
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [210, 297],
+            'margin_top' => 5,
 
-            //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else if ($data['cabecalho']->vc_nif == "5000820440") {
-        
-            //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else if ($data['cabecalho']->vc_nif == "5000305308") {
-
-            //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else if ($data['cabecalho']->vc_nif == "7301002572") {
-
-            //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else if ($data['cabecalho']->vc_nif == "7301003617") {
-
-            //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-            /*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-             */        }else if ($data['cabecalho']->vc_nif == "5000300926") {
-
-            //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        } else {
-            //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents(.'css/pauta/style.css');
-/*             $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
- */        }
-        $mpdf = new \Mpdf\Mpdf(['format' => [210, 297]]);
-        $mpdf->SetFont("arial");
+        ]);
         $mpdf->setHeader();
-        $data["estado"]= Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' || Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico';
         $this->Logger->Log('info', 'Imprimi mini pauta');
-        $html = view("admin/pdfs/pauta/mini/trimestral", $data);
-      
+        $html = view("admin/pdfs/pauta/mini/trimestral", $response);
         $mpdf->writeHTML($html);
         // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
         $mpdf->Output("pauta.pdf", "I");
-        $this->Logger->Log('info', 'Adicionou Nota');
-        return redirect('nota_em_carga/buscar_alunos/')->with('status', '1');
+
+
     }
     public $email;
     public $mpdf;
@@ -297,7 +255,7 @@ class PautaController extends Controller
     public function enviarEmail($mpdf, $distino, $dados, $view)
     {
 
-        $this->disciplina =  $dados['disciplina'];
+        $this->disciplina = $dados['disciplina'];
         $this->vc_classe = $dados['detalhes_turma']->vc_classe;
         $this->vc_shortName = $dados['detalhes_turma']->vc_shortName;
         $this->vc_nomedaTurma = $dados['detalhes_turma']->vc_nomedaTurma;
@@ -325,58 +283,58 @@ class PautaController extends Controller
         $data['cabecalho'] = Cabecalho::find(1);
         $data['disciplina'] = Disciplinas::find($id_disciplina);
         $data['trimestre'] = $trimestre;
-        $data['detalhes_turma'] = $this->detalhes_turma($id_turma);    //    dd( $response['notas']);
+        $data['detalhes_turma'] = $this->detalhes_turma($id_turma); //    dd( $response['notas']);
 
         $data['notas'] = $this->notas->object_notas_disc_todos_trimestre($id_turma, $trimestre, $id_disciplina);
         // dd($data['notas']);
         // $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
-       /*  $data["css"] = file_get_contents("css/pauta/style.css"); */
-       if ($data['cabecalho']->vc_nif == "5000298182") {
+        /*  $data["css"] = file_get_contents("css/pauta/style.css"); */
+        if ($data['cabecalho']->vc_nif == "5000298182") {
 
-        //$url = 'cartões/CorMarie/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+            //$url = 'cartões/CorMarie/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
 
-    } else if ($data['cabecalho']->vc_nif == "7301002327") {
+        } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
-        //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000303399") {
+            //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
-        //$url = 'cartões/negage/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000820440") {
-    
-        //$url = 'cartões/Quilumosso/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "5000305308") {
+            //$url = 'cartões/negage/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "5000820440") {
 
-        //$url = 'cartões/Foguetao/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "7301002572") {
+            //$url = 'cartões/Quilumosso/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
-        //$url = 'cartões/LiceuUíge/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else if ($data['cabecalho']->vc_nif == "7301003617") {
+            //$url = 'cartões/Foguetao/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
-        //$url = 'cartões/ldc/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    }else if ($data['cabecalho']->vc_nif == "5000300926") {
+            //$url = 'cartões/LiceuUíge/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
-        //$url = 'cartões/imagu/aluno.png';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    } else {
-        //$url = 'images/cartao/aluno.jpg';
-        $data["css"] = file_get_contents(.'css/pauta/style.css');
-        $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-    }
+            //$url = 'cartões/ldc/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else if ($data['cabecalho']->vc_nif == "5000300926") {
+
+            //$url = 'cartões/imagu/aluno.png';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        } else {
+            //$url = 'images/cartao/aluno.jpg';
+            $data["css"] = file_get_contents('css/pauta/style.css');
+            $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+        }
         $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
         $mpdf->SetFont("arial");
         $mpdf->setHeader();
@@ -388,111 +346,48 @@ class PautaController extends Controller
 
     public function detalhes_turma($id_turma)
     {
-        $resul_set =   DB::table('turmas')
+        $resul_set = DB::table('turmas')
             ->join('classes', 'turmas.it_idClasse', '=', 'classes.id')
             ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
             ->Join('anoslectivos', 'turmas.it_idAnoLectivo', '=', 'anoslectivos.id')
             ->where('turmas.id', $id_turma)
             ->first();
 
-        return  $resul_set;
+        return $resul_set;
     }
 
 
 
 
 
-    public function create1(Pauta $ResponseAlunos, $id, $trimestre)
+    public function trimestral($slug_turma, $trimestre)
     {
+        $turma = fh_turmas()->where('turmas.slug', $slug_turma)->first();
+        $response['director_turma'] = fh_directores_turmas()->where('turmas.id', $turma->id)->first();
+        $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
+      
+        $alunos = fha_turma_alunos($slug_turma);
+        $response['trimestre'] = $trimestre;
+        $response['alunos'] = $alunos;
+        $response['turma'] = $turma;
+        $response['trimestre'] = $trimestre;
+        $response['cabecalho'] = fh_cabecalho();
 
+        $response["css"] = file_get_contents('css/lista/style-2.css');
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [210, 297],
+            'margin_top' => 5,
 
-        $data['cabecalho'] = Cabecalho::find(1);
-        $ResponseTurma = Turma::find($id);
+        ]);
+        $mpdf->setHeader();
+        $this->Logger->Log('info', 'Imprimi mini pauta');
+        $html = view("admin/pdfs/pauta/trimestral/index", $response);
 
-        $data['turma'] = $ResponseTurma;
-        $data['trimestres'] = $trimestre;
+        $mpdf->writeHTML($html);
+        // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
+        $mpdf->Output("pauta.pdf", "I");
 
-        /* Acessando os dados da turma */
-        $vc_anoLectivo = $ResponseTurma->vc_anoLectivo;
-        $vc_cursoTurma = $ResponseTurma->vc_cursoTurma;
-        $vc_classeTurma = $ResponseTurma->vc_classeTurma;
-        /* end-acesso */
-
-        /* joins apartir do model */
-
-        $data['cabecalhoNotas'] =  $ResponseAlunos->HeaderNoteforPauta($vc_cursoTurma, $vc_classeTurma)->get();
-
-        $AlunoRes = $ResponseAlunos->AlunosforPauta($vc_anoLectivo, $ResponseTurma->id)->distinct()->get();
-        //    dd( $AlunoRes);
-        $data['alunos'] = $AlunoRes;
-        /* endjoins */
-
-        if ($AlunoRes->count()) :
-
-            /* $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
-            $data["css"] = file_get_contents("css/pauta/style.css"); */
-            if ($data['cabecalho']->vc_nif == "5000298182") {
-
-                //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-
-            } else if ($data['cabecalho']->vc_nif == "7301002327") {
-
-                //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000303399") {
-
-                //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000820440") {
-            
-                //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000305308") {
-
-                //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "7301002572") {
-
-                //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-             } else if ($data['cabecalho']->vc_nif == "7301003617") {
-
-                //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            }else if ($data['cabecalho']->vc_nif == "5000300926") {
-
-                //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            } else {
-                //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            }
-
-            $mpdf = new \Mpdf\Mpdf();
-
-            $mpdf->SetFont("arial");
-            $mpdf->setHeader();
-            $mpdf->defaultfooterline = 0;
-            $mpdf->setFooter('{PAGENO}');
-            $this->Logger->Log('info', 'Imprimiu Pauta ');
-            $html = view("admin/pdfs/pauta/index", $data);
-
-            $mpdf->writeHTML($html);
-
-            $mpdf->Output($vc_anoLectivo . "_" . $vc_classeTurma . "_" . $vc_cursoTurma . "_" . $trimestre . ".pdf", "I");
-        else :
-            return back()->with('aviso', 'Não existe alunos nesta turma');
-        endif;
     }
 
     public function creatEnd(Pauta $ResponseAlunos, $id, $tipo)
@@ -511,59 +406,59 @@ class PautaController extends Controller
         /* end-acesso */
 
         /* joins apartir do model */
-        $data['cabecalhoNotas'] =   $ResponseAlunos->HeaderNoteforPauta($vc_cursoTurma, $vc_classeTurma)->get();
+        $data['cabecalhoNotas'] = $ResponseAlunos->HeaderNoteforPauta($vc_cursoTurma, $vc_classeTurma)->get();
         $AlunoRes = $ResponseAlunos->AlunosforPauta($vc_anoLectivo, $ResponseTurma->id)->get();
         $data['alunos'] = $AlunoRes;
         /* endjoins */
-        if ($AlunoRes->count()) :
-          /*   $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
-            $data["css"] = file_get_contents("css/pauta/style.css"); */
-            
+        if ($AlunoRes->count()):
+            /*   $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
+              $data["css"] = file_get_contents("css/pauta/style.css"); */
+
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
                 //$url = 'cartões/CorMarie/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
 
             } else if ($data['cabecalho']->vc_nif == "7301002327") {
 
                 //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000303399") {
 
                 //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
-            
+
                 //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000305308") {
 
                 //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "7301002572") {
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-             } else if ($data['cabecalho']->vc_nif == "7301003617") {
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
-            }else if ($data['cabecalho']->vc_nif == "5000300926") {
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
+            } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             } else {
                 //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents(.'css/pauta/style.css');
-                $data["bootstrap"] = file_get_contents(.'css/pauta/bootstrap.min.css');
+                $data["css"] = file_get_contents('css/pauta/style.css');
+                $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
             }
             $mpdf = new \Mpdf\Mpdf(['format' => 'A3-L']);
 
@@ -573,7 +468,7 @@ class PautaController extends Controller
             $html = view("admin/pdfs/pauta/final", $data);
             $mpdf->writeHTML($html);
             $mpdf->Output($vc_anoLectivo . "_" . $vc_classeTurma . "_" . $vc_cursoTurma . "_" . $tipo . ".pdf", "I");
-        else :
+        else:
             return back()->with('aviso', 'Não existe alunos nesta turma');
         endif;
     }
