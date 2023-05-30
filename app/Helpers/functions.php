@@ -64,13 +64,28 @@ function fh_cabecalho()
 function gerarProcesso()
 {
 
-    $processo = Processo::where('id_cabecalho', Auth::User()->id_cabecalho)->first();
-    if ($processo) {
-        return $processo->it_processo + 1;
+    $candidato_aluno = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->orderBy('alunnos.processo', 'desc')->first();
+
+    if ($candidato_aluno) {
+        return $candidato_aluno->processo + 1;
     } else {
-        // Alunno::max('processo');
-        return Alunno::max('processo') + 1;
+
+        return Alunno::where('id_cabecalho', Auth::User()->id_cabecalho)->max('processo') + 1;
     }
+
+}
+function ultimo_processo()
+{
+
+    $candidato_aluno = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->orderBy('alunnos.processo', 'desc')->first();
+
+    if ($candidato_aluno) {
+        return $candidato_aluno->processo ;
+    } else {
+
+        return Alunno::where('id_cabecalho', Auth::User()->id_cabecalho)->max('processo');
+    }
+
 
 }
 function actulizarProcesso($ultimo_processo)

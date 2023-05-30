@@ -78,84 +78,104 @@ class AlunnoController extends Controller
             return response()->json($ex->getMessage());
         }
     }
-    public function importar(){
-           //envia os cursos e classes para popular os selects
-           $response['cursos'] = fh_cursos()->get();
-           // dd(   $response['cursos']);
-           $response['classes'] = fh_classes()->get();
-           // dd($response['classes']);
-           $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->orderby('id', 'desc')->first();
-        
-           $response['cabecalho'] = fh_cabecalho();
-           $response['provincias'] = fh_provincias()->get();
+    public function importar()
+    {
+        //envia os cursos e classes para popular os selects
+        $response['cursos'] = fh_cursos()->get();
+        // dd(   $response['cursos']);
+        $response['classes'] = fh_classes()->get();
+        // dd($response['classes']);
+        $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->orderby('id', 'desc')->first();
+
+        $response['cabecalho'] = fh_cabecalho();
+        $response['provincias'] = fh_provincias()->get();
         return view('admin.alunos.importar.index', $response);
     }
     public function cadastrar(Request $request)
     {
-       
-dd($request);
+
+        // dd($request);
         try {
-            $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi], ])->count();
+            // $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi], ])->count();
 
-            if ($Z == 0) {
+            // if ($Z == 0) {
 
-                $vezes = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi]])->count();
+            // $vezes = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi]])->count();
 
-                //rotina que cadastra o formulário
-                $candidatura = Candidatura::create([
-                    'vc_primeiroNome' => $request->vc_primeiroNome,
-                    'vc_nomedoMeio' => $request->vc_nomedoMeio,
-                    'vc_apelido' => $request->vc_apelido,
-                    'dt_dataNascimento' => $request->dt_dataNascimento,
-                    'vc_nomePai' => $request->vc_nomePai,
-                    'vc_nomeMae' => $request->vc_nomeMae,
-                    'vc_genero' => $request->vc_genero,
-                    "LP_S" => $request->LP_S,
-                    "LP_O" => $request->LP_O,
-                    "LP_N" => $request->LP_N,
-                    "MAT_S" => $request->MAT_S,
-                    "MAT_O" => $request->MAT_O,
-                    "MAT_N" => $request->MAT_N,
-                    "FIS_S" => $request->FIS_S,
-                    "FIS_O" => $request->FIS_O,
-                    "FIS_N" => $request->FIS_N,
-                    "QUIM_S" => $request->QUIM_S,
-                    "QUIM_O" => $request->QUIM_O,
-                    "QUIM_N" => $request->QUIM_N,
+            //rotina que cadastra o formulário
 
-                    'vc_dificiencia' => $request->vc_dificiencia,
-                    'vc_estadoCivil' => $request->vc_estadoCivil,
-                    'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
-                    'vc_email' => $request->vc_email,
-                    'tokenKey' => $this->generateRandomString(),
-                    'vc_residencia' => $request->vc_residencia,
-                    'vc_naturalidade' => $request->vc_naturalidade,
-                    'vc_provincia' => $request->vc_provincia,
-                    'vc_bi' => $request->vc_bi,
-                    'media' => $request->media,
-                    'tipo_candidato'=>'Comun',
-                    'it_estado_candidato' => "1",
-                    'dt_emissao' => $request->dt_emissao,
-                    'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
-                    'vc_localEmissao' => $request->vc_localEmissao,
-                    'vc_vezesdCandidatura' => $vezes + 1,
-                    'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
-                    'id_classe' => $request->id_classe,
-                    'id_curso' => isset($request->id_curso) ? $request->id_curso :
-                    fh_cursos()->first()->id,
-                    'id_ano_lectivo' => fh_ultimo_ano_lectivo()->id
-                ]);
-
-
-
-                $this->loggerData("Adicionou Candidatura");
-                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Candidatura efectuada com sucesso']);
-
-
+            $processo_actual = fh_processo_actual()->first();
+            if ($processo_actual) {
+                if ($processo_actual->it_processo < $request->processo) {
+                    return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'O processo deve ser inferior ao último processo']);
+                }
             } else {
+                return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Antes, cadastre o último processo que a escola registou']);
 
-                return redirect('site')->with('aviso', '1');
             }
+
+            $c = fha_aluno_processo($request->processo);
+            if ($c) {
+                return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Já tem um aluno usando este processo']);
+            }
+            $candidatura = Candidatura::create([
+                'vc_primeiroNome' => $request->vc_primeiroNome,
+                'vc_nomedoMeio' => $request->vc_nomedoMeio,
+                'vc_apelido' => $request->vc_apelido,
+                'dt_dataNascimento' => $request->dt_dataNascimento,
+                'vc_nomePai' => $request->vc_nomePai,
+                'vc_nomeMae' => $request->vc_nomeMae,
+                'vc_genero' => $request->vc_genero,
+                "LP_S" => $request->LP_S,
+                "LP_O" => $request->LP_O,
+                "LP_N" => $request->LP_N,
+                "MAT_S" => $request->MAT_S,
+                "MAT_O" => $request->MAT_O,
+                "MAT_N" => $request->MAT_N,
+                "FIS_S" => $request->FIS_S,
+                "FIS_O" => $request->FIS_O,
+                "FIS_N" => $request->FIS_N,
+                "QUIM_S" => $request->QUIM_S,
+                "QUIM_O" => $request->QUIM_O,
+                "QUIM_N" => $request->QUIM_N,
+
+                'vc_dificiencia' => $request->vc_dificiencia,
+                'vc_estadoCivil' => $request->vc_estadoCivil,
+                'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
+                'vc_email' => $request->vc_email,
+                'tokenKey' => $this->generateRandomString(),
+                'vc_residencia' => $request->vc_residencia,
+                'vc_naturalidade' => $request->vc_naturalidade,
+                'vc_provincia' => $request->vc_provincia,
+                'vc_bi' => $request->vc_bi,
+                'media' => $request->media,
+                'tipo_candidato' => 'Comun',
+                'it_estado_candidato' => "1",
+                'dt_emissao' => $request->dt_emissao,
+                'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
+                'vc_localEmissao' => $request->vc_localEmissao,
+                'vc_vezesdCandidatura' => $vezes + 1,
+                'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
+                'id_classe' => $request->id_classe,
+                'id_curso' => isset($request->id_curso) ? $request->id_curso :
+                fh_cursos()->first()->id,
+                'id_ano_lectivo' => fh_ultimo_ano_lectivo()->id
+            ]);
+
+            Alunno::create([
+                'processo' => $request->processo,
+                'tipo_aluno' => 'Importado',
+                'id_candidato' => $candidatura->id,
+                'id_cabecalho' => Auth::User()->id_cabecalho,
+                'vc_imagem' => 'images/aluno/avatar.png'
+            ]);
+
+
+
+            $this->loggerData("Importou aluno com processo  $request->processo ");
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Importação efectuada com sucesso']);
+
+
         } catch (\Exception $exception) {
             // dd($exception->getMessage());
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);
@@ -235,57 +255,10 @@ dd($request);
         return view('admin.alunos.cadastrar.index');
     }
 
-  
 
 
 
-    // public function transferir($id)
-    // {
 
-    //     $candidato2 = Candidato2::find($id);
-
-    //     try {
-    //         $aluno = Alunno::create([
-    //             'id' => $candidato2->id,
-    //             'vc_primeiroNome' => $candidato2->vc_primeiroNome,
-    //             'vc_nomedoMeio' => $candidato2->vc_nomedoMeio,
-    //             'vc_ultimoaNome' => $candidato2->vc_apelido,
-    //             'it_classe' => $candidato2->vc_classe,
-
-    //             'dt_dataNascimento' => $candidato2->dt_dataNascimento,
-    //             'vc_naturalidade' => $candidato2->vc_naturalidade,
-    //             'vc_provincia' => $candidato2->vc_provincia,
-    //             'vc_namePai' => $candidato2->vc_namePai,
-    //             'vc_nameMae' => $candidato2->vc_nameMae,
-    //             'vc_dificiencia' => $candidato2->vc_dificiencia,
-    //             'vc_estadoCivil' => $candidato2->vc_estadoCivil,
-    //             'vc_genero' => $candidato2->vc_genero,
-    //             'it_telefone' => $candidato2->it_telefone,
-    //             'vc_email' => $candidato2->vc_email,
-    //             'vc_residencia' => $candidato2->vc_residencia,
-    //             'vc_bi' => $candidato2->vc_bi,
-    //             'dt_emissao' => $candidato2->dt_emissao,
-    //             'vc_EscolaAnterior' => $candidato2->vc_EscolaAnterior,
-    //             'ya_anoConclusao' => $candidato2->ya_anoConclusao,
-    //             'vc_nomeCurso' => $candidato2->vc_nomeCurso,
-    //             'vc_anoLectivo' => $candidato2->vc_anoLectivo,
-    //             'it_classe' => $candidato2->vc_classe,
-    //             'vc_localEmissao' => $candidato2->vc_localEmissao,
-    //             'tokenKey' => $candidato2->tokenKey,
-    //             'it_processo' => 0,
-    //             'tokenKey' => 'não utilizado',
-    //             'it_media' => $candidato2->it_media,
-    //         ]);
-    //         if ($aluno) {
-    //             Candidato2::find($id)->update(['it_processo' => 1]);
-    //             $this->loggerData("Transferiu Selecionado a Matricula" . $candidato2->vc_primeiroNome . '' . $candidato2->vc_nomedoMeio . '' . $candidato2->vc_apelido);
-    //             return  response()->json($id);
-    //         }
-    //     } catch (\Exception $exception) {
-
-    //         return  response()->json("ola");
-    //     }
-    // }
 
 
     public function transferir($id)
@@ -296,7 +269,14 @@ dd($request);
             $processo = Processo::orderBy('id', 'desc')->where('it_estado_processo', 1)->first();
             //  dd($processo);
 
-            $aluno = Alunno::create([
+            $aluno = $aluno = Alunno::create([
+                'processo' => gerarProcesso(),
+                'tipo_aluno' => 'Candidato_aluno',
+                'id_candidato' => $id,
+                'id_cabecalho' => Auth::User()->id_cabecalho,
+                'vc_imagem' => 'images/aluno/avatar.png'
+            ]);
+            ([
                 'id' => $processo->it_processo + 1,
                 'vc_primeiroNome' => $candidato2->vc_primeiroNome,
                 'vc_nomedoMeio' => $candidato2->vc_nomedoMeio,

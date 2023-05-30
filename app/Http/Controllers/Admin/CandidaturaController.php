@@ -219,7 +219,8 @@ class CandidaturaController extends Controller
     public function create()
     {
         // dd("ol");
-  
+        if (fh_processo_actual()->count()) {
+
             //envia os cursos e classes para popular os selects
             $response['cursos'] = fh_cursos()->get();
             // dd(   $response['cursos']);
@@ -232,7 +233,11 @@ class CandidaturaController extends Controller
             $response['provincias'] = fh_provincias()->get();
             // dd($response['provincias']);
             return view('site/candidatura', $response);
-       
+        } else {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, cadastra o último número de processo registrado na escola.']);
+
+        }
+
     }
 
     /**
@@ -256,7 +261,7 @@ class CandidaturaController extends Controller
         // dd("ola");
 
         try {
-            $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi], ])->count();
+            $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi],])->count();
 
             if ($Z == 0) {
 
@@ -294,7 +299,7 @@ class CandidaturaController extends Controller
                     'vc_provincia' => $request->vc_provincia,
                     'vc_bi' => $request->vc_bi,
                     'media' => $request->media,
-                    'tipo_candidato'=>'Comun',
+                    'tipo_candidato' => 'Comun',
                     'it_estado_candidato' => "1",
                     'dt_emissao' => $request->dt_emissao,
                     'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
@@ -499,9 +504,9 @@ class CandidaturaController extends Controller
                         'id_cabecalho' => Auth::User()->id_cabecalho,
                         'vc_imagem' => 'images/aluno/avatar.png'
                     ]);
-                    if ($aluno) {
-                        actulizarProcesso($aluno->processo);
-                    }
+                    // if ($aluno) {
+                    //     actulizarProcesso($aluno->processo);
+                    // }
                     if ($aluno) {
                         $this->loggerData('Transferiu ' . $aluno->vc_primeiroNome . ' ' . $aluno->vc_nomedoMeio . ' ' . $aluno->vc_apelido);
                         return response()->json('candidato_transferido');

@@ -30,7 +30,8 @@
             <tr>
 
                 <th>ID</th>
-                <th>PROCESSO</th>
+                <th>ÚLTIMO PROCESSO DE ENTRADA</th>
+                <th>ÚLTIMO PROCESSO REGISTRADO</th>
         
                 <th>ACÇÕES</th>
             </tr>
@@ -41,7 +42,8 @@
 
                     <td>{{ $processo->id }}</td>
                     <td>{{ $processo->it_processo }}</td>
-               
+                    <td>{{ ultimo_processo() }}</td>
+                    
                     <td>
 
 

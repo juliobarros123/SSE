@@ -16,10 +16,9 @@
             <form method="POST" class="row m-2" action="{{ route('admin.alunos.cadastrar') }}">
                 @csrf
                 @include('site.forms._formAluno.index')
+                <div class="d-flex justify-content-center col-md-12">
 
-                <div class="col-4">
-                    <label class="form-label text-white">.</label><br>
-                    <button id="btn_consulta" class="form-control col-4 btn btn-dark">Importar</button>
+                    <button class=" btn btn-dark w-25 ">Importar</button>
                 </div>
             </form>
         </div>
