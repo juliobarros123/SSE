@@ -33505,3 +33505,7 @@ table tr td:last-child{
     background-color: var(--red)!important;
 } */
 
+.select2-container--default .select2-results__option{
+    color: black!important;
+}
+

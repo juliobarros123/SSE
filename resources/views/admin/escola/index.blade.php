@@ -8,7 +8,15 @@
     </div>
 
 
-
+    @if (acc_admin_desenvolvedor())
+   
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-dark" href="{{ url('admin/escola/cadastrar') }}">
+            <strong class="text-light">Cadastrar</strong>
+        </a>
+       
+    </div>
+@endif
 
     <table id="example" class="display table table-hover">
            <thead class="">

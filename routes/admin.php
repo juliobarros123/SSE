@@ -606,15 +606,12 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::post('/admin/funcionario/cadastrar', ['as' => 'admin/funcionario/cadastrar', 'uses' => 'Admin\Funcionario@store']);
     Route::get('/admin/funcionarios/listar', ['as' => 'admin.funcionarios.listar', 'uses' => 'Admin\Funcionario@listar']);
 
-    Route::get('/admin/funcionario/editar/{id}', ['as' => 'admin/funcionario/editar', 'uses' => 'Admin\Funcionario@edit']);
-    Route::put('/admin/funcionario/editar/{id}', ['as' => 'admin/funcionario/atualizar', 'uses' => 'Admin\Funcionario@update']);
-    Route::get('/admin/funcionario/eliminar/{id}', ['as' => 'admin/funcionario/eliminar', 'uses' => 'Admin\Funcionario@destroy']);
-    Route::get('/admin/funcionario/gerar/cartao/{id}', ['as' => 'admin/funcionario/gerar/cartao', 'uses' => 'Admin\Funcionario@gerar']);
+    Route::get('/admin/funcionario/editar/{slug}', ['as' => 'admin/funcionario/editar', 'uses' => 'Admin\Funcionario@edit']);
+    Route::put('/admin/funcionario/editar/{slug}', ['as' => 'admin/funcionario/atualizar', 'uses' => 'Admin\Funcionario@update']);
+    Route::get('/admin/funcionario/eliminar/{slug}', ['as' => 'admin/funcionario/eliminar', 'uses' => 'Admin\Funcionario@destroy']);
+    Route::get('/admin/funcionario/gerar/cartao/{slug}', ['as' => 'admin/funcionario/gerar/cartao', 'uses' => 'Admin\Funcionario@gerar']);
     Route::get(' admin/funcionarios/listas/imprimir', ['as' => ' admin/funcionarios/listas/imprimir', 'uses' => 'Admin\Funcionario@imprimir']);
 
-    Route::get('admin/funcionarios/eliminadas', ['as' => 'admin.funcionario.eliminadas', 'uses' => 'Admin\Funcionario@eliminadas'])->middleware('access.controll.administrador');
-    Route::get('admin/funcionarios/purgar/{id}', ['as' => 'admin.funcionario.purgar', 'uses' => 'Admin\Funcionario@purgar'])->middleware('access.controll.administrador');
-    Route::get('admin/funcionarios/recuperar/{id}', ['as' => 'admin.funcionario.recuperar', 'uses' => 'Admin\Funcionario@recuperar'])->middleware('access.controll.administrador');
 
 
 

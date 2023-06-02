@@ -145,7 +145,12 @@ class EscolaController extends Controller
                 'ya_fim' => date('Y'),
                 'id_cabecalho' => $cab->id
             ]);
-
+            Curso::create([
+                'vc_nomeCurso' => 'Nenhum',
+                'vc_descricaodoCurso'=>'Nenhum',
+                'vc_shortName'=>'Nenhum',
+                'id_cabecalho'=>$cab->id
+            ]);
             AnoLectivoPublicado::create(
                 [
                     'id_anoLectivo' => $ano_lectivo->id,

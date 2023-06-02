@@ -30,23 +30,75 @@ class ListadCandidatura extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     //
     public function pesquisar()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
-        $response['cursos'] = Curso::where([['it_estado_curso', 1]])->get();
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
+        $response['cursos'] = fh_cursos()->get();
         return view('admin/candidatura/listas/index', $response);
     }
     public function recebeCandidaturas(Request $request)
     {
-        $anoLectivo =  $request->vc_anolectivo;
-        $curso = $request->vc_curso;
+        // dd(fh_cabecalho());
 
-        return redirect("Admin/listas/candidaturas/$anoLectivo/$curso");
+        $data['cabecalho'] = fh_cabecalho();
+
+        if (!$request->id_curso) {
+            $filtro_candidato = session()->get('filtro_candidato');
+            $request->id_curso = $filtro_candidato['id_curso'];
+        }
+        if (!$request->id_ano_lectivo) {
+            $filtro_candidato = session()->get('filtro_candidato');
+            $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+        }
+        $data['anolectivo'] = 'Todos';
+
+        $data['curso'] = 'Todos';
+
+
+        // $data['anolectivo'] = anoLE
+        // $data['curso'] = $curso;
+        // dd("s");
+        // dd(session()->all());
+        $candidados = fh_candidatos();
+        // dd(  $candidados ->get());
+        // dd($request);
+
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
+            $ano_lectivo = fh_anos_lectivos_publicado()->first();
+
+            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $candidados = $candidados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
+        }
+
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
+            // dd($candidados->get(),$request->id_curso);
+            $data['curso'] = Curso::find($request->id_curso)->vc_nomeCurso;
+
+            $candidados = $candidados->where('candidatos.id_curso', $request->id_curso);
+        }
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+        ];
+        storeSession('filtro_candidato', $data);
+        $response['candidatos'] = $candidados->get();
+
+        $mpdf = new \Mpdf\Mpdf();
+
+        $mpdf->SetFont("arial");
+        $mpdf->setHeader();
+        $mpdf->defaultfooterline = 0;
+        $mpdf->setFooter('{PAGENO}');
+        $this->loggerData('Imprimiu Lista de Candidatura');
+        $html = view("admin/pdfs/listas/candidaturas/index", $data);
+        $mpdf->writeHTML($html);
+        $mpdf->Output("listasdCandidaturas.pdf", "I");
     }
     public function index(Candidatura $Rcandidatos, $anoLectivo, $curso)
     {
@@ -56,7 +108,7 @@ class ListadCandidatura extends Controller
         if ($curso == 'Todos') {
             $curso = '';
         }
-        $c =  $Rcandidatos->CandidaturasListas($anoLectivo, $curso);
+        $c = $Rcandidatos->CandidaturasListas($anoLectivo, $curso);
         $data['alunos'] = $c->get();
         $data['anolectivo'] = $anoLectivo;
         $data['curso'] = $curso;
@@ -83,7 +135,7 @@ class ListadCandidatura extends Controller
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
-        
+
             //$url = 'cartões/Quilumosso/aluno.png';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
@@ -107,12 +159,12 @@ class ListadCandidatura extends Controller
             //$url = 'cartões/imagu/aluno.png';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        }  else {
+        } else {
             //$url = 'images/cartao/aluno.jpg';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         }
-  
+
 
         $mpdf = new \Mpdf\Mpdf();
 

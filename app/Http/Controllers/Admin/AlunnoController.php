@@ -91,6 +91,15 @@ class AlunnoController extends Controller
         $response['provincias'] = fh_provincias()->get();
         return view('admin.alunos.importar.index', $response);
     }
+    function generateRandomString($size = 9)
+    {
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuwxyz0123456789";
+        $randomString = '';
+        for ($i = 0; $i < $size; $i = $i + 1) {
+            $randomString .= $chars[mt_rand(0, 60)];
+        }
+        return $randomString;
+    }
     public function cadastrar(Request $request)
     {
 
@@ -154,7 +163,7 @@ class AlunnoController extends Controller
                 'dt_emissao' => $request->dt_emissao,
                 'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
                 'vc_localEmissao' => $request->vc_localEmissao,
-                'vc_vezesdCandidatura' => $vezes + 1,
+                'vc_vezesdCandidatura' =>1,
                 'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
                 'id_classe' => $request->id_classe,
                 'id_curso' => isset($request->id_curso) ? $request->id_curso :
@@ -177,7 +186,7 @@ class AlunnoController extends Controller
 
 
         } catch (\Exception $exception) {
-            // dd($exception->getMessage());
+            dd($exception->getMessage());
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);
 
             // return redirect()->back()->with('aviso', '1');

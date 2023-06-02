@@ -27,18 +27,6 @@
             <a class="btn btn-dark" href="{{ url('/admin/funcionario/cadastrar') }}">
                 <strong class="text-light">Cadastrar Funcionário</strong>
             </a>
-
-            @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-            Auth::user()->vc_tipoUtilizador == 'Preparador')
-           
-    
-                <a class="btn btn-dark ml-1" href="{{route('admin.funcionario.eliminadas')}}">
-                    <strong class="text-light">Eliminados</strong>
-                </a>
-    
-        @endif
         </div>
     @endif
 
@@ -83,12 +71,7 @@
                                     aria-expanded="false">
                                     <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a href="{{ route('admin.funcionario.recuperar', $funcionario->id) }}"
-                                        class="dropdown-item ">Recuperar</a>
-                                    <a href="{{ route('admin.funcionario.purgar', $funcionario->id) }}"
-                                        class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
-                                </div>
+                              
                             </div>
                              @else
                                 <div class="dropdown">
@@ -98,15 +81,14 @@
                                         <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a href="{{ route('admin/funcionario/editar', $funcionario->id) }}"
+                                        <a href="{{ route('admin/funcionario/editar', $funcionario->slug) }}"
                                             class="dropdown-item">Editar</a>
 
                                         <a data-confirm="Tem certeza que deseja eliminar?"
-                                            href="{{ route('admin/funcionario/eliminar', $funcionario->id) }}"
+                                            href="{{ route('admin/funcionario/eliminar', $funcionario->slug) }}"
                                             class="dropdown-item">Eliminar</a>
 
-                                            <a href="{{ route('admin.funcionario.purgar', $funcionario->id) }}"
-                                                class="dropdown-item " data-confirm="Tem certeza que deseja eliminar?">Purgar</a>
+                                          
                                     </div>
                                 </div>
                             @endif

@@ -20,7 +20,7 @@
 
 <div class="form-group col-md-3">
     <label for="it_classe">Classe</label>
-    <select class="form-control border-secondary " name="it_classe" id="it_classe" required>
+    <select class="form-control border-secondary  select-dinamico" name="it_classe" id="it_classe" required>
         @if (!isset($disciplina_curso_classe->it_classe))
             <option value="" selected disabled>Selecione a classe</option>
         @endif
@@ -33,7 +33,7 @@
 </div>
 <div class="form-group col-md-3">
     <label for="it_disciplina">Disciplina</label>
-    <select class="form-control  border-secondary buscarDisciplina" name="it_disciplina" id="it_disciplina" required>
+    <select class="form-control  border-secondary select-dinamico" name="it_disciplina" id="it_disciplina" required>
         @if (!isset($disciplina_curso_classe->it_disciplina))
             <option value="" selected disabled>Selecione disciplina
             </option>
