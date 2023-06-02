@@ -115,19 +115,34 @@ class TurmaController extends Controller
 
     public function ver(Request $request)
     {
+        if (session()->get('filtro_turma')) {
+            if (!$request->id_curso) {
+                $filtro_turma = session()->get('filtro_turma');
+                $request->id_curso = $filtro_turma['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_turma = session()->get('filtro_turma');
+                $request->id_ano_lectivo = $filtro_turma['id_ano_lectivo'];
+            }
+        }
         $turmas = fh_turmas();
-        if ($request->id_ano_lectivo) {
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $turmas = $turmas->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
         }
 
-        if ($request->id_curso) {
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
             // dd(  $turmas->get(),$request->id_curso);
             $turmas = $turmas->where('turmas.it_idCurso', $request->id_curso);
         }
         $response['turmas'] = $turmas->get();
         // $anolectivo = fh_anos_lectivos()->where('anoslectivos.id', $request->id_ano_lectivo)->first();
         $anolectivo = fha_ano_lectivo_publicado();
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+        ];
+        storeSession('filtro_turma', $data);
         //    dd( $response['anolectivo']);
         $response['anolectivo'] = "$anolectivo->ya_inicio/$anolectivo->ya_fim";
         return view('admin.turmas.index', $response);
@@ -136,64 +151,7 @@ class TurmaController extends Controller
         // return redirect("/turmas/listarTurmas/$anoLectivo/$curso");
     }
 
-    public function listarTurmas($anoLectivo, $curso)
-    {
 
-
-        if ($request->id_ano_lectivo) {
-
-            $alunos = $alunos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
-        }
-
-        if ($request->id_curso) {
-            // dd( $alunos->get(),$request->id_curso);
-            $alunos = $alunos->where('candidatos.id_curso', $request->id_curso);
-        }
-        $response['anolectivo'] = $anoLectivo;
-
-        $turmas = collect();
-
-        if (Auth::user()->vc_tipoUtilizador == 'Professor') {
-
-            $response['turmas'] = $this->turmas_professor->turmasCoodernador();
-
-            if ($anoLectivo != '') {
-
-                $response['turmas'] = $response['turmas']->where('turmas.vc_anoLectivo', $anoLectivo);
-            }
-            if ($curso != '') {
-                $response['turmas'] = $response['turmas']->where('turmas.vc_cursoTurma', $curso);
-            }
-
-            $response['turmas'] = $response['turmas']->get();
-
-            return view('admin.coordenador_curso.turmas_curso.index', $response);
-        }
-
-
-
-        if ($anoLectivo && $curso) {
-            $response['turmas'] = Turma::where([
-                ['it_estado_turma', 1],
-                ['vc_anoLectivo', '=', $anoLectivo],
-                ['vc_cursoTurma', '=', $curso]
-            ])->get();
-        } elseif ($anoLectivo && !$curso) {
-            $response['turmas'] = Turma::where([
-                ['it_estado_turma', 1],
-                ['vc_anoLectivo', '=', $anoLectivo]
-            ])->get();
-        } elseif (!$anoLectivo && $curso) {
-            $response['turmas'] = Turma::where([
-                ['it_estado_turma', 1],
-                ['vc_cursoTurma', '=', $curso]
-            ])->get();
-        } else {
-            $response['turmas'] = Turma::where([['it_estado_turma', 1]])->get();
-        }
-
-        return view('admin.turmas.index', $response);
-    }
 
     public function cadastrar()
     {
@@ -267,7 +225,7 @@ class TurmaController extends Controller
             // $dados['anos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
             $dados['cursos'] = fh_cursos()->get();
             $dados['ano_letivos'] = fh_anos_lectivos()->get();
-    
+
 
             return view('admin.turmas.editar.index', $dados);
         else:
@@ -279,8 +237,8 @@ class TurmaController extends Controller
 
     public function actualizar(Request $request, $slug)
     {
-       
-        Turma::where('turmas.slug',$slug)->update(
+
+        Turma::where('turmas.slug', $slug)->update(
             [
                 'vc_nomedaTurma' => $request->vc_nomedaTurma,
                 'it_qtdeAlunos' => $request->it_qtdeAlunos,
@@ -291,13 +249,13 @@ class TurmaController extends Controller
             ]
 
         );
-        
+
         $this->loggerData('Actualizou Turma ' . $request->vc_nomedaTurma);
         return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Turma actualizada com sucesso']);
 
     }
 
- 
+
     //
 
     public function imprimir_alunos(Estudante $estudantes, $slug)
@@ -305,60 +263,61 @@ class TurmaController extends Controller
         $turma_alunos = fha_turma_alunos($slug);
         //    dd($turma_alunos);
 
-       
-            //Metodo que gera as listas da turmas
-            $data['turma'] = fh_turmas_slug($slug)->first();
-// dd(  $data['turma']);
-            $data['cabecalho'] = fh_cabecalho();
-            $data['turma_alunos'] = $turma_alunos;
-            // dd( $data['turma_alunos']);
-            // dd( $data['cabecalho']);
-            // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
-              $data['css'] = file_get_contents('css/lista/style-2.css'); 
-            // Dados para a tabela
-        
-            // Carregar a view
-        
-            
-            // Parâmetros da view
-         
-            $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8', 'margin_top' => 5,
-                
-            ]);
 
-            $mpdf->SetFont("arial");
-            $mpdf->setHeader();
-            $mpdf->defaultfooterline = 0;
-       
-            $mpdf->setFooter('{PAGENO}');
-          
-            $this->loggerData("Imprimiu Lista da Turma " . $data['turma']->vc_nomedaTurma);
+        //Metodo que gera as listas da turmas
+        $data['turma'] = fh_turmas_slug($slug)->first();
+        // dd(  $data['turma']);
+        $data['cabecalho'] = fh_cabecalho();
+        $data['turma_alunos'] = $turma_alunos;
+        // dd( $data['turma_alunos']);
+        // dd( $data['cabecalho']);
+        // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
+        $data['css'] = file_get_contents('css/lista/style-2.css');
+        // Dados para a tabela
 
-            $html = view("admin/pdfs/listas/alunos-turma/index", $data);
-            // return  $html;
-            $mpdf->writeHTML($html);
-         
-            $mpdf->Output("lista-turma.pdf", "I");
-        
+        // Carregar a view
+
+
+        // Parâmetros da view
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'margin_top' => 5,
+
+        ]);
+
+        $mpdf->SetFont("arial");
+        $mpdf->setHeader();
+        $mpdf->defaultfooterline = 0;
+
+        $mpdf->setFooter('{PAGENO}');
+
+        $this->loggerData("Imprimiu Lista da Turma " . $data['turma']->vc_nomedaTurma);
+
+        $html = view("admin/pdfs/listas/alunos-turma/index", $data);
+        // return  $html;
+        $mpdf->writeHTML($html);
+
+        $mpdf->Output("lista-turma.pdf", "I");
+
     }
 
 
- 
 
-   
+
+
     public function eliminar($slug)
     {
         // dd($id);
         try {
-            $response = Turma::where('turmas.slug',$slug)->delete();
-            $this->loggerData('Eliminou  turma'.$response->vc_nomedaTurma);
+            $response = Turma::where('turmas.slug', $slug)->delete();
+            $this->loggerData('Eliminou  turma' . $response->vc_nomedaTurma);
             return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Turmas eliminada com sucesso']);
             // return redirect()->back();
 
         } catch (\Exception $ex) {
-        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro,possivelmente essa turma está relacionada com algum professor']);
-          
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro,possivelmente essa turma está relacionada com algum professor']);
+
         }
 
     }

@@ -91,6 +91,15 @@ class AlunnoController extends Controller
         $response['provincias'] = fh_provincias()->get();
         return view('admin.alunos.importar.index', $response);
     }
+    function generateRandomString($size = 9)
+    {
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuwxyz0123456789";
+        $randomString = '';
+        for ($i = 0; $i < $size; $i = $i + 1) {
+            $randomString .= $chars[mt_rand(0, 60)];
+        }
+        return $randomString;
+    }
     public function cadastrar(Request $request)
     {
 
@@ -154,7 +163,7 @@ class AlunnoController extends Controller
                 'dt_emissao' => $request->dt_emissao,
                 'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
                 'vc_localEmissao' => $request->vc_localEmissao,
-                'vc_vezesdCandidatura' => $vezes + 1,
+                'vc_vezesdCandidatura' => 1,
                 'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
                 'id_classe' => $request->id_classe,
                 'id_curso' => isset($request->id_curso) ? $request->id_curso :
@@ -177,7 +186,7 @@ class AlunnoController extends Controller
 
 
         } catch (\Exception $exception) {
-            // dd($exception->getMessage());
+            dd($exception->getMessage());
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);
 
             // return redirect()->back()->with('aviso', '1');
@@ -189,16 +198,30 @@ class AlunnoController extends Controller
 
         $alunos = fh_alunos();
         // dd($alunos->get());
-        if ($request->id_ano_lectivo) {
+        if (session()->get('filtro_aluno')) {
+            if (!$request->id_curso) {
+                $filtro_aluno = session()->get('filtro_aluno');
+                $request->id_curso = $filtro_aluno['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_aluno = session()->get('filtro_aluno');
+                $request->id_ano_lectivo = $filtro_aluno['id_ano_lectivo'];
+            }
+        }
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $alunos = $alunos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
 
-        if ($request->id_curso) {
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
             // dd( $alunos->get(),$request->id_curso);
             $alunos = $alunos->where('candidatos.id_curso', $request->id_curso);
         }
-
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+        ];
+        storeSession('filtro_aluno', $data);
         $response['alunos'] = $alunos->get();
         // dd( $response['alunos']);
 
@@ -231,24 +254,8 @@ class AlunnoController extends Controller
         return view('admin.alunos.index', $response);
     }
 
-    public function recebeBI(Request $request)
-    {
-        $BI = $request->searchBI;
-        return redirect("admin/alunos/trazerCandidato/$BI");
-    }
-    public function trazerCandidato($BI)
-    {
-        $anoLectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
-        $alunos = Candidatura::where([['it_estado_candidato', 1], ['id', $BI], ['vc_anoLectivo', $anoLectivo->ya_inicio . "-" . $anoLectivo->ya_fim]])->get();
-        // $alunosToken = Candidatura::where([['it_estado_candidato', 1], ['id', $token], ['vc_anoLectivo', $anoLectivo->ya_inicio . "-" . $anoLectivo->ya_fim]])->get();
 
-        //dd($alunos);
-        if ($alunos->count()):
-            return view("admin.alunos.cadastrar.index", compact("alunos"));
-        else:
-            return redirect('admin/alunos/cadastrar')->with('aviso', 'Não existe nenhum Candidato com este número de inscrição neste ano lectivo');
-        endif;
-    }
+
 
     public function create()
     {
@@ -260,111 +267,6 @@ class AlunnoController extends Controller
 
 
 
-
-    public function transferir($id)
-    {
-
-        $candidato2 = Candidato2::find($id);
-        try {
-            $processo = Processo::orderBy('id', 'desc')->where('it_estado_processo', 1)->first();
-            //  dd($processo);
-
-            $aluno = $aluno = Alunno::create([
-                'processo' => gerarProcesso(),
-                'tipo_aluno' => 'Candidato_aluno',
-                'id_candidato' => $id,
-                'id_cabecalho' => Auth::User()->id_cabecalho,
-                'vc_imagem' => 'images/aluno/avatar.png'
-            ]);
-            ([
-                'id' => $processo->it_processo + 1,
-                'vc_primeiroNome' => $candidato2->vc_primeiroNome,
-                'vc_nomedoMeio' => $candidato2->vc_nomedoMeio,
-                'vc_ultimoaNome' => $candidato2->vc_ultimoaNome,
-                'it_classe' => $candidato2->vc_classe,
-
-                'dt_dataNascimento' => $candidato2->dt_dataNascimento,
-                'vc_naturalidade' => $candidato2->vc_naturalidade,
-                'vc_provincia' => $candidato2->vc_provincia,
-                'vc_namePai' => $candidato2->vc_namePai,
-                'vc_nameMae' => $candidato2->vc_nameMae,
-                'vc_dificiencia' => $candidato2->vc_dificiencia,
-                'vc_estadoCivil' => $candidato2->vc_estadoCivil,
-                'vc_genero' => $candidato2->vc_genero,
-                'it_telefone' => $candidato2->it_telefone,
-                'vc_email' => $candidato2->vc_email,
-                'vc_residencia' => $candidato2->vc_residencia,
-                'vc_bi' => $candidato2->vc_bi,
-                'dt_emissao' => $candidato2->dt_emissao,
-                'vc_EscolaAnterior' => $candidato2->vc_EscolaAnterior,
-                'ya_anoConclusao' => $candidato2->ya_anoConclusao,
-                'vc_nomeCurso' => $candidato2->vc_nomeCurso,
-                'vc_anoLectivo' => $candidato2->vc_anoLectivo,
-                'it_classe' => $candidato2->it_classe,
-                'vc_localEmissao' => $candidato2->vc_localEmissao,
-                'tokenKey' => $candidato2->tokenKey,
-                'it_processo' => 0,
-                'tokenKey' => 'não utilizado',
-                'it_media' => $candidato2->it_media,
-            ]);
-
-            Processo::find($processo->id)->update(['it_processo' => $processo->it_processo + 1]);
-
-            Candidato2::find($id)->update(['it_estado_aluno' => 1]);
-            Candidato2::find($id)->update(['it_processo' => 1]);
-            if ($aluno) {
-
-                $this->loggerData("Adicionou Selecionado a Matricula" . $candidato2->vc_primeiroNome . '' . $candidato2->vc_nomedoMeio . '' . $candidato2->vc_apelido);
-                // return redirect()->back()->with('up', '1');
-                return response()->json($id);
-            }
-        } catch (\Exception $exception) {
-            return response()->json($exception->getMessage());
-            return redirect()->back()->with('aviso', '1');
-        }
-    }
-
-    // public function cadastrar($request)
-    // {
-    //     try {
-    //         $aluno = Alunno::insert([
-    //             'id' => $request->id,
-    //             'vc_primeiroNome' => $request->vc_primeiroNome,
-    //             'vc_nomedoMeio' => $request->vc_nomedoMeio,
-    //             'vc_ultimoaNome' => $request->vc_apelido,
-    //             'it_classe' => $request->vc_classe,
-
-    //             'dt_dataNascimento' => $request->dt_dataNascimento,
-    //             'vc_naturalidade' => $request->vc_naturalidade,
-    //             'vc_provincia' => $request->vc_provincia,
-    //             'vc_namePai' => $request->vc_nomePai,
-    //             'vc_nameMae' => $request->vc_nomeMae,
-    //             'vc_dificiencia' => $request->vc_dificiencia,
-    //             'vc_estadoCivil' => $request->vc_estadoCivil,
-    //             'vc_genero' => $request->vc_genero,
-    //             'it_telefone' => $request->it_telefone,
-    //             'vc_email' => $request->vc_email,
-    //             'vc_residencia' => $request->vc_residencia,
-    //             'vc_bi' => $request->vc_bi,
-    //             'dt_emissao' => $request->dt_emissao,
-    //             'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
-    //             'ya_anoConclusao' => $request->ya_anoConclusao,
-    //             'vc_nomeCurso' => $request->vc_nomeCurso,
-    //             'vc_anoLectivo' => $request->vc_anoLectivo,
-    //             'it_classe' => $request->vc_classe,
-    //             'vc_localEmissao' => $request->vc_localEmissao,
-    //             'tokenKey' => $request->tokenKey,
-
-    //             'it_media' => $request->it_media,
-    //         ]);
-    //         if ($aluno) {
-    //             $this->loggerData("Adicionou o(a) Aluno(a) " . $request->vc_primeiroNome . '' . $request->vc_nomedoMeio . '' . $request->vc_apelido);
-    //             return redirect('admin/alunos/cadastrar')->with('status', '1');
-    //         }
-    //     } catch (\Exception $exception) {
-    //         return redirect()->back()->with('aviso', '1');
-    //     }
-    // }
     public function actualizar_classe()
     {
         $alunos2 = Alunno::get();

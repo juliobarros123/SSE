@@ -80,16 +80,30 @@ class TurmaUserController extends Controller
 
         $atribuicoes = fh_turmas_professores();
         $response['disciplinas'] = fh_professores_disciplinas()->get();
-
-        if ($request->id_ano_lectivo) {
+        if (session()->get('filtro_turma_user')) {
+            if (!$request->id_curso) {
+                $filtro_turma_user = session()->get('filtro_turma_user');
+                $request->id_curso = $filtro_turma_user['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_turma_user = session()->get('filtro_turma_user');
+                $request->id_ano_lectivo = $filtro_turma_user['id_ano_lectivo'];
+            }
+        }
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $atribuicoes = $atribuicoes->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
         }
 
-        if ($request->id_curso) {
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
             // dd(  $atribuicoes->get(),$request->id_curso);
             $atribuicoes = $atribuicoes->where('turmas.it_idCurso', $request->id_curso);
         }
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+        ];
+        storeSession('filtro_turma_user', $data);
         $response['atribuicoes'] = $atribuicoes->get();
         // dd( $response['atribuicoes']);
         return view('admin.atribuicoes.index', $response);

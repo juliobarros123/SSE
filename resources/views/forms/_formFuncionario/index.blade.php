@@ -1,16 +1,3 @@
-@isset($funcionario->vc_foto)
-
-    <div class="col-sm-12 m-2">
-
-        <div class="card card-outline-info h-100">
-            <div class="card-img-top">
-                <img src="{{ asset($funcionario->vc_foto) }}" class="grayscale img-fluid mx-auto d-block"
-                    width="200">
-            </div>
-        </div>
-
-    </div>
-@endisset
 
 <div class="col-md-4">
     <label for="vc_primeiroNome" class="form-label">Primeiro Nome</label>
@@ -44,7 +31,7 @@
         @isset($funcionario)
             <option value="{{ $funcionario->vc_funcao }}">{{ $funcionario->vc_funcao }}</option>
         @else
-            <option disabled value="" selected>selecione a função</option>
+            <option disabled value="" selected>Selecione a função</option>
         @endisset
         <option value="Admin de Sistemas">Admin de Sistemas</option>
         <option value="Administrador">Administrador</option>
@@ -56,7 +43,7 @@
         <option value="Chefe de Depart. RH">Chefe de Depart. RH</option>
         <option value="Chefe de Departamento">Chefe de Departamento</option>
         <option value="Chefe da Secretaria Geral">Chefe da Secretaria Geral</option>
-        <option value="DBA">DBA</option>
+     
         <option value="Director Geral">Director Geral</option>
         <option value="Directora Geral">Directora Geral</option>
         <option value="Docente">Docente</option>
@@ -90,6 +77,11 @@
         value="{{ isset($funcionario->dt_nascimento) ? $funcionario->dt_nascimento : '' }}"
         max="<?php echo date('Y-m-d'); ?>" min="1921-01-01" name="dt_nascimento">
 </div>
+<div class="col-md-4">
+    <label for="dt_nascimento" class="form-label">Fotografia</label>
+    <input name="vc_foto" type="file" id="file" class="form-control border-secondary"
+    value="{{ isset($funcionario->vc_foto) ? $funcionario->vc_foto : '' }}">
+</div>
 
 <style>
     .file {
@@ -118,14 +110,3 @@
     }
 
 </style>
-<div class="file-field input-field col-md-12">
-    <label class="form-label text-white">.</label><br>
-    <div class="form-group">
-        <div class="file-input ">
-
-            <input name="vc_foto" type="file" id="file" class="file"
-                value="{{ isset($funcionario->vc_foto) ? $funcionario->vc_foto : '' }}">
-            <label for="file"><i class="fas fa-camera mr-2"></i> Carregar foto</label>
-        </div>
-    </div>
-</div>

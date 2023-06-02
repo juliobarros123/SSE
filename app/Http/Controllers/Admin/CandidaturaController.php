@@ -56,25 +56,43 @@ class CandidaturaController extends Controller
 
         $response['anoslectivos'] = fh_anos_lectivos()->get();
         $response['cursos'] = fh_cursos()->get();
+
         //dd($response)
         // dd(  $response['cursos']);
         return view('admin/candidatura/pesquisar/index', $response);
     }
     public function recebecandidaturas(Request $request)
     {
+        if (session()->get('filtro_candidato')) {
+            if (!$request->id_curso) {
+                $filtro_candidato = session()->get('filtro_candidato');
+                $request->id_curso = $filtro_candidato['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_candidato = session()->get('filtro_candidato');
+                $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+            }
+        }
+        // dd("s");
+        // dd(session()->all());
         $candidados = fh_candidatos();
         // dd(  $candidados ->get());
         // dd($request);
-        if ($request->id_ano_lectivo) {
+
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $candidados = $candidados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
 
-        if ($request->id_curso) {
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
             // dd($candidados->get(),$request->id_curso);
             $candidados = $candidados->where('candidatos.id_curso', $request->id_curso);
         }
-
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+        ];
+        storeSession('filtro_candidato', $data);
         $response['candidatos'] = $candidados->get();
         // dd(  $response['candidatos']);
         //      dd( $request->id_ano_lectivo,
@@ -261,67 +279,67 @@ class CandidaturaController extends Controller
         // dd("ola");
 
         try {
-            $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi],])->count();
+            // $Z = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi],])->count();
 
-            if ($Z == 0) {
+            // if ($Z == 0) {
 
-                $vezes = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi]])->count();
+            $vezes = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi]])->count();
 
-                //rotina que cadastra o formulário
-                $candidatura = Candidatura::create([
-                    'vc_primeiroNome' => $request->vc_primeiroNome,
-                    'vc_nomedoMeio' => $request->vc_nomedoMeio,
-                    'vc_apelido' => $request->vc_apelido,
-                    'dt_dataNascimento' => $request->dt_dataNascimento,
-                    'vc_nomePai' => $request->vc_nomePai,
-                    'vc_nomeMae' => $request->vc_nomeMae,
-                    'vc_genero' => $request->vc_genero,
-                    "LP_S" => $request->LP_S,
-                    "LP_O" => $request->LP_O,
-                    "LP_N" => $request->LP_N,
-                    "MAT_S" => $request->MAT_S,
-                    "MAT_O" => $request->MAT_O,
-                    "MAT_N" => $request->MAT_N,
-                    "FIS_S" => $request->FIS_S,
-                    "FIS_O" => $request->FIS_O,
-                    "FIS_N" => $request->FIS_N,
-                    "QUIM_S" => $request->QUIM_S,
-                    "QUIM_O" => $request->QUIM_O,
-                    "QUIM_N" => $request->QUIM_N,
+            //rotina que cadastra o formulário
+            $candidatura = Candidatura::create([
+                'vc_primeiroNome' => $request->vc_primeiroNome,
+                'vc_nomedoMeio' => $request->vc_nomedoMeio,
+                'vc_apelido' => $request->vc_apelido,
+                'dt_dataNascimento' => $request->dt_dataNascimento,
+                'vc_nomePai' => $request->vc_nomePai,
+                'vc_nomeMae' => $request->vc_nomeMae,
+                'vc_genero' => $request->vc_genero,
+                "LP_S" => $request->LP_S,
+                "LP_O" => $request->LP_O,
+                "LP_N" => $request->LP_N,
+                "MAT_S" => $request->MAT_S,
+                "MAT_O" => $request->MAT_O,
+                "MAT_N" => $request->MAT_N,
+                "FIS_S" => $request->FIS_S,
+                "FIS_O" => $request->FIS_O,
+                "FIS_N" => $request->FIS_N,
+                "QUIM_S" => $request->QUIM_S,
+                "QUIM_O" => $request->QUIM_O,
+                "QUIM_N" => $request->QUIM_N,
 
-                    'vc_dificiencia' => $request->vc_dificiencia,
-                    'vc_estadoCivil' => $request->vc_estadoCivil,
-                    'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
-                    'vc_email' => $request->vc_email,
-                    'tokenKey' => $this->generateRandomString(),
-                    'vc_residencia' => $request->vc_residencia,
-                    'vc_naturalidade' => $request->vc_naturalidade,
-                    'vc_provincia' => $request->vc_provincia,
-                    'vc_bi' => $request->vc_bi,
-                    'media' => $request->media,
-                    'tipo_candidato' => 'Comun',
-                    'it_estado_candidato' => "1",
-                    'dt_emissao' => $request->dt_emissao,
-                    'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
-                    'vc_localEmissao' => $request->vc_localEmissao,
-                    'vc_vezesdCandidatura' => $vezes + 1,
-                    'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
-                    'id_classe' => $request->id_classe,
-                    'id_curso' => isset($request->id_curso) ? $request->id_curso :
-                    fh_cursos()->first()->id,
-                    'id_ano_lectivo' => fh_ultimo_ano_lectivo()->id
-                ]);
-
-
-
-                $this->loggerData("Adicionou Candidatura");
-                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Candidatura efectuada com sucesso']);
+                'vc_dificiencia' => $request->vc_dificiencia,
+                'vc_estadoCivil' => $request->vc_estadoCivil,
+                'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
+                'vc_email' => $request->vc_email,
+                'tokenKey' => $this->generateRandomString(),
+                'vc_residencia' => $request->vc_residencia,
+                'vc_naturalidade' => $request->vc_naturalidade,
+                'vc_provincia' => $request->vc_provincia,
+                'vc_bi' => $request->vc_bi,
+                'media' => $request->media,
+                'tipo_candidato' => 'Comun',
+                'it_estado_candidato' => "1",
+                'dt_emissao' => $request->dt_emissao,
+                'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
+                'vc_localEmissao' => $request->vc_localEmissao,
+                'vc_vezesdCandidatura' => $vezes + 1,
+                'id_cabecalho' => id_cabecalho_user(Auth::User()->id),
+                'id_classe' => $request->id_classe,
+                'id_curso' => isset($request->id_curso) ? $request->id_curso :
+                fh_cursos()->first()->id,
+                'id_ano_lectivo' => fh_ultimo_ano_lectivo()->id
+            ]);
 
 
-            } else {
 
-                return redirect('site')->with('aviso', '1');
-            }
+            $this->loggerData("Adicionou Candidatura");
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Candidatura efectuada com sucesso']);
+
+
+            // } else {
+
+            // return redirect('site')->with('aviso', '1');
+            // }
         } catch (\Exception $exception) {
             // dd($exception->getMessage());
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, preencha os campos corretamente.']);

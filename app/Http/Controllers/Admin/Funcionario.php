@@ -27,15 +27,16 @@ use Illuminate\Support\Facades\Auth;
 class Funcionario extends Controller
 {
     //
-    private $Logger,$salario;
-    public function __construct(FolhaSalarioFuncionarioController $salario)
+    private $Logger, $salario;
+    public function __construct()
     {
         $this->Logger = new Logger();
-        $this->salario=$salario;
+
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function show()
     {
@@ -43,15 +44,16 @@ class Funcionario extends Controller
         return view('admin.cartoes.funcionario.visualizar.index', $response);
     }
 
-    public function listar(){
-        $data['funcionarios'] = DB::select('select * from funcionarios where it_estado_funcionario = ?', [1]);
+    public function listar()
+    {
+        $data['funcionarios'] = fh_funcionarios()->get();
 
-        return view("admin.cartoes.funcionario.index",$data);
+        return view("admin.cartoes.funcionario.index", $data);
     }
     public function create()
     {
-        $data['anoValidade']= AnoValidadeCartao::orderBy('id','desc')->where('vc_TipoCartao','Funcionário')->first();
-        return view('admin.cartoes.funcionario.cadastrar.index',$data);
+        $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->where('vc_TipoCartao', 'Funcionário')->first();
+        return view('admin.cartoes.funcionario.cadastrar.index', $data);
     }
 
     public function store(Request $request)
@@ -62,52 +64,56 @@ class Funcionario extends Controller
             $request->validate([
                 'vc_primeiroNome' => 'required',
                 'vc_ultimoNome' => 'required',
-                'vc_bi' =>  'required',
+                'vc_bi' => 'required',
                 'vc_funcao' => 'required',
                 'ya_anoValidade' => 'required',
                 'dt_nascimento' => 'required'
             ]);
 
 
-                    if ($request->hasFile('vc_foto')) {
-                        $imagem = $request->file('vc_foto');
-                        $num = rand(1111, 9999);
-                        $dir = public_path("images/funcionarios");
-                        $extensao = $imagem->guessClientExtension();
-                        $nomeImagem = 'vc_foto' . "_" . $num . "." . $extensao;
-                        $imagem->move($dir, $nomeImagem);
-                        $dados["vc_foto"] = "images/funcionarios" . "/" . $nomeImagem;
-                    }else{
-                        $dados["vc_foto"] = "images/funcionarios" . "/" . "avatar.png";
-                    }
-
+            if ($request->hasFile('vc_foto')) {
+                $imagem = $request->file('vc_foto');
+                $num = rand(1111, 9999);
+                $dir = public_path("images/funcionarios");
+                $extensao = $imagem->guessClientExtension();
+                $nomeImagem = 'vc_foto' . "_" . $num . "." . $extensao;
+                $imagem->move($dir, $nomeImagem);
+                $dados["vc_foto"] = "images/funcionarios" . "/" . $nomeImagem;
+            } else {
+                $dados["vc_foto"] = "images/funcionarios" . "/" . "avatar.png";
+            }
+            $dados["id_cabecalho"] = Auth::User()->id_cabecalho;
             ModelsFuncionario::create($dados);
-            $this->loggerData('Adicionou o(a) Funcionáro(a) '.$request->vc_primeiroNome.' '.$request->vc_ultimoNome.' com o id '.$request->id.'com a função de '.$request->vc_funcao);
+            $this->loggerData('Adicionou o(a) Funcionáro(a) ' . $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . ' com o id ' . $request->id . 'com a função de ' . $request->vc_funcao);
             $it_id_funcionario = DB::table('funcionarios')->max('id');
-            $id_mes=1;
-            $this->salario->cadastrar($it_id_funcionario);
+            $id_mes = 1;
+    
             return redirect()->back()->with('status', '1');
         } catch (\Exception $exception) {
-dd($exception);
+            dd($exception);
             return redirect()->back()->with('aviso', '1');
         }
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
-        if ($response['funcionario'] = ModelsFuncionario::find($id)) :
-            $data['anoValidade']= AnoValidadeCartao::orderBy('id','desc')->where('vc_TipoCartao','Funcionário')->first();
+        $response['funcionario']=fh_funcionarios()->where('funcionarios.slug',$slug)->first();
+        
+        if ($response['funcionario']):
+            $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->where('vc_TipoCartao', 'Funcionário')->first();
 
             return view('admin.cartoes.funcionario.editar.index', $response);
-        else :
+        else:
             return redirect('/admin/funcionario/cadastrar')->with('funcionario', '1');
 
         endif;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        $dados = $request->all();
+        // dd($slug);
+        try{
+        $dados = $request->except(['_token','_method']);
 
         $request->validate([
             'vc_primeiroNome' => 'required',
@@ -127,43 +133,50 @@ dd($exception);
             $nomeImagem = 'vc_foto' . "_" . $num . "." . $extensao;
             $imagem->move($dir, $nomeImagem);
             $dados['vc_foto'] = "images/funcionarios" . "/" . $nomeImagem;
-            $cff = ModelsFuncionario::find($id);
+       
             // unlink($cff->vc_foto);
             // $imagem->move($dir, $nomeImagem);
         }
-        $cf = ModelsFuncionario::find($id);
-        $edit = $cf->update($dados);
+        $cf = ModelsFuncionario::where('funcionarios.slug',$slug)->update($dados);
+      
 
         //dd($dados);
-        $this->loggerData('Actualizou Funcionário ',$request->vc_primeiroNome .' '.$request->vc_ultimoNome.'com  função '.$request->vc_funcao);
-        return redirect()->back();
+        $this->loggerData('Actualizou Funcionário ', $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . 'com  função ' . $request->vc_funcao);
+        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio editado com sucesso']);
+
+    }catch(\Exception $ex){
+        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+        
+    }
     }
 
-    public function destroy($id)
+    public function destroy($slug)
     {
 
         //$response = ModelsFuncionario::find($id);
         //$response->delete();
-        $response = ModelsFuncionario::find($id);
-        $response->update(['it_estado_funcionario' => 0]);
+        $response = ModelsFuncionario::where('funcionarios.slug',$slug)->first();
+        ModelsFuncionario::where('funcionarios.slug',$slug)->delete();
 
         //unlink($response->vc_foto);
-        $this->loggerData('Eliminou Funcionário ',$response->vc_primeiroNome .' '.$response->vc_ultimoNome.'com  função '.$response->vc_funcao);
-        return redirect()->route('admin/funcionarios');
+        $this->loggerData('Eliminou Funcionário ', $response->vc_primeiroNome . ' ' . $response->vc_ultimoNome . 'com  função ' . $response->vc_funcao);
+        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio eliminado com sucesso']);
+
     }
 
     public function gerar($id)
     {
 
-        if ($data['response'] = ModelsFuncionario::where([['it_estado_funcionario', 1]])->find($id)) :
-            $data['anoValidade']= AnoValidadeCartao::orderBy('id','desc')->first();
+        if ($data['response'] = ModelsFuncionario::where([['it_estado_funcionario', 1]])->find($id)):
+            $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->first();
             //gerar cartão
             $data['cabecalho'] = Cabecalho::find(1);
-               
+
             /* $data["bootstrap"] = file_get_contents("css/listas/bootstrap.min.css");
             $data["css"] = file_get_contents("css/listas/style.css"); */
             if ($data['cabecalho']->vc_nif == "5000298182") {
-          
+
                 //$url = 'cartões/CorMarie/aluno.png';
                 // 
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
@@ -179,9 +192,9 @@ dd($exception);
                 //$url = 'cartões/negage/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-               
+
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
-            // dd(5000820440);
+                // dd(5000820440);
                 //$url = 'cartões/Quilumosso/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
@@ -195,46 +208,49 @@ dd($exception);
                 //$url = 'cartões/LiceuUíge/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-             } else if ($data['cabecalho']->vc_nif == "7301003617") {
+            } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 //$url = 'cartões/ldc/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            }else if ($data['cabecalho']->vc_nif == "5000300926") {
+            } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
                 //$url = 'cartões/imagu/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            }else {
+            } else {
                 //$url = 'images/cartao/aluno.jpg';
                 $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
                 $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
             }
 
             $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8', 'margin_top' => 0,
+                'mode' => 'utf-8',
+                'margin_top' => 0,
                 'margin_left' => 5,
-                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [85, 54]
+                'margin_right' => 0,
+                'margin_bottom' => 0,
+                'format' => [85, 54]
             ]);
 
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
             $mpdf->AddPage('L');
-            $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) '.$data['response']->vc_primeiroNome.' '.$data['response']->vc_ultimoNome.' com o id '.$data['response']->id);
+            $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) ' . $data['response']->vc_primeiroNome . ' ' . $data['response']->vc_ultimoNome . ' com o id ' . $data['response']->id);
             $html = view("admin/pdfs/cartao/funcionario/index", $data);
             $mpdf->writeHTML($html);
             $mpdf->Output("funcionario.pdf", "I");
 
-        else :
+        else:
             return redirect('admin/funcionarios')->with('aviso', 'Não existe nenhum Funcionário com esse ID');
         endif;
     }
     public function imprimir()
     {
-        
+
         $data['cabecalho'] = Cabecalho::find(1);
-       /*  $data["bootstrap"] = file_get_contents("css/listas/bootstrap.min.css");
-        $data["css"] = file_get_contents("css/listas/style.css"); */
+        /*  $data["bootstrap"] = file_get_contents("css/listas/bootstrap.min.css");
+         $data["css"] = file_get_contents("css/listas/style.css"); */
 
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
@@ -253,7 +269,7 @@ dd($exception);
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
-        
+
             //$url = 'cartões/Quilumosso/aluno.png';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
@@ -277,14 +293,14 @@ dd($exception);
             //$url = 'cartões/imagu/aluno.png';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        }  else {
+        } else {
             //$url = 'images/cartao/aluno.jpg';
             $data["css"] = file_get_contents('css/listas/style.css');
             $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
         }
         $data['funcionarios'] = ModelsFuncionario::where([['it_estado_funcionario', 1]])->orderby('vc_primeiroNome', 'asc')->orderby('vc_ultimoNome', 'asc')->get();
         $mpdf = new \Mpdf\Mpdf();
-    
+
         $mpdf->SetFont("arial");
         $mpdf->setHeader();
         $mpdf->defaultfooterline = 0;
@@ -296,41 +312,6 @@ dd($exception);
     }
 
 
-    public function purgar($id)
-    {
-        try {
-            //ModelsFuncionario::find($id)->delete();
-            $response = ModelsFuncionario::find($id);
-            $response2 = ModelsFuncionario::find($id)->delete();
-            $this->loggerData("Purgou o Funcionário");
-            return redirect()->back()->with('funcionario.purgar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('funcionario.purgar.error', '1');
-        }
-    }
 
-    public function eliminadas()
-    {
-        $this->loggerData("Listou os funcionários eliminados");
 
-        $response['funcionarios'] = ModelsFuncionario::where([['it_estado_funcionario', 0]])->get();
-        $response['eliminadas']="eliminadas";
-        return view('admin.cartoes.funcionario.index',  $response);
-    }
-
-    public function recuperar($id)
-    {
-        try {
-            //ModelsFuncionario::find($id)->delete();
-            //ModelsFuncionario::find($id)->delete();
-            $response = ModelsFuncionario::find($id);
-            $response->update(['it_estado_funcionario' => 1]);
-            $this->loggerData("Recuperou Funcionário");
-            return redirect()->back()->with('funcionario.recuperar.success', '1');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->with('funcionario.recuperar.error', '1');
-        }
-    }
 }

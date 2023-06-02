@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Funcionario;
 use App\Models\Activador_da_candidatura;
 use App\Models\Alunno;
 use App\Models\AnoLectivoPublicado;
@@ -33,6 +34,7 @@ use App\Models\Disciplina_Terminal;
 use App\Models\Matricula;
 use Carbon\Carbon;
 use App\Models\TurmaUser;
+use Illuminate\Support\Facades\Session;
 
 function ficha($vc_bi)
 {
@@ -69,8 +71,7 @@ function gerarProcesso()
     if ($candidato_aluno) {
         return $candidato_aluno->processo + 1;
     } else {
-
-        return Alunno::where('id_cabecalho', Auth::User()->id_cabecalho)->max('processo') + 1;
+        return fh_processo_actual()->first()->it_processo + 1;
     }
 
 }
@@ -80,7 +81,7 @@ function ultimo_processo()
     $candidato_aluno = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->orderBy('alunnos.processo', 'desc')->first();
 
     if ($candidato_aluno) {
-        return $candidato_aluno->processo ;
+        return $candidato_aluno->processo;
     } else {
 
         return Alunno::where('id_cabecalho', Auth::User()->id_cabecalho)->max('processo');
@@ -1291,6 +1292,56 @@ function pri_ultimo_nome($nome)
     $primeiroNome = array_shift($partes);
     $ultimoNome = array_pop($partes);
     return [$primeiroNome, $ultimoNome];
+}
+
+    function storeSession($sessionName, $data)
+    {
+        session()->remove('filtro_candidato');
+
+        session()->put($sessionName, $data);
+    }
+
+
+if (!function_exists('getSession')) {
+    function getSession($sessionName)
+    {
+        if (isset($_SESSION[$sessionName])) {
+            return $_SESSION[$sessionName];
+        }
+
+        return null;
+    }
+}
+function fh_funcionarios()
+{
+    return Funcionario::where('funcionarios.id_cabecalho', Auth::User()->id_cabecalho)->orderBy('id', 'desc');
+}
+function fh_logs_anos(){
+ return   DB::table('logs')
+      ->selectRaw('YEAR(created_at) as ano')->distinct('YEAR(created_at)')
+      ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+      ->orderBy('logs.id', 'desc');
+
+}
+function fh_users_logs()
+{
+   return DB::table('logs')
+    ->join('users', 'users.id', '=', 'logs.it_idUser')
+    ->select('users.id','users.vc_primemiroNome' ,'users.vc_apelido')->DISTINCT ('logs.it_idUser')
+    ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+    ->orderBy('logs.id', 'desc');
+      
+}
+function obter_iniciais($nomes)
+{
+    $nomesSeparados = explode(" ", $nomes);
+    $primeiroNome = $nomesSeparados[0];
+    $ultimoNome = $nomesSeparados[count($nomesSeparados) - 1];
+
+    $inicialPrimeiroNome = strtoupper(substr($primeiroNome, 0, 1));
+    $inicialUltimoNome = strtoupper(substr($ultimoNome, 0, 1));
+
+    return $inicialPrimeiroNome . $inicialUltimoNome;
 }
 
 function sub_traco_barra($dt)

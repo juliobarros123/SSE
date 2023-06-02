@@ -85,7 +85,7 @@
 
                         <div class="nav-item-user dropbtn ">
                             <div class="dropdown">
-                                <div class="dropbtn">JB</div>
+                                <div class="dropbtn">{{obter_iniciais( Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido )}}</div>
                                 <div class="dropdown-content card ">
                                     <div class="container  d-flex justify-content-center">
 
@@ -289,12 +289,7 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ url('admin/candidatos/filtro') }}" class="nav-link ">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Candidatos</p>
-                        </a>
-                    </li>
+                 
                     <li class="nav-item">
                         <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
                             <i class="far fa-circle nav-icon"></i>
@@ -651,12 +646,13 @@
         @endif
 
 
-        <li class="nav-header">Mod. de Gestão de Turmas</li>
-
+    
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+                    <li class="nav-header">Mod. de Gestão de Turmas</li>
+
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -774,47 +770,9 @@
                 </a>
             </li>
 
-            <li class="nav-item has-treeview">
-                <a href="{{ route('documentos.anulacao_matricula.emitir') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Anulação de Matrícula
+          
 
-                    </p>
-                </a>
-            </li>
-
-            <li class="nav-item has-treeview">
-                <a href="{{ route('documentos.boletim_justificativo_falta.emitir') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Bole. de Justifi. de Faltas
-
-                    </p>
-                </a>
-            </li>
-
-            <li class="nav-item has-treeview">
-                <a href="{{ route('documentos.dispensa_administrativa.emitir') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Dispensa Administrativa
-
-                    </p>
-                </a>
-            </li>
-
-            <li class="nav-item has-treeview">
-                <a href="{{ route('documentos.dispensa_professor.emitir') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Dispensa do Professor
-
-                    </p>
-                </a>
-            </li>
-
-            @if (isset($cab) && $cab->vc_tipo_escola == 'Instituto')
+           
                 <li class="nav-item has-treeview">
                     <a href="{{ route('documentos.declaracao_frequencia.emitir') }}" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
@@ -824,7 +782,7 @@
                         </p>
                     </a>
                 </li>
-            @endif
+         
 
             <li class="nav-item has-treeview">
                 <a href="{{ route('admin.documentos.componentes') }}" class="nav-link">

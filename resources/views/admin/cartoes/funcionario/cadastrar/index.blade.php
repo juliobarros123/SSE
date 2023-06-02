@@ -17,8 +17,10 @@
             <form action="{{ url('admin/funcionario/cadastrar') }}" class="row" method="POST" enctype="multipart/form-data">
                 @csrf
                 @include('forms._formFuncionario.index')
-                <div class="col-md-12 text-center mt-4">
-                    <button class="btn btn-success col-md-3 form-control" type="submit">Cadastrar</button>
+            
+                <div class="form-group col-sm-12 d-flex justify-content-center mt-2">
+                       
+                    <button class="form-control btn btn-dark w-25">Cadastrar</button>
                 </div>
             </form>
 

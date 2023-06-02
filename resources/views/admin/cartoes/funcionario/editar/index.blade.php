@@ -14,12 +14,13 @@
  
     <div class="card mt-4">
         <div class="card-body">
-            <form action="{{ route('admin/funcionario/editar', $funcionario->id) }}" class="row" method="POST"  enctype="multipart/form-data">
+            <form action="{{ route('admin/funcionario/editar', $funcionario->slug) }}" class="row" method="POST"  enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('forms._formFuncionario.index')
-                <div class="col-md-12 text-center mt-4">
-                    <button class="btn btn-success col-md-3" type="submit">Editar</button>
+                <div class="form-group col-sm-12 d-flex justify-content-center mt-2">
+                       
+                    <button class="form-control btn btn-dark w-25">Editar</button>
                 </div>
             </form>
 
