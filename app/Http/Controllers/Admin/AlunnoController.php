@@ -58,6 +58,8 @@ class AlunnoController extends Controller
     {
         $response['anoslectivos'] = fh_anos_lectivos()->get();
         $response['cursos'] = fh_cursos()->get();
+        $response['classes'] = fh_classes()->get();
+
         return view('admin/alunos/pesquisar/index', $response);
     }
     public function aluno($processo)
@@ -207,6 +209,10 @@ class AlunnoController extends Controller
                 $filtro_aluno = session()->get('filtro_aluno');
                 $request->id_ano_lectivo = $filtro_aluno['id_ano_lectivo'];
             }
+            if (!$request->id_classe) {
+                $filtro_aluno = session()->get('filtro_aluno');
+                $request->id_classe = $filtro_aluno['id_classe'];
+            }
         }
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
@@ -217,9 +223,16 @@ class AlunnoController extends Controller
             // dd( $alunos->get(),$request->id_curso);
             $alunos = $alunos->where('candidatos.id_curso', $request->id_curso);
         }
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            // dd($candidados->get(),$request->id_classe);
+
+
+            $alunos = $alunos->where('candidatos.id_classe', $request->id_classe);
+        }
         $data = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe
         ];
         storeSession('filtro_aluno', $data);
         $response['alunos'] = $alunos->get();

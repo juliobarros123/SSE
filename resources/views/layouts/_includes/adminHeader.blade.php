@@ -220,32 +220,25 @@
 
                                     <li class="nav-item">
                                         <a href="{{ url('/admin/funcionario/cadastrar') }}" class="nav-link">
-                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Cadastrar</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
-                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Listar</p>
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
                                         <a href="{{ url('/admin/funcionarios') }}" class="nav-link">
-                                            <i class="far fa-dot-circle nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Cartão</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{ url('admin/funcionarios/listas/imprimir') }}" class="nav-link"
-                                            target="_blank">
-                                            <i class="far fa-dot-circle nav-icon"></i>
-                                            <p>Imprimir Listas</p>
-                                        </a>
-                                    </li>
-
+                                   
 
 
                                 </ul>
@@ -290,29 +283,14 @@
                 </a>
             
             <li class="nav-item has-treeview ">
-                <a href="#" class="nav-link">
+                <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
                         Alunos
 
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Lista de Alunos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarSelecionados') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Imprimir Lista</p>
-                        </a>
-                    </li>
-
-                </ul>
+          
             </li>
 
             </li>
@@ -446,17 +424,17 @@
                             <p>Candidatos</p>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a href="{{ url('Admin/relatorio/matricula/pesquisar') }}" class="nav-link">
+                        <a href="{{ url('Admin/candidatos/aceitos/pesquisar/imprimir') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Matriculas/Alunos</p>
+                            <p>Candidatos Aceitos</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisar_alunos') }}" class="nav-link">
+                        <a href="{{ url('admin/funcionarios/listas/imprimir') }}" class="nav-link"
+                            target="_blank">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Alunos</p>
+                            <p>Funcionários</p>
                         </a>
                     </li>
 
@@ -482,31 +460,28 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarRec') }}" class="nav-link">
+                        <a href="{{ route('relatorios.candidaturas.pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Candidatura</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarRes') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Selecção de Candidatos</p>
-                        </a>
-                    </li>
 
                     <li class="nav-item">
-                        <a href="{{ url('Admin/relatorio/matricula/pesquisar') }}" class="nav-link">
+                        <a href="{{ route('relatorios.candidatos_aceitos.pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Matriculas/Alunos</p>
+                            <p>Candidatos Aceitos</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisar_alunos') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Alunos</p>
-                        </a>
-                    </li>
+                   
+                 
 
+                    <li class="nav-item">
+                        <a href="{{ route('relatorios.matriculados.pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Matriculas</p>
+                        </a>
+                    </li>
+                  
 
                 </ul>
             </li>

@@ -1,14 +1,21 @@
 @extends('layouts.admin')
-@section('titulo', 'Alunos/Listar')
+@section('titulo', 'Imprimir Relatório de Alunos Matriculados ')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Pesquisar alunos</h3>
+            <h3>Imprimir Relatório de Alunos Matriculados</h3>
         </div>
     </div>
-
-
+    <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
+    @if (session('teste'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Candidato Inexistente',
+            })
+        </script>
+    @endif
 
     @if (isset($errors) && count($errors) > 0)
         <div class="text-center mt-4 mb-4 alert-danger">
@@ -20,7 +27,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('admin.alunos.ver') }}" class="row" method="POST">
+            <form action="{{ route('relatorios.matriculados.imprimir') }}" class="row" method="POST">
                 @csrf
                 <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
@@ -37,7 +44,6 @@
 
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
                             <option value="Todos" >Todos</option>
-
                             @foreach ($anoslectivos as $anolectivo)
                                 <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
@@ -61,22 +67,27 @@
                     </select>
 
                 </div>
+
                 <div class="form-group col-md-4">
-                    <label for="id_classe" class="form-label">Classe:</label>
-                    <select name="id_classe" id="id_classe" class="form-control">
-                        <option value="Todas" >Todas</option>
-                        @foreach ($classes as $classe)
-                            <option value="{{ $classe->id }}">
-                                {{ $classe->vc_classe }}ª classe
-                            </option>
-                        @endforeach
-                    </select>
+                 
+                    <label for="ciclo" class="form-label">Ciclo:</label>
+                 
+                    <select name="ciclo" id="ciclo" class="form-control" required>
+                        <option value="">Seleccione um ciclo de ensino</option>
 
+                        <option value="Todos" >Todos</option>
+
+                        <option value="Ensino Primário">Ensino Primário</option>
+                        <option value="Ensino Secundário (1º Ciclo)">Ensino Secundário (1º Ciclo)</option>
+                        <option value="Ensino Secundário (2º Ciclo)">Ensino Secundário (2º Ciclo)</option>
+                      </select>
+                      
                 </div>
+            
 
-                <div class="form-group col-md-12 d-flex justify-content-center">
 
-                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
+                <div class=" d-flex justify-content-center w-100">
+                    <button class="form-control btn btn-dark w-25">Imprimir</button>
                 </div>
 
             </form>
@@ -84,6 +95,7 @@
     </div>
 
     @include('admin.layouts.footer')
+
 
 
 @endsection

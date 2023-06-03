@@ -54,7 +54,8 @@
                 <th>Nº</th>
                 <th>NOME</th>
                 <th>CURSO</th>
-                <th>BILHETE DE IDENTIDADE</th>
+                <th>B.I/CÉDULA</th>
+              
                 <th>IDADE</th>
                 <th>MEDIA</th>
                 <th>FOTO</th>
@@ -180,11 +181,11 @@
                                     {{ $aluno->vc_naturalidade }}<br>
                                     <b>Provincia: </b>
                                     {{ $aluno->vc_provincia }}<br>
-                                    <b>Bilhete de Identidade Nº: </b>
+                                    <b>B.I/CÉDULA Nº: </b>
                                     {{ $aluno->vc_bi }}<br>
-                                    <b>Data de emissão do bilhete de Identidade: </b>
+                                    <b>Data de emissão do(a) B.I/CÉDULA: </b>
                                     {{ date('d-m-Y', strtotime($aluno->dt_emissao)) }}<br>
-                                    <b>Local de emissão do Bilhete de Identidade: </b>
+                                    <b>Local de emissão do(a) B.I/CÉDULA: </b>
                                     {{ $aluno->vc_localEmissao }}<br>
                                 </p>
                                 <h5 class="text-left mb-2 mt-2 ml-2"><b>Dados Acadêmicos</b></h5>

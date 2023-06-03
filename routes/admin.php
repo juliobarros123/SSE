@@ -26,6 +26,8 @@ Route::get('/{id}/{trimestre}/gerarBoletimTurma/xlsx', ['as' => 'turmas.boletimT
 Route::get('notas-seca/aluno-processos/{processo}/{estudando}', ['as' => 'aluno-processoS', 'uses' => 'Admin\NotaSecaController@alunoProcesso']);
 Route::get('notas-seca/vrf_disciplina_terminal/{id_disciplina}/{id_turma}/{estado}/{processo}/{classe}', ['as' => 'vrf_disciplina_terminal', 'uses' => 'Admin\NotaSecaController@vrf_disciplina_terminal']);
 
+Route::get('classes_por_curso/{curso}', ['as' => 'classes_por_curso', 'uses' => 'Admin\CandidaturaController@classes_por_curso']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('candidatura', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@create']);
     Route::post('candidatura/', ['as' => 'site.candidatura', 'uses' => 'Admin\CandidaturaController@store']);
@@ -424,7 +426,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     ///alunos fim
 
     //Lista PDF dos Selecionados
-    Route::get('Admin/pesquisarSelecionados', ['as' => 'admin.ListadSelecionado.pesquisarSelecionados', 'uses' => 'Admin\ListadSelecionado@pesquisar']);
+    Route::get('Admin/candidatos/aceitos/pesquisar/imprimir', ['as' => 'admin.ListadSelecionado.candidatos/aceitos/pesquisar/imprimir', 'uses' => 'Admin\ListadSelecionado@pesquisar']);
     Route::post('Admin/recebeSelecionados', ['as' => 'admin.ListadSelecionado.recebeSelecionados', 'uses' => 'Admin\ListadSelecionado@recebeSelecionados']);
 
     Route::get('Admin/lista/selecionados/{anoLectivo}/{curso}', ['as' => 'admin.ListadSelecionado.lista', 'uses' => 'Admin\ListadSelecionado@index']);
@@ -1048,5 +1050,29 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
             Route::put('/actualizar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.actualizar', 'uses' => 'Admin\ComponenteDisciplinaController@actualizar'])->middleware('access.controll.administrador');
             Route::get('/editar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.editar', 'uses' => 'Admin\ComponenteDisciplinaController@editar'])->middleware('access.controll.administrador');
         });
+
+            //=============relatorios-Start=====================f//
+    Route::group(['prefix' => 'relatorios/'], function () {
+          //=============relatorios-Start=====================f//
+    Route::group(['prefix' => 'candidaturas/'], function () {
+        Route::get('/pesquisar', ['as' => 'relatorios.candidaturas.pesquisar', 'uses' => 'Admin\RelatorioController@candidaturas_pesquisar']);
+        Route::post('/imprimir', ['as' => 'relatorios.candidaturas.imprimir', 'uses' => 'Admin\RelatorioController@candidaturas_imprimir']);
+      
+    });
+    Route::group(['prefix' => 'candidatos_aceitos/'], function () {
+        Route::get('/pesquisar', ['as' => 'relatorios.candidatos_aceitos.pesquisar', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_pesquisar']);
+        Route::post('/imprimir', ['as' => 'relatorios.candidatos_aceitos.imprimir', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_imprimir']);
+      
+    });
+    Route::group(['prefix' => 'matriculados/'], function () {
+        Route::get('/pesquisar', ['as' => 'relatorios.matriculados.pesquisar', 'uses' => 'Admin\RelatorioController@matriculados_pesquisar']);
+        Route::post('/imprimir', ['as' => 'relatorios.matriculados.imprimir', 'uses' => 'Admin\RelatorioController@matriculados_imprimir']);
+      
+    });
+    //=============relatorios-End======================//
+
+    });
+  
+
     });
 });

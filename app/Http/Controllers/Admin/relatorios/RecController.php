@@ -33,7 +33,7 @@ class RecController extends Controller
 
     public function pesquisar()
     {
-        $response['anoslectivos'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->get();
+        $response['anoslectivos'] = fh_anos_lectivos()->get();
         return view('admin/relatorios/candidatura/index', $response);
     }
 

@@ -56,10 +56,28 @@ class CandidaturaController extends Controller
 
         $response['anoslectivos'] = fh_anos_lectivos()->get();
         $response['cursos'] = fh_cursos()->get();
+        $response['classes'] = fh_classes()->get();
+
 
         //dd($response)
         // dd(  $response['cursos']);
         return view('admin/candidatura/pesquisar/index', $response);
+    }
+    public function classes_por_curso($curso)
+    {
+        try {
+            if ($curso == 'Nenhum') {
+                $classes = fh_classes()->whereBetween('classes.vc_classe', [1, 9])->get();
+                return response()->json($classes);
+            } else {
+                $classes = fh_classes()->whereBetween('classes.vc_classe', [10, 13])->get();
+                return response()->json($classes);
+            }
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage());
+        }
+
+
     }
     public function recebecandidaturas(Request $request)
     {
@@ -71,6 +89,10 @@ class CandidaturaController extends Controller
             if (!$request->id_ano_lectivo) {
                 $filtro_candidato = session()->get('filtro_candidato');
                 $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+            }
+            if (!$request->id_classe) {
+                $filtro_candidato = session()->get('filtro_candidato');
+                $request->id_classe = $filtro_candidato['id_classe'];
             }
         }
         // dd("s");
@@ -88,11 +110,18 @@ class CandidaturaController extends Controller
             // dd($candidados->get(),$request->id_curso);
             $candidados = $candidados->where('candidatos.id_curso', $request->id_curso);
         }
-        $data = [
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            // dd($candidados->get(),$request->id_classe);
+
+
+            $candidados = $candidados->where('candidatos.id_classe', $request->id_classe);
+        }
+        $filtro_candidato = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe,
         ];
-        storeSession('filtro_candidato', $data);
+        storeSession('filtro_candidato', $filtro_candidato);
         $response['candidatos'] = $candidados->get();
         // dd(  $response['candidatos']);
         //      dd( $request->id_ano_lectivo,

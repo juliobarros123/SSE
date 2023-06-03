@@ -1,16 +1,15 @@
 @extends('layouts.admin')
-@section('titulo', 'Alunos/Imprimir')
+@section('titulo', 'Imprimir Lista de Candidatos Aceitos')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
             <div class="row col-md-12">
                 <div class="col-md-10">
-                    <h3>Imprimir lista dos selecionados à Matrícula</h3>
+                    <h3>Imprimir Lista de Candidatos Aceitos
+                    </h3>
                 </div>
-                <div class="col-md-2">
-                    <a type="submit" href="{{ route('admin.alunos-api.create') }}" class="btn btn-primary">Atualizar</a>
-                </div>
+              
             </div>
 
         </div>
@@ -34,40 +33,58 @@
                 <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
+
                     @if (isset($ano_lectivo_publicado))
-                        <select name="vc_anolectivo" id="vc_anolectivo" class="form-control" readonly>
-                            <option value="{{ $ano_lectivo_publicado }}">
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+                            <option value="{{ $id_anoLectivo_publicado }}">
                                 {{ $ano_lectivo_publicado }}
                             </option>
                         </select>
                         <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
                     @else
-                        <select name="vc_anolectivo" id="vc_anolectivo" class="form-control">
-                            <option value="Todos">Todos</option>
+
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
+                            <option value="Todos" >Todos</option>
+
                             @foreach ($anoslectivos as $anolectivo)
-                                <option value="{{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}">
+                                <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
                                 </option>
                             @endforeach
                         </select>
                     @endif
+
+
                 </div>
-                <div class="form-group col-md-5">
-                    <label for="vc_curso" class="form-label">Curso:</label>
-                    <select name="vc_curso" id="vc_curso" class="form-control">
-                        <option value="Todos">Todos</option>
+                <div class="form-group col-md-4">
+                    <label for="id_curso" class="form-label">Curso:</label>
+                    <select name="id_curso" id="id_curso" class="form-control">
+                        <option value="Todos" >Todos</option>
+
                         @foreach ($cursos as $curso)
-                            <option value="{{ $curso->vc_nomeCurso }}">
+                            <option value="{{ $curso->id }}">
                                 {{ $curso->vc_nomeCurso }}
                             </option>
                         @endforeach
                     </select>
 
                 </div>
+                <div class="form-group col-md-4">
+                    <label for="id_classe" class="form-label">Classe:</label>
+                    <select name="id_classe" id="id_classe" class="form-control">
+                        <option value="Todas" >Todas</option>
+                        @foreach ($classes as $classe)
+                            <option value="{{ $classe->id }}">
+                                {{ $classe->vc_classe }}ª classe
+                            </option>
+                        @endforeach
+                    </select>
 
-                <div class="form-group col-md-3">
-                    <label for="" class="form-label text-white">.</label>
-                    <button class="form-control btn btn-dark">Pesquisar</button>
+                </div>
+
+                <div class="form-group col-md-12 d-flex justify-content-center">
+
+                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
                 </div>
 
             </form>

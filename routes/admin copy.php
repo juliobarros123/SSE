@@ -296,7 +296,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///alunos fim
 
     //Lista PDF dos Selecionados
-    Route::get('Admin/pesquisarSelecionados', ['as' => 'admin.ListadSelecionado.pesquisarSelecionados', 'uses' => 'Admin\ListadSelecionado@pesquisar']);
+    Route::get('Admin/candidatos/aceitos/pesquisar/imprimir', ['as' => 'admin.ListadSelecionado.candidatos/aceitos/pesquisar/imprimir', 'uses' => 'Admin\ListadSelecionado@pesquisar']);
     Route::post('Admin/recebeSelecionados', ['as' => 'admin.ListadSelecionado.recebeSelecionados', 'uses' => 'Admin\ListadSelecionado@recebeSelecionados']);
 
     Route::get('Admin/lista/selecionados/{anoLectivo}/{curso}', ['as' => 'admin.ListadSelecionado.lista', 'uses' => 'Admin\ListadSelecionado@index']);

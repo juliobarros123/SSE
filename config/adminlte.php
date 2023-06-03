@@ -277,7 +277,7 @@ return [
                 ],
                 [
                     'text' => 'Imprimir Lista dos Admitidos',
-                    'url' =>  'Admin/pesquisarSelecionados',
+                    'url' =>  'Admin/candidatos/aceitos/pesquisar/imprimir',
                 ]
             ],
         ],

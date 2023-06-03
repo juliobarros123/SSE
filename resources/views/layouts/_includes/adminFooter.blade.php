@@ -665,6 +665,55 @@
 
     });
 
+    $('#id_curso').change(function() {
+        var curso = $(this).val();
+        alert(curso);
+        // //alert(idMunicipio)
+        // $.ajax({
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     url: url_origin + '/buscar/municipios/' + id,
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     async: false,
+        //     success: function(municipios) {
+
+        //         // response.forEach(element => {
+        //         //     console.log
+        //         // })
+        //         //console.log(municipios);
+        //         $("#it_id_municipio").empty();
+        //         $("#it_id_municipio").append('<option select  "> Selecionar o Município</option>');
+        //         $.each(municipios, function(municipio) {
+
+        //             //console.log(municipios[municipio].vc_nome);
+        //             //alert(municipios[municipio].id )
+        //             if (idMunicipio == municipios[municipio].id) {
+        //                 //alert("igual")
+        //                 $("#it_id_municipio").append('<option value="' + municipios[
+        //                         municipio].id + ' " selected>' + municipios[municipio]
+        //                     .vc_nome +
+        //                     '</option>');
+        //             } else {
+        //                 $("#it_id_municipio").append('<option value="' + municipios[
+        //                         municipio].id + ' ">' + municipios[municipio].vc_nome +
+        //                     '</option>');
+        //             }
+
+        //         });
+
+
+
+
+        //     }
+        // });
+
+
+    });
+
+
+
 
 
     $('.buscarTurma').select2({
@@ -1233,8 +1282,8 @@ vc_tipodaNota
 <script>
     $("#dt_limiteaesquerda").change(function() {
         // var dataNascimento = $(this).val();
-        var dataNascimento = new Date( $(this).val());
-// alert(dataNascimento);
+        var dataNascimento = new Date($(this).val());
+        // alert(dataNascimento);
         // Obter a data atual
         var dataAtual = new Date();
 
@@ -1243,8 +1292,8 @@ vc_tipodaNota
 
         // Converter a diferença em anos
         var idade = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24 * 365.25));
-        console.log(idade,"ol");
-        $("#dt_limiteaesquerda_span").text(idade+' anos');
+        console.log(idade, "ol");
+        $("#dt_limiteaesquerda_span").text(idade + ' anos');
         // console.log(idade,"ol");
     });
 </script>
@@ -1252,8 +1301,8 @@ vc_tipodaNota
 <script>
     $("#dt_limitemaxima").change(function() {
         // var dataNascimento = $(this).val();
-        var dataNascimento = new Date( $(this).val());
-// alert(dataNascimento);
+        var dataNascimento = new Date($(this).val());
+        // alert(dataNascimento);
         // Obter a data atual
         var dataAtual = new Date();
 
@@ -1262,8 +1311,8 @@ vc_tipodaNota
 
         // Converter a diferença em anos
         var idade = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24 * 365.25));
-        console.log(idade,"ol");
-        $("#dt_limitemaxima_span").text(idade+' anos');
+        console.log(idade, "ol");
+        $("#dt_limitemaxima_span").text(idade + ' anos');
         // console.log(idade,"ol");
     });
 </script>

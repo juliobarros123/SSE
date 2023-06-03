@@ -90,3 +90,19 @@ body {
     margin-top: 10px;
     font-style: italic;
   }
+
+  th, td {
+    border: 1px solid black;
+   
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+
+caption {
+    font-weight: bold;
+    margin-bottom: 10px;
+}

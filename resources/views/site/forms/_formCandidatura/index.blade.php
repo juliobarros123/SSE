@@ -174,7 +174,7 @@
         <label for="id_curso" class="form-label">Curso à se Candidatar <small
                 class="campo-obrigatorio">*</small></label>
         {{-- @dump($cursos) --}}
-        <select class="form-control" name="id_curso" id="id_curso">
+        <select class="form-control" name="id_curso" id="id_curso" required>
             @isset($candidato)
                 <option value="{{ $candidato->id_curso }}">{{ $candidato->vc_shortName }}</option>
             @else
