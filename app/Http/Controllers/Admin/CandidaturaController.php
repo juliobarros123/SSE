@@ -63,14 +63,15 @@ class CandidaturaController extends Controller
     }
     public function recebecandidaturas(Request $request)
     {
-
-        if (!$request->id_curso) {
-            $filtro_candidato = session()->get('filtro_candidato');
-            $request->id_curso = $filtro_candidato['id_curso'];
-        }
-        if (!$request->id_ano_lectivo) {
-            $filtro_candidato = session()->get('filtro_candidato');
-            $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+        if (session()->get('filtro_candidato')) {
+            if (!$request->id_curso) {
+                $filtro_candidato = session()->get('filtro_candidato');
+                $request->id_curso = $filtro_candidato['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_candidato = session()->get('filtro_candidato');
+                $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+            }
         }
         // dd("s");
         // dd(session()->all());

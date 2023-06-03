@@ -30,9 +30,9 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{route('admin.ListadCandidatura.recebeCandidaturas')}}" class="row" method="POST">
+            <form action="{{route('admin.ListadCandidatura.lista_pdf')}}" class="row" method="POST">
                 @csrf
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
 
@@ -57,7 +57,7 @@
 
 
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="id_curso" class="form-label">Curso:</label>
                     <select name="id_curso" id="id_curso" class="form-control">
                         <option value="Todos" >Todos</option>
@@ -71,10 +71,22 @@
 
                 </div>
 
+                <div class="form-group col-md-4">
+                    <label for="id_classe" class="form-label">Classe:</label>
+                    <select name="id_classe" id="id_classe" class="form-control">
+                        <option value="Todas" >Todas</option>
+                        @foreach ($classes as $classe)
+                            <option value="{{ $classe->id }}">
+                                {{ $classe->vc_classe }}ª classe
+                            </option>
+                        @endforeach
+                    </select>
+
+                </div>
 
 
                 <div class=" d-flex justify-content-center w-100">
-                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
+                    <button class="form-control btn btn-dark w-25">Imprimir</button>
                 </div>
 
             </form>

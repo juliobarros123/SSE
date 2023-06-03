@@ -21,6 +21,7 @@
 
                     @if (isset($ano_lectivo_publicado))
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+                  
                             <option value="{{ $id_anoLectivo_publicado }}">
                                 {{ $ano_lectivo_publicado }}
                             </option>
@@ -29,7 +30,8 @@
                     @else
 
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
-                            <option value="" >Todos</option>
+                            <option value="Todos" >Todos</option>
+
                             @foreach ($anoslectivos as $anolectivo)
                                 <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}

@@ -137,21 +137,40 @@ class MatriculaController extends Controller
     }
     public function matriculados(Request $request)
     {
+        if (session()->get('filtro_matricula')) {
+            if (!$request->id_curso) {
+                $filtro_matricula = session()->get('filtro_matricula');
+                $request->id_curso = $filtro_matricula['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $filtro_matricula = session()->get('filtro_matricula');
+                $request->id_ano_lectivo = $filtro_matricula['id_ano_lectivo'];
+            }
+            if (!$request->id_classe) {
+                $filtro_matricula = session()->get('filtro_matricula');
+                $request->id_classe = $filtro_matricula['id_classe'];
+            }
+        }
         $matriculas = fh_matriculas();
-        if ($request->id_ano_lectivo) {
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $matriculas = $matriculas->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
         }
 
-        if ($request->id_curso) {
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
             // dd(  $matriculas->get(),$request->id_curso);
             $matriculas = $matriculas->where('turmas.it_idCurso', $request->id_curso);
         }
-        if ($request->id_classe) {
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
             // dd(  $matriculas->get(),$request->id_curso);
             $matriculas = $matriculas->where('turmas.it_idClasse', $request->id_classe);
         }
-        
+        $data = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe,
+        ];
+        storeSession('filtro_matricula', $data);
         $response['matriculas'] = $matriculas->get();
         //   dd($response['matriculas']);
         return view('admin.matriculas.index', $response);
@@ -263,7 +282,7 @@ class MatriculaController extends Controller
 
     public function imprimirFicha($slug)
     {
-        $response['matricula']=fh_matriculas()->where('matriculas.slug',$slug)->first();
+        $response['matricula'] = fh_matriculas()->where('matriculas.slug', $slug)->first();
         // dd($response['matricula']);
         // $response['alunno'] = fh_aluno_slug($slug);
         // dd($response['alunno']);
@@ -272,19 +291,19 @@ class MatriculaController extends Controller
         // dd($response['cabecalho']);
 
 
-    
 
-            $mpdf = new \Mpdf\Mpdf();
-            /* $response['stylesheet'] = file_get_contents('css/recibo/style.css'); */
 
-            //$url = 'images/cartao/aluno.jpg';
-            $response['css'] = file_get_contents('css/lista/style-2.css');
+        $mpdf = new \Mpdf\Mpdf();
+        /* $response['stylesheet'] = file_get_contents('css/recibo/style.css'); */
 
-            $html = view("admin/pdfs/matricula/ficha", $response);
-            $mpdf->writeHTML($html);
-            $this->loggerData('Imprimiu Ficha do Aluno(a)' . $response['matricula']->vc_primeiroNome . ' ' . $response['matricula']->vc_nomedoMeio . ' ' . $response['matricula']->vc_apelido);
-            $mpdf->Output("ficha.pdf", "I");
-        
+        //$url = 'images/cartao/aluno.jpg';
+        $response['css'] = file_get_contents('css/lista/style-2.css');
+
+        $html = view("admin/pdfs/matricula/ficha", $response);
+        $mpdf->writeHTML($html);
+        $this->loggerData('Imprimiu Ficha do Aluno(a)' . $response['matricula']->vc_primeiroNome . ' ' . $response['matricula']->vc_nomedoMeio . ' ' . $response['matricula']->vc_apelido);
+        $mpdf->Output("ficha.pdf", "I");
+
     }
 
     /**

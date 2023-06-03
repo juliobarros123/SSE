@@ -431,8 +431,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     //Lista PDF dos Selecionados
 
     //Lista PDF dos Candidatos
-    Route::get('Admin/pesquisarCandidaturas', ['as' => 'admin.ListadCandidatura.pesquisarCandidaturas', 'uses' => 'Admin\ListadCandidatura@pesquisar']);
-    Route::any('Admin/recebeCandidaturas', ['as' => 'admin.ListadCandidatura.recebeCandidaturas', 'uses' => 'Admin\ListadCandidatura@recebeCandidaturas']);
+    Route::get('Admin/candidaturas/pesquisar/imprimir', ['as' => 'admin.ListadCandidatura.candidaturas/pesquisar/imprimir', 'uses' => 'Admin\ListadCandidatura@pesquisar']);
+    Route::any('Admin/candidaturas/lista_pdf', ['as' => 'admin.ListadCandidatura.lista_pdf', 'uses' => 'Admin\ListadCandidatura@lista_pdf']);
 
     Route::get('Admin/listas/candidaturas/{anoLectivo}/{curso}', ['as' => 'admin.ListadCandidatura.lista', 'uses' => 'Admin\ListadCandidatura@index']);
 
@@ -709,7 +709,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //logs
     Route::get('admin/logs/pesquisar', ['as' => 'admin.logs.pesquisar.index', 'uses' => 'Admin\LogUserController@pesquisar'])->middleware('access.controll.administrador');
-    Route::post('admin/logs/recebelogs', ['as' => 'admin.logs.recebelogs', 'uses' => 'Admin\LogUserController@recebelogs'])->middleware('access.controll.administrador');
+    Route::any('admin/logs/recebelogs', ['as' => 'admin.logs.recebelogs', 'uses' => 'Admin\LogUserController@recebelogs'])->middleware('access.controll.administrador');
     Route::get('admin/logs/visualizar/index/{anoLectivo}/{utilizador}', ['as' => 'admin.logs.listar', 'uses' => 'Admin\LogUserController@index'])->middleware('access.controll.administrador');
     //
 

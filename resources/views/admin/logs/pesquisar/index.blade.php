@@ -30,8 +30,8 @@
             <form action="{{ url('admin/logs/recebelogs')}}" class="row" method="POST">
                 @csrf
                 <div class="form-group col-md-4">
-                    <label for="vc_anolectivo" class="form-label">Ano Lectivo</label>
-                    <select name="vc_anolectivo" id="vc_anolectivo" class="form-control">
+                    <label for="ano" class="form-label">Ano</label>
+                    <select name="ano" id="ano" class="form-control">
                         <option value="Todos">Todos</option>
                         @foreach ($anos as $ano)
                             <option value="{{$ano->ano}}">
@@ -41,12 +41,13 @@
                     </select>
 
                 </div>
+              
                 <div class="form-group col-md-5">
-                    <label for="vc_nome" class="form-label">Utilizador</label>
-                    <select name="vc_nome" id="vc_nome" class="form-control">
+                    <label for="id_user" class="form-label">Utilizador</label>
+                    <select name="id_user" id="id_user" class="form-control">
                         <option value="Todos">Todos</option>
                         @foreach ($utilizadores as $utilizador)
-                            <option value="{{ $utilizador->vc_apelido}}">
+                            <option value="{{ $utilizador->id}}">
                                 {{ $utilizador->vc_primemiroNome." ".$utilizador->vc_apelido }}
                             </option>
                         @endforeach

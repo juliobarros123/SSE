@@ -1,135 +1,80 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-
-    <title>Listas de candidaturas</title>
+    <title> Lista de candidatos</title>
     <style>
-        <?php echo $bootstrap;
+        <?php
         echo $css;
-        ?>.table1,
-        .tr1,
-        .td1,
-        .th1 {
-            border: none;
-        }
+        ?>
     </style>
 </head>
 
 <body>
-    <div class="text-center">
-        <p>
-           <img src="<?php echo ?>images/ensignia/<?php echo $cabecalho->vc_ensignia; ?>.png" class="" width="50" height="50">
-            <br>
-            <?php echo $cabecalho->vc_republica; ?>
-            <br>
-            <?php echo $cabecalho->vc_ministerio; ?>
-            <br>
-            <?php echo $cabecalho->vc_escola; ?>
-            <table class="table1" style="width:40% ;">
-        <tr class="tr1">
-            <th class="th1" style="padding-right: 20px;"> VISTO <br>
-            O DIRECTOR
-          <br>
-                <!-- _____________________________________ -->
-                <br>
-               <br> <br>
-            </th>
-            
-        </tr>
-        <tr class="tr1">
-            <td class="td1" style=" padding-right:10px; "> <?php echo $cabecalho->vc_nomeDirector; ?>
-            </td>
-            
-        </tr>
+    @include('layouts._includes.fragments.lista.header')
 
-    </table>
-       
+    <div class="title">
+        Lista de candidatos
+    </div>
+    <div class="dates">
+
+        <strong>Ano Lectivo:</strong>
+        {{ $ano_lectivo }}
+        &nbsp;
+        <strong>Curso:</strong>
+        {{ $curso }}
+        &nbsp;
+        <strong>Classe:</strong>
+        {{ $classe }}ª
+        &nbsp;
+        
+
+
 
     </div>
-    <br>
-    <div class="text-center">
-        <h3 class="tema">Lista de Candidaturas de <?php if ($curso) :  echo ($curso);
-                                                    else : echo "Todos os Cursos";
-                                                    endif; ?></h3>
-    </div>
-    <div class="text-left">
-        <h5 class="text-dark">
-            Ano Lectivo: <?php if ($anolectivo) :  echo ($anolectivo);
-                            else : echo "Todos os anos lectivos";
-                            endif; ?>
-        </h5>
-    </div>
-    <table class="table table-striped  table-bodered table-hover">
+    <table class="table">
         <thead>
             <tr>
-                <th width="3px">Nº</th>
-                <th width="90px">Nº de Inscrição</th>
-                <th>NOME</th>
-                <th>Idade</th>
+            <th>Nº</th>
+            <th>Nº de Inscrição</th>
+            <th>NOME</th>
+            <th>Idade</th>
             </tr>
         </thead>
         <tbody>
+        <tbody>
 
             <?php $contador = 1; ?>
-            <?php foreach ($alunos as $aluno) : ?>
+            <?php foreach ($candidatos as $candidato) : ?>
 
-                <tr>
-                    <td><?php echo $contador++; ?></td>
-                    <td><?php echo $aluno->id ?></td>
-                    <td class="text-left"><?php echo $aluno->vc_primeiroNome . " " . $aluno->vc_nomedoMeio . " " . $aluno->vc_apelido; ?></td>
+            <tr>
+                <td><?php echo $contador++; ?></td>
+                <td><?php echo $candidato->id; ?></td>
+                <td class="text-left"><?php echo $candidato->vc_primeiroNome . ' ' . $candidato->vc_nomedoMeio . ' ' . $candidato->vc_apelido; ?></td>
 
-                    <td><?php echo date('Y') - date('Y', strtotime($aluno->dt_dataNascimento)) ?> anos</td>
-                </tr>
+                <td>{{calcularIdade($candidato->dt_dataNascimento)}} anos</td>
+            </tr>
 
+            
             <?php endforeach; ?>
 
             <br>
         </tbody>
+        </tbody>
     </table>
+    @include('layouts._includes.fragments.lista.footer.index')
+    @section('entidadade1', 'O COORDENADOR DA COMISSÃO')
+    @if (0)
+        @section('entidadade1-valor', 'xxxxxxxxxx')
+    @else
+        @section('entidadade1-valor', '-----------------------')
+    @endif
+    @section('entidadade2', 'O SUBDIRECTOR PEDAGÓGICO')
+    @section('entidadade2-valor', $cabecalho->vc_nomeSubdirectorPedagogico)
+    @include('layouts._includes.fragments.lista.footer.visto-2')
 
-    <?php
-    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-    date_default_timezone_set('Africa/Luanda');
-    ?>
-    <p class="text-center" style="margin-top: 6%;"> <?php echo  strtoupper("Uíge"); ?> , AOS <?php echo strtoupper(strftime('%d de %B de %G', strtotime(date('d-m-Y', strtotime(date('Y-m-d')))))) ?></p>
-    <table class="table1">
-        <tr class="tr1">
-            
-            <th class="th1" style="padding-left: 80px;padding-right: 100px;">
-               <br> <br>O COORDENADOR DA COMISSÃO <br>
-                <!-- _____________________________________________________ -->
-                <br>
-               <br> <br>
 
-            </th>
-            <th class="th1">
-               <br> <br> O SUBDIRECTOR PEDAGÓGICO <br>
-                <!-- ____________________________________________________ -->
-                <br>
-               <br> <br>
 
-            </th>
-        </tr>
-        <tr class="tr1">
-            <td class="td1"> <?php echo "" ?>
-            </td>
-            <td class="td1"> <?php echo $cabecalho->vc_nomeSubdirectorPedagogico; ?> <br>
-            </td>
-        </tr>
-
-    </table>
-
-    <div>
-
-    </div>
 </body>
 
 </html>
-
-
-
-
-
-

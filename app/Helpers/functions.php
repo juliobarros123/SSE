@@ -1314,7 +1314,23 @@ if (!function_exists('getSession')) {
 }
 function fh_funcionarios()
 {
-    return Funcionario::where('id_cabecalho', Auth::User()->id_cabecalho)->orderBy('id', 'desc');
+    return Funcionario::where('funcionarios.id_cabecalho', Auth::User()->id_cabecalho)->orderBy('id', 'desc');
+}
+function fh_logs_anos(){
+ return   DB::table('logs')
+      ->selectRaw('YEAR(created_at) as ano')->distinct('YEAR(created_at)')
+      ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+      ->orderBy('logs.id', 'desc');
+
+}
+function fh_users_logs()
+{
+   return DB::table('logs')
+    ->join('users', 'users.id', '=', 'logs.it_idUser')
+    ->select('users.id','users.vc_primemiroNome' ,'users.vc_apelido')->DISTINCT ('logs.it_idUser')
+    ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+    ->orderBy('logs.id', 'desc');
+      
 }
 function obter_iniciais($nomes)
 {

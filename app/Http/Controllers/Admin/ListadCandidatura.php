@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AnoLectivo;
 use App\Models\Cabecalho;
 use App\Models\Candidatura;
+use App\Models\Classe;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 use App\Models\Logger;
@@ -40,26 +41,30 @@ class ListadCandidatura extends Controller
     {
         $response['anoslectivos'] = fh_anos_lectivos()->get();
         $response['cursos'] = fh_cursos()->get();
+        $response['classes'] = fh_classes()->get();
         return view('admin/candidatura/listas/index', $response);
     }
-    public function recebeCandidaturas(Request $request)
+    public function lista_pdf(Request $request)
     {
         // dd(fh_cabecalho());
 
-        $data['cabecalho'] = fh_cabecalho();
 
         if (!$request->id_curso) {
-            $filtro_candidato = session()->get('filtro_candidato');
-            $request->id_curso = $filtro_candidato['id_curso'];
+            $filtro_candidato_lista = session()->get('filtro_candidato_lista');
+            $request->id_curso = $filtro_candidato_lista['id_curso'];
         }
         if (!$request->id_ano_lectivo) {
-            $filtro_candidato = session()->get('filtro_candidato');
-            $request->id_ano_lectivo = $filtro_candidato['id_ano_lectivo'];
+            $filtro_candidato_lista = session()->get('filtro_candidato_lista');
+            $request->id_ano_lectivo = $filtro_candidato_lista['id_ano_lectivo'];
         }
-        $data['anolectivo'] = 'Todos';
+        if (!$request->id_classe) {
+            $filtro_candidato_lista = session()->get('filtro_candidato_lista');
+            $request->id_classe = $filtro_candidato_lista['id_classe'];
+        }
+        $data['ano_lectivo'] = 'Todos';
 
         $data['curso'] = 'Todos';
-
+        $data['classe'] = 'Todas';
 
         // $data['anolectivo'] = anoLE
         // $data['curso'] = $curso;
@@ -82,22 +87,35 @@ class ListadCandidatura extends Controller
 
             $candidados = $candidados->where('candidatos.id_curso', $request->id_curso);
         }
-        $data = [
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            // dd($candidados->get(),$request->id_classe);
+            $data['classe'] =   Classe::find($request->id_classe)->vc_classe;
+
+            $candidados = $candidados->where('candidatos.id_classe', $request->id_classe);
+        }
+        $filtro_candidato_lista = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe,
         ];
-        storeSession('filtro_candidato', $data);
-        $response['candidatos'] = $candidados->get();
 
-        $mpdf = new \Mpdf\Mpdf();
+        storeSession('filtro_candidato_lista', $filtro_candidato_lista);
+        $data['candidatos'] = $candidados->get();
+        $data["css"] = file_get_contents('css/lista/style-2.css');
+        $data['cabecalho'] = fh_cabecalho();
 
-        $mpdf->SetFont("arial");
+     
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'margin_top' => 5,
+
+        ]);
         $mpdf->setHeader();
-        $mpdf->defaultfooterline = 0;
-        $mpdf->setFooter('{PAGENO}');
         $this->loggerData('Imprimiu Lista de Candidatura');
         $html = view("admin/pdfs/listas/candidaturas/index", $data);
+
         $mpdf->writeHTML($html);
+     
         $mpdf->Output("listasdCandidaturas.pdf", "I");
     }
     public function index(Candidatura $Rcandidatos, $anoLectivo, $curso)

@@ -31,7 +31,7 @@
                         @else
     
                             <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
-                                <option value="" >Todos</option>
+                                <option value="Todos" >Todos</option>
                                 @foreach ($anoslectivos as $anolectivo)
                                     <option value="{{ $anolectivo->id }}">
                                         {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
@@ -59,7 +59,7 @@
                     <div class="form-group col-md-4">
                         <label for="id_classe" class="form-label">Classe:</label>
                         <select name="id_classe" id="id_classe" class="form-control">
-                            <option value="" >Todas</option>
+                            <option value="Todas" >Todas</option>
                             @foreach ($classes as $classe)
                                 <option value="{{ $classe->id }}">
                                     {{ $classe->vc_classe }}ª classe

@@ -281,28 +281,14 @@
             <li class="nav-header">Mód. de Gestão de Matrículas</li>
 
             <li class="nav-item has-treeview ">
-                <a href="#" class="nav-link ">
+                <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
                         Candidatos
 
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-                 
-                    <li class="nav-item">
-                        <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Lista de Candidatos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarCandidaturas') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Imprimir Lista</p>
-                        </a>
-                    </li>
-                </ul>
+            
             <li class="nav-item has-treeview ">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -453,16 +439,11 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+               
                     <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarRec') }}" class="nav-link">
+                        <a href="{{ url('Admin/candidaturas/pesquisar/imprimir') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Candidatura</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/pesquisarRes') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Selecção de Candidatos</p>
+                            <p>Candidatos</p>
                         </a>
                     </li>
 

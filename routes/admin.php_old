@@ -197,7 +197,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Lista PDF dos Selecionados
 
     //Lista PDF dos Candidatos
-    Route::get('Admin/pesquisarCandidaturas', ['as' => 'admin.ListadCandidatura.pesquisarCandidaturas', 'uses' => 'Admin\ListadCandidatura@pesquisar']);
+    Route::get('Admin/candidaturas/pesquisar/imprimir', ['as' => 'admin.ListadCandidatura.candidaturas/pesquisar/imprimir', 'uses' => 'Admin\ListadCandidatura@pesquisar']);
     Route::post('Admin/recebeCandidaturas', ['as' => 'admin.ListadCandidatura.recebeCandidaturas', 'uses' => 'Admin\ListadCandidatura@recebeCandidaturas']);
 
     Route::get('Admin/listas/candidaturas/{anoLectivo}/{curso}', ['as' => 'admin.ListadCandidatura.lista', 'uses' => 'Admin\ListadCandidatura@index']);
