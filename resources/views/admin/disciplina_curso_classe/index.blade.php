@@ -46,11 +46,8 @@
                     <td>{{ $row->vc_nomeCurso }}</td>
                     <td>{{ $row->vc_classe }}ª Classe</td>
                     <td>
-                        @if ($row->terminal)
-                            Terminal
-                        @else
-                            Não Terminal
-                        @endif
+                    {{$row->terminal}}
+                       
                     </td>
                     <td class="text-center">
 

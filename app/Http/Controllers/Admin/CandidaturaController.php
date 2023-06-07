@@ -66,12 +66,18 @@ class CandidaturaController extends Controller
     public function classes_por_curso($curso)
     {
         try {
-            if ($curso == 'Nenhum') {
+            $curso = preg_replace('/\s+/', ' ', trim($curso));
+
+            if ($curso == 'Ensino Fundamental') {
                 $classes = fh_classes()->whereBetween('classes.vc_classe', [1, 9])->get();
+                return response()->json($classes);
+            } else if ($curso == 'Todos') {
+                $classes = fh_classes()->whereBetween('classes.vc_classe', [1, 13])->get();
                 return response()->json($classes);
             } else {
                 $classes = fh_classes()->whereBetween('classes.vc_classe', [10, 13])->get();
                 return response()->json($classes);
+
             }
         } catch (Exception $ex) {
             return response()->json($ex->getMessage());
@@ -350,6 +356,7 @@ class CandidaturaController extends Controller
                 'it_estado_candidato' => "1",
                 'dt_emissao' => $request->dt_emissao,
                 'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
+                'vc_municipio' => $request->vc_municipio,
                 'vc_localEmissao' => $request->vc_localEmissao,
                 'vc_vezesdCandidatura' => $vezes + 1,
                 'id_cabecalho' => id_cabecalho_user(Auth::User()->id),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Alunno;
 use App\Models\Municipio;
+use App\Models\Provincia;
 use Illuminate\Http\Request;
 use App\Models\Curso;
 use App\Models\Classe;
@@ -53,7 +54,7 @@ class DynamicSearch extends Controller
         return response()->json($turmasAtrib);
     }
 
-    public function  searchSubjectAtrib(Request $request)
+    public function searchSubjectAtrib(Request $request)
     {
 
         $turmasAtrib = [];
@@ -85,26 +86,26 @@ class DynamicSearch extends Controller
     }
     public function searchProcess(Request $request)
     {
-        try{
-        $alunos = [];
-        if ($request->has('q')) {
-            $buscar = $request->q;
-            $m = Matricula::where('id_aluno', $buscar)->count();
-            if($m){
-                $alunos = Alunno::leftJoin('matriculas','matriculas.it_idAluno','alunnos.id')->
-                select("alunnos.id", "matriculas.vc_imagem as foto","alunnos.vc_primeiroNome","alunnos.vc_nomedoMeio","alunnos.vc_ultimoaNome","matriculas.id as id_m")
-                    ->where('alunnos.id', 'LIKE', "%$buscar%")->limit(1)->get();
-            }else{
-                $alunos =   Alunno::
-                select("id", "foto","vc_primeiroNome","vc_nomedoMeio","vc_ultimoaNome")
-                    ->where('id', 'LIKE', "%$buscar%")->limit(1)->get();
+        try {
+            $alunos = [];
+            if ($request->has('q')) {
+                $buscar = $request->q;
+                $m = Matricula::where('id_aluno', $buscar)->count();
+                if ($m) {
+                    $alunos = Alunno::leftJoin('matriculas', 'matriculas.it_idAluno', 'alunnos.id')->
+                        select("alunnos.id", "matriculas.vc_imagem as foto", "alunnos.vc_primeiroNome", "alunnos.vc_nomedoMeio", "alunnos.vc_ultimoaNome", "matriculas.id as id_m")
+                        ->where('alunnos.id', 'LIKE', "%$buscar%")->limit(1)->get();
+                } else {
+                    $alunos = Alunno::
+                        select("id", "foto", "vc_primeiroNome", "vc_nomedoMeio", "vc_ultimoaNome")
+                        ->where('id', 'LIKE', "%$buscar%")->limit(1)->get();
+                }
             }
-        }
 
-        return response()->json($alunos);
-    }catch(Exception $ex){
-        return response()->json($ex->getMessage());
-    }
+            return response()->json($alunos);
+        } catch (Exception $ex) {
+            return response()->json($ex->getMessage());
+        }
     }
 
     public function searchCourse(Request $request)
@@ -181,11 +182,22 @@ class DynamicSearch extends Controller
     public function searchMunicipe($id_provincia)
     {
         $municipios = [];
-        
-            $municipios = Municipio::select("id", "vc_nome")
-                ->where('it_id_provincia',  $id_provincia)->get();
-       
+
+        $municipios = Municipio::select("id", "vc_nome")
+            ->where('it_id_provincia', $id_provincia)->get();
+
         return response()->json($municipios);
+    }
+
+    public function municipios_nome($provincia)
+    {
+        $p=Provincia::where('vc_nome',$provincia)->first();
+        $municipios = Municipio::select("id", "vc_nome")
+        
+            ->where('it_id_provincia',  $p->id)->get();
+
+        return response()->json($municipios);
+
     }
 
     public function searchClassRegistration(Request $request)

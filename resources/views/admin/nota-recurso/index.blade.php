@@ -38,14 +38,14 @@
                 <th>ACÇÕES</th>
             </tr>
         </thead>
-
+{{-- @dump($notas) --}}
         <tbody class="bg-white">
             @if ($notas)
                 @foreach ($notas as $nota)
                     <tr class="text-center">
                         <th>{{$nota->id_n}}</th>
 
-                        <td>{{ $nota->vc_primeiroNome." ".$nota->vc_nomedoMeio." ".$nota->vc_ultimoaNome }}</td>
+                        <td>{{ $nota->vc_primeiroNome." ".$nota->vc_nomedoMeio." ".$nota->vc_apelido }}</td>
                         <td>{{ $nota->nota }}</td>
                         <td>{{ $nota->vc_acronimo }}</td>
                         @csrf
@@ -62,7 +62,7 @@
                                     {{-- <a href="{{ route('admin.matriculas.editar', $matricula->id) }}"
                                         class="dropdown-item">Editar</a> --}}
                                         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral')
-                                    <a href="{{ route('admin.notas-recurso.eliminar', $nota->id_n) }}"
+                                    <a href="{{ route('admin.notas-recurso.eliminar', $nota->slug) }}"
                                         class="dropdown-item" data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
 
                                         {{-- <a href="{{ route('admin.matriculas.purgar', $matricula->id) }}"

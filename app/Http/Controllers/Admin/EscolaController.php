@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use Image;
 use App\Models\User;
 use Illuminate\Support\Str;
-
+use App\Models\Curso;
 
 class EscolaController extends Controller
 {
@@ -145,10 +145,11 @@ class EscolaController extends Controller
                 'ya_fim' => date('Y'),
                 'id_cabecalho' => $cab->id
             ]);
+            
             Curso::create([
-                'vc_nomeCurso' => 'Nenhum',
-                'vc_descricaodoCurso'=>'Nenhum',
-                'vc_shortName'=>'Nenhum',
+                'vc_nomeCurso' => 'Ensino Fundamental',
+                'vc_descricaodoCurso'=>'Ensino Fundamental',
+                'vc_shortName'=>'Ensino Fundamental',
                 'id_cabecalho'=>$cab->id
             ]);
             AnoLectivoPublicado::create(

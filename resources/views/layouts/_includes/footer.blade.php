@@ -89,7 +89,7 @@
         var curso = $(this).find("option:selected").text();
         var url = "{{ url('/') }}"
         url = url + '/classes_por_curso/' + curso;
-    
+
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -103,12 +103,58 @@
                 console.log(classes);
                 $("#id_classe").empty();
                 $("#id_classe").append('<option value="">Selecciona a Classe</option>');
-                $.each(classes, function(index,classe) {
+                $.each(classes, function(index, classe) {
 
-                //  console.log(classe,)
-                        $("#id_classe").append('<option value="' + classe.id + ' " >' +classe.vc_classe +
-                            'ª Classe</option>');
-                
+                    //  console.log(classe,)
+                    $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
+                        .vc_classe +
+                        'ª Classe</option>');
+
+
+                });
+
+
+
+
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+    $('#id_provincia').change(function() {
+        var provincia = $(this).val();
+        // var idMunicipio = $('#id_municipio').val();
+        // alert(id)
+        let url_origin = "{{ url('/') }}";
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: url_origin + `/buscar/municipios/${provincia}/nome`,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            async: false,
+            success: function(municipios) {
+
+                // response.forEach(element => {
+                //     console.log
+                // })
+                //console.log(municipios);
+                $("#id_municipio").empty();
+                $("#id_municipio").append('<option select  "> Selecionar o Município</option>');
+                $.each(municipios, function(municipio) {
+
+                    //console.log(municipios[municipio].vc_nome);
+
+                    $("#id_municipio").append('<option value="' + municipios[
+                            municipio].id + ' " selected>' + municipios[municipio]
+                        .vc_nome +
+                        '</option>');
+
 
                 });
 

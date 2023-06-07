@@ -46,6 +46,7 @@ class HomeController extends Controller
 
     public function raiz()
     {
+     
         // dd('2022-08-18');
         if (Auth::user()->vc_tipoUtilizador == 'Candidato') {
             return redirect('candidatura');

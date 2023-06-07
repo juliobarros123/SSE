@@ -21,6 +21,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
+    use HasFactory;
+
     protected $fillable = ['id_cabecalho','slug', 
         'vc_nomeUtilizador',
         'vc_primemiroNome',

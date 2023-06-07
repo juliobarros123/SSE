@@ -160,7 +160,9 @@ class TurmaController extends Controller
         $dados['cursos'] = fh_cursos()->get();
         $dados['ano_letivos'] = fh_anos_lectivos()->get();
 
-
+        $dados['view_turma']=1;
+      
+     
         return view('admin.turmas.cadastrar.index', $dados);
     }
 
@@ -226,6 +228,7 @@ class TurmaController extends Controller
             $dados['cursos'] = fh_cursos()->get();
             $dados['ano_letivos'] = fh_anos_lectivos()->get();
 
+            $dados['view_turma']=1;
 
             return view('admin.turmas.editar.index', $dados);
         else:

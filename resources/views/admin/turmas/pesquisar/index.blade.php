@@ -45,7 +45,7 @@
                 <div class="form-group col-md-6">
                     <label for="id_curso" class="form-label">Curso:</label>
                     <select name="id_curso" id="id_curso" class="form-control">
-                        <option value="" >Todos</option>
+                        <option value="Todos" >Todos</option>
                         @foreach ($cursos as $curso)
                             <option value="{{ $curso->id }}">
                                 {{ $curso->vc_nomeCurso }}

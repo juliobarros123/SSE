@@ -154,14 +154,15 @@ class NotaDinamca extends Controller
     public function alunos($slug_turma_user, $trimestre)
     {
         // dd("ola");
+        try{
         $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
 // dd( $turma_professor);
         $turma = fh_turmas()->where('turmas.id',$turma_professor->id_turma)->first();
      
         $alunos = fha_turma_alunos($turma->slug);
 
-        $nota=fhap_media_geral(113, $turma_professor->it_idClasse,$turma_professor->id_ano_lectivo);
-        dd(  $nota );
+        // $nota=fhap_media_geral(113, $turma_professor->it_idClasse,$turma_professor->id_ano_lectivo);
+        // dd(  $nota );
         $response['trimestre'] = $trimestre;
         $response['alunos'] = $alunos;
         $response['turma'] = $turma;
@@ -169,6 +170,12 @@ class NotaDinamca extends Controller
 
 
         return view('admin.nota_em_carga.mostrar_alunos.index', $response);
+        }catch(Exception $ex){
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+
+        }
     }
     public function filtrar_alunos($alunos_filtrado, $alunos)
     {

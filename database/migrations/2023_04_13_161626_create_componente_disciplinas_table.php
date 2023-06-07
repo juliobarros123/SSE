@@ -20,9 +20,8 @@ class CreateComponenteDisciplinasTable extends Migration
             $table->foreign('id_componente')->references('id')->on('classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->foreign('id_disciplina')->references('id')->on('disciplinas')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
-           
             $table->timestamps();
- $table->string('slug')->unique();
+            $table->string('slug')->unique();
         });
     }
 

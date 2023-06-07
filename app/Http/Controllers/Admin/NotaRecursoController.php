@@ -14,6 +14,7 @@ use App\Models\NotaRecurso;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Logger;
+
 class NotaRecursoController extends Controller
 {
     //
@@ -25,7 +26,7 @@ class NotaRecursoController extends Controller
         'message' => 'Turma Indisponível',
     ];
 
-   
+
     public function loggerData($mensagem)
     {
         $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
@@ -39,27 +40,35 @@ class NotaRecursoController extends Controller
     }
     public function index()
     {
-        $response['notas'] = NotaRecurso::join('disciplinas', 'nota_recursos.id_disciplina', '=', 'disciplinas.id')
-            ->join('alunnos', 'nota_recursos.it_idAluno', '=', 'alunnos.id')
-            ->select('nota_recursos.id as id_n', 'disciplinas.*', 'alunnos.*','nota_recursos.*')
-            ->orderBy('nota_recursos.id','asc')
+        $response['notas'] = fh_notas_recurso()
+            ->orderBy('nota_recursos.id', 'asc')
             ->get();
+        // dd(  $response['notas']);
         return view('admin.nota-recurso.index', $response);
     }
-    public function eliminar($id)
+    public function eliminar($slug)
     {
-        NotaRecurso::find($id)->delete();
-        // dd($id);
-        $this->Logger->Log('info', 'Eliminou nota recurso ');
-        return redirect()->back()->with('eliminado',1);
+        try {
+            NotaRecurso::where('slug', $slug)->delete();
+            // dd($id);
+            $this->Logger->Log('info', 'Eliminou nota recurso ');
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Nota eliminada']);
+        } catch (Exception $ex) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+
+        }
+
     }
     public function inserir()
     {
-        $response['disciplinas'] = Disciplinas::get();
+        $response['disciplinas'] = fh_disciplinas()->get();
         return view('admin.nota-recurso.inserir.index', $response);
     }
     public function cadastrar(Request $req)
     {
+        // dd($req);
         // dd($req);
         $keys = $req->keys();
         $processos = array();
@@ -72,18 +81,21 @@ class NotaRecursoController extends Controller
 
 
                 if (isset($req["processo-$arraySplitkey[1]"])) {
-                    $matricula =  Matricula::where('id_aluno', $arraySplitkey[1])->first();
+                    $aluno = fh_alunos()->where('alunnos.processo', $arraySplitkey[1])->first();
+                    // $matricula = fh_matriculas()->where('alunnos.processo', $arraySplitkey[1])->first();
+                    // dd(  $matricula);
 
-
-                    $dcc = $this->fh_disciplinas_cursos_classes()
-                        ->where('disciplinas.id',   $req->id_disciplina)
-                        ->where('cursos.id', $matricula->it_idCurso)->first();
+                    $dcc = fh_disciplinas_cursos_classes()
+                        ->where('disciplinas.id', $req->id_disciplina)
+                        ->where('cursos.id', $aluno->id_curso)->first();
+                    // dd($dcc);
                     if ($dcc) {
 
                         NotaRecurso::create([
-                            'id_aluno' => $arraySplitkey[1],
+                            'id_aluno' => $aluno->id,
                             'id_disciplina' => $req->id_disciplina,
                             'nota' => ($req["notaProcesso-$arraySplitkey[1]"]),
+                            'id_cabecalho' => Auth::User()->id_cabecalho
                         ]);
                         $this->Logger->Log('info', "Adicionou nota recurso para o aluno com processo $arraySplitkey[1]");
                     } else {
@@ -101,7 +113,7 @@ class NotaRecursoController extends Controller
 
     // $divisor = $this->acharDivisor($nota->classe);
     // $mts = $this->dividirNota($nota->nota, $divisor);
-    public  function fh_disciplinas_cursos_classes()
+    public function fh_disciplinas_cursos_classes()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
@@ -123,7 +135,7 @@ class NotaRecursoController extends Controller
 
 
 
-            $linha =  Nota::where('id_aluno', $processo)
+            $linha = Nota::where('id_aluno', $processo)
                 ->where('id_classe', $id_classe)
                 ->where('it_disciplina', $id_CCD)
                 ->where('id_turma', $it_idTurma)
@@ -138,7 +150,7 @@ class NotaRecursoController extends Controller
                     ->where('id_turma', $it_idTurma)
                     ->update([
                         'fl_nota1' => $nota,
-                        'fl_nota2' =>  $nota,
+                        'fl_nota2' => $nota,
                         'fl_mac' => $nota,
                         'fl_media' => $nota,
 
@@ -167,12 +179,12 @@ class NotaRecursoController extends Controller
 
         try {
             // if ($estudando == 0) {
-                $response['processosAluno'] = $this->matricula->processosAluno($processo)->first();
-                // $response['disciplinas'] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
-                //     ->select("disciplinas.vc_nome", "disciplinas.id")
-                //     ->distinct()
-                //     ->pluck("disciplinas.vc_nome", "disciplinas.id");
-                // return response()->json($response);
+            $response['processosAluno'] = fh_matriculas()->where('alunnos.processo', $processo)->first();
+            // $response['disciplinas'] = $this->fh_disciplinas_cursos_classes()->where('disciplinas_cursos_classes.it_curso', $response['processosAluno']->it_idCurso)
+            //     ->select("disciplinas.vc_nome", "disciplinas.id")
+            //     ->distinct()
+            //     ->pluck("disciplinas.vc_nome", "disciplinas.id");
+            // return response()->json($response);
             // } else {
             //     $ultimoProcesso = $this->matricula->processosAluno($processo)->first();
             //     $limit = $ultimoProcesso->vc_classe - 10;
@@ -186,7 +198,7 @@ class NotaRecursoController extends Controller
             //             ->pluck("disciplinas.vc_nome", "disciplinas.id");
             //         // array_push($response['disciplinas'], $r);
             //     }
-                return response()->json($response);
+            return response()->json($response);
             // }
         } catch (\Exception $ex) {
             return response()->json($ex->getMessage());

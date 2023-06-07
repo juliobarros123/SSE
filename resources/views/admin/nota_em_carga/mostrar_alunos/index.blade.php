@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Inserir Notas em Carga')
+@section('titulo', 'Inserir Notas')
 
 @section('conteudo')
 
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Inserir Notas em Carga</h3>
+            <h3>Inserir Notas</h3>
             <div class="dates">
                 <strong>Turma:</strong>
                 {{$turma->vc_nomedaTurma}}
@@ -98,25 +98,36 @@
                                     <th scope="row">{{ $aluno->processo }}</th>
                                     <td> {{ $aluno->vc_primeiroNome }} {{ $aluno->vc_nomedoMeio }}
                                         {{ $aluno->vc_apelido }}</td>
+                                        @php
+                                        $mac = fha_mac_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
+                                        $nota1 = fha_nota1_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
+                                        $nota2 = fha_nota2_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
+                                        $media = fha_media_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
+                                        
+                                    @endphp
                                     <td>
 
                                      
                                             <input type="number" min="0" max="20" step="any"
                                                 class="form-control border-secondary  " placeholder="MAC"
-                                                name="fl_mac_{{ $aluno->processo }}" value="" >
+                                                name="fl_mac_{{ $aluno->processo }}" 
+                                                style="color:<?php echo $mac >= 10 ? 'blue' : 'red'; ?>!important" value="{{ $mac}}" >
 
                                     </td>
                                     <td>
 
                                         <input type="number" min="0" max="20" step="any"
                                             class="form-control border-secondary  " placeholder="Nota 1"
-                                            name="fl_nota1_{{ $aluno->processo }}" value="" >
+                                            name="fl_nota1_{{ $aluno->processo }}" 
+                                            style="color:<?php echo $nota1 >= 10 ? 'blue' : 'red'; ?>!important"
+                                            value="{{ $nota1}}" >
 
                                     </td>
                                     <td class="nota2">
                                         <input type="number" min="0" max="20" step="any"
                                             class="form-control border-secondary  " placeholder="Nota 2"
-                                            name="fl_nota2_{{ $aluno->processo }}" value="">
+                                            name="fl_nota2_{{ $aluno->processo }}" value="{{ $nota2}}"
+                                            style="color:<?php echo $nota2>= 10 ? 'blue' : 'red'; ?>!important">
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center">

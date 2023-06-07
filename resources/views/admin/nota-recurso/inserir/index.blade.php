@@ -57,10 +57,12 @@
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label>Disciplinas</label>
-                            <select name="id_disciplina" class="  form-control buscarDisciplina select2"
+                            <select name="id_disciplina" class="  form-control  select-dinamico"
                                 id="selectDisciplinaRecurso">
                                 @isset($disciplinas)
-                                    <option value=""> </option>
+                                @foreach ($disciplinas as $disciplina)
+                                <option value="{{ $disciplina->id }}">{{ $disciplina->vc_nome }}</option>
+                            @endforeach
                                 @else
                                     <option selected value="{{ isset($dt) ? $dt->id_disciplina : '0' }}">
                                         {{ isset($dt) ? $dt->vc_nome : 'Seleciona a disciplina' }}

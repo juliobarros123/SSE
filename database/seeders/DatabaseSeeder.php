@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         if ($cabecalhos == 0) {
             \App\Models\Cabecalho::factory(1)->create();
         }
-        $user = \App\Models\User::where('vc_email', 'escolauige@gmail.com')->count();
+        $user = \App\Models\User::where('vc_email', 'admin@gmail.com')->count();
         if ($user == 0) {
             \App\Models\User::factory(1)->create();
         }
@@ -122,9 +122,9 @@ class DatabaseSeeder extends Seeder
         if ($curso == 0) {
            
                 Curso::create([
-                    'vc_nomeCurso' => 'Nenhum',
-                    'vc_descricaodoCurso'=>'Nenhum',
-                    'vc_shortName'=>'Nenhum',
+                    'vc_nomeCurso' => 'Ensino Fundamental',
+                    'vc_descricaodoCurso'=>'Ensino Fundamental',
+                    'vc_shortName'=>'Ensino Fundamental',
                     'id_cabecalho'=>id_first_cabecalho()
                 ]);
               

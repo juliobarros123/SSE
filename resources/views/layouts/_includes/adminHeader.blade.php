@@ -39,6 +39,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="{{ asset('/css/fontfamily.css?family=Source+Sans+Pro:300,400,400i,700') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/css/datatables/dataTables.bootstrap4.min.css') }}">
+    {{-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Adicione o link da fonte personalizada aqui --> --}}
 
     {{-- Gráficos --}}
     {{--  --}}
@@ -85,7 +86,9 @@
 
                         <div class="nav-item-user dropbtn ">
                             <div class="dropdown">
-                                <div class="dropbtn">{{obter_iniciais( Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido )}}</div>
+                                <div class="dropbtn">
+                                    {{ obter_iniciais(Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido) }}
+                                </div>
                                 <div class="dropdown-content card ">
                                     <div class="container  d-flex justify-content-center">
 
@@ -238,7 +241,7 @@
                                             <p>Cartão</p>
                                         </a>
                                     </li>
-                                   
+
 
 
                                 </ul>
@@ -281,7 +284,7 @@
 
                     </p>
                 </a>
-            
+
             <li class="nav-item has-treeview ">
                 <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -290,7 +293,7 @@
 
                     </p>
                 </a>
-          
+
             </li>
 
             </li>
@@ -324,19 +327,14 @@
 
 
 
-                    <li class="nav-item">
-                        <a href="{{ url('admin/matriculas/pesquisar_pdf') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Imprimir Lista</p>
-                        </a>
-                    </li>
+
                 </ul>
             </li>
             <li class="nav-item has-treeview ">
                 <a href="{{ route('admin.alunos.importar') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                       Importar
+                        Importar
 
                     </p>
                 </a>
@@ -401,7 +399,7 @@
 
         @endif
 
-        
+
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
@@ -417,7 +415,7 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-               
+
                     <li class="nav-item">
                         <a href="{{ url('Admin/candidaturas/pesquisar/imprimir') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
@@ -431,8 +429,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin/funcionarios/listas/imprimir') }}" class="nav-link"
-                            target="_blank">
+                        <a href="{{ url('admin/matriculas/pesquisar_pdf') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Matriculados</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('admin/funcionarios/listas/imprimir') }}" class="nav-link" target="_blank">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Funcionários</p>
                         </a>
@@ -472,8 +475,8 @@
                             <p>Candidatos Aceitos</p>
                         </a>
                     </li>
-                   
-                 
+
+
 
                     <li class="nav-item">
                         <a href="{{ route('relatorios.matriculados.pesquisar') }}" class="nav-link">
@@ -481,7 +484,7 @@
                             <p>Matriculas</p>
                         </a>
                     </li>
-                  
+
 
                 </ul>
             </li>
@@ -573,6 +576,17 @@
                 </a>
 
             </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('inicio-termino-ano-lectivo') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Início-Fim(Ano Lectivo)
+
+                    </p>
+                </a>
+
+            </li>
+            
 
 
             <li class="nav-item has-treeview">
@@ -650,12 +664,12 @@
         @endif
 
 
-    
+
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-                    <li class="nav-header">Mod. de Gestão de Turmas</li>
+            <li class="nav-header">Mod. de Gestão de Turmas</li>
 
             <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
@@ -734,80 +748,51 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
-            <li class="nav-header"> Mod. de Recuperação(Aluno)</li>
+            <li class="nav-header"> Mod. de Pagamentos</li>
 
             <li class="nav-item has-treeview">
-                <a href="{{ route('admin.notas-recurso.index') }}" class="nav-link">
+                <a href="{{ route('tipos-pagamento') }}" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
-                        Notas(Recurso/Exame)
+                        Tipo de Pagamento
 
                     </p>
                 </a>
 
             </li>
+            <li class="nav-item has-treeview ">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Pagamento
+
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                    
+                        <li class="nav-item">
+                            <a href="{{ route('pagamentos.pesquisar') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pesquisar</p>
+                            </a>
+                        </li>
+                
+                    <li class="nav-item">
+                        <a href="{{ url('Admin/matriculas/pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Listar Pagamentos</p>
+                        </a>
+                    </li>
+
+
+
+
+
+                </ul>
+            </li>
+
         @endif
-
-        @if (Auth::user()->vc_tipoUtilizador == 'Secretaria' ||
-                Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                Auth::user()->vc_tipoUtilizador == 'Director Geral')
-            <li class="nav-header">Mod. de Documentos</li>
-            <li class="nav-item has-treeview">
-                <a href="{{ url('Declaracoes/paginaListar') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Declarações Sem Notas
-
-                    </p>
-                </a>
-
-            </li>
-
-
-            <li class="nav-item has-treeview">
-                <a href="{{ route('documentos.certificados.emitir') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Certificado
-
-                    </p>
-                </a>
-            </li>
-
-          
-
-           
-                <li class="nav-item has-treeview">
-                    <a href="{{ route('documentos.declaracao_frequencia.emitir') }}" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard"></i>
-                        <p>
-                            Declaração de Frequência
-
-                        </p>
-                    </a>
-                </li>
-         
-
-            <li class="nav-item has-treeview">
-                <a href="{{ route('admin.documentos.componentes') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Componete
-
-                    </p>
-                </a>
-            </li>
-            <li class="nav-item has-treeview">
-                <a href="{{ route('admin.documentos.componentes-disciplinas') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Componete disciplina
-
-                    </p>
-                </a>
-            </li>
-        @endif
-
 
 
 

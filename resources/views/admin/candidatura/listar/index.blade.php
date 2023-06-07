@@ -165,6 +165,8 @@
                                     {{ $candidato->vc_residencia }}<br>
                                     <b>Naturalidade: </b>
                                     {{ $candidato->vc_naturalidade }}<br>
+                                    <b>Município: </b>
+                                    {{ $candidato->vc_municipio }}<br>
                                     <b>Provincia: </b>
                                     {{ $candidato->vc_provincia }}<br>
                                     <b>Bilhete de Identidade Nº: </b>

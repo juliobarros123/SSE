@@ -128,6 +128,8 @@
                                         {{ $aluno->vc_residencia }}<br>
                                         <b>Naturalidade: </b>
                                         {{ $aluno->vc_naturalidade }}<br>
+                                        <b>Município: </b>
+                                        {{ $aluno->vc_municipio }}<br>
                                         <b>Provincia: </b>
                                         {{ $aluno->vc_provincia }}<br>
                                         <b>Bilhete de Identidade Nº: </b>

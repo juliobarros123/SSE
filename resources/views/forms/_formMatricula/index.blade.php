@@ -25,7 +25,7 @@
 
         <label>Turma</label>
         {{-- <select name="it_idTurma" class="form-control buscarTurma"> --}}
-        <select name="it_idTurma" id="id_turma" class="form-control select2" required>
+        <select name="it_idTurma" id="id_turma" class="form-control select-dinamico" required>
             @isset($matricula)
                 <option value="{{ $matricula->it_idTurma }}">{{ $matricula->vc_nomedaTurma }}/
                     {{ $matricula->vc_classe }}ª

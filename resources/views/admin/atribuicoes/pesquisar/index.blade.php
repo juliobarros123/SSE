@@ -27,10 +27,9 @@
                         </select>
                         <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
                     @else
-                    <option value="Todos" >Todos</option>
-
+                 
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
-                            <option value="" >Todos</option>
+                            <option value="Todos" >Todos</option>
                             @foreach ($anoslectivos as $anolectivo)
                                 <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}

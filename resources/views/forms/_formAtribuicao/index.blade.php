@@ -1,7 +1,7 @@
 <div class="col-sm-4">
     <div class="form-group">
         <label>Turma</label>
-        <select name="it_idTurma" class="form-control" required>
+        <select name="it_idTurma" class="form-control select-dinamico" required>
             @isset($turma)
                 <option value="{{ $turma->id }}">{{ $turma->vc_nomedaTurma }}/
                     {{ $turma->vc_classe }}ª

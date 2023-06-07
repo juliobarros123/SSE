@@ -9,11 +9,14 @@ use App\Models\Classe;
 use App\Models\DireitorTurma;
 use App\Models\Disciplinas;
 use App\Models\IdadedeCandidatura;
+use App\Models\Municipio;
 use App\Models\Nota;
+use App\Models\Pagamento;
 use App\Models\PermissaoProfessorNota;
 use App\Actions\Fortify;
 use App\Models\Processo;
 use App\Models\Provincia;
+use App\Models\TipoPagamento;
 use App\Models\Turma;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +38,7 @@ use App\Models\Matricula;
 use Carbon\Carbon;
 use App\Models\TurmaUser;
 use Illuminate\Support\Facades\Session;
-
+use App\Models\InicioTerminoAnoLectivo;
 function ficha($vc_bi)
 {
 }
@@ -66,10 +69,10 @@ function fh_cabecalho()
 function gerarProcesso()
 {
 
-    $candidato_aluno = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->orderBy('alunnos.processo', 'desc')->first();
+    $processo = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->max('processo');
 
-    if ($candidato_aluno) {
-        return $candidato_aluno->processo + 1;
+    if ($processo) {
+        return $processo + 1;
     } else {
         return fh_processo_actual()->first()->it_processo + 1;
     }
@@ -78,10 +81,11 @@ function gerarProcesso()
 function ultimo_processo()
 {
 
-    $candidato_aluno = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->orderBy('alunnos.processo', 'desc')->first();
+    $processo = fh_alunos()->where('alunnos.tipo_aluno', 'Candidato_aluno')->max('processo');
 
-    if ($candidato_aluno) {
-        return $candidato_aluno->processo;
+
+    if ($processo) {
+        return $processo;
     } else {
 
         return Alunno::where('id_cabecalho', Auth::User()->id_cabecalho)->max('processo');
@@ -137,18 +141,31 @@ function fh_matriculas()
 
 
 
-
+function fha_municipios()
+{
+    return Municipio::get();
+}
 function fh_turmas()
 {
     // dd("ola");
 
-    return Turma::join('classes', 'turmas.it_idClasse', '=', 'classes.id')
-        ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
-        ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
-        ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
-        ->select('turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'turmas.slug as slug', 'turmas.id as id');
+    $ano_lectivo_publicado = fh_anos_lectivos_publicado()->first();
+    if ($ano_lectivo_publicado) {
+        return Turma::join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+            ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+            ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
+            ->where('turmas.it_idAnoLectivo', $ano_lectivo_publicado->id_anoLectivo)
+            ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+            ->select('turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'turmas.slug as slug', 'turmas.id as id');
 
+    } else {
+        return Turma::join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+            ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+            ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
 
+            ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+            ->select('turmas.*', 'cursos.*', 'anoslectivos.*', 'classes.*', 'turmas.slug as slug', 'turmas.id as id');
+    }
 
 }
 
@@ -726,6 +743,48 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
 
 }
 
+function fh_mes_valido($tipo, $mes, $id_classe)
+{
+    return TipoPagamento::where('tipo', $tipo)
+        ->where('pagamento', $mes)
+        ->where('id_classe', $id_classe)
+        ->where('tipo_pagamentos.id_cabecalho', Auth::User()->id_cabecalho);
+
+
+}
+
+function fh_pagamento_estado($id_tipo_pagamento, $processo, $id_ano_lectivo)
+{
+    
+    $aluno = fha_aluno_processo($processo);
+    return Pagamento::where('id_tipo_pagamento', $id_tipo_pagamento)
+        ->where('id_aluno', $aluno->id)
+        ->where('id_ano_lectivo', $id_ano_lectivo)
+        ->where('pagamentos.id_cabecalho', Auth::User()->id_cabecalho);
+}
+function fh_meses()
+{
+    return $meses = array(1 => "Janeiro", 2 => "Fevereiro", 3 => "Março", 4 => "Abril", 5 => "Maio", 6 => "Junho", 7 => "Julho", 8 => "Agosto", 9 => "Setembro", 10 => "Outubro", 11 => "Novembro", 12 => "Dezembro");
+}
+
+function fh_tipos_pagamento()
+{
+    return TipoPagamento::leftJoin('classes', 'classes.id', 'tipo_pagamentos.id_classe')
+        ->where('tipo_pagamentos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('classes.vc_classe', 'tipo_pagamentos.*');
+
+}
+function fh_notas_recurso()
+{
+    return fh_alunos()
+        ->join('nota_recursos', 'nota_recursos.id_aluno', '=', 'alunnos.id')
+        ->join('disciplinas', 'nota_recursos.id_disciplina', '=', 'disciplinas.id')
+        ->select('nota_recursos.id as id_n', 'disciplinas.*', 'candidatos.*', 'alunnos.*', 'nota_recursos.*')
+        ->orderBy('nota_recursos.id', 'asc')
+        ->where('nota_recursos.id_cabecalho', Auth::User()->id_cabecalho);
+
+}
+
 function fhap_media_geral($processo, $id_classe, $id_ano_lectivo)
 {
     // dd($processo, $trimestre, $id_classe, $id_ano_lectivo);
@@ -1286,6 +1345,86 @@ function hoje_extenso()
     $data = Carbon::now()->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY');
     return $data;
 }
+
+function calcularMesesPassados($data) {
+    $dataAtual = new DateTime();
+    $dataPassada = DateTime::createFromFormat('Y-m-d', $data);
+    
+    $intervalo = $dataPassada->diff($dataAtual);
+    
+    $anos = $intervalo->y;
+    $meses = $intervalo->m;
+    
+    $totalMeses = ($anos * 12) + $meses;
+    
+    return $totalMeses;
+}
+function obterNumeroMes($mesExtenso) {
+    $meses = array(
+        'janeiro' => 1,
+        'fevereiro' => 2,
+        'março' => 3,
+        'abril' => 4,
+        'maio' => 5,
+        'junho' => 6,
+        'julho' => 7,
+        'agosto' => 8,
+        'setembro' => 9,
+        'outubro' => 10,
+        'novembro' => 11,
+        'dezembro' => 12
+    );
+
+    $mesExtenso = strtolower($mesExtenso);
+
+    if (array_key_exists($mesExtenso, $meses)) {
+        return $meses[$mesExtenso];
+    } else {
+        return null; // Retorna null se o mês não for encontrado
+    }
+}
+function fh_inicio_termino_ano_lectivo(){
+
+  return  InicioTerminoAnoLectivo::where('inicio_termino_ano_lectivos.id_cabecalho', Auth::User()->id_cabecalho);
+}
+function fha_calcular_valor_pagar($dataVencimento, $valorPagar, $diasTolerancia, $valorMulta) {
+    // Obter a data atual
+    $dataAtual = new DateTime();
+
+    // Converter a data de vencimento para o formato DateTime
+    $dataVencimento = DateTime::createFromFormat('Y-m-d', $dataVencimento);
+
+    // Adicionar os dias de tolerância à data de vencimento
+    $dataLimitePagamento = clone $dataVencimento;
+    $dataLimitePagamento->modify("+$diasTolerancia days");
+// dd($dataAtual > $dataLimitePagamento);
+    // Verificar se a data atual é posterior à data limite de pagamento
+    if ($dataAtual > $dataLimitePagamento) {
+        // Aplicar a multa ao valor a pagar
+        $valorAPagar = $valorPagar + $valorMulta;
+    } else {
+        $valorAPagar = "----------";
+    }
+
+    return $valorAPagar;
+}
+
+// Exemplo de uso
+// $dataVencimento = '2023-06-01';
+// $valorPagar = 3000;
+
+
+function converterData($data) {
+     // Extrai a data e hora separadamente
+     list($dataPart, $horaPart) = explode(' ', $data);
+
+     // Divide a data em ano, mês e dia
+     list($ano, $mes, $dia) = explode('-', $dataPart);
+ 
+     // Retorna a data no formato português
+     return $dia . '/' . $mes . '/' . $ano;
+}
+
 function pri_ultimo_nome($nome)
 {
     $partes = explode(' ', $nome);
@@ -1294,12 +1433,12 @@ function pri_ultimo_nome($nome)
     return [$primeiroNome, $ultimoNome];
 }
 
-    function storeSession($sessionName, $data)
-    {
-        session()->remove('filtro_candidato');
+function storeSession($sessionName, $data)
+{
+    session()->remove('filtro_candidato');
 
-        session()->put($sessionName, $data);
-    }
+    session()->put($sessionName, $data);
+}
 
 
 if (!function_exists('getSession')) {
@@ -1316,21 +1455,22 @@ function fh_funcionarios()
 {
     return Funcionario::where('funcionarios.id_cabecalho', Auth::User()->id_cabecalho)->orderBy('id', 'desc');
 }
-function fh_logs_anos(){
- return   DB::table('logs')
-      ->selectRaw('YEAR(created_at) as ano')->distinct('YEAR(created_at)')
-      ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
-      ->orderBy('logs.id', 'desc');
+function fh_logs_anos()
+{
+    return DB::table('logs')
+        ->selectRaw('YEAR(created_at) as ano')->distinct('YEAR(created_at)')
+        ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+        ->orderBy('logs.id', 'desc');
 
 }
 function fh_users_logs()
 {
-   return DB::table('logs')
-    ->join('users', 'users.id', '=', 'logs.it_idUser')
-    ->select('users.id','users.vc_primemiroNome' ,'users.vc_apelido')->DISTINCT ('logs.it_idUser')
-    ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
-    ->orderBy('logs.id', 'desc');
-      
+    return DB::table('logs')
+        ->join('users', 'users.id', '=', 'logs.it_idUser')
+        ->select('users.id', 'users.vc_primemiroNome', 'users.vc_apelido')->DISTINCT('logs.it_idUser')
+        ->where('logs.id_cabecalho', Auth::User()->id_cabecalho)
+        ->orderBy('logs.id', 'desc');
+
 }
 function obter_iniciais($nomes)
 {

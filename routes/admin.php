@@ -72,9 +72,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('notas-recurso/aluno-processos/{processo}', ['as' => 'aluno-processoS', 'uses' => 'Admin\NotaRecursoController@alunoProcesso']);
     Route::group(['prefix' => 'notas-recurso'], function () {
         Route::get('inserir', ['as' => 'admin.notas-recurso.inserir', 'uses' => 'Admin\NotaRecursoController@inserir']);
-
         Route::post('/cadastrar', ['as' => 'admin.notas-recurso.cadastrar', 'uses' => 'Admin\NotaRecursoController@cadastrar']);
-        Route::get('{id}/eliminar', ['as' => 'admin.notas-recurso.eliminar', 'uses' => 'Admin\NotaRecursoController@eliminar']);
+        Route::get('{slug}/eliminar', ['as' => 'admin.notas-recurso.eliminar', 'uses' => 'Admin\NotaRecursoController@eliminar']);
         Route::get('', ['as' => 'admin.notas-recurso.index', 'uses' => 'Admin\NotaRecursoController@index']);
     });
 
@@ -171,6 +170,9 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //Início search municipios
     Route::get('buscar/municipios/{id_provincia}', ['as' => 'buscar.municipios.searchMunicipe', 'uses' => 'Admin\DynamicSearch@searchMunicipe']);
+    //FIM search municipios
+    //Início search municipios
+    Route::get('buscar/municipios/{provincia}/nome', ['as' => 'buscar.municipios.nome', 'uses' => 'Admin\DynamicSearch@municipios_nome']);
     //FIM search municipios
 
 
@@ -300,7 +302,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('Admin/matriculas/editar/{slug}', ['as' => 'admin.matriculas.editar', 'uses' => 'Admin\MatriculaController@editar']);
 
     Route::get('admin/matriculas/pesquisar_pdf', ['as' => 'admin.matriculas.pesquisar_pdf', 'uses' => 'Admin\MatriculaController@pesquisar_pdf']);
-    Route::post('Admin/matriculados/lista_pdf', ['as' => 'admin.matriculas.lista_pdf', 'uses' => 'Admin\MatriculaController@lista_pdf']);
+    Route::any('Admin/matriculados/lista_pdf', ['as' => 'admin.matriculas.lista_pdf', 'uses' => 'Admin\MatriculaController@lista_pdf']);
     //-------Gerar boletim------//
     Route::get('/admin/matriculas/pesquisar', ['as' => 'admin.matriculas.pesquisar', 'uses' => 'Admin\MatriculaController@pesquisaraluno']);
     Route::post('/admin/matriculas/send/', ['as' => 'admin.matriculas.send', 'uses' => 'Admin\MatriculaController@recebeAluno']);
@@ -418,8 +420,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('admin/aluno/{processo}', ['as' => 'admin.aluno.por_processo', 'uses' => 'Admin\AlunnoController@aluno']);
     Route::get('admin/alunos/importar', ['as' => 'admin.alunos.importar', 'uses' => 'Admin\AlunnoController@importar']);
     Route::get('admin/alunos/cadastrar', ['as' => 'admin.alunos.cadastrar', 'uses' => 'Admin\AlunnoController@cadastrar']);
-    
-    
+
+
 
 
     ///alunos fim
@@ -536,10 +538,50 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
         Route::put('/{slug}/actualizar', ['as' => 'direitores-turmas.actualizar', 'uses' => 'Admin\DireitorTurmaController@actualizar'])->middleware('access.controll.administrador');
         Route::post('turmas', ['as' => 'direitores-turmas.turmas', 'uses' => 'Admin\DireitorTurmaController@turmas']);
         Route::get('/meus', ['as' => 'direitores-turmas.meus', 'uses' => 'Admin\DireitorTurmaController@meus']);
-    
+
     });
     // End Direitor de Turma
 
+    //Start Tipo pagamento
+    Route::group(['prefix' => 'tipos-pagamento'], function () {
+
+        Route::get('/criar', ['as' => 'tipos-pagamento.criar', 'uses' => 'Admin\TipoPagamentoController@criar']);
+        Route::post('/cadastrar', ['as' => 'tipos-pagamento.cadastrar', 'uses' => 'Admin\TipoPagamentoController@cadastrar']);
+        Route::get('/', ['as' => 'tipos-pagamento', 'uses' => 'Admin\TipoPagamentoController@index']);
+        Route::get('/{slug}/editar', ['as' => 'tipos-pagamento.editar', 'uses' => 'Admin\TipoPagamentoController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{slug}/eliminar', ['as' => 'tipos-pagamento.eliminar', 'uses' => 'Admin\TipoPagamentoController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{slug}/actualizar', ['as' => 'tipos-pagamento.actualizar', 'uses' => 'Admin\TipoPagamentoController@actualizar'])->middleware('access.controll.administrador');
+       
+
+    });
+    //End Tipo pagamento
+       //Start Tipo pagamento
+       Route::group(['prefix' => 'inicio-termino-ano-lectivo'], function () {
+        Route::get('/criar', ['as' => 'inicio-termino-ano-lectivo.criar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@criar']);
+        Route::post('/cadastrar', ['as' => 'inicio-termino-ano-lectivo.cadastrar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@cadastrar']);
+        Route::get('/', ['as' => 'inicio-termino-ano-lectivo', 'uses' => 'Admin\InicioTerminoAnoLectivoController@index']);
+        Route::get('/{slug}/editar', ['as' => 'inicio-termino-ano-lectivo.editar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{slug}/eliminar', ['as' => 'inicio-termino-ano-lectivo.eliminar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{slug}/actualizar', ['as' => 'inicio-termino-ano-lectivo.actualizar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@actualizar'])->middleware('access.controll.administrador');
+    
+    });
+    //End Tipo pagamento
+   //Start  pagamento
+   Route::group(['prefix' => 'pagamentos'], function () {
+    Route::get('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
+    Route::any('/estado', ['as' => 'pagamentos.estado', 'uses' => 'Admin\PagamentoController@estado']);
+    Route::get('{slug_tipo_pagamento}/{processo}/{slug_ano_lectivo}/pagar_mensalidade', ['as' => 'pagamentos.pagar_mensalidade', 'uses' => 'Admin\PagamentoController@pagar_mensalidade']);
+    Route::get('{slug_pagamento}/anular_pagamento', ['as' => 'pagamentos.anular_pagamento', 'uses' => 'Admin\PagamentoController@anular_pagamento']);
+
+    // Route::post('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
+    Route::get('/', ['as' => 'pagamentos', 'uses' => 'Admin\PagamentoController@index']);
+    Route::get('/{slug}/editar', ['as' => 'pagamentos.editar', 'uses' => 'Admin\PagamentoController@editar'])->middleware('access.controll.administrador');
+    Route::get('/{slug}/eliminar', ['as' => 'pagamentos.eliminar', 'uses' => 'Admin\PagamentoController@eliminar'])->middleware('access.controll.administrador');
+    Route::put('/{slug}/actualizar', ['as' => 'pagamentos.actualizar', 'uses' => 'Admin\PagamentoController@actualizar'])->middleware('access.controll.administrador');
+   
+
+});
+//End  pagamento
     //Start DeclaracaoComNotas
     Route::group(['prefix' => 'declaracaoComNotas'], function () {
         Route::get('/home', ['as' => 'declaracaoComNotas.home', 'uses' => 'Admin\DeclaracaoComNotasController@home']);
@@ -725,7 +767,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
         Route::get('/pesquisar', ['as' => 'nota_em_carga.pesquisar', 'uses' => 'Admin\NotaDinamca@pesquisar']);
         Route::post('nota_em_carga/ver/', ['as' => 'nota_em_carga.ver', 'uses' => 'Admin\NotaDinamca@ver']);
         Route::get('alunos/{slug_turma_user}/{trimestre}', ['as' => 'nota_em_carga.alunos', 'uses' => 'Admin\NotaDinamca@alunos']);
-       
+
         // alunos($slug_turma_user,$trimistre)
     });
     /* nota_dinamica */
@@ -1051,28 +1093,28 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
             Route::get('/editar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.editar', 'uses' => 'Admin\ComponenteDisciplinaController@editar'])->middleware('access.controll.administrador');
         });
 
+        //=============relatorios-Start=====================f//
+        Route::group(['prefix' => 'relatorios/'], function () {
             //=============relatorios-Start=====================f//
-    Route::group(['prefix' => 'relatorios/'], function () {
-          //=============relatorios-Start=====================f//
-    Route::group(['prefix' => 'candidaturas/'], function () {
-        Route::get('/pesquisar', ['as' => 'relatorios.candidaturas.pesquisar', 'uses' => 'Admin\RelatorioController@candidaturas_pesquisar']);
-        Route::post('/imprimir', ['as' => 'relatorios.candidaturas.imprimir', 'uses' => 'Admin\RelatorioController@candidaturas_imprimir']);
-      
-    });
-    Route::group(['prefix' => 'candidatos_aceitos/'], function () {
-        Route::get('/pesquisar', ['as' => 'relatorios.candidatos_aceitos.pesquisar', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_pesquisar']);
-        Route::post('/imprimir', ['as' => 'relatorios.candidatos_aceitos.imprimir', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_imprimir']);
-      
-    });
-    Route::group(['prefix' => 'matriculados/'], function () {
-        Route::get('/pesquisar', ['as' => 'relatorios.matriculados.pesquisar', 'uses' => 'Admin\RelatorioController@matriculados_pesquisar']);
-        Route::post('/imprimir', ['as' => 'relatorios.matriculados.imprimir', 'uses' => 'Admin\RelatorioController@matriculados_imprimir']);
-      
-    });
-    //=============relatorios-End======================//
+            Route::group(['prefix' => 'candidaturas/'], function () {
+                Route::get('/pesquisar', ['as' => 'relatorios.candidaturas.pesquisar', 'uses' => 'Admin\RelatorioController@candidaturas_pesquisar']);
+                Route::post('/imprimir', ['as' => 'relatorios.candidaturas.imprimir', 'uses' => 'Admin\RelatorioController@candidaturas_imprimir']);
 
-    });
-  
+            });
+            Route::group(['prefix' => 'candidatos_aceitos/'], function () {
+                Route::get('/pesquisar', ['as' => 'relatorios.candidatos_aceitos.pesquisar', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_pesquisar']);
+                Route::post('/imprimir', ['as' => 'relatorios.candidatos_aceitos.imprimir', 'uses' => 'Admin\RelatorioController@candidatos_aceitos_imprimir']);
+
+            });
+            Route::group(['prefix' => 'matriculados/'], function () {
+                Route::get('/pesquisar', ['as' => 'relatorios.matriculados.pesquisar', 'uses' => 'Admin\RelatorioController@matriculados_pesquisar']);
+                Route::post('/imprimir', ['as' => 'relatorios.matriculados.imprimir', 'uses' => 'Admin\RelatorioController@matriculados_imprimir']);
+
+            });
+            //=============relatorios-End======================//
+
+        });
+
 
     });
 });

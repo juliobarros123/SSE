@@ -665,52 +665,9 @@
 
     });
 
-    $('#id_curso').change(function() {
-        var curso = $(this).val();
-        alert(curso);
-        // //alert(idMunicipio)
-        // $.ajax({
-        //     type: 'GET',
-        //     dataType: 'json',
-        //     url: url_origin + '/buscar/municipios/' + id,
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     async: false,
-        //     success: function(municipios) {
-
-        //         // response.forEach(element => {
-        //         //     console.log
-        //         // })
-        //         //console.log(municipios);
-        //         $("#it_id_municipio").empty();
-        //         $("#it_id_municipio").append('<option select  "> Selecionar o Município</option>');
-        //         $.each(municipios, function(municipio) {
-
-        //             //console.log(municipios[municipio].vc_nome);
-        //             //alert(municipios[municipio].id )
-        //             if (idMunicipio == municipios[municipio].id) {
-        //                 //alert("igual")
-        //                 $("#it_id_municipio").append('<option value="' + municipios[
-        //                         municipio].id + ' " selected>' + municipios[municipio]
-        //                     .vc_nome +
-        //                     '</option>');
-        //             } else {
-        //                 $("#it_id_municipio").append('<option value="' + municipios[
-        //                         municipio].id + ' ">' + municipios[municipio].vc_nome +
-        //                     '</option>');
-        //             }
-
-        //         });
 
 
 
-
-        //     }
-        // });
-
-
-    });
 
 
 
@@ -829,6 +786,93 @@
         }
     });
 </script>
+@isset($view_turma)
+    <script>
+        $('#id_curso').change(function() {
+            var curso = $(this).find("option:selected").text();
+            console.log(curso);
+            var url = "{{ url('/') }}"
+            url = url + '/classes_por_curso/' + curso;
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                async: false,
+                success: function(classes) {
+
+                    console.log(classes);
+                    $("#id_classe").empty();
+                    $("#id_classe").append('<option value="">Selecciona a Classe</option>');
+
+
+                    $.each(classes, function(index, classe) {
+
+                        //  console.log(classe,)
+                        $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
+                            .vc_classe +
+                            'ª Classe</option>');
+
+
+                    });
+
+
+
+
+                }
+            });
+
+
+        });
+    </script>
+@else
+    <script>
+        $('#id_curso').change(function() {
+            var curso = $(this).find("option:selected").text();
+            // console.log(curso);
+            // alert("ola");
+            var url = "{{ url('/') }}"
+            url = url + '/classes_por_curso/' + curso;
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                async: false,
+                success: function(classes) {
+
+                    console.log(classes);
+                    $("#id_classe").empty();
+                    $("#id_classe").append('<option value="">Selecciona a Classe</option>');
+                    $("#id_classe").append('<option value="Todas">Todas</option>');
+
+                    $.each(classes, function(index, classe) {
+
+                        //  console.log(classe,)
+                        $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
+                            .vc_classe +
+                            'ª Classe</option>');
+
+
+                    });
+
+
+
+
+                }
+            });
+
+
+        });
+    </script>
+@endisset
+
 <script>
     $(".cand_para_aluno").on("click", function() {
         var id = $(this).attr('id_candidato');
@@ -1093,7 +1137,7 @@ vc_tipodaNota
             $("#ordemNota-" + array[1]).attr("name", "notaProcesso-" + $(this).val());
             $(".processoNotaRecurso").on("keyup", function() {
                 var processo = $(this).val();
-
+                // alert(processo);
                 // var url = window.location.origin + `/notas-recurso/aluno-processos/${processo}`;
                 var url = "{{ url('/') }}" + `/notas-recurso/aluno-processos/${processo}`;
                 $.ajax({
@@ -1103,7 +1147,7 @@ vc_tipodaNota
                         console.log(data.processosAluno);
                         if (data.processosAluno) {
                             var nome = data.processosAluno.vc_primeiroNome + ' ' + data
-                                .processosAluno.vc_ultimoaNome;
+                                .processosAluno.vc_apelido;
                             $("#nome-" + array[1]).empty();
                             $("#nome-" + array[1]).append(nome);
                         } else {
@@ -1182,7 +1226,28 @@ vc_tipodaNota
     });
 </script>
 
+<script>
+    $("#tipo_pagamento").on("change", function() {
+        var tipo = $(this).val();
+        //    alert("ola");
+        var inputs = $(".box-hidden");
+        if (tipo == 'Mensalidades') {
+            for (let index = 0; index < inputs.length; index++) {
+                var element = inputs[index];
+                // console.log(element);
+                element.removeAttribute("hidden");
+            }
+        } else {
+            for (let index = 0; index < inputs.length; index++) {
+                var element = inputs[index];
+                // console.log(element);
+                element.hidden = true;
+            }
 
+        }
+
+    });
+</script>
 <script>
     function dataConfirmDelete() {
         $('a[data-confirm]').click(function(ev) {

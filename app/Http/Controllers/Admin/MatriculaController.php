@@ -59,81 +59,90 @@ class MatriculaController extends Controller
     }
     public function lista_pdf(Request $request, Estudante $estudantes)
     {
-        $response['matriculas'] = $estudantes->StudentForAll($request->vc_anolectivo, $request->vc_curso)->get();
-
-        if ($request->vc_classe != 'Todos') {
-            $response['matriculas'] = $response['matriculas']->where('vc_classe', $request->vc_classe);
+        // dd(session()->get('matriculados_lista_pdf'));
+        if (session()->get('matriculados_lista_pdf')) {
+            if (!$request->id_curso) {
+                $matriculados_lista_pdf = session()->get('matriculados_lista_pdf');
+                $request->id_curso = $matriculados_lista_pdf['id_curso'];
+            }
+            if (!$request->id_ano_lectivo) {
+                $matriculados_lista_pdf = session()->get('matriculados_lista_pdf');
+                $request->id_ano_lectivo = $matriculados_lista_pdf['id_ano_lectivo'];
+            }
+            if (!$request->id_classe) {
+                $matriculados_lista_pdf = session()->get('matriculados_lista_pdf');
+                $request->id_classe = $matriculados_lista_pdf['id_classe'];
+            }
+            // dd($request->ciclo);
+           
         }
 
-        $data['curso'] = $request->vc_curso;
-        $data['anolectivo'] = $request->vc_anolectivo;
-        $data['vc_classe'] = $request->vc_classe;
+        $data['ano_lectivo'] = 'Todos';
 
-        $data['alunos'] = $response['matriculas'];
-        $data['cabecalho'] = Cabecalho::find(1);
-        /* $data["bootstrap"] = file_get_contents("css/listas/bootstrap.min.css");
-        $data["css"] = file_get_contents("css/listas/style.css"); */
+        $data['curso'] = 'Todos';
+        $data['ciclo'] = 'Todos';
+        $data['classe'] = 'Todas';
 
-        if ($data['cabecalho']->vc_nif == "5000298182") {
+        $matriculados = fh_matriculas();
+        //    dd($matriculados->get());
+        if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
+            $ano_lectivo = fh_anos_lectivos_publicado()->first();
+            // dd($ano_lectivo );
+            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            // dd($request->id_ano_lectivo);
+            $matriculados = $matriculados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
+        }
+        // dd($matriculados->get());
 
-            //$url = 'cartões/CorMarie/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "7301002327") {
-
-            //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "5000303399") {
-
-            //$url = 'cartões/negage/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "5000820440") {
-
-            //$url = 'cartões/Quilumosso/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "5000305308") {
-
-            //$url = 'cartões/Foguetao/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "7301002572") {
-
-            //$url = 'cartões/LiceuUíge/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "7301003617") {
-
-            //$url = 'cartões/ldc/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-        } else if ($data['cabecalho']->vc_nif == "5000300926") {
-
-            //$url = 'cartões/imagu/aluno.png';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
+        if ($request->id_curso != 'Todos' && $request->id_curso) {
+            // dd($matriculados->get(),$request->id_curso);
+            $data['curso'] = Curso::find($request->id_curso)->vc_nomeCurso;
+            $data['cursos'] = fh_cursos()->where('cursos.id', $request->id_curso)->get();
+            $matriculados = $matriculados->where('candidatos.id_curso', $request->id_curso);
         } else {
-            //$url = 'images/cartao/aluno.jpg';
-            $data["css"] = file_get_contents('css/listas/style.css');
-            $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
+            $data['cursos'] = fh_cursos()->get();
+
         }
 
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            // dd($candidados->get(),$request->id_classe);
+            $data['classe'] = Classe::find($request->id_classe)->vc_classe;
 
-        $mpdf = new \Mpdf\Mpdf();
+            $matriculados = $matriculados->where('candidatos.id_classe', $request->id_classe);
+        }
+        // dd($matriculados->get());
+        // dd($matriculados);
+        // dd( $data['classes']);
+  
+        // dd( $request);
+        $matriculados_lista_pdf = [
+            'id_ano_lectivo' => $request->id_ano_lectivo,
+            'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe,
+        ];
+        // dd($matriculados);
 
-        $mpdf->SetFont("arial");
+        storeSession('matriculados_lista_pdf', $matriculados_lista_pdf);
+        $data['matriculados'] = $matriculados->get();
+        $data["css"] = file_get_contents('css/lista/style-2.css');
+        $data['cabecalho'] = fh_cabecalho();
+
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'margin_top' => 5,
+
+        ]);
+        // dd(   $data['matriculados']);
+        // dd( $data['candidatos'] );
         $mpdf->setHeader();
-        $mpdf->defaultfooterline = 0;
-        $mpdf->setFooter('{PAGENO}');
-        $this->loggerData('Imprimiu Lista de Candidatura');
+        $this->loggerData('Imprimiu lista de matriculados ');
         $html = view("admin/pdfs/listas/matriculas/index", $data);
 
         $mpdf->writeHTML($html);
-        $mpdf->defaultfooterline = 0;
-        $mpdf->setFooter('{PAGENO}');
-        $mpdf->Output("listasdCandidaturas.pdf", "I");
+
+        $mpdf->Output("Lista-matriculados.pdf", "I");
+
     }
     public function matriculados(Request $request)
     {
