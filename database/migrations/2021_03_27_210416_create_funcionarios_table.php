@@ -20,13 +20,13 @@ class CreateFuncionariosTable extends Migration
             $table->string('vc_bi');
             $table->string('vc_foto');
             $table->string('vc_funcao');
-            $table->string('vc_agente');
+            $table->string('vc_agente')->nullable();
             $table->date('dt_nascimento');
-            $table->year('ya_anoValidade');
+            $table->year('ya_anoValidade')->nullable();
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
 
             $table->timestamps();
- $table->string('slug')->unique();
+            $table->string('slug')->unique();
         });
     }
 

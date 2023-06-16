@@ -11,10 +11,12 @@ class Pagamento extends Model
    
     use HasFactory;
     protected $fillable = [
+        'mes',
         'id_tipo_pagamento',
         'id_aluno',
         'id_cabecalho',
         'id_ano_lectivo',
+        'valor_final',
         'slug'
     ];
 

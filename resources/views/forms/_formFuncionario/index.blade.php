@@ -16,7 +16,7 @@
     <label for="vc_agente" class="form-label">Número de agente</label>
     <input type="text" class="form-control border-secondary"
         value="{{ isset($funcionario->vc_agente) ? $funcionario->vc_agente : '' }}" name="vc_agente" 
-         placeholder="Número" required>
+         placeholder="Número" >
 </div>
 <div class="col-md-4">
     <label for="vc_bi" class="form-label">Bilhete de Identidade</label>
@@ -43,6 +43,7 @@
         <option value="Chefe de Depart. RH">Chefe de Depart. RH</option>
         <option value="Chefe de Departamento">Chefe de Departamento</option>
         <option value="Chefe da Secretaria Geral">Chefe da Secretaria Geral</option>
+        <option value="Chefe da Comissão Geral">Chefe da Comissão Geral</option>
      
         <option value="Director Geral">Director Geral</option>
         <option value="Directora Geral">Directora Geral</option>

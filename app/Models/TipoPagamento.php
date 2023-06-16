@@ -24,7 +24,7 @@ class TipoPagamento extends Model
         });
     }
     protected $fillable = [
-        'pagamento',
+        // 'pagamento',
         'tipo',
         'dias_multa',
         'multa_valor',

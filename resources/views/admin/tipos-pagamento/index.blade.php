@@ -28,7 +28,7 @@
            <thead class="">
             <tr class="text-center">
                 <th>ID</th>
-                <th>PAGAMENTO</th>
+                {{-- <th>PAGAMENTO</th> --}}
                 <th>TIPO</th>
                 <th>MULTA(AKZ)</th>
                 <th>DEPOIS DE(DIAS)</th>
@@ -43,7 +43,7 @@
                 {{-- @dump($dt) --}}
                     <tr class="text-center">
                         <th>{{ $tipo_pagamento->id }}</th>
-                        <th>{{ $tipo_pagamento->pagamento }}</th>
+                        {{-- <th>{{ $tipo_pagamento->pagamento }}</th> --}}
                         <td>{{ $tipo_pagamento->tipo }}</td>
                         <td>{{ $tipo_pagamento->multa_valor }}</td>
                         <td>{{ $tipo_pagamento->dias_multa }}</td>

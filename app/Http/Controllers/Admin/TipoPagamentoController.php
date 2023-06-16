@@ -23,7 +23,7 @@ class TipoPagamentoController extends Controller
         try {
             $data = $request->all();
             // dd(auth()->id_cabecalho);
-            if ($this->tem_registro($request)) {
+            if ($this->tem_registro_2($request)) {
                 return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Tipo de pagamento já existe']);
 
             }
@@ -55,7 +55,14 @@ class TipoPagamentoController extends Controller
 
 
 
+            $tipo = fh_tipos_pagamento()->where('id_classe', $request->id_classe)
+                ->where('tipo', $request->tipo)->first();
+                if(  $tipo){
+            if ($tipo->slug != $slug) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Tipo de pagamento já existe']);
 
+            }
+        }
             TipoPagamento::where('slug', $slug)->update(
                 $request->except(['_token', '_method'])
             );
@@ -78,8 +85,8 @@ class TipoPagamentoController extends Controller
         if ($tipo_pagamento):
             // dd($tipo_pagamento);
             $data['tipo_pagamento'] = $tipo_pagamento;
-            $data['classes']=fh_classes()->get();
-          
+            $data['classes'] = fh_classes()->get();
+
             return view('admin.tipos-pagamento.editar.index', $data);
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
@@ -90,9 +97,25 @@ class TipoPagamentoController extends Controller
 
     public function tem_registro($array)
     {
+        $cont = $this->tem_registro_2($array);
+
+        if ($cont) {
+            return 1;
+        }
         $array_limpo = $array->except(['_token', '_method']);
         // dd( $array_limpo);
-        return TipoPagamento::where($array_limpo)->count();
+        return fh_tipos_pagamento()->where($array_limpo)->count();
+        // if($estado){
+        //     throw new Exception('Registro já existe!');
+        //    }
+
+    }
+    public function tem_registro_2($array)
+    {
+
+        // dd( $array);
+        return fh_tipos_pagamento()->where('id_classe', $array->id_classe)
+            ->where('tipo', $array->tipo)->count();
         // if($estado){
         //     throw new Exception('Registro já existe!');
         //    }

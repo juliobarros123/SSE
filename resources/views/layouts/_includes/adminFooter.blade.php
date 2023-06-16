@@ -1381,6 +1381,14 @@ vc_tipodaNota
         // console.log(idade,"ol");
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('.mySelect').select2();
+    });
+</script>
+
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" /> --}}
+
 
 </body>
 

@@ -95,7 +95,7 @@ class DisciplinaCursoClasse extends Controller
 
         $array_limpo = $array->except('_token', '_method', 'terminal');
 
-        return Disciplina_Curso_Classe::where($array_limpo)->count();
+        return fh_disciplinas_cursos_classes()->where($array_limpo)->count();
 
 
     }

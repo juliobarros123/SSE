@@ -15,7 +15,7 @@ class CreateTipoPagamentosTable extends Migration
     {
         Schema::create('tipo_pagamentos', function (Blueprint $table) {
             $table->id();
-            $table->string('pagamento');
+            // $table->string('pagamento');
             $table->string('tipo');
             $table->string('valor');
             $table->string('dias_multa')->nullable();

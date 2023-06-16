@@ -62,10 +62,13 @@
         </tbody>
         </tbody>
     </table>
+    @php
+   $funcionario=fh_funcionarios()->where('funcionarios.vc_funcao','Chefe da Comissão Geral')->first();
+    @endphp
     @include('layouts._includes.fragments.lista.footer.index')
     @section('entidadade1', 'O COORDENADOR DA COMISSÃO')
-    @if (0)
-        @section('entidadade1-valor', 'xxxxxxxxxx')
+    @if ($funcionario)
+        @section('entidadade1-valor', fha_coordenador_comissao())
     @else
         @section('entidadade1-valor', '-----------------------')
     @endif

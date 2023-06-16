@@ -91,7 +91,7 @@ class InicioTerminoAnoLectivoController extends Controller
     {
         $array_limpo = $array->except(['_token', '_method']);
         // dd( $array_limpo);
-        return InicioTerminoAnoLectivo::where($array_limpo)->count();
+        return fh_inicio_termino_ano_lectivo()->where($array_limpo)->count();
         // if($estado){
         //     throw new Exception('Registro já existe!');
         //    }

@@ -19,7 +19,7 @@
 
 
 
-<div class="form-group col-md-4">
+{{-- <div class="form-group col-md-4">
     <label for="valor">{{ __('Pagamento de:') }}</label>
 
     <input value="{{ isset($tipo_pagamento->pagamento) ? $tipo_pagamento->pagamento : '' }}" id="pagamento"
@@ -32,7 +32,7 @@
             <strong>{{ $message }}</strong>
         </span>
     @enderror
-</div>
+</div> --}}
 
 
 <div class="form-group col-md-4">

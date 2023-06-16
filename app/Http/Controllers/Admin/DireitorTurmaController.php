@@ -137,7 +137,7 @@ class DireitorTurmaController extends Controller
     public function tem_registro($array)
     {
         $array_limpo = $array->except(['_token', '_method']);
-        return DireitorTurma::where($array_limpo)->count();
+        return fh_directores_turmas()->where($array_limpo)->count();
         // if($estado){
         //     throw new Exception('Registro já existe!');
         //    }

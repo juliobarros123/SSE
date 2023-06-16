@@ -90,8 +90,8 @@
                                         class="dropdown-item" target="_blank">Professores</a>
                                         <a href="" class="dropdown-item" data-toggle="modal"
                                         data-target=".bd-example-modal-sm{{ $turma->id }}">Pauta Trimestral</a>
-                                    <a href="{{ route('admin.pautaFinal.gerar', $turma->id_turma ? $turma->id_turma : $turma->id) }}"
-                                        class="dropdown-item" target="_blank">Pauta final</a>
+                                    <a href="{{ route('admin.pautaFinal.gerar',$turma->slug) }}"
+                                        class="dropdown-item" target="_blank">Pauta Anual</a>
                                        
                                     @if (Auth::user()->vc_tipoUtilizador != 'Professor')
                                         <a href="{{ route('turmas.editar',  $turma->slug) }}"

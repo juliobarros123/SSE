@@ -1,5 +1,5 @@
 <div class="form-group col-md-4">
-    
+
     <label>Mês de Início:</label>
     <select name="mes_inicio" class="form-control select-dinamico " id="mes_inicio" required>
         @isset($inicio_termino_ano_lectivo)
@@ -14,20 +14,7 @@
     </select>
 </div>
 
-<div class="form-group col-md-4">
-    <label>Do ano:</label>
-    <select name="ano_inicio" class="form-control select-dinamico " id="ano_inicio" required>
-        @isset($inicio_termino_ano_lectivo)
-            <option value="{{ $inicio_termino_ano_lectivo->ano_inicio }}">{{ $inicio_termino_ano_lectivo->ano_inicio }}
-            </option>
-        @else
-            <option value="">Selecciona o ano</option>
-        @endisset
-        @foreach ($anos_lectivos as $ano_lectivo)
-            <option value="{{ $ano_lectivo->ya_inicio }}">{{ $ano_lectivo->ya_inicio }}</option>
-        @endforeach
-    </select>
-</div>
+
 
 
 <div class="form-group col-md-4">
@@ -44,17 +31,28 @@
         @endforeach
     </select>
 </div>
-
 <div class="form-group col-md-4">
-    <label>Do ano:</label>
-    <select name="ano_fim" class="form-control select-dinamico " id="ano_fim" required>
-        @isset($inicio_termino_ano_lectivo)
-            <option value="{{ $inicio_termino_ano_lectivo->ano_fim }}">{{ $inicio_termino_ano_lectivo->ano_fim }}</option>
-        @else
-            <option value="">Selecciona o ano</option>
-        @endisset
-        @foreach ($anos_lectivos as $ano_lectivo)
-            <option value="{{ $ano_lectivo->ya_fim }}">{{ $ano_lectivo->ya_fim }}</option>
-        @endforeach
-    </select>
+    <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
+
+
+    @if (isset($ano_lectivo_publicado))
+        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+            <option value="{{ $id_anoLectivo_publicado }}">
+                {{ $ano_lectivo_publicado }}
+            </option>
+        </select>
+        <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
+    @else
+        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
+            <option value="Todos">Todos</option>
+
+            @foreach ($anoslectivos as $anolectivo)
+                <option value="{{ $anolectivo->id }}">
+                    {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
+                </option>
+            @endforeach
+        </select>
+    @endif
+
+
 </div>

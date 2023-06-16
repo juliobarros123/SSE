@@ -15,8 +15,7 @@ class InicioTerminoAnoLectivo extends Model
     protected $fillable = [
         'mes_inicio',
         'mes_termino',
-        'ano_inicio',
-        'ano_fim',
+        'id_ano_lectivo',
         'id_cabecalho',
         'slug'
     ];

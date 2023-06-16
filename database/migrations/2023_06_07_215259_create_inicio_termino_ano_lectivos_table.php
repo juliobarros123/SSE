@@ -17,8 +17,8 @@ class CreateInicioTerminoAnoLectivosTable extends Migration
             $table->id();
             $table->string('mes_inicio');
             $table->string('mes_termino');
-            $table->year('ano_inicio');
-            $table->year('ano_fim');
+            $table->unsignedBigInteger('id_ano_lectivo');
+            $table->foreign('id_ano_lectivo')->references('id')->on('anoslectivos')->onDelete('cascade');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->string('slug')->unique();
             $table->timestamps();

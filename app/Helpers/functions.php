@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CriterioDisciplina;
+use App\Models\DisciplinaExame;
 use App\Models\Funcionario;
 use App\Models\Activador_da_candidatura;
 use App\Models\Alunno;
@@ -10,10 +12,12 @@ use App\Models\DireitorTurma;
 use App\Models\Disciplinas;
 use App\Models\IdadedeCandidatura;
 use App\Models\Municipio;
+use App\Models\NNegativa;
 use App\Models\Nota;
 use App\Models\Pagamento;
 use App\Models\PermissaoProfessorNota;
 use App\Actions\Fortify;
+use App\Models\PesoNotaExame;
 use App\Models\Processo;
 use App\Models\Provincia;
 use App\Models\TipoPagamento;
@@ -39,6 +43,7 @@ use Carbon\Carbon;
 use App\Models\TurmaUser;
 use Illuminate\Support\Facades\Session;
 use App\Models\InicioTerminoAnoLectivo;
+
 function ficha($vc_bi)
 {
 }
@@ -489,6 +494,62 @@ function fh_classes()
         return Classe::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
 }
+function fha_colspan($id_disciplina, $id_classe, $id_curso)
+{
+    $cont = 0;
+    $c = 0;
+
+    $classe = fh_classes()->where('classes.id', $id_classe)->first();
+    $cabecalho = fh_cabecalho();
+    if (!($cabecalho->vc_tipo_escola == "Liceu")) {
+        $cont = temDisciplinaNoClasseAnterior($id_disciplina, $classe->vc_classe, $id_curso);
+    }
+    $c = 0;
+
+    $temDCCNestaClasse = temDCCNestaClasse($id_disciplina, $id_classe, $id_curso);
+
+    if ($temDCCNestaClasse) {
+        if ($cont && $c) {
+            $colspan = 6 + $cont;
+        }
+        if ($cont) {
+            $colspan = $cont;
+        }
+        if ($c) {
+            $colspan = 6 + $cont;
+        } else {
+            // dd($cont);
+            $colspan = 4 + $cont;
+        }
+    } else {
+        dd($temDCCNestaClasse);
+        $colspan = $cont;
+    }
+    // dd($colspan);
+    return $colspan;
+}
+function fha_disciplinas($id_curso, $id_classe)
+{
+    $classe = Classe::find($id_classe);
+    $cabecalho = fh_cabecalho();
+    if ($cabecalho->vc_tipo_escola == "Liceu") {
+        $disciplinas = fh_disciplinas_cursos_classes()->where('classes.vc_classe', '=', $classe->vc_classe)
+            ->where('cursos.id', $id_curso)
+            ->select('disciplinas.*', 'disciplinas_cursos_classes.terminal');
+    } else {
+        $disciplinas = fh_disciplinas_cursos_classes()->where('classes.vc_classe', '<=', $classe->vc_classe)
+            ->where('cursos.id', $id_curso)
+            ->select('disciplinas.*', 'disciplinas_cursos_classes.terminal');
+    }
+    return $disciplinas->get();
+}
+function fha_coordenador_comissao()
+{
+    $funcionario = fh_funcionarios()->where('funcionarios.vc_funcao', 'Chefe da Comissão Geral')->first();
+    if ($funcionario) {
+        return $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome;
+    }
+}
 function fh_disciplinas()
 {
 
@@ -562,6 +623,18 @@ function fh_disciplinas_cursos_classes()
         ->orderBy('id', 'desc')
         ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
         ->select('disciplinas_cursos_classes.*', 'disciplinas.vc_nome', 'disciplinas.vc_acronimo', 'cursos.vc_nomeCurso', 'classes.vc_classe');
+
+
+}
+
+
+function fh_criterio_disciplinas()
+{
+    return CriterioDisciplina::join('disciplinas', 'criterio_disciplinas.id_disciplina', '=', 'disciplinas.id')
+        ->join('cursos', 'criterio_disciplinas.id_curso', '=', 'cursos.id')
+        ->join('classes', 'criterio_disciplinas.id_classe', '=', 'classes.id')
+        ->where('criterio_disciplinas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('disciplinas.vc_nome', 'disciplinas.vc_acronimo', 'cursos.vc_nomeCurso', 'classes.vc_classe', 'criterio_disciplinas.*');
 
 
 }
@@ -743,28 +816,215 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
 
 }
 
-function fh_mes_valido($tipo, $mes, $id_classe)
+function fh_notas_recursos()
 {
-    return TipoPagamento::where('tipo', $tipo)
-        ->where('pagamento', $mes)
-        ->where('id_classe', $id_classe)
-        ->where('tipo_pagamentos.id_cabecalho', Auth::User()->id_cabecalho);
+    $notas_recursos = NotaRecurso::
+        where('nota_recursos.id_cabecalho', Auth::User()->id_cabecalho);
+
+    return $notas_recursos;
+}
+function fh_nota_recurso($id_aluno, $id_disciplina)
+{
+    $notaRecurso = fh_notas_recursos()->where('nota_recursos.id_aluno', $id_aluno)->where('nota_recursos.id_disciplina', $id_disciplina)->orderBy('id', 'desc')->first();
+    if ($notaRecurso) {
+        return $notaRecurso->nota;
+    } else {
+        return "0";
+    }
+}
+function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_lectivo)
+{
+    $cont_negativas = 0;
+    $cont = 0;
+    // dd($processo, $id_classe, $id_ano_lectivo);
+    $resultados = array();
+    $notas = array();
+    $aluno = fha_aluno_processo($processo);
+    $disciplinas = fha_disciplinas($id_curso, $id_classe);
+    // dd($disciplinas);
+    $cont2 = 0;
+    $nota = 0;
+    $classe = Classe::find($id_classe);
+    // dd( $classe);
+    $n_negativas_adminita = fh_n_negativas()->where('classes.id', $classe->id)->first();
+
+    if ($n_negativas_adminita) {
+        $n_negativas_adminita = $n_negativas_adminita->n;
+    } else {
+        $n_negativas_adminita = 2;
+    }
+    // dd( $n_negativas );
+    foreach ($disciplinas as $disciplina) {
+        $nota_recurso = fh_nota_recurso($processo, $disciplina->id);
+        if (is_string($nota_recurso)) {
+            // $nota = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
+            $nota = fha_cfd_ext($processo, $disciplina->id, $id_classe);
+            // dd($nota, $processo);
+        } else {
+            $nota = intval($nota_recurso);
+        }
+        if ($nota < 10) {
+            $cont_negativas++;
+        }
+    }
+    // dd($cont_negativas);
+    if ($cont_negativas > $n_negativas_adminita) {
+        array_push($resultados, 'N/TRANSITA');
+    }else{
+        array_push($resultados, 'TRANSITA');
+
+    }
+    return fha_org_resultados($resultados);
+    // foreach ($disciplinas as $disciplina) {
+    //     $nota_recurso = fh_nota_recurso($processo, $disciplina->id);
+    //     if (is_string($nota_recurso)) {
+    //         // $nota = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
+    //         $nota = fha_cfd_ext($processo, $disciplina->id, $id_classe);
+    //     } else {
+    //         $nota = intval($nota_recurso);
+    //     }
+
+
+    //     $c = fh_criterio_aprovacao()->where('classes.id', $id_classe)
+    //         ->where('cursos.id', $id_curso)
+    //         ->where('disciplinas.id', $disciplina->id)->first();
+
+    //     if (isset($c->valor)) {
+    //         // dd($nota );
+    //         if ($nota >= $c->dt_adicional && $nota <= $c->valor) {
+    //             array_push($resultados, $c->resultado);
+    //             $cont2++;
+    //         } else if ($nota < 10) {
+    //             $cont++;
+    //         }
+    //     }
+
+
+
+    // }
+    // if ($classe->vc_classe == 12) {
+    //     $estado = $cont + $cont2 > 3;
+    // } else {
+    //     $estado = $cont + $cont2 > 2;
+
+    // }
+
+
+    // if ($cont) {
+    //     array_push($resultados, 'N/TRANSITA');
+
+    // } else
+    //     if ($estado) {
+    //         array_push($resultados, 'N/TRANSITA');
+
+    //     } else
+    //         if (!count($resultados)) {
+    //             array_push($resultados, 'TRANSITA');
+    //         }
+    // dd($resultados);
+    // return fha_org_resultados($resultados);
+
+}
+function fha_org_resultados($resultados)
+{
+    $array = $resultados;
+
+    $order = array(
+        "TRANSITA",
+        "N/TRANSITA",
+        "RECURSO",
+        "TRANSITA/DEFICIÊNCIA"
+    );
+
+    $collection = collect($array);
+    // dd( $collection);         
+    $sorted = $collection->sortBy(function ($item) use ($order) {
+        $index = array_search($item, $order);
+        return $index !== false ? $index : count($order);
+    });
+
+    $result = $sorted->values()->all();
+
+    return $result;
 
 
 }
-
-function fh_pagamento_estado($id_tipo_pagamento, $processo, $id_ano_lectivo)
+function fha_cfd_ext($processo, $id_disciplina, $id_classe_limit)
 {
-    
+    $notas = array();
+    $nota = 0;
+    $cabecalho = fh_cabecalho();
+    $classe = Classe::find($id_classe_limit);
+    if ($cabecalho->vc_tipo_escola == "Liceu" ||  $classe->vc_classe<10) {
+        $matriculas = fh_matriculas()
+            ->where('alunnos.processo', $processo)
+            ->where('classes.vc_classe', $classe->vc_classe)->limit(1)->get();
+        // dd( $matriculas);
+    } else  {
+        // dd("Ola");  
+        $matriculas = fh_matriculas()
+            ->where('alunnos.processo', $processo)
+            ->where('classes.vc_classe', '<=', $classe->vc_classe)
+            ->orderBy('matriculas.id', 'desc')->get();
+    }
+
+
+    foreach ($matriculas as $matricula) {
+        $turma = Turma::find($matricula->it_idTurma);
+        // dd($turma);
+        // dd($processo, $id_disciplina, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
+        $nota = fha_media_trimestral_geral($processo, $id_disciplina, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
+        //   dd(  $nota);
+        array_push($notas, $nota);
+    }
+    // dd($notas);
+    $media = media($notas);
+    // dd(  $media);
+    return fh_arredondar($media);
+
+}
+// function FH($tipo, $mes, $id_classe)
+// {
+//     return TipoPagamento::where('tipo', $tipo)
+//         ->where('pagamento', $mes)
+//         ->where('id_classe', $id_classe)
+//         ->where('tipo_pagamentos.id_cabecalho', Auth::User()->id_cabecalho);
+
+
+// }
+
+function fh_pagamento($mes, $processo, $id_ano_lectivo)
+{
+
     $aluno = fha_aluno_processo($processo);
-    return Pagamento::where('id_tipo_pagamento', $id_tipo_pagamento)
+    return Pagamento::
+        join('tipo_pagamentos', 'tipo_pagamentos.id', 'pagamentos.id_tipo_pagamento')
+        ->where('mes', $mes)
         ->where('id_aluno', $aluno->id)
         ->where('id_ano_lectivo', $id_ano_lectivo)
-        ->where('pagamentos.id_cabecalho', Auth::User()->id_cabecalho);
+        ->where('pagamentos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('tipo_pagamentos.*', 'pagamentos.*');
+}
+function fh_pagamentos()
+{
+
+    // { $aluno->vc_primeiroNome }}
+    // {{ $aluno->vc_apelido }}
+    return Pagamento::
+        join('tipo_pagamentos', 'tipo_pagamentos.id', 'pagamentos.id_tipo_pagamento')
+        ->join('anoslectivos', 'anoslectivos.id', 'pagamentos.id_ano_lectivo')
+        ->join('alunnos', 'alunnos.id', 'pagamentos.id_aluno')
+        ->join('candidatos', 'alunnos.id_candidato', 'candidatos.id')
+        ->where('pagamentos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('candidatos.vc_primeiroNome', 'candidatos.vc_apelido', 'alunnos.processo', 'anoslectivos.*', 'tipo_pagamentos.*', 'pagamentos.*');
 }
 function fh_meses()
 {
     return $meses = array(1 => "Janeiro", 2 => "Fevereiro", 3 => "Março", 4 => "Abril", 5 => "Maio", 6 => "Junho", 7 => "Julho", 8 => "Agosto", 9 => "Setembro", 10 => "Outubro", 11 => "Novembro", 12 => "Dezembro");
+}
+function fh_meses_1()
+{
+    return $meses = array(1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril', 5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto', 9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro');
 }
 
 function fh_tipos_pagamento()
@@ -787,18 +1047,17 @@ function fh_notas_recurso()
 
 function fhap_media_geral($processo, $id_classe, $id_ano_lectivo)
 {
-    // dd($processo, $trimestre, $id_classe, $id_ano_lectivo);
+    // dd($processo, $id_classe, $id_ano_lectivo);
     $notas = array();
     $aluno = fha_aluno_processo($processo);
-    $disciplinas = fh_disciplinas_cursos_classes()
-        ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
-        ->where('disciplinas_cursos_classes.it_classe', $id_classe)
-        ->where('disciplinas_cursos_classes.id_cabecalho', Auth::User()->id_cabecalho)
-        ->select('disciplinas.*')
-        ->get();
+    // dd(   $aluno );
+    $disciplinas = fha_disciplinas($aluno->id_curso, $aluno->id_classe);
     // dd($disciplinas);
     foreach ($disciplinas as $disciplina) {
+        // dd($processo, $disciplina->id, 'I', $id_ano_lectivo);
+
         $media_trimestral_geral = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
+        //    dd($media_trimestral_geral,$disciplina,$processo);
         $nota = $media_trimestral_geral;
         array_push($notas, $nota);
     }
@@ -1007,7 +1266,29 @@ function consultarRupePreCandidato_v3($numeroDC)
         return "SEM RUPE";
     }
 }
+function fh_n_negativas()
+{
+    return NNegativa::
+        join('classes', 'n_negativas.id_classe', 'classes.id')
+        ->where('n_negativas.id_cabecalho', Auth::User()->id_cabecalho)->
+        select('classes.*', 'n_negativas.*');
+}
+function fh_disciplinas_exames()
+{
 
+    return DisciplinaExame::
+        join('classes', 'disciplina_exames.id_classe', 'classes.id')
+        ->join('disciplinas', 'disciplina_exames.id_disciplina', 'disciplinas.id')
+        ->where('disciplina_exames.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('classes.*', 'disciplinas.*', 'disciplina_exames.*');
+}
+
+function fh_pesos_notas_exames()
+{
+
+    return PesoNotaExame::where('peso_nota_exames.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('peso_nota_exames.*');
+}
 
 function verificarPagamentoRupe($idOrigem)
 {
@@ -1252,7 +1533,20 @@ function notasFakes($id_aluno, $id_disciplina, $id_anoLectivo, $id_classe)
     //
     return $fkNotas;
 }
+function fha_disciplina_terminal($id_disciplina, $id_classe, $it_idCurso)
+{
 
+
+    $disciplinas_terminas = fh_disciplinas_cursos_classes()
+
+        ->where('disciplinas_cursos_classes.it_classe', $id_classe)
+        ->where('disciplinas_cursos_classes.it_curso', $it_idCurso)
+        ->where('disciplinas.id', $id_disciplina)
+        ->where('disciplinas_cursos_classes.terminal', 'Terminal')
+        ->count();
+
+    return $disciplinas_terminas;
+}
 function temDCCNestaClasse($id_disciplina, $id_classe, $id_curso)
 {
     return DB::table('disciplinas_cursos_classes')
@@ -1262,7 +1556,7 @@ function temDCCNestaClasse($id_disciplina, $id_classe, $id_curso)
         ->where('disciplinas.id', $id_disciplina)
         ->where('classes.id', $id_classe)
         ->where('cursos.id', $id_curso)
-        ->where([['disciplinas_cursos_classes.it_estado_dcc', 1]])->count();
+        ->count();
 }
 function valorPorExtenso($valor = 0, $bolExibirMoeda = true, $bolPalavraFeminina = false)
 {
@@ -1346,20 +1640,74 @@ function hoje_extenso()
     return $data;
 }
 
-function calcularMesesPassados($data) {
+function calcularMesesPassados($data)
+{
     $dataAtual = new DateTime();
     $dataPassada = DateTime::createFromFormat('Y-m-d', $data);
-    
+
     $intervalo = $dataPassada->diff($dataAtual);
-    
+
     $anos = $intervalo->y;
     $meses = $intervalo->m;
-    
+
     $totalMeses = ($anos * 12) + $meses;
-    
+
     return $totalMeses;
 }
-function obterNumeroMes($mesExtenso) {
+function fha_obter_numeros_meses($mes1, $mes2)
+{
+    $meses = [
+        'janeiro',
+        'fevereiro',
+        'março',
+        'abril',
+        'maio',
+        'junho',
+        'julho',
+        'agosto',
+        'setembro',
+        'outubro',
+        'novembro',
+        'dezembro'
+    ];
+
+    $mes1Index = array_search(strtolower($mes1), $meses);
+    $mes2Index = array_search(strtolower($mes2), $meses);
+
+    $numerosMeses = [];
+
+    if ($mes1Index !== false && $mes2Index !== false) {
+        $anoAtual = date('Y');
+        $mesAtual = date('n');
+
+        if ($mes2Index >= $mes1Index) {
+            for ($i = $mes1Index; $i <= $mes2Index; $i++) {
+                $numerosMeses[] = $i + 1;
+            }
+        } else {
+            for ($i = $mes1Index; $i < count($meses); $i++) {
+                $numerosMeses[] = $i + 1;
+            }
+
+            for ($i = 0; $i <= $mes2Index; $i++) {
+                $numerosMeses[] = $i + 1;
+            }
+        }
+
+        if ($anoAtual > 1 || $mes2Index >= $mesAtual - 1) {
+            for ($i = 1; $i <= $mesAtual; $i++) {
+                if (!in_array($i, $numerosMeses)) {
+                    $numerosMeses[] = $i;
+                }
+            }
+        }
+    }
+
+    return $numerosMeses;
+}
+
+function fha_obterNumeroMes($mesExtenso)
+{
     $meses = array(
         'janeiro' => 1,
         'fevereiro' => 2,
@@ -1383,11 +1731,15 @@ function obterNumeroMes($mesExtenso) {
         return null; // Retorna null se o mês não for encontrado
     }
 }
-function fh_inicio_termino_ano_lectivo(){
+function fh_inicio_termino_ano_lectivo()
+{
 
-  return  InicioTerminoAnoLectivo::where('inicio_termino_ano_lectivos.id_cabecalho', Auth::User()->id_cabecalho);
+    return InicioTerminoAnoLectivo::join('anoslectivos', 'anoslectivos.id', 'inicio_termino_ano_lectivos.id_ano_lectivo')
+        ->where('inicio_termino_ano_lectivos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('anoslectivos.*', 'inicio_termino_ano_lectivos.*');
 }
-function fha_calcular_valor_pagar($dataVencimento, $valorPagar, $diasTolerancia, $valorMulta) {
+function fha_calcular_valor_pagar($dataVencimento, $valorPagar, $diasTolerancia, $valorMulta)
+{
     // Obter a data atual
     $dataAtual = new DateTime();
 
@@ -1397,32 +1749,54 @@ function fha_calcular_valor_pagar($dataVencimento, $valorPagar, $diasTolerancia,
     // Adicionar os dias de tolerância à data de vencimento
     $dataLimitePagamento = clone $dataVencimento;
     $dataLimitePagamento->modify("+$diasTolerancia days");
-// dd($dataAtual > $dataLimitePagamento);
+    // dd($dataAtual > $dataLimitePagamento);
     // Verificar se a data atual é posterior à data limite de pagamento
     if ($dataAtual > $dataLimitePagamento) {
         // Aplicar a multa ao valor a pagar
         $valorAPagar = $valorPagar + $valorMulta;
     } else {
-        $valorAPagar = "----------";
+        $valorAPagar = 0;
     }
 
     return $valorAPagar;
 }
+function fha_pagou_com_multa($dataVencimento, $valorPagar, $diasTolerancia, $valorMulta)
+{
+    // Obter a data atual
+    $dataAtual = new DateTime();
 
+    // Converter a data de vencimento para o formato DateTime
+    $dataVencimento = DateTime::createFromFormat('Y-m-d', $dataVencimento);
+
+    // Adicionar os dias de tolerância à data de vencimento
+    $dataLimitePagamento = clone $dataVencimento;
+    $dataLimitePagamento->modify("+$diasTolerancia days");
+    // dd($dataAtual > $dataLimitePagamento);
+    // Verificar se a data atual é posterior à data limite de pagamento
+    if ($dataAtual > $dataLimitePagamento) {
+        // Aplicar a multa ao valor a pagar
+        $valorAPagar = $valorPagar + $valorMulta;
+    } else {
+        $valorAPagar = 0;
+    }
+
+    return $valorAPagar;
+}
 // Exemplo de uso
 // $dataVencimento = '2023-06-01';
 // $valorPagar = 3000;
 
 
-function converterData($data) {
-     // Extrai a data e hora separadamente
-     list($dataPart, $horaPart) = explode(' ', $data);
+function converterData($data)
+{
+    // Extrai a data e hora separadamente
+    list($dataPart, $horaPart) = explode(' ', $data);
 
-     // Divide a data em ano, mês e dia
-     list($ano, $mes, $dia) = explode('-', $dataPart);
- 
-     // Retorna a data no formato português
-     return $dia . '/' . $mes . '/' . $ano;
+    // Divide a data em ano, mês e dia
+    list($ano, $mes, $dia) = explode('-', $dataPart);
+
+    // Retorna a data no formato português
+    return $dia . '/' . $mes . '/' . $ano;
 }
 
 function pri_ultimo_nome($nome)
@@ -1494,14 +1868,11 @@ function temDisciplinaNoClasseAnterior($id_disciplina, $classe, $id_curso)
 {
     $cols = 0;
     for ($cont = 10; $cont < $classe; $cont++) {
-        $datas = DB::table('disciplinas_cursos_classes')
-            ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
-            ->join('cursos', 'disciplinas_cursos_classes.it_curso', '=', 'cursos.id')
-            ->join('classes', 'disciplinas_cursos_classes.it_classe', '=', 'classes.id')
+        $datas = fh_disciplinas_cursos_classes()
             ->where('disciplinas.id', $id_disciplina)
             ->where('classes.vc_classe', $cont)
             ->where('cursos.id', $id_curso)
-            ->where([['disciplinas_cursos_classes.it_estado_dcc', 1]])->count();
+            ->count();
         if ($datas) {
             $cols++;
         }

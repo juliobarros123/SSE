@@ -52,6 +52,9 @@
             -ms-user-select: none;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/select-2.css') }}">
+
+ 
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -212,44 +215,27 @@
 
                             </li>
                             <li class="nav-item has-treeview ">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
                                     <i class="nav-icon fas fa-chalkboard"></i>
                                     <p>
                                         Funcionários
 
                                     </p>
                                 </a>
-                                <ul class="nav nav-treeview">
-
-                                    <li class="nav-item">
-                                        <a href="{{ url('/admin/funcionario/cadastrar') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Cadastrar</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Listar</p>
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="{{ url('/admin/funcionarios') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Cartão</p>
-                                        </a>
-                                    </li>
-
-
-
-                                </ul>
 
 
 
 
                             </li>
+                            <li class="nav-item has-treeview ">
+                                <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-chalkboard"></i>
+                                    <p>
+                                        Cartão
+
+
+                                    </p>
+                                </a>
                             <li class="nav-item has-treeview ">
                                 <a href="{{ url('admin/logs/pesquisar') }}" class="nav-link ">
                                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -344,7 +330,7 @@
             <li class="nav-item has-treeview ">
 
                 @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                    <a href="#" class="nav-link">
+                    <a href="{{ url('/admin/cartaoaluno') }}" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
                         <p>
                             Cartão
@@ -352,15 +338,7 @@
                         </p>
                     </a>
                 @endif
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ url('/admin/cartaoaluno') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Cartão de Aluno</p>
-                        </a>
-                    </li>
 
-                </ul>
             </li>
 
 
@@ -440,7 +418,12 @@
                             <p>Funcionários</p>
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a href="{{ route('listas.propinas_turmas.pesquisar') }}" class="nav-link" target="_blank">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Propinas(Turma)</p>
+                        </a>
+                    </li>
 
                 </ul>
             </li>
@@ -491,6 +474,42 @@
         @endif
 
 
+
+
+        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico' ||
+                Auth::user()->vc_tipoUtilizador == 'Visitante')
+            <li class="nav-header">Mod. de Relatórios
+                de Propinas
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Relatórios
+
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('relatorios.propinas.alunos.pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Por Alunos</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('relatorios.candidaturas.pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p> Em Atraso</p>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+        @endif
 
 
 
@@ -558,7 +577,52 @@
 
 
 
+        @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+            <li class="nav-header">Mod. de Configuração de Pauta</li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('configuracoes.pautas.n_negativas') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                       Nº de Negativas
 
+                    </p>
+                </a>
+
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('configuracoes.pautas.disciplinas_exames') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                       Disciplinas de Exame
+
+                    </p>
+                </a>
+
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('configuracoes.pautas.pesos_notas_exames') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                       Pesos de notas(Exames)
+
+                    </p>
+                </a>
+
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="{{ route('configuracoes.pautas.criterio_disciplinas') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                      Critério de Disciplina
+
+                    </p>
+                </a>
+
+            </li>
+        @endif
 
 
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
@@ -586,7 +650,7 @@
                 </a>
 
             </li>
-            
+
 
 
             <li class="nav-item has-treeview">
@@ -770,16 +834,16 @@
                 </a>
                 <ul class="nav nav-treeview">
 
-                    
-                        <li class="nav-item">
-                            <a href="{{ route('pagamentos.pesquisar') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pesquisar</p>
-                            </a>
-                        </li>
-                
+
                     <li class="nav-item">
-                        <a href="{{ url('Admin/matriculas/pesquisar') }}" class="nav-link">
+                        <a href="{{ route('pagamentos.pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Pesquisar</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('pagamentos.filtrar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Listar Pagamentos</p>
                         </a>
@@ -791,7 +855,6 @@
 
                 </ul>
             </li>
-
         @endif
 
 

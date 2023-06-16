@@ -135,7 +135,7 @@ class TurmaUserController extends Controller
 
         /*   dd($array); */
 
-        return TurmaUser::where($array)->count();
+        return fh_turmas_professores()->where($array)->count();
 
 
     }

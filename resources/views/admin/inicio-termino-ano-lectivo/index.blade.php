@@ -12,11 +12,9 @@
 
 
     @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-        Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-        Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
-        Auth::user()->vc_tipoUtilizador == 'Preparador')
-        
-
+            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
+            Auth::user()->vc_tipoUtilizador == 'Preparador')
         <div class="d-flex justify-content-end mb-3">
             <a class="btn btn-dark" href="{{ route('inicio-termino-ano-lectivo.criar') }}">
                 <strong class="text-light">Cadastrar</strong>
@@ -25,7 +23,7 @@
     @endif
 
     <table id="example" class="display table table-hover">
-           <thead class="">
+        <thead class="">
             <tr class="text-center">
                 <th>ID</th>
                 <th>MÊS DE INÍCIO</th>
@@ -38,13 +36,13 @@
         <tbody class="bg-white">
             @if ($inicio_termino_ano_lectivo)
                 @foreach ($inicio_termino_ano_lectivo as $inicio_termino_ano_lectivo)
-                {{-- @dump($dt) --}}
+                    {{-- @dump($dt) --}}
                     <tr class="text-center">
                         <th>{{ $inicio_termino_ano_lectivo->id }}</th>
                         <th>{{ $inicio_termino_ano_lectivo->mes_inicio }}</th>
-                        <td>{{ $inicio_termino_ano_lectivo->ano_inicio }}</td>
+                        <td>{{ $inicio_termino_ano_lectivo->ya_inicio }}</td>
                         <td>{{ $inicio_termino_ano_lectivo->mes_termino }}</td>
-                        <td>{{ $inicio_termino_ano_lectivo->ano_fim }}</td>
+                        <td>{{ $inicio_termino_ano_lectivo->ya_fim }}</td>
                         <td>
                             @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
                                 <div class="dropdown">
@@ -56,7 +54,8 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a href="{{ route('inicio-termino-ano-lectivo.editar', $inicio_termino_ano_lectivo->slug) }}"
                                             class="dropdown-item">Editar</a>
-                                        <a href="{{ route('inicio-termino-ano-lectivo.eliminar', $inicio_termino_ano_lectivo->slug) }}" class="dropdown-item"
+                                        <a href="{{ route('inicio-termino-ano-lectivo.eliminar', $inicio_termino_ano_lectivo->slug) }}"
+                                            class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                     </div>
                                 </div>

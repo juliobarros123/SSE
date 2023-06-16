@@ -137,7 +137,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //novas rotas pautas finais
     Route::group(['prefix' => 'pauta-final'], function () {
-        Route::get('/gerar/{id_turma}/', ['as' => 'admin.pautaFinal.gerar', 'uses' => 'Admin\PautaFinalController@gerar']);
+        Route::get('/turma/{slug_turma}/', ['as' => 'admin.pautaFinal.gerar', 'uses' => 'Admin\PautaFinalController@gerar']);
 
         //     Route::post('/listar', ['as' => 'admin.pautaFinal.listar.get', 'uses' => 'Admin\PautaFinalController@getListPautaFinal']);
         //     Route::get('/listar/{anoLectivo}/{Curso}/{classe}', ['as' => 'admin.pautaFinal.Listas.get', 'uses' => 'Admin\PautaFinalController@getListasPautaFinal']);
@@ -551,37 +551,85 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
         Route::get('/{slug}/editar', ['as' => 'tipos-pagamento.editar', 'uses' => 'Admin\TipoPagamentoController@editar'])->middleware('access.controll.administrador');
         Route::get('/{slug}/eliminar', ['as' => 'tipos-pagamento.eliminar', 'uses' => 'Admin\TipoPagamentoController@eliminar'])->middleware('access.controll.administrador');
         Route::put('/{slug}/actualizar', ['as' => 'tipos-pagamento.actualizar', 'uses' => 'Admin\TipoPagamentoController@actualizar'])->middleware('access.controll.administrador');
-       
+
 
     });
     //End Tipo pagamento
-       //Start Tipo pagamento
-       Route::group(['prefix' => 'inicio-termino-ano-lectivo'], function () {
+    //Start Tipo pagamento
+    Route::group(['prefix' => 'inicio-termino-ano-lectivo'], function () {
         Route::get('/criar', ['as' => 'inicio-termino-ano-lectivo.criar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@criar']);
         Route::post('/cadastrar', ['as' => 'inicio-termino-ano-lectivo.cadastrar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@cadastrar']);
         Route::get('/', ['as' => 'inicio-termino-ano-lectivo', 'uses' => 'Admin\InicioTerminoAnoLectivoController@index']);
         Route::get('/{slug}/editar', ['as' => 'inicio-termino-ano-lectivo.editar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@editar'])->middleware('access.controll.administrador');
         Route::get('/{slug}/eliminar', ['as' => 'inicio-termino-ano-lectivo.eliminar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@eliminar'])->middleware('access.controll.administrador');
         Route::put('/{slug}/actualizar', ['as' => 'inicio-termino-ano-lectivo.actualizar', 'uses' => 'Admin\InicioTerminoAnoLectivoController@actualizar'])->middleware('access.controll.administrador');
-    
+
     });
     //End Tipo pagamento
-   //Start  pagamento
-   Route::group(['prefix' => 'pagamentos'], function () {
-    Route::get('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
-    Route::any('/estado', ['as' => 'pagamentos.estado', 'uses' => 'Admin\PagamentoController@estado']);
-    Route::get('{slug_tipo_pagamento}/{processo}/{slug_ano_lectivo}/pagar_mensalidade', ['as' => 'pagamentos.pagar_mensalidade', 'uses' => 'Admin\PagamentoController@pagar_mensalidade']);
-    Route::get('{slug_pagamento}/anular_pagamento', ['as' => 'pagamentos.anular_pagamento', 'uses' => 'Admin\PagamentoController@anular_pagamento']);
+    Route::group(['prefix' => 'configuracoes'], function () {
+        Route::group(['prefix' => 'pautas'], function () {
+            Route::group(['prefix' => 'n_negativas'], function () {
+                Route::get('/criar', ['as' => 'configuracoes.pautas.n_negativas.criar', 'uses' => 'Admin\NNegativaController@criar']);
+                Route::post('/cadastrar', ['as' => 'configuracoes.pautas.n_negativas.cadastrar', 'uses' => 'Admin\NNegativaController@cadastrar']);
+                Route::get('/', ['as' => 'configuracoes.pautas.n_negativas', 'uses' => 'Admin\NNegativaController@index']);
+                Route::get('/{slug}/editar', ['as' => 'configuracoes.pautas.n_negativas.editar', 'uses' => 'Admin\NNegativaController@editar'])->middleware('access.controll.administrador');
+                Route::get('/{slug}/eliminar', ['as' => 'configuracoes.pautas.n_negativas.eliminar', 'uses' => 'Admin\NNegativaController@eliminar'])->middleware('access.controll.administrador');
+                Route::put('/{slug}/actualizar', ['as' => 'configuracoes.pautas.n_negativas.actualizar', 'uses' => 'Admin\NNegativaController@actualizar'])->middleware('access.controll.administrador');
 
-    // Route::post('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
-    Route::get('/', ['as' => 'pagamentos', 'uses' => 'Admin\PagamentoController@index']);
-    Route::get('/{slug}/editar', ['as' => 'pagamentos.editar', 'uses' => 'Admin\PagamentoController@editar'])->middleware('access.controll.administrador');
-    Route::get('/{slug}/eliminar', ['as' => 'pagamentos.eliminar', 'uses' => 'Admin\PagamentoController@eliminar'])->middleware('access.controll.administrador');
-    Route::put('/{slug}/actualizar', ['as' => 'pagamentos.actualizar', 'uses' => 'Admin\PagamentoController@actualizar'])->middleware('access.controll.administrador');
-   
+            });
+            Route::group(['prefix' => 'disciplinas_exames'], function () {
+                Route::get('/criar', ['as' => 'configuracoes.pautas.disciplinas_exames.criar', 'uses' => 'Admin\DisciplinaExameController@criar']);
+                Route::post('/cadastrar', ['as' => 'configuracoes.pautas.disciplinas_exames.cadastrar', 'uses' => 'Admin\DisciplinaExameController@cadastrar']);
+                Route::get('/', ['as' => 'configuracoes.pautas.disciplinas_exames', 'uses' => 'Admin\DisciplinaExameController@index']);
+                Route::get('/{slug}/editar', ['as' => 'configuracoes.pautas.disciplinas_exames.editar', 'uses' => 'Admin\DisciplinaExameController@editar'])->middleware('access.controll.administrador');
+                Route::get('/{slug}/eliminar', ['as' => 'configuracoes.pautas.disciplinas_exames.eliminar', 'uses' => 'Admin\DisciplinaExameController@eliminar'])->middleware('access.controll.administrador');
+                Route::put('/{slug}/actualizar', ['as' => 'configuracoes.pautas.disciplinas_exames.actualizar', 'uses' => 'Admin\DisciplinaExameController@actualizar'])->middleware('access.controll.administrador');
 
-});
-//End  pagamento
+            });
+            Route::group(['prefix' => 'pesos_notas_exames'], function () {
+                Route::get('/criar', ['as' => 'configuracoes.pautas.pesos_notas_exames.criar', 'uses' => 'Admin\PesoNotaExameController@criar']);
+                Route::post('/cadastrar', ['as' => 'configuracoes.pautas.pesos_notas_exames.cadastrar', 'uses' => 'Admin\PesoNotaExameController@cadastrar']);
+                Route::get('/', ['as' => 'configuracoes.pautas.pesos_notas_exames', 'uses' => 'Admin\PesoNotaExameController@index']);
+                Route::get('/{slug}/editar', ['as' => 'configuracoes.pautas.pesos_notas_exames.editar', 'uses' => 'Admin\PesoNotaExameController@editar'])->middleware('access.controll.administrador');
+                Route::get('/{slug}/eliminar', ['as' => 'configuracoes.pautas.pesos_notas_exames.eliminar', 'uses' => 'Admin\PesoNotaExameController@eliminar'])->middleware('access.controll.administrador');
+                Route::put('/{slug}/actualizar', ['as' => 'configuracoes.pautas.pesos_notas_exames.actualizar', 'uses' => 'Admin\PesoNotaExameController@actualizar'])->middleware('access.controll.administrador');
+
+            });
+            Route::group(['prefix' => 'criterio_disciplinas'], function () {
+                Route::get('/criar', ['as' => 'configuracoes.pautas.criterio_disciplinas.criar', 'uses' => 'Admin\CriterioDisciplinaController@criar']);
+                Route::post('/cadastrar', ['as' => 'configuracoes.pautas.criterio_disciplinas.cadastrar', 'uses' => 'Admin\CriterioDisciplinaController@cadastrar']);
+                Route::get('/', ['as' => 'configuracoes.pautas.criterio_disciplinas', 'uses' => 'Admin\CriterioDisciplinaController@index']);
+                Route::get('/{slug}/editar', ['as' => 'configuracoes.pautas.criterio_disciplinas.editar', 'uses' => 'Admin\CriterioDisciplinaController@editar'])->middleware('access.controll.administrador');
+                Route::get('/{slug}/eliminar', ['as' => 'configuracoes.pautas.criterio_disciplinas.eliminar', 'uses' => 'Admin\CriterioDisciplinaController@eliminar'])->middleware('access.controll.administrador');
+                Route::put('/{slug}/actualizar', ['as' => 'configuracoes.pautas.criterio_disciplinas.actualizar', 'uses' => 'Admin\CriterioDisciplinaController@actualizar'])->middleware('access.controll.administrador');
+
+            });
+
+        });
+
+    });
+    //Start Nº de Negativas
+
+    //End Nº de Negativas
+    //Start  pagamento
+    Route::group(['prefix' => 'pagamentos'], function () {
+        Route::get('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
+        Route::any('/estado', ['as' => 'pagamentos.estado', 'uses' => 'Admin\PagamentoController@estado']);
+        Route::get('{slug_tipo_pagamento}/{processo}/{slug_ano_lectivo}/{mes}/{valor_final}/pagar_mensalidade', ['as' => 'pagamentos.pagar_mensalidade', 'uses' => 'Admin\PagamentoController@pagar_mensalidade']);
+        Route::get('{slug_pagamento}/anular_pagamento', ['as' => 'pagamentos.anular_pagamento', 'uses' => 'Admin\PagamentoController@anular_pagamento']);
+        Route::get('{slug_pagamento}/fatura', ['as' => 'pagamentos.fatura', 'uses' => 'Admin\PagamentoController@fatura']);
+        Route::get('filtrar', ['as' => 'pagamentos.filtrar', 'uses' => 'Admin\PagamentoController@filtrar']);
+        Route::any('lista', ['as' => 'pagamentos.lista', 'uses' => 'Admin\PagamentoController@lista']);
+
+        // Route::post('/pesquisar', ['as' => 'pagamentos.pesquisar', 'uses' => 'Admin\PagamentoController@pesquisar']);
+        Route::get('/', ['as' => 'pagamentos', 'uses' => 'Admin\PagamentoController@index']);
+        Route::get('/{slug}/editar', ['as' => 'pagamentos.editar', 'uses' => 'Admin\PagamentoController@editar'])->middleware('access.controll.administrador');
+        Route::get('/{slug}/eliminar', ['as' => 'pagamentos.eliminar', 'uses' => 'Admin\PagamentoController@eliminar'])->middleware('access.controll.administrador');
+        Route::put('/{slug}/actualizar', ['as' => 'pagamentos.actualizar', 'uses' => 'Admin\PagamentoController@actualizar'])->middleware('access.controll.administrador');
+
+
+    });
+    //End  pagamento
     //Start DeclaracaoComNotas
     Route::group(['prefix' => 'declaracaoComNotas'], function () {
         Route::get('/home', ['as' => 'declaracaoComNotas.home', 'uses' => 'Admin\DeclaracaoComNotasController@home']);
@@ -1111,9 +1159,29 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
                 Route::post('/imprimir', ['as' => 'relatorios.matriculados.imprimir', 'uses' => 'Admin\RelatorioController@matriculados_imprimir']);
 
             });
+            Route::group(['prefix' => 'propinas/'], function () {
+                Route::group(['prefix' => 'alunos/'], function () {
+                    Route::get('/pesquisar', ['as' => 'relatorios.propinas.alunos.pesquisar', 'uses' => 'Admin\RelatorioController@propinas_aluno_pesquisar']);
+                    Route::any('/imprimir', ['as' => 'relatorios.propinas.alunos.imprimir', 'uses' => 'Admin\RelatorioController@propinas_aluno_imprimir']);
+
+                });
+
+            });
             //=============relatorios-End======================//
 
         });
+
+        //=============relatorios-Lista=====================f//
+        Route::group(['prefix' => 'listas/'], function () {
+
+            Route::group(['prefix' => 'propinas/turmas'], function () {
+                Route::get('/pesquisar', ['as' => 'listas.propinas_turmas.pesquisar', 'uses' => 'Admin\ListaController@propinas_turmas_pesquisar']);
+                Route::post('/imprimir', ['as' => 'listas.propinas_turmas.imprimir', 'uses' => 'Admin\ListaController@propinas_turmas_imprimir']);
+
+            });
+        });
+
+        //=============relatorios-Lista=====================f//
 
 
     });

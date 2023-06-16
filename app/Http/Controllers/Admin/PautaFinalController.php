@@ -29,10 +29,10 @@ class PautaFinalController extends Controller
     private $notas;
     protected $turma;
     protected $curso;
-    public function __construct( Nota $notas, Turma $turma, Curso $curso)
+    public function __construct(Nota $notas, Turma $turma, Curso $curso)
     {
         $this->Logger = new Logger();
-  
+
         $this->notas = $notas;
         $this->turma = $turma;
         $this->curso = $curso;
@@ -41,99 +41,41 @@ class PautaFinalController extends Controller
     {
         $id_curso = Turma::find($id_turma)->it_idCurso;
         $id_classe = Turma::find($id_turma)->it_idClasse;
-        $disciplinas = $this->fh_disciplinas_cursos_classes()->where('classes.id',     $id_classe)
-            ->where('cursos.id',  $id_curso);
+        $disciplinas = $this->fh_disciplinas_cursos_classes()->where('classes.id', $id_classe)
+            ->where('cursos.id', $id_curso);
         return $disciplinas;
     }
 
-    public function gerar($id_turma)
+    public function gerar($slug_turma)
     {
         try {
-
-            $response['disciplinas'] = $this->pegarDisciplinas($id_turma)
-            ->orderBy('disciplinas.id', 'asc')
-            ->select('disciplinas.*')
-            ->get();
-
-
-        // $response['disciplinas']=$this->turma->turmasDisciplinas($id_turma)->get();
-        // dd(   $response['disciplinas']);
-        $response['disciplinas_terminas'] = $this->turma->disciplinas_terminas($id_turma)->get();
-
-        $response['alunos'] = $this->turma->alunos($id_turma);
-        //   dd($id_turma);
-        $response['notas'] = $this->notas->notasGeral($id_turma)->get();
-        // dd($response['notas']);
-        // dd(  $response['notas']);
-        //  dd($response['notas']->where('id_disciplina',25)->where('vc_tipodaNota','I')->where('id_aluno',13381)->first()->fl_media);
-        $response['cabecalho'] = Cabecalho::find(1);
-        // dd($response['cabecalho']);
-        $response['detalhes_turma'] = $this->turma->detalhes_turma($id_turma);
-        // dd( $response['detalhes_turma']);
-        $response['disciplinas'] = $this->curso->disciplinas($response['detalhes_turma']->it_idCurso)
-            ->distinct()
-            ->where('classes.vc_classe', '<=',  $response['detalhes_turma']->vc_classe)
-            ->orderBy('disciplinas.id', 'asc')
-            ->select('disciplinas.*')
-            ->get();
-        //dd($disciplinas2);
-            if ($response['cabecalho']->vc_nif == "5000298182") {
-
-                //$url = 'cartões/CorMarie/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-
-            } else if ($response['cabecalho']->vc_nif == "7301002327") {
-
-                //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            } else if ($response['cabecalho']->vc_nif == "5000303399") {
-
-                //$url = 'cartões/negage/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            } else if ($response['cabecalho']->vc_nif == "5000820440") {
-            
-                //$url = 'cartões/Quilumosso/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            } else if ($response['cabecalho']->vc_nif == "5000305308") {
-
-                //$url = 'cartões/Foguetao/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            } else if ($response['cabecalho']->vc_nif == "7301002572") {
-
-                //$url = 'cartões/LiceuUíge/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-             } else if ($response['cabecalho']->vc_nif == "7301003617") {
-
-                //$url = 'cartões/ldc/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            }else if ($response['cabecalho']->vc_nif == "5000300926") {
-
-                //$url = 'cartões/imagu/aluno.png';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            } else {
-                //$url = 'images/cartao/aluno.jpg';
-                $response["css"] = file_get_contents('css/pauta/style.css');
-                $response["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-            }
-            $response['titulo'] = $response['detalhes_turma']->vc_nomedaTurma . '-' . $response['detalhes_turma']->vc_classe . 'ª Classe' . '-' . $response['detalhes_turma']->vc_shortName . '-' . $response['detalhes_turma']->ya_inicio . '_' . $response['detalhes_turma']->ya_fim;
+            // dd($slug_turma);
+            $turma = fh_turmas_slug($slug_turma)->first();
+            //   dd( $turma);
+            $turma_alunos = fha_turma_alunos($slug_turma);
+            $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
+            //  dd( $disciplinas );
+            $data['turma'] = $turma;
+            // dd(  $data['turma']);
+            $data['cabecalho'] = fh_cabecalho();
+            $data['alunos'] = $turma_alunos;
+            // dd( $data['turma_alunos']);
+            // dd( $data['cabecalho']);
+            // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
+            $data['css'] = file_get_contents('css/lista/style-2.css');
+            // Dados para a tabela
+            $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
             $mpdf = new \Mpdf\Mpdf(['format' => 'A1-L']);
+            // dd(   $data['titulo']);
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
-            $this->Logger->Log('info', 'Imprimiu Pauta Final ');
+            $this->Logger->Log('info', 'Imprimiu Pauta Anual com o título ' . $data['titulo']);
             // dd($response);
-            $html = view("admin/pdfs/pauta_final/dinamica", $response);
+            $html = view("admin.pdfs.pauta.anual", $data);
 
             $mpdf->writeHTML($html);
 
-            $mpdf->Output("Pauta final " . $response['titulo'] . ".pdf", "I");
+            $mpdf->Output("Pauta final " . $data['titulo'] . ".pdf", "I");
             // return view('admin.pdfs.pauta_final.index',$response);
         } catch (Exception $ex) {
             dd($ex);
@@ -167,7 +109,7 @@ class PautaFinalController extends Controller
 
 
             $response['alunos'] = $this->turma->alunos($id_turma);
-            $response['alunos'] =  $response['alunos']->where('id_aluno', $processo);
+            $response['alunos'] = $response['alunos']->where('id_aluno', $processo);
             //    $response['alunos']=   $response['alunos']->where()
             //   dd($id_turma);
             $response['notas'] = $this->notas->notasGeral($id_turma)->get();
@@ -180,7 +122,7 @@ class PautaFinalController extends Controller
             // dd( $response['detalhes_turma']);
             $response['disciplinas'] = $this->curso->disciplinas($response['detalhes_turma']->it_idCurso)
                 ->distinct()
-                ->where('classes.vc_classe', '<=',  $response['detalhes_turma']->vc_classe)
+                ->where('classes.vc_classe', '<=', $response['detalhes_turma']->vc_classe)
                 ->orderBy('disciplinas.id', 'asc')
                 ->select('disciplinas.*')
                 ->get();
@@ -219,7 +161,8 @@ class PautaFinalController extends Controller
         $detalhes_turma = $dados['detalhes_turma'];
 
 
-        $processos = [];;
+        $processos = [];
+        ;
         $contador = 1;
         $contadorDisciplinas = 0;
         $qtDisciplinaNegativa = 0;
@@ -229,8 +172,10 @@ class PautaFinalController extends Controller
         $qtFemininoNTransitados = array();
         $somaAcs = 0;
         $ttlReprovados = 0;
-        $disciplinasNegativas = array();;
-        $disciplinasNotas = array();;
+        $disciplinasNegativas = array();
+        ;
+        $disciplinasNotas = array();
+        ;
         $disciplinasPositivas = array();
         $dataOutrosAnos = array();
         $arrayNotasClasses = array();
@@ -253,18 +198,18 @@ class PautaFinalController extends Controller
                     // $disciplinasNotas->push(collect($disciplina->vc_acronimo));
                     // dd($disciplinasNotas[$contadorDisciplinas]);
                     $rec = notaRecurso($aluno->id, $disciplina->id);
-                
+
                     if (!temDCCNestaClasse($disciplina->id, $detalhes_turma->it_idClasse, $detalhes_turma->it_idCurso)) {
                         $cfd = buscarCDF($aluno->id, $disciplina->id);
-                        if($disciplina->vc_acronimo=='T.R.E.I'){
+                        if ($disciplina->vc_acronimo == 'T.R.E.I') {
                             // dd($cfd,"O",$disciplina);
-                   
+
                         }
                         if ("$cfd" != "null" && $cfd < 10) {
 
 
                             if ($rec != -1 && $rec < 10) {
-                                array_push($disciplinasNegativasIndividual, ['disciplina' => $disciplina->vc_acronimo, 'terminal' => 1, 'nota' =>  $rec, 'id_aluno' => $aluno->id, 'tipo_nota' => 'cfd']);
+                                array_push($disciplinasNegativasIndividual, ['disciplina' => $disciplina->vc_acronimo, 'terminal' => 1, 'nota' => $rec, 'id_aluno' => $aluno->id, 'tipo_nota' => 'cfd']);
                             } else if ($rec == -1) {
 
                                 array_push($disciplinasNegativasIndividual, ['disciplina' => $disciplina->vc_acronimo, 'terminal' => 1, 'nota' => $cfd, 'id_aluno' => $aluno->id, 'tipo_nota' => 'cfd']);
@@ -339,7 +284,8 @@ class PautaFinalController extends Controller
                                                     //   dd("Ola");
                                                     array_push($arrayNotasClasses, array(
                                                         "$cls" . "classe" => $nota
-                                                    ));
+                                                    )
+                                                    );
 
 
 
@@ -364,7 +310,7 @@ class PautaFinalController extends Controller
                             $cfd = $dataOutrosAnos['media'];
                         }
                         $ac = round((($mat1 + $mat2 + $mat3) / 3), 0, PHP_ROUND_HALF_UP);
-                  
+
                         if ($rec != -1) {
                             if ($rec >= 10) {
                                 array_push($disciplinasPositivas, $disciplina->id);
@@ -389,9 +335,11 @@ class PautaFinalController extends Controller
                             }
                         }
 
-                        if ($disciplinas_terminas->where('id', $disciplina->id)->count() && ($detalhes_turma->vc_classe == '12' || $detalhes_turma->vc_classe == '13')) {;
+                        if ($disciplinas_terminas->where('id', $disciplina->id)->count() && ($detalhes_turma->vc_classe == '12' || $detalhes_turma->vc_classe == '13')) {
+                            ;
                         } else {
-                        };
+                        }
+                        ;
 
                         if ($disciplinas_terminas->where('id', $disciplina->id)->count() && temDisciplinaNoClasseAnterior($disciplina->id, $detalhes_turma->vc_classe, $detalhes_turma->it_idCurso)) {
 
@@ -418,7 +366,7 @@ class PautaFinalController extends Controller
                                 $qtDisciplinaNegativa++;
                             }
                         } else if ($disciplinas_terminas->where('id', $disciplina->id)->count() && !temDisciplinaNoClasseAnterior($disciplina->id, $detalhes_turma->vc_classe, $detalhes_turma->it_idCurso)) {
-            
+
                             if (($detalhes_turma->vc_classe == 12 || $detalhes_turma->vc_classe == 13)) {
 
                                 $ac = round((($mfd * 0.6) + ($exame * 0.4)), 0, PHP_ROUND_HALF_UP);
@@ -432,7 +380,8 @@ class PautaFinalController extends Controller
 
                             if ($ac < 10) {
                                 $qtDisciplinaNegativa++;
-                            };
+                            }
+                            ;
                         }
 
                         if ($rec != -1 && $rec < 10) {
@@ -446,7 +395,7 @@ class PautaFinalController extends Controller
                             if ("$cfd" != "null" && $cfd < 10) {
 
                                 array_push($disciplinasNegativasIndividual, ['disciplina' => $disciplina->vc_acronimo, 'terminal' => $disciplinas_terminas->where('id', $disciplina->id)->count(), 'nota' => $cfd, 'id_aluno' => $aluno->id, 'tipo_nota' => 'cfd']);
-                            } else if ("$ac" != "null"  && $ac < 10 && "$cfd" == "null") {
+                            } else if ("$ac" != "null" && $ac < 10 && "$cfd" == "null") {
 
                                 array_push($disciplinasNegativasIndividual, ['disciplina' => $disciplina->vc_acronimo, 'terminal' => $disciplinas_terminas->where('id', $disciplina->id)->count(), 'nota' => $ac, 'id_aluno' => $aluno->id, 'tipo_nota' => 'ac']);
                             }
@@ -699,106 +648,108 @@ class PautaFinalController extends Controller
                         $rec = -1;
                         $arrayNotasClasses = array();
                     }
-                };
+                }
+                ;
 
                 $disciplinasNegativasIndividualC = collect($disciplinasNegativasIndividual);
                 // dump($disciplinasNegativasIndividualC );
                 // $c2 = CadeadoGeralPauta::where('it_estado_activacao', 1)->count();
-                $c2=true;
+                $c2 = true;
                 if ($c2) {
                     if (
                         $detalhes_turma->vc_classe == '13' &&
                         $disciplinasNegativasIndividualC
-                        ->where('terminal', 1)
-                        ->where('id_aluno', $aluno->id)
-                        ->count() > 0
+                            ->where('terminal', 1)
+                            ->where('id_aluno', $aluno->id)
+                            ->count() > 0
                     ) {
                         $estadoResultado = 'N/TRANSITA';
                         $result = 0;
-                    } elseif (($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() +
-                            $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count())  >= 3
+                    } elseif (
+                        ($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() +
+                            $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) >= 3
                         && $detalhes_turma->vc_classe == "12" && !temCadeirasDoAnoAnterior($disciplinasNegativasIndividualC, $detalhes_turma)
                     ) {
-                        $estadoResultado =  "RECURSO";
+                        $estadoResultado = "RECURSO";
                         $result = 0;
-                    } else  if (temCadeirasDoAnoAnterior($disciplinasNegativasIndividualC, $detalhes_turma) && $detalhes_turma->vc_classe == "12") {
+                    } else if (temCadeirasDoAnoAnterior($disciplinasNegativasIndividualC, $detalhes_turma) && $detalhes_turma->vc_classe == "12") {
 
-                        $estadoResultado =  "N/TRANSITA";
-                        $result = 0;
-                    } else
-              if (($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() + $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) >= 3) {
                         $estadoResultado = "N/TRANSITA";
                         $result = 0;
-                    } else  if ($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() >= 1 && $detalhes_turma->vc_classe == "12") {
-
-                        $estadoResultado =  "RECURSO";
-                        $result = 0;
-                    } else if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) {
-                        if (
-                            $detalhes_turma->vc_shortName == "Info e Sistemas Multimédia" &&
-                            $detalhes_turma->vc_classe == "11" &&
-                            $disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() == 2
-                            && $disciplinasNegativasIndividualC->where("disciplina", "DES. TÉC.")->where('id_aluno', $aluno->id)->count()
-                        ) {
-                            $estadoResultado =  "N/TRANSITA";
+                    } else
+                        if (($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() + $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) >= 3) {
+                            $estadoResultado = "N/TRANSITA";
                             $result = 0;
-                        } else {
-                            if (($detalhes_turma->vc_classe == 12 || $detalhes_turma->vc_classe == 13) && temCadeirasDoAnoAnterior($disciplinasNegativasIndividualC, $detalhes_turma)) {
+                        } else if ($disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() >= 1 && $detalhes_turma->vc_classe == "12") {
 
-                                $estadoResultado =  "N/TRANSITA";
+                            $estadoResultado = "RECURSO";
+                            $result = 0;
+                        } else if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) {
+                            if (
+                                $detalhes_turma->vc_shortName == "Info e Sistemas Multimédia" &&
+                                $detalhes_turma->vc_classe == "11" &&
+                                $disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count() == 2
+                                && $disciplinasNegativasIndividualC->where("disciplina", "DES. TÉC.")->where('id_aluno', $aluno->id)->count()
+                            ) {
+                                $estadoResultado = "N/TRANSITA";
                                 $result = 0;
                             } else {
-                                //    dd(deixouCadeiraDesteAno($disciplinasNegativasIndividualC,$detalhes_turma));
+                                if (($detalhes_turma->vc_classe == 12 || $detalhes_turma->vc_classe == 13) && temCadeirasDoAnoAnterior($disciplinasNegativasIndividualC, $detalhes_turma)) {
 
-                                if (deixouCadeiraDesteAno($disciplinasNegativasIndividualC, $detalhes_turma)) {
-
-                                    $estadoResultado =  "RECURSO";
+                                    $estadoResultado = "N/TRANSITA";
                                     $result = 0;
                                 } else {
+                                    //    dd(deixouCadeiraDesteAno($disciplinasNegativasIndividualC,$detalhes_turma));
 
-                                    if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) {
-                                        if (
-                                            $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count() == 1
-                                            &&  $detalhes_turma->vc_classe == "11"  && $detalhes_turma->vc_shortName == "Info e Sistemas Multimédia"
-                                        ) {
-                                            $estadoResultado =  "TRANSITA";
-                                            $result = 1;
-                                        } else {
-                                            $estadoResultado =  "RECURSO";
+                                    if (deixouCadeiraDesteAno($disciplinasNegativasIndividualC, $detalhes_turma)) {
 
-                                            $result = 0;
-                                        }
+                                        $estadoResultado = "RECURSO";
+                                        $result = 0;
                                     } else {
-                                        if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count() <= 1) {
-                                            $estadoResultado =  "TRANSITA";
-                                            $result = 1;
+
+                                        if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count()) {
+                                            if (
+                                                $disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count() == 1
+                                                && $detalhes_turma->vc_classe == "11" && $detalhes_turma->vc_shortName == "Info e Sistemas Multimédia"
+                                            ) {
+                                                $estadoResultado = "TRANSITA";
+                                                $result = 1;
+                                            } else {
+                                                $estadoResultado = "RECURSO";
+
+                                                $result = 0;
+                                            }
                                         } else {
-                                            $estadoResultado =  "RECURSO";
-                                            $result = 0;
+                                            if ($disciplinasNegativasIndividualC->where('terminal', 1)->where('id_aluno', $aluno->id)->count() <= 1) {
+                                                $estadoResultado = "TRANSITA";
+                                                $result = 1;
+                                            } else {
+                                                $estadoResultado = "RECURSO";
+                                                $result = 0;
+                                            }
                                         }
                                     }
                                 }
                             }
+                        } else {
+
+
+                            $estadoResultado = "TRANSITA";
+                            $result = 1;
                         }
-                    } else {
-
-
-                        $estadoResultado =  "TRANSITA";
-                        $result = 1;
-                    }
 
                     // start activar somente depois do recurso
                     // if($aluno->id==13409){
                     //     dd($estadoResultado, temNegativaDeRecurso($aluno->id));
                     // }
-                    if ($detalhes_turma->vc_classe == "12" &&  $estadoResultado == "RECURSO") {
+                    if ($detalhes_turma->vc_classe == "12" && $estadoResultado == "RECURSO") {
                         if (
                             temNegativaDeRecurso($aluno->id) +
                             $disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count()
                             + $disciplinasNegativasIndividualC->where('terminal', 0)->where('id_aluno', $aluno->id)->count()
                         ) {
 
-                            $estadoResultado =  "N/TRANSITA";
+                            $estadoResultado = "N/TRANSITA";
                             $result = 0;
                         }
                     } else {
@@ -810,11 +761,11 @@ class PautaFinalController extends Controller
                         ) {
 
 
-                            $estadoResultado =  "N/TRANSITA";
+                            $estadoResultado = "N/TRANSITA";
                             $result = 0;
                         } else if ($estadoResultado == "RECURSO" && temNegativaDeRecurso($aluno->id) <= 2) {
 
-                            $estadoResultado =  "TRANSITA";
+                            $estadoResultado = "TRANSITA";
                             $result = 1;
                         }
                     }
@@ -827,14 +778,15 @@ class PautaFinalController extends Controller
                 $disciplinasNegativasIndividual = array();
 
                 round(($somaAcs / $disciplinas->count()), 0, PHP_ROUND_HALF_UP);
-                $somaAcs = 0;;
+                $somaAcs = 0;
+                ;
             }
 
             array_push($processos, $aluno->id);
         }
         return $disciplinasNotas;
     }
- 
+
     public function alunoPautaFinal(Request $processo)
     {
 
@@ -877,9 +829,10 @@ class PautaFinalController extends Controller
             $matricula = Matricula::join('classes', 'classes.id', 'matriculas.it_idClasse')
                 ->where('id_aluno', $processo)
                 ->orderBy('classes.vc_classe', 'desc')->first();
-            return  $this->minhaPauta($processo, $matricula->it_idTurma);;
+            return $this->minhaPauta($processo, $matricula->it_idTurma);
+            ;
         } catch (\Exception $ex) {
-            return  response()->json("Pendente");
+            return response()->json("Pendente");
         }
     }
     public function alunoPauta($processo)
@@ -890,9 +843,9 @@ class PautaFinalController extends Controller
                 ->orderBy('classes.vc_classe', 'desc')->first();
             $p = $this->minhaPauta($processo, $matricula->it_idTurma);
             // dd($p);
-            return  response()->json($p);
+            return response()->json($p);
         } catch (\Exception $ex) {
-            return  response()->json("Pendente");
+            return response()->json("Pendente");
         }
     }
     public function index()
@@ -915,7 +868,7 @@ class PautaFinalController extends Controller
     }
 
     public function getListPautaFinal(Request $request)
-    {   //dd($request->vc_anolectivo);
+    { //dd($request->vc_anolectivo);
         return redirect('/pauta-final/listar/' . $request->vc_anolectivo . '/' . $request->vc_curso . '/' . $request->vc_classe);
     }
 
@@ -930,7 +883,7 @@ class PautaFinalController extends Controller
         // dd($data['dados']);
 
 
-        $data['alunos']  = Alunno::all();
+        $data['alunos'] = Alunno::all();
         $data['notas'] = Nota::all();
         $data['disciplinas'] = Disciplinas::all();
         $data['ano_lectivo'] = $ano_lectivo;
@@ -948,8 +901,8 @@ class PautaFinalController extends Controller
         $ResponseTurma = Turma::find($id);
         $data['disciplinas'] = Disciplinas::all();
         $data['turma'] = $ResponseTurma;
-      /*   $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
-        $data["css"] = file_get_contents("css/pauta/style.css"); */
+        /*   $data["bootstrap"] = file_get_contents("css/pauta/bootstrap.min.css");
+          $data["css"] = file_get_contents("css/pauta/style.css"); */
         if ($data['cabecalho']->vc_nif == "5000298182") {
 
             //$url = 'cartões/CorMarie/aluno.png';
@@ -967,7 +920,7 @@ class PautaFinalController extends Controller
             $data["css"] = file_get_contents('css/pauta/style.css');
             $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
         } else if ($data['cabecalho']->vc_nif == "5000820440") {
-        
+
             //$url = 'cartões/Quilumosso/aluno.png';
             $data["css"] = file_get_contents('css/pauta/style.css');
             $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
@@ -986,7 +939,7 @@ class PautaFinalController extends Controller
             //$url = 'cartões/ldc/aluno.png';
             $data["css"] = file_get_contents('css/pauta/style.css');
             $data["bootstrap"] = file_get_contents('css/pauta/bootstrap.min.css');
-        }else if ($data['cabecalho']->vc_nif == "5000300926") {
+        } else if ($data['cabecalho']->vc_nif == "5000300926") {
 
             //$url = 'cartões/imagu/aluno.png';
             $data["css"] = file_get_contents('css/pauta/style.css');
@@ -1006,7 +959,7 @@ class PautaFinalController extends Controller
         $mpdf->writeHTML($html);
         $mpdf->Output($id . ".pdf", "I");
     }
-    public  function fh_disciplinas_cursos_classes()
+    public function fh_disciplinas_cursos_classes()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')

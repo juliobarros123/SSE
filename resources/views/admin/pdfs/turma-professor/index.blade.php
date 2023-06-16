@@ -37,9 +37,9 @@
     <ul>
         @foreach ($professores as $item)
         <li> <strong> {{$item->vc_primemiroNome . ' ' . $item->vc_apelido }} / </strong>   
-             @foreach ($disciplinas as $discplina)
-            @if ($discplina->it_idUser == $item->it_idUser)
-                {{ $discplina->disciplina }}
+             @foreach ($disciplinas as $disciplina)
+            @if ($disciplina->it_idUser == $item->it_idUser)
+                {{ $disciplina->disciplina }}
                
             @endif
         @endforeach</li>
