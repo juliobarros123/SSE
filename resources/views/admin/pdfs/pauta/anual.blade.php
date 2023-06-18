@@ -60,7 +60,7 @@
                     <th colspan="{{ $colspan }}" rowspan="1" class="th " style="text-align: center;">
                         <?php echo $disciplina->vc_acronimo; ?></th>
                 @endforeach
-                <th rowspan="2" class="th">RESULTADO</th>
+                <th rowspan="2" class="th">OBS</th>
                 <th rowspan="2" class="th">MÉDIA</th>
             <tr>
                 <?php foreach ($disciplinas as $disciplina) {?>

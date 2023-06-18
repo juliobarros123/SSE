@@ -62,8 +62,9 @@
 
                     @foreach ($disciplinas as $disciplina)
                         @php
-                            $media = fha_media_trimestre_por_ano($aluno->processo, $disciplina->id, $trimestre, $turma->it_idAnoLectivo);
-                        @endphp
+                            
+                            $media=  fha_media_trimestral_geral($aluno->processo, $disciplina->id, [$trimestre], $turma->it_idAnoLectivo);
+                            @endphp
                         <td style="color:<?php echo $media >= 10 ? 'blue' : 'red'; ?>">{{ $media }} </td>
                     @endforeach
                     @php

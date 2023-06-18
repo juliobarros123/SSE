@@ -499,12 +499,12 @@
                             <p>Por Alunos</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('relatorios.candidaturas.pesquisar') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p> Em Atraso</p>
                         </a>
-                    </li>
+                    </li> --}}
 
 
                 </ul>

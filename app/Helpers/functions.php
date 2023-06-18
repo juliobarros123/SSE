@@ -762,10 +762,13 @@ function fha_mac_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_an
 }
 function fha_media_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
 {
+
+
+
     $n = fh_mt_trimestre_por_ano($processo, $id_disciplina, $trimestre, $id_ano_lectivo)
         ->select('notas.fl_media')
         ->first();
-    // dd($n);
+
     $nota = isset($n->fl_media) && $n->fl_media ? $n->fl_media : 0;
     return fh_arredondar($nota);
 }
@@ -784,7 +787,8 @@ function fhap_media_trimestre_disciplinas($processo, $trimestre, $id_classe, $id
         ->get();
     // dd($disciplinas);
     foreach ($disciplinas as $disciplina) {
-        $nota = fha_media_trimestre_por_ano($processo, $disciplina->id, $trimestre, $id_ano_lectivo);
+        // $nota = fha_media_trimestre_por_ano($processo, $disciplina->id, $trimestre, $id_ano_lectivo);
+        $nota = fha_media_trimestral_geral($processo, $disciplina->id, [$trimestre], $id_ano_lectivo);
         array_push($notas, $nota);
     }
 
@@ -792,29 +796,71 @@ function fhap_media_trimestre_disciplinas($processo, $trimestre, $id_classe, $id
     return fh_arredondar($nota);
 
 }
+function fha_md_III_disciplina_exame($processo, $id_disciplina, $id_ano_lectivo)
+{
+    $media_I_II = fha_media_trimestral_geral($processo, $id_disciplina, ['I', 'II'], $id_ano_lectivo);
+    $notas_III = fh_mt_trimestre_por_ano($processo, $id_disciplina, 'III', $id_ano_lectivo)
+        ->first();
+    $fl_nota1 = isset($notas_III->fl_media) && $notas_III->fl_media ? $notas_III->fl_media : 0;
+    $fl_mac = isset($notas_III->fl_mac) && $notas_III->fl_mac ? $notas_III->fl_mac : 0;
+    $mft = $fl_nota1 + $fl_mac;
+    $mft = round(($mft / 2), 0, PHP_ROUND_HALF_UP);
+    $mfd = media([$media_I_II, $mft]);
+    return fh_arredondar($mfd);
+}
 function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $id_ano_lectivo)
 {
     $notas = array();
+    $matricula = fh_matriculas()
+        ->where('anoslectivos.id', $id_ano_lectivo)
+        ->where('alunnos.processo', $processo)->first();
+
+    $disciplinas_exame = fh_disciplinas_exames()
+        ->where('classes.id', $matricula->it_idClasse)
+        ->where('disciplinas.id', $id_disciplina)->first();
 
     foreach ($trimestre_array as $t) {
-        $nota = fh_mt_trimestre_por_ano($processo, $id_disciplina, $t, $id_ano_lectivo)
-            ->select('notas.fl_media')
-            ->first();
-        // dd(  $nota);
-        $nota = isset($nota->fl_media) && $nota->fl_media ? $nota->fl_media : 0;
-        array_push($notas, $nota);
-
-        // dd($n);
-        ;
+        if ($t == "III" && $disciplinas_exame) {
+          $media_III_disciplina_exame=  fha_md_III_disciplina_exame($processo, $id_disciplina, $id_ano_lectivo);
+          dd( $media_III_disciplina_exame);
+        } else {
+            $nota = fh_mt_trimestre_por_ano($processo, $id_disciplina, $t, $id_ano_lectivo)
+                ->select('notas.fl_media')
+                ->first();
+            $nota = isset($nota->fl_media) && $nota->fl_media ? $nota->fl_media : 0;
+            array_push($notas, $nota);
+        }
 
     }
     // dd($notas);
+    // fh_disciplinas_exames
     $media = media($notas);
 
     return fh_arredondar($media);
 
 
 }
+// function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $id_ano_lectivo)
+// {
+//     $notas = array();
+
+//     foreach ($trimestre_array as $t) {
+//         $nota = fh_mt_trimestre_por_ano($processo, $id_disciplina, $t, $id_ano_lectivo)
+//             ->select('notas.fl_media')
+//             ->first();
+//         $nota = isset($nota->fl_media) && $nota->fl_media ? $nota->fl_media : 0;
+//         array_push($notas, $nota);
+
+//     }
+
+//     $media = media($notas);
+
+//     return fh_arredondar($media);
+
+
+// }
+
+
 
 function fh_notas_recursos()
 {
@@ -856,6 +902,7 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
     // dd( $n_negativas );
     foreach ($disciplinas as $disciplina) {
         $nota_recurso = fh_nota_recurso($processo, $disciplina->id);
+
         if (is_string($nota_recurso)) {
             // $nota = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
             $nota = fha_cfd_ext($processo, $disciplina->id, $id_classe);
@@ -863,17 +910,30 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
         } else {
             $nota = intval($nota_recurso);
         }
+
+        $criterio_disciplina = fh_criterio_disciplinas()->where('classes.id', $id_classe)
+            ->where('cursos.id', $id_curso)
+            ->where('disciplinas.id', $disciplina->id)->first();
+
+        if (isset($criterio_disciplina->valor_inicial)) {
+
+            if ($nota >= $criterio_disciplina->valor_inicial && $nota <= $criterio_disciplina->valor_final) {
+                array_push($resultados, $criterio_disciplina->resultado);
+            }
+        }
         if ($nota < 10) {
             $cont_negativas++;
         }
     }
-    // dd($cont_negativas);
+
     if ($cont_negativas > $n_negativas_adminita) {
         array_push($resultados, 'N/TRANSITA');
-    }else{
+    } else {
         array_push($resultados, 'TRANSITA');
 
     }
+
+
     return fha_org_resultados($resultados);
     // foreach ($disciplinas as $disciplina) {
     //     $nota_recurso = fh_nota_recurso($processo, $disciplina->id);
@@ -928,12 +988,13 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
 function fha_org_resultados($resultados)
 {
     $array = $resultados;
+    // dd($resultados);
 
     $order = array(
-        "TRANSITA",
         "N/TRANSITA",
         "RECURSO",
-        "TRANSITA/DEFICIÊNCIA"
+        "TRANSITA/DEFICIÊNCIA",
+        "TRANSITA"
     );
 
     $collection = collect($array);
@@ -955,12 +1016,12 @@ function fha_cfd_ext($processo, $id_disciplina, $id_classe_limit)
     $nota = 0;
     $cabecalho = fh_cabecalho();
     $classe = Classe::find($id_classe_limit);
-    if ($cabecalho->vc_tipo_escola == "Liceu" ||  $classe->vc_classe<10) {
+    if ($cabecalho->vc_tipo_escola == "Liceu" || $classe->vc_classe < 10) {
         $matriculas = fh_matriculas()
             ->where('alunnos.processo', $processo)
             ->where('classes.vc_classe', $classe->vc_classe)->limit(1)->get();
         // dd( $matriculas);
-    } else  {
+    } else {
         // dd("Ola");  
         $matriculas = fh_matriculas()
             ->where('alunnos.processo', $processo)
