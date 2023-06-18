@@ -37,6 +37,7 @@
         <strong>Disciplina:</strong>
         {{ $turma_professor->disciplina }}
     </div>
+    
     <table class="table">
         <thead>
             <tr>
@@ -46,8 +47,15 @@
                 <th>NOME COMPLETO</th>
                 <th>MAC</th>
                 <th>NPP</th>
+                @if(fha_disciplina_exame($turma->it_idClasse,$turma_professor->id_disciplina) && $trimestre=='III' )
+                
+                <th>EX</th>
+                @else
                 <th>NPT</th>
+
+                @endif
                 <th>MT</th>
+
             </tr>
         </thead>
         <tbody>
@@ -61,8 +69,8 @@
                         $mac = fha_mac_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
                         $nota1 = fha_nota1_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
                         $nota2 = fha_nota2_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
-                        $media = fha_media_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo);
-                        
+                        /* $media = fha_media_trimestre_por_ano($aluno->processo, $turma_professor->id_disciplina, $trimestre, $turma->it_idAnoLectivo); */
+                        $media = fha_media_trimestral_geral($aluno->processo, $turma_professor->id_disciplina, [ $trimestre], $turma->it_idAnoLectivo);
                     @endphp
                     <td style="color:<?php echo $mac >= 10 ? 'blue' : 'red'; ?>">{{ $mac }}</td>
                     <td style="color:<?php echo $nota1 >= 10 ? 'blue' : 'red'; ?>">{{ $nota1 }} </td>

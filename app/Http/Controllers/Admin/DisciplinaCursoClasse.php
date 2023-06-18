@@ -103,7 +103,7 @@ class DisciplinaCursoClasse extends Controller
     {
 
         $array_limpo = $array->except('_token', '_method');
-
+// dd( $array_limpo);
         return Disciplina_Curso_Classe::where($array_limpo)->count();
 
 
@@ -144,8 +144,8 @@ class DisciplinaCursoClasse extends Controller
     {
         //
         try {
-            $c = $this->tem_registro($request);
-            // dd($request);
+            $c = $this->tem_registro_apdate($request);
+            // dd($c );
             if ($c) {
                 return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Registro existe']);
             }

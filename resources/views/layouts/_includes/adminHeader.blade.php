@@ -27,17 +27,17 @@
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="{{ asset('/plugins/daterangepicker/daterangepicker.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/plugins/da terangepicker/daterangepicker.css') }}"> --}}
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('/plugins/summernote/summernote-bs4.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/plugins/summernote/summernote-bs4.css') }}"> --}}
 
     <link rel="stylesheet" href="{{ asset('/css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/select2-bootstrap4.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('/plugins/summernote/summernote-bs4.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/plugins/summernote/summernote-bs4.css') }}"> --}}
 
     <!-- Google Font: Source Sans Pro -->
-    <link href="{{ asset('/css/fontfamily.css?family=Source+Sans+Pro:300,400,400i,700') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('/css/fontfamily.css?family=Source+Sans+Pro:300,400,400i,700') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ asset('/css/datatables/dataTables.bootstrap4.min.css') }}">
     {{-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Adicione o link da fonte personalizada aqui --> --}}
 
@@ -61,23 +61,24 @@
 
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light d-flex flex-row flex-wrap">
             <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link img-circle  bg-danger" data-widget="pushmenu" href="#" role="button"><i
-                            class="right fas fa-angle-left"></i></a>
-                </li>
-            </ul>
-            <!-- Start Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-                <!-- itens a direita do menu -->
-
+            <ul class="navbar-nav mt-1">
                 <li class="nav-item ">
                     <div class="nav-item-user">
                         School management: {{ fh_cabecalho()->vc_escola }}
                     </div>
                 </li>
+            </ul>
+            <!-- Start Right navbar links -->
+            <ul class="navbar-nav ml-auto d-flex flex-row flex-wrap mt-1">
+                <!-- itens a direita do menu -->
+
+                {{-- <li class="nav-item ">
+                    <div class="nav-item-user">
+                        School management: {{ fh_cabecalho()->vc_escola }}
+                    </div>
+                </li> --}}
                 @isset($ano_lectivo_publicado)
                     <li class="nav-item ">
                         <div class="nav-item-user">
@@ -144,7 +145,11 @@
                         </div>
 
                     </li>
-
+                 
+                    <li class="nav-item ml-1 d-flex align-items-center">
+                        <a class="nav-link img-circle  bg-danger" data-widget="pushmenu" href="#" role="button"><i
+                                class="right fas fa-angle-left"></i></a>
+                    </li>
                     {{-- <li class="nav-item ">
 
 
@@ -174,7 +179,7 @@
         @if (null !== Auth::user())
             {{-- @dump($id_anoLectivo,$ano_lectivo); --}}
             {{-- @dump(isset(session('ano_lectivo')['0']['ano_lectivo'])?session('ano_lectivo')['0']['id']:'AVATAR') --}}
-            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <aside class="main-sidebar  elevation-4" style="background: white">
                 <!-- Brand Logo -->
 
                 <!-- Sidebar -->
@@ -183,13 +188,17 @@
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
-                            <li class="nav-header box-li-sidebar ">
-                                <a href="{{ url('/') }}" class="nav-link">
+                            <li class="nav-header box-li-sidebar d-flex ">
+                                <a href="{{ url('/') }}" class="nav-link w-75">
                                     <i class="nav-icon fas fa-user"></i>
                                     <p>
                                         Dashboard
 
                                     </p>
+                                </a>
+                                <a class="nav-link img-circle  w-25  " data-widget="pushmenu" href="#" role="button">
+                                    <i
+                                    class="right fas fa-angle-left mt-1 " ></i>
                                 </a>
                             </li>
 
@@ -575,6 +584,24 @@
 
 
 
+        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica'
+                ||
+                Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+            <li class="nav-header"> Mod. de Recuperação(Aluno)</li>
+
+            <li class="nav-item has-treeview">
+                <a href="{{ route('admin.notas-recurso.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Notas(Recurso/Exame)
+
+                    </p>
+                </a>
+
+            </li>
+        @endif
 
 
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||

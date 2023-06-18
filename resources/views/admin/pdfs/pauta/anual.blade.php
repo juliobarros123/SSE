@@ -41,7 +41,7 @@
 
 
             @php
-                $estatistica_resultados=collect();
+                $estatistica_resultados = collect();
                 $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
             @endphp
 
@@ -55,7 +55,7 @@
                     @endphp
                     @php
                         $colspan = fha_colspan($disciplina->id, $turma->it_idClasse, $turma->it_idCurso);
-                        // dd(   $colspan);
+                        
                     @endphp
                     <th colspan="{{ $colspan }}" rowspan="1" class="th " style="text-align: center;">
                         <?php echo $disciplina->vc_acronimo; ?></th>
@@ -67,13 +67,18 @@
                 <th colspan="1" rowspan="1" class="th">MT1</th>
                 <th colspan="1" rowspan="1" class="th">MT2</th>
                 <th colspan="1" rowspan="1" class="th">MT3</th>
-                <?php if (fha_disciplina_terminal($disciplina->id,$turma->it_idClasse,$turma->it_idCurso)) {?>
+                @if (fha_disciplina_exame($turma->it_idClasse, $disciplina->id))
+                    <th>MFT</th>
+                    <th>EX</th>
+                @endif
                 <th colspan="1" rowspan="1" class="th">CA</th>
-                <th colspan="1" rowspan="1" class="th">CFD</th>
-                <th colspan="1" rowspan="1" class="th">REC</th>
-                <?php } else {?>
-                <th colspan="1" rowspan="1" class="th">CA</th>
-                <?php }?>
+                @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
+                    <th colspan="1" rowspan="1" class="th">CFD</th>
+                @endif
+                @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso) && $turma->vc_classe > 9)
+                    <th colspan="1" rowspan="1" class="th">REC</th>
+                @endif
+
                 <?php }?>
             </tr>
 
@@ -100,6 +105,7 @@
                         $mt3 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['III'], $turma->it_idAnoLectivo);
                         
                         $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
+                        /* dd(  $ca ); */
                     @endphp
                     <td colspan="1" class="td " style="{{ $mt1 >= 10 ? 'color:blue' : 'color:red' }}">
                         {{ $mt1 }}</td>
@@ -107,25 +113,41 @@
                         {{ $mt2 }}</td>
                     <td colspan="1" class="td" style="{{ $mt3 >= 10 ? 'color:blue' : 'color:red' }}">
                         {{ $mt3 }}</td>
+                    @if (fha_disciplina_exame($turma->it_idClasse, $disciplina->id))
+                        @php
+                            $mft = fha_mfd_sem_exame($aluno->processo, $disciplina->id, $turma->it_idAnoLectivo);
+                            
+                            $exame = fha_nota_exame($aluno->processo, $disciplina->id, $turma->it_idAnoLectivo);
+                        @endphp
+                        <td colspan="1" class="td" style="{{ $mft >= 10 ? 'color:blue' : 'color:red' }}">
+                            {{ $mft }}</td>
+                        <td colspan="1" class="td" style="{{ $exame >= 10 ? 'color:blue' : 'color:red' }}">
+                            {{ $exame }}</td>
+                    @endif
 
-
-                    <?php if (fha_disciplina_terminal($disciplina->id,$turma->it_idClasse,$turma->it_idCurso)) {?>
                     <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
                         {{ $ca }}</td>
-                    <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
-                        {{ fha_cfd($aluno->processo, $disciplina->id) }}</td>
-                    @php
-                        
-                        $rec = fh_nota_recurso($aluno->processo, $disciplina->id);
-                    @endphp
-                    <td colspan="1" class="td" style="{{ $rec >= 10 ? 'color:blue' : 'color:red' }}">
-                        {{ $rec }}</td>
-                    <?php } else {?>
-                    <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
-                        {{ $ca }}</td>
-                    <?php }?>
+
 
                     <?php }?>
+                    @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
+                        @php
+                            $cfd = fha_cfd_ext($aluno->processo, $disciplina->id,$turma->it_idClasse);
+                        @endphp
+
+                        <td colspan="1" class="td" style="{{ $cfd >= 10 ? 'color:blue' : 'color:red' }}">
+                            {{ $cfd }}</td>
+                    @endif
+
+                    @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso) && $turma->vc_classe > 9)
+                        @php
+                            $rec = fh_nota_recurso($aluno->processo, $disciplina->id);
+                        @endphp
+
+                        <td colspan="1" class="td" style="{{ $rec >= 10 ? 'color:blue' : 'color:red' }}">
+                            {{ $rec }}</td>
+                    @endif
+
                     @php
                         $media = fhap_media_geral($aluno->processo, $turma->it_idClasse, $turma->it_idAnoLectivo);
                     @endphp
@@ -133,12 +155,12 @@
                         
                         $color = 'red';
                         $resultados = fhap_aluno_resultato_pauta($aluno->processo, $turma->it_idCurso, $turma->it_idClasse, $turma->it_idAnoLectivo);
-                        /* dd($resultados); */
+                        
                         if ($resultados[0] == 'TRANSITA' || $resultados[0] == 'TRANSITA/DEFICIÊNCIA') {
                             $color = 'blue';
                         }
                         $r = ['processo' => $aluno->id, 'genero' => $aluno->vc_genero, 'resultado' => $resultados[0]];
-                       $estatistica_resultados->push($r);
+                        $estatistica_resultados->push($r);
                         
                     @endphp
                     <td colspan="1" class="td " style="color:{{ $color }}">
