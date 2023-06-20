@@ -22,6 +22,7 @@ class CreateInfoCerficadosTable extends Migration
             $table->string('LBSEE')->nullable();
             $table->string('lei')->nullable();
             $table->string('ensino')->nullable();
+            $table->foreignId('id_classe')->constrained('classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
 
             $table->timestamps();
             $table->string('slug')->unique();

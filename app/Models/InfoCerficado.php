@@ -25,6 +25,7 @@ class InfoCerficado extends Model
     }
     protected $fillable = [
         'id_cabecalho',
+        'id_classe',
         'slug',
         'decreto',
         'artigo',
