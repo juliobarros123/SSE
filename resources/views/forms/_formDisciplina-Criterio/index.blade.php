@@ -1,6 +1,6 @@
 <div class="form-group col-md-4">
     <label for="id_curso" class="form-label">Curso:</label>
-    <select name="id_curso" id="id_curso" class="form-control" required>
+    <select name="id_curso" id="id_curso_sem_todas" class="form-control" required>
         <option value="">Selecciona o Curso</option>
 
         @foreach ($cursos as $curso)

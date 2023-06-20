@@ -1128,19 +1128,27 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
             Route::post('/cadastrar', ['as' => 'admin.documentos.componentes.cadastrar', 'uses' => 'Admin\ComponenteController@cadastrar']);
             Route::get('/criar', ['as' => 'admin.documentos.componentes.criar', 'uses' => 'Admin\ComponenteController@criar']);
             Route::get('', ['as' => 'admin.documentos.componentes', 'uses' => 'Admin\ComponenteController@index']);
-            Route::get('/eliminar/{id}', ['as' => 'admin.documentos.componentes.eliminar', 'uses' => 'Admin\ComponenteController@eliminar'])->middleware('access.controll.administrador');
-            Route::put('/actualizar/{id}', ['as' => 'admin.documentos.componentes.actualizar', 'uses' => 'Admin\ComponenteController@actualizar'])->middleware('access.controll.administrador');
-            Route::get('/editar/{id}', ['as' => 'admin.documentos.componentes.editar', 'uses' => 'Admin\ComponenteController@editar'])->middleware('access.controll.administrador');
+            Route::get('/eliminar/{slug}', ['as' => 'admin.documentos.componentes.eliminar', 'uses' => 'Admin\ComponenteController@eliminar'])->middleware('access.controll.administrador');
+            Route::put('/actualizar/{slug}', ['as' => 'admin.documentos.componentes.actualizar', 'uses' => 'Admin\ComponenteController@actualizar'])->middleware('access.controll.administrador');
+            Route::get('/editar/{slug}', ['as' => 'admin.documentos.componentes.editar', 'uses' => 'Admin\ComponenteController@editar'])->middleware('access.controll.administrador');
         });
         Route::group(['prefix' => 'componentes-disciplinas/'], function () {
             Route::post('/cadastrar', ['as' => 'admin.documentos.componentes-disciplinas.cadastrar', 'uses' => 'Admin\ComponenteDisciplinaController@cadastrar']);
             Route::get('/criar', ['as' => 'admin.documentos.componentes-disciplinas.criar', 'uses' => 'Admin\ComponenteDisciplinaController@criar']);
             Route::get('', ['as' => 'admin.documentos.componentes-disciplinas', 'uses' => 'Admin\ComponenteDisciplinaController@index']);
-            Route::get('/eliminar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.eliminar', 'uses' => 'Admin\ComponenteDisciplinaController@eliminar'])->middleware('access.controll.administrador');
-            Route::put('/actualizar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.actualizar', 'uses' => 'Admin\ComponenteDisciplinaController@actualizar'])->middleware('access.controll.administrador');
-            Route::get('/editar/{id}', ['as' => 'admin.documentos.componentes-disciplinas.editar', 'uses' => 'Admin\ComponenteDisciplinaController@editar'])->middleware('access.controll.administrador');
+            Route::get('/eliminar/{slug}', ['as' => 'admin.documentos.componentes-disciplinas.eliminar', 'uses' => 'Admin\ComponenteDisciplinaController@eliminar'])->middleware('access.controll.administrador');
+            Route::put('/actualizar/{slug}', ['as' => 'admin.documentos.componentes-disciplinas.actualizar', 'uses' => 'Admin\ComponenteDisciplinaController@actualizar'])->middleware('access.controll.administrador');
+            Route::get('/editar/{slug}', ['as' => 'admin.documentos.componentes-disciplinas.editar', 'uses' => 'Admin\ComponenteDisciplinaController@editar'])->middleware('access.controll.administrador');
         });
+        Route::group(['prefix' => 'infos_certificado'], function () {
+            Route::get('/criar', ['as' => 'admin.documentos.infos_certificado.criar', 'uses' => 'Admin\InfoCerficadoController@criar']);
+            Route::post('/cadastrar', ['as' => 'admin.documentos.infos_certificado.cadastrar', 'uses' => 'Admin\InfoCerficadoController@cadastrar']);
+            Route::get('/', ['as' => 'admin.documentos.infos_certificado', 'uses' => 'Admin\InfoCerficadoController@index']);
+            Route::get('/{slug}/editar', ['as' => 'admin.documentos.infos_certificado.editar', 'uses' => 'Admin\InfoCerficadoController@editar']);
+            Route::get('/{slug}/eliminar', ['as' => 'admin.documentos.infos_certificado.eliminar', 'uses' => 'Admin\InfoCerficadoController@eliminar']);
+            Route::put('/{slug}/actualizar', ['as' => 'admin.documentos.infos_certificado.actualizar', 'uses' => 'Admin\InfoCerficadoController@actualizar']);
 
+        });
         //=============relatorios-Start=====================f//
         Route::group(['prefix' => 'relatorios/'], function () {
             //=============relatorios-Start=====================f//

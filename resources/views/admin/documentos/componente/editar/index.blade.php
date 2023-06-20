@@ -15,7 +15,7 @@
         <div class="card-body">
 
 
-            <form method="POST" action="{{ route('admin.documentos.componentes.actualizar', $componente->id) }}" class="row">
+            <form method="POST" action="{{ route('admin.documentos.componentes.actualizar', $componente->slug) }}" class="row">
                 @csrf
                 @method('PUT')
                 @include('forms._form_componente.index')

@@ -44,9 +44,9 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     @if (Auth::user()->vc_tipoUtilizador != 'Professor')
-                                        <a href="{{ route('admin.documentos.componentes.editar', $componente->id) }}"
+                                        <a href="{{ route('admin.documentos.componentes.editar', $componente->slug) }}"
                                             class="dropdown-item">Editar</a>
-                                        <a href="{{ route('admin.documentos.componentes.eliminar', ['id' => $componente->id]) }}"
+                                        <a href="{{ route('admin.documentos.componentes.eliminar', ['slug' => $componente->slug]) }}"
                                             class="dropdown-item"
                                             data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
                                     @endif

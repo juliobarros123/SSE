@@ -355,14 +355,14 @@
             @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
                 <li class="nav-item has-treeview ">
 
-
+{{-- 
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
                         <p>
                             Ano validade de cartão
 
                         </p>
-                    </a>
+                    </a> --}}
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -884,7 +884,38 @@
             </li>
         @endif
 
-
+        @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+        Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+        Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica')
+    <li class="nav-header"> Mod. de Documentos</li>
+    <li class="nav-item has-treeview">
+        <a href="{{route('admin.documentos.componentes')}}" class="nav-link">
+              <i class="nav-icon fas fa-chalkboard"></i>
+            <p>
+                Componete
+               
+            </p>
+        </a>
+    </li>
+    <li class="nav-item has-treeview">
+        <a href="{{route('admin.documentos.componentes-disciplinas')}}" class="nav-link">
+              <i class="nav-icon fas fa-chalkboard"></i>
+            <p>
+                Componete disciplina
+               
+            </p>
+        </a>
+    </li>
+    <li class="nav-item has-treeview">
+        <a href="{{route('documentos.certificados.emitir')}}" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard"></i>
+            <p>
+                Certificado
+            
+            </p>
+        </a>
+    </li>
+@endif
 
 
         </ul>

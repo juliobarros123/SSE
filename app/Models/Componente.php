@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Componente extends Model
 {
@@ -17,15 +19,18 @@ class Componente extends Model
             $hash_bcrypt = Hash::make(slug_gerar());
             $stringSemBarras = str_replace('/', '', $hash_bcrypt);
             $model->slug = $stringSemBarras;
+            $model->id_cabecalho = Auth::User()->id_cabecalho;
         });
     }
-    protected $fillable = ['id_cabecalho','slug', 
+    protected $fillable = [
+        'id_cabecalho',
+        'slug',
         'vc_componente'
     ];
     public function tem_registro($array)
     {
         $array_limpo = $array->except('_token', '_method');
 
-        return Componente::where($array_limpo)->count();
+        return fh_componentes()->where($array_limpo)->count();
     }
 }

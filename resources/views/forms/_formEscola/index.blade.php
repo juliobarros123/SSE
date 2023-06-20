@@ -1,10 +1,15 @@
 
-<div class="form-group col-sm-10">
+<div class="form-group col-sm-4">
     <label for="" class="form-label">Logo</label>
     <input type="file" class="form-control" placeholder="Escola" name="vc_logo"
         value="{{ isset($cabecalho->vc_logo) ? $cabecalho->vc_logo : '' }}">
 </div>
-<div class="form-group col-sm-10">
+<div class="form-group col-sm-4">
+    <label for="" class="form-label">Assinatura do Director</label>
+    <input type="file" class="form-control" placeholder="Escola" name="assinatura_director"
+        value="{{ isset($cabecalho->assinatura_director) ? $cabecalho->assinatura_director : '' }}">
+</div>
+<div class="form-group col-sm-4">
     <label for="" class="form-label">Escola</label>
     <input type="text" class="form-control" placeholder="Escola" name="vc_escola"
         value="{{ isset($cabecalho->vc_escola) ? $cabecalho->vc_escola : '' }}">

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ComponenteDisciplina extends Model
+class InfoCerficado extends Model
 {
     use HasFactory;
     protected static function boot()
@@ -20,14 +20,18 @@ class ComponenteDisciplina extends Model
             $stringSemBarras = str_replace('/', '', $hash_bcrypt);
             $model->slug = $stringSemBarras;
             $model->id_cabecalho = Auth::User()->id_cabecalho;
+
         });
     }
+    protected $fillable = [
+        'id_cabecalho',
+        'slug',
+        'decreto',
+        'artigo',
+        'LBSEE',
+        'lei',
+        'ensino'
 
-    protected $fillable = ['id_cabecalho', 'slug', 'id_disciplina', 'id_componente'];
-    public function tem_registro($array)
-    {
-        $array_limpo = $array->except('_token', '_method');
+    ];
 
-        return fh_componentes_disciplinas()->where($array_limpo)->count();
-    }
 }

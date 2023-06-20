@@ -5,7 +5,7 @@
  @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Emitir Cartão de Estudante</h3>
+            <h3>Cartão de Estudante</h3>
         </div>
     </div>
     <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
@@ -22,18 +22,48 @@
 
 
     <div class="card">
-        <div class="card-body">
-            <form method="post" class="row justify-content-center" action="{{ url('admin/cartaoaluno/send/') }}"
+        <div class="card-body ">
+            <form method="post" class="row" action="{{ url('admin/cartaoaluno/send/') }}"
                 target="_blank">
                 @csrf
                 <div class="col-md-4">
-                    <label for="processo" class="form-label">Nº de Processo</label>
-                    <input type="number" autocomplete="off" name="processo" placeholder="Introduza o número de processo"
+                    <label for="processo" class="form-label">Processo:</label>
+                    <input type="number" autocomplete="off" name="processo" placeholder="Número de processo"
                         class="form-control border-secondary" id="processo" required>
                 </div>
-                <div class="col-md-2">
-                    <label for="" class="form-label text-white">.</label>
-                    <button id="submit" class="form-control btn btn-success">Gerar Cartão</button>
+            
+                <div class="col-md-4">
+                    <label for="validade" class="form-label">Válido Até:</label>
+                    <input type="number" autocomplete="off" name="validade" placeholder="Número de validade"
+                        class="form-control border-secondary" id="validade" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
+
+
+                    @if (isset($ano_lectivo_publicado))
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
+                            <option value="{{ $id_anoLectivo_publicado }}">
+                                {{ $ano_lectivo_publicado }}
+                            </option>
+                        </select>
+                        <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
+                    @else
+
+                        <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
+                            <option value="Todos" >Todos</option>
+                            @foreach ( fh_anos_lectivos()->get() as $anolectivo)
+                                <option value="{{ $anolectivo->id }}">
+                                    {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
+
+
+                </div>
+                <div class=" d-flex justify-content-center w-100">
+                    <button class="form-control btn btn-dark w-25">Imprimir</button>
                 </div>
             </form>
         </div>

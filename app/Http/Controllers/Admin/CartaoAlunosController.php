@@ -41,8 +41,32 @@ class CartaoAlunosController extends Controller
 
     public function recebeAluno(Request $request)
     {
-        $id = $request->processo;
-        return redirect("/admin/cartaoaluno/emitir/$id");
+        $matricula=fh_matriculas()
+        ->where('alunnos.processo', $request->processo)
+        ->where('anoslectivos.id', $request->id_ano_lectivo)
+        ->first();
+        if( $matricula):
+        $data['request']=$request->all();
+    //   dd($data['request']);
+        $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+        $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
+        
+            $mpdf = new \Mpdf\Mpdf([
+                'mode' => 'utf-8', 'margin_top' => 0,
+                'margin_left' => 5,
+                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [54, 84]
+            ]);
+            $mpdf->SetFont("arial");
+            $mpdf->setHeader();
+            $mpdf->AddPage('L');
+            $html = view("admin/pdfs/cartao/aluno/index", $data);
+            $mpdf->writeHTML($html);
+            $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) '.Auth::User()->vc_primeiroNome.' '.Auth::User()->vc_ultimoaNome);
+            $mpdf->Output("aluno.pdf", "I");
+        else :
+            return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Aluno não existe, ou não deve estar matriculado neste ano lectivo!']);
+
+        endif;
     }
     public function emitir(Estudante $estudantes, $id)
     {

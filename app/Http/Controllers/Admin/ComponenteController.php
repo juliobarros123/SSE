@@ -20,8 +20,8 @@ class ComponenteController extends Controller
 
     public function index()
     {
-        $response['componentes'] = Componente::all();
-        return view('admin.documentos.componente.index',  $response);
+        $response['componentes'] = fh_componentes()->get();
+        return view('admin.documentos.componente.index', $response);
     }
     public function criar()
     {
@@ -34,40 +34,57 @@ class ComponenteController extends Controller
 
         if (!$registro) {
             Componente::create($dados->all());
-            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Componente cadastrada com sucesso!']);
+            return redirect()->route('admin.documentos.componentes')->with('feedback', ['type' => 'success', 'sms' => 'Componente cadastrada com sucesso!']);
 
         } else {
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Componente já existe!']);
 
         }
     }
-    public function editar($id)
+    public function editar($slug)
     {
-        $response['componente'] = Componente::find($id);
-        return view('admin.documentos.componente.editar.index', $response);
+        $response['componente'] = fh_componentes()->where('componentes.slug', $slug)->first();
+
+        if ($response['componente']):
+            return view('admin.documentos.componente.editar.index', $response);
+
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+
+        endif;
     }
-    public function actualizar(Request $dados, $id)
+    public function actualizar(Request $dados, $slug)
     {
         $registro = $this->componente->tem_registro($dados);
-      
+        // dd("ola");
         if (!$registro) {
-            Componente::find($id)->update($dados->all());
+            $dados = $dados->except(['_token', '_method']);
+            Componente::where('componentes.slug', $slug)->update($dados);
             return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Componente actualizado com sucesso!']);
 
         } else {
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Componente já existe!']);
 
         }
-       
+
 
     }
-    public function eliminar($id)
+    public function eliminar($slug)
     {
-        Componente::find($id)->delete();
-        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Componente eliminado com sucesso!']);
+        $response['componente'] = fh_componentes()->where('componentes.slug', $slug)->first();
+        if ( $response['componente']) {
+            Componente::where('componentes.slug', $slug)->delete();
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Componente eliminado com sucesso!']);
 
+        } else {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Componente já existe!']);
+
+
+
+        }
     }
-
 
 
 

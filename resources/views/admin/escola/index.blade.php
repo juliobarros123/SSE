@@ -29,6 +29,7 @@
                 <th>TELEFONE</th>
                 <th>NIF</th>
                 <th>MUNICIPIO</th>
+                <th>ASSINATURA DIRECTOR</th>
                 <th>ACÇÕES</th>
             </tr>
         </thead>
@@ -43,6 +44,10 @@
                     <td>{{ $cabecalho->it_telefone }}</td>
                     <td>{{ $cabecalho->vc_nif }}</td>
                     <td>{{ $cabecalho->vc_nomeMunicipio }}</td>
+                    <td>  <img src="{{ asset('/' . $cabecalho->assinatura_director) }}" id="myImg" alt=""
+                        width="50px">
+</td>
+                    
                     <td>
 
                         @if (Auth::user()->vc_tipoUtilizador != 'Visitante')

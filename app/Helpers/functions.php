@@ -11,6 +11,7 @@ use App\Models\Classe;
 use App\Models\DireitorTurma;
 use App\Models\Disciplinas;
 use App\Models\IdadedeCandidatura;
+use App\Models\InfoCerficado;
 use App\Models\Municipio;
 use App\Models\NNegativa;
 use App\Models\Nota;
@@ -302,20 +303,22 @@ function fha_meus_director_turmas()
     $index = 0;
     foreach ($turmas_professores as $turma) {
         $director_turma = fh_directores_turmas()->where('turmas.id', $turma->it_idTurma)->first();
+        // dd( $turma,$director_turma);
+        if ($director_turma) {
+            $std = new stdClass();
+            $std->id = $director_turma->id;
 
-        $std = new stdClass();
-        $std->id = $director_turma->id;
-
-        $std->curso = $director_turma->vc_nomeCurso;
-        $std->curso = $director_turma->vc_nomeCurso;
-        $std->curso_nome_curto = $director_turma->vc_shortName;
-        $std->vc_nomeCurso = $director_turma->vc_nomeCurso;
-        $std->id_cabecalho = $director_turma->id_cabecalho;
-        $std->director = $director_turma->vc_primemiroNome . ' ' . $director_turma->vc_apelido;
-        $std->classe = $director_turma->vc_classe;
-        $std->turma = $director_turma->vc_nomedaTurma;
-        $std->turno = $director_turma->vc_turnoTurma;
-        $meus_directores->push($std);
+            $std->curso = $director_turma->vc_nomeCurso;
+            $std->curso = $director_turma->vc_nomeCurso;
+            $std->curso_nome_curto = $director_turma->vc_shortName;
+            $std->vc_nomeCurso = $director_turma->vc_nomeCurso;
+            $std->id_cabecalho = $director_turma->id_cabecalho;
+            $std->director = $director_turma->vc_primemiroNome . ' ' . $director_turma->vc_apelido;
+            $std->classe = $director_turma->vc_classe;
+            $std->turma = $director_turma->vc_nomedaTurma;
+            $std->turno = $director_turma->vc_turnoTurma;
+            $meus_directores->push($std);
+        }
     }
     // dd($turmas_professores);
     return $meus_directores;
@@ -334,6 +337,23 @@ function fh_professores_disciplinas()
             'disciplinas.vc_nome as disciplina'
         );
     return $disciplinas;
+}
+function fh_infos_certificado()
+{
+    return InfoCerficado::join('classes', 'info_cerficados.id_classe', 'classes.id')
+        ->select('classes.*', 'info_cerficados.*');
+}
+function fh_componentes()
+{
+    return Componente::where('componentes.id_cabecalho', Auth::User()->id_cabecalho);
+
+}
+function fh_componentes_disciplinas()
+{
+    return ComponenteDisciplina::join('disciplinas', 'componente_disciplinas.id_disciplina', 'disciplinas.id')
+        ->join('componentes', 'componente_disciplinas.id_componente', '=', 'componentes.id')
+        ->where('componente_disciplinas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->select('componente_disciplinas.*', 'disciplinas.vc_acronimo', 'disciplinas.vc_nome', 'componentes.vc_componente');
 }
 function fh_turmas_slug($slug)
 {
@@ -2543,12 +2563,7 @@ function componentes()
 {
     return Componente::all();
 }
-function componentes_disciplinas()
-{
-    return ComponenteDisciplina::join('disciplinas', 'componente_disciplinas.id_disciplina', 'disciplinas.id')
-        ->join('componentes', 'componente_disciplinas.id_componente', '=', 'componentes.id')
-        ->select('componente_disciplinas.*', 'disciplinas.vc_acronimo', 'disciplinas.vc_nome', 'componentes.vc_componente');
-}
+
 function addNotasFakes($id_aluno, $notas, $ultimaClasse, $id_disciplina, $id_anoLectivo)
 {
     // dd($notas,$ultimaClasse);

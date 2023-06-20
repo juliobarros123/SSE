@@ -31,7 +31,7 @@ use App\Models\Curso;
 
 class EscolaController extends Controller
 {
-    
+
     /**
      * 
      * Display a listing of the resource.
@@ -97,6 +97,29 @@ class EscolaController extends Controller
                 $dir = "images/logotipo/logo_modelo.jpg";
                 $dados['vc_logo'] = $dir;
             }
+            if ($request->hasFile('assinatura_director')) {
+
+                $image = $request->file('assinatura_director');
+                $input['imagename'] = $request->vc_nif . '.' . $image->extension();
+                $destinationPath = public_path('/images/assinatura_director');
+                $img = Image::make($image->path())->orientate();
+                ;
+                // Verificar se a pasta de destino existe
+                if (!is_dir($destinationPath)) {
+                    // Criar a pasta se ela não existir
+                    mkdir($destinationPath, 0777, true);
+                }
+
+                $img->resize(333, 310, function ($constraint) {
+                })->save($destinationPath . '/' . $input['imagename']);
+
+                $dir = "images/assinatura_director";
+                $dados['assinatura_director'] = $dir . "/" . $input['imagename'];
+            } else {
+
+                $dir = "images/assinatura_director/modelo.jpg";
+      
+            }
 
             $cab = Cabecalho::create([
 
@@ -115,7 +138,8 @@ class EscolaController extends Controller
                 'vc_nomeSubdirectorAdminFinanceiro' => $request->vc_nomeSubdirectorAdminFinanceiro,
                 'vc_nomeSubdirectorPedagogico' => $request->vc_nomeSubdirectorPedagogico,
                 'it_id_municipio' => $request->it_id_municipio,
-                'vc_tipo_escola' => $request->vc_tipo_escola
+                'vc_tipo_escola' => $request->vc_tipo_escola,
+                'assinatura_director' => $dados['assinatura_director']
             ]);
 
             User::create(
@@ -140,17 +164,17 @@ class EscolaController extends Controller
                 'it_estado' => 1,
                 'id_cabecalho' => $cab->id
             ]);
-           $ano_lectivo= AnoLectivo::create([
+            $ano_lectivo = AnoLectivo::create([
                 'ya_inicio' => date('Y') - 1,
                 'ya_fim' => date('Y'),
                 'id_cabecalho' => $cab->id
             ]);
-            
+
             Curso::create([
                 'vc_nomeCurso' => 'Ensino Fundamental',
-                'vc_descricaodoCurso'=>'Ensino Fundamental',
-                'vc_shortName'=>'Ensino Fundamental',
-                'id_cabecalho'=>$cab->id
+                'vc_descricaodoCurso' => 'Ensino Fundamental',
+                'vc_shortName' => 'Ensino Fundamental',
+                'id_cabecalho' => $cab->id
             ]);
             AnoLectivoPublicado::create(
                 [
@@ -160,7 +184,7 @@ class EscolaController extends Controller
                     'id_cabecalho' => $cab->id
                 ]
             );
-            $this->Logger->Log('info', 'Adicionou Uma Escola '.$request->vc_escola);
+            $this->Logger->Log('info', 'Adicionou Uma Escola ' . $request->vc_escola);
             return redirect()->route('admin/escola');
         } catch (\Exception $ex) {
             dd($ex);
@@ -228,7 +252,38 @@ class EscolaController extends Controller
             $dir = "images/logotipo";
             $dados['vc_logo'] = $dir . "/" . $input['imagename'];
         }
+        $dir = null;
+        if ($request->hasFile('assinatura_director')) {
 
+            $image = $request->file('assinatura_director');
+            $input['imagename'] = $request->vc_nif . '.' . $image->extension();
+            $destinationPath = public_path('/images/assinatura_director');
+            $img = Image::make($image->path())->orientate();
+            ;
+            $destinationPath = 'images/assinatura_director';
+            // Verificar se a pasta de destino existe
+            if (!is_dir($destinationPath)) {
+                // Criar a pasta se ela não existir
+                mkdir($destinationPath, 0777, true);
+            }
+
+            $img->resize(333, 310, function ($constraint) {
+            })->save($destinationPath . '/' . $input['imagename']);
+
+            $dir = "images/assinatura_director";
+            $dados['assinatura_director'] = $dir . "/" . $input['imagename'];
+        } else {
+            $cab = Cabecalho::find($id);
+            if ($cab->assinatura_director && $dir) {
+                $dados['assinatura_director'] = $dir;
+            } else if ($cab->assinatura_director) {
+                $dados['assinatura_director'] = $cab->assinatura_director;
+            } else {
+                $dir = "images/assinatura_director/modelo.jpg";
+
+            }
+
+        }
         Cabecalho::find($id)->update([
             'id' => $request->id,
             'vc_logo' => isset($dados['vc_logo']) ? $dados['vc_logo'] : Cabecalho::find($id)->vc_logo,
@@ -246,7 +301,8 @@ class EscolaController extends Controller
             'vc_nomeSubdirectorAdminFinanceiro' => $request->vc_nomeSubdirectorAdminFinanceiro,
             'vc_nomeSubdirectorPedagogico' => $request->vc_nomeSubdirectorPedagogico,
             'it_id_municipio' => $request->it_id_municipio,
-            'vc_tipo_escola' => $request->vc_tipo_escola
+            'vc_tipo_escola' => $request->vc_tipo_escola,
+            'assinatura_director' => $dados['assinatura_director']
         ]);
         $this->Logger->Log('info', 'Actualizou Uma Escola');
         return redirect()->route('admin/escola')->with('update', 1);
