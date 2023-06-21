@@ -42,7 +42,7 @@
 <div class="col-sm-4">
     <div class="form-group">
         <label>Disciplina</label>
-        <select name="it_idDisciplina" class="form-control " required>
+        <select name="it_idDisciplina" class="form-control select-dinamico" required>
             @isset($disciplina)
                 <option selected value="{{ $disciplina->id }}">{{ $disciplina->vc_nome }}</option>
             @else

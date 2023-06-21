@@ -49,11 +49,25 @@
         <p><strong>Localidade:</strong> <?= $matricula->vc_residencia  ?></p>
         <p><strong>Telefone:</strong> <?php if($matricula->it_telefone !=null )  echo $matricula->it_telefone  ?></p>
         <p><strong>BI:</strong> <?php if($matricula->it_telefone !=null )  echo $matricula->vc_bi  ?></p>
-        <p><strong>Estabelecimento de ensino que frequentou no ano anterior :</strong> <?php if($matricula->vc_EscolaAnterior !=null )  echo $matricula->it_telefone  ?></p>
+    
 
     </div>
     @include('layouts._includes.fragments.lista.footer.index')
-    @include('layouts._includes.fragments.lista.footer.visto')
+    @php
+    $funcionario=fh_funcionarios()->where('funcionarios.vc_funcao','Chefe da Comissão Geral')->first();
+    @endphp
+    @include('layouts._includes.fragments.lista.footer.index')
+    @section('entidadade1', 'O COORDENADOR DA COMISSÃO')
+    @if ($funcionario)
+        @section('entidadade1-valor', fha_coordenador_comissao())
+    @else
+        @section('entidadade1-valor', '-----------------------')
+    @endif
+    @section('entidadade2', 'O SUBDIRECTOR PEDAGÓGICO')
+    @section('entidadade2-valor', $cabecalho->vc_nomeSubdirectorPedagogico)
+    @include('layouts._includes.fragments.lista.footer.visto-2')
+
+
    
 
    

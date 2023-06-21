@@ -20,10 +20,12 @@
         </div>
     @endif
     <table id="example" class="display table table-hover">
-           <thead class="">
+        <thead class="">
             <tr class="text-center">
                 <th>ID</th>
                 <th>COMPONENTE</th>
+                <th>CURSO</th>
+                <th>CLASSE</th>
                 <th>AÇÕES</th>
             </tr>
         </thead>
@@ -33,6 +35,10 @@
                 <tr class="text-center">
                     <td>{{ $componente->id }}</td>
                     <th>{{ $componente->vc_componente }}</th>
+
+                    <th>{{ $componente->vc_nomeCurso }}</th>
+
+                    <th>{{ $componente->vc_classe }}ª Classe</th>
 
 
                     <td>

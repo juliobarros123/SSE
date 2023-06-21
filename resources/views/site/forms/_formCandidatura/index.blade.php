@@ -140,9 +140,9 @@
     </div>
 
     <div class="form-group col-md-4">
-        <label for="vc_provincia" class="form-label">Província <small class="campo-obrigatorio select-dinamico ">*</small></label>
+        <label for="vc_provincia" class="form-label ">Província <small class="campo-obrigatorio  ">*</small></label>
         {{-- @dump($provincias ) --}}
-        <select class="form-control" name="vc_provincia" id="id_provincia" required>
+        <select class="form-control select-dinamico" name="vc_provincia" id="id_provincia" required>
             @isset($candidato)
                 <option value="{{ $candidato->vc_provincia }}">{{ $candidato->vc_provincia }}</option>
             @else
@@ -160,7 +160,7 @@
         <label for="" class="form-label">Municipio</label>
             <select class="form-control buscarMunicipio " name="vc_municipio" id="id_municipio" >
                 <option value="{{ isset($candidato) ? $candidato->vc_municipio : '' }}" selected>
-                    {{ isset($candidato) ? $candidato->vc_nomeMunicipio : 'Selecione o Municipio:' }}</option>
+                    {{ isset($candidato) ? $candidato->vc_municipio  : 'Selecione o Municipio:' }}</option>
                 @foreach (fha_municipios() as $municipio)
                     <option value="{{ $municipio->vc_nome }}">{{ $municipio->vc_nome }} </option>
               
@@ -186,7 +186,7 @@
         {{-- @dump($cursos) --}}
         <select class="form-control" name="id_curso" id="id_curso" required>
             @isset($candidato)
-                <option value="{{ $candidato->id_curso }}">{{ $candidato->vc_shortName }}</option>
+                <option value="{{ $candidato->id_curso }}">{{ $candidato->vc_nomeCurso }}</option>
             @else
                 <option value="" selected disabled>Selecione um curso</option>
             @endisset

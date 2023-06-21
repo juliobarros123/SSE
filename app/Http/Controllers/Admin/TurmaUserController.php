@@ -53,9 +53,13 @@ class TurmaUserController extends Controller
     public function professores($slug)
     {
 
-        $data['professores'] = fha_turma_professores($slug)['atribuicoes'];
-        $data['disciplinas'] = fha_turma_professores($slug)['disciplinas'];
+        $data['professores'] = fh_turmas_professores()->where('turmas.slug',$slug)->get();
+//  dd($data['professores']);
+        // dd($data);
         $data['turma'] = fh_turmas_slug($slug)->first();
+        // dd( $data['turma']);
+        $data['disciplinas'] =  fha_disciplinas( $data['turma']->it_idCurso , $data['turma']->it_idClasse );
+// dd($data['disciplinas']);
         $data['cabecalho'] = fh_cabecalho();
         $data["css"] = file_get_contents('css/lista/style-2.css');
 

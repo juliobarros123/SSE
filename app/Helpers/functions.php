@@ -297,12 +297,16 @@ function fh_turmas_professores()
 function fha_meus_director_turmas()
 {
     $meus_directores = collect();
-    $turmas_professores = fh_turmas_professores()
+    $turmas_professores = fh_turmas_professores()   
+    
         ->get();
 
     $index = 0;
     foreach ($turmas_professores as $turma) {
-        $director_turma = fh_directores_turmas()->where('turmas.id', $turma->it_idTurma)->first();
+        // dd($turma);
+        $director_turma = fh_directores_turmas()->where('turmas.id', $turma->it_idTurma)
+        ->select('classes.*','cursos.*','users.*','users.id as id_user','turmas.*')
+        ->first();
         // dd( $turma,$director_turma);
         if ($director_turma) {
             $std = new stdClass();
@@ -317,10 +321,15 @@ function fha_meus_director_turmas()
             $std->classe = $director_turma->vc_classe;
             $std->turma = $director_turma->vc_nomedaTurma;
             $std->turno = $director_turma->vc_turnoTurma;
+            $std->slug_turma = $director_turma->slug;
+            $std->id_user = $director_turma->id_user;
+
+
             $meus_directores->push($std);
         }
     }
-    // dd($turmas_professores);
+    $meus_directores=$meus_directores->unique();
+   
     return $meus_directores;
     // return $minhas_turma;
 }
@@ -345,15 +354,20 @@ function fh_infos_certificado()
 }
 function fh_componentes()
 {
-    return Componente::where('componentes.id_cabecalho', Auth::User()->id_cabecalho);
+    return Componente::where('componentes.id_cabecalho', Auth::User()->id_cabecalho)
+        ->join('classes', 'componentes.id_classe', 'classes.id')
+        ->join('cursos', 'componentes.id_curso', 'cursos.id')
+
+        ->select('cursos.*','classes.*', 'componentes.*');
 
 }
 function fh_componentes_disciplinas()
 {
     return ComponenteDisciplina::join('disciplinas', 'componente_disciplinas.id_disciplina', 'disciplinas.id')
         ->join('componentes', 'componente_disciplinas.id_componente', '=', 'componentes.id')
+        ->join('cursos', 'componentes.id_curso', 'cursos.id')
         ->where('componente_disciplinas.id_cabecalho', Auth::User()->id_cabecalho)
-        ->select('componente_disciplinas.*', 'disciplinas.vc_acronimo', 'disciplinas.vc_nome', 'componentes.vc_componente');
+        ->select('componente_disciplinas.*','disciplinas.vc_acronimo', 'disciplinas.vc_nome', 'componentes.vc_componente','cursos.vc_nomeCurso');
 }
 function fh_turmas_slug($slug)
 {
@@ -1554,6 +1568,34 @@ function notasDeOutrosAnos($id_aluno, $id_disciplina, $id_anoLectivo, $id_ultima
     dd($data, $id_aluno, $id_disciplina, $id_anoLectivo, $id_ultima_classe);
     return $data;
 }
+
+
+
+function dataPorExtenso($data) {
+    $meses = array(
+        1 => 'Janeiro',
+        2 => 'Fevereiro',
+        3 => 'Março',
+        4 => 'Abril',
+        5 => 'Maio',
+        6 => 'Junho',
+        7 => 'Julho',
+        8 => 'Agosto',
+        9 => 'Setembro',
+        10 => 'Outubro',
+        11 => 'Novembro',
+        12 => 'Dezembro'
+    );
+
+    $dia = date('j', strtotime($data));
+    $mes = date('n', strtotime($data));
+    $ano = date('Y', strtotime($data));
+
+    $dataExtenso = $dia . ' de ' . ucfirst($meses[$mes]) . ' de ' . $ano;
+
+    return $dataExtenso;
+}
+
 
 
 function upload_img($request, $input, $caminho)

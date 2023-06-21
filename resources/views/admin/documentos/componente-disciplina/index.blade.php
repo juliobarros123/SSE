@@ -23,6 +23,7 @@
            <thead class="">
             <tr class="text-center">
                 <th>ID</th>
+                <th>CURSO</th>
                 <th>COMPONENTE</th>
                 <th>DISCIPLINA</th>
                 <th>AÇÕES</th>
@@ -33,6 +34,8 @@
             @foreach ($componente_disciplinas as $componente)
                 <tr class="text-center">
                     <td>{{ $componente->id }}</td>
+                    <th>{{ $componente->vc_nomeCurso }}</th>
+
                     <th>{{ $componente->vc_componente }}</th>
                     <th>{{ $componente->vc_nome }}</th>
 

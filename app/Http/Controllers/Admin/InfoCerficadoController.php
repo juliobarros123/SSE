@@ -31,7 +31,7 @@ class InfoCerficadoController extends Controller
     {
         $response['classes'] = fh_classes()->get();
         //  dd($response['classes']);
-        return view('admin.n-negativas.cadastrar.index', $response);
+        return view('admin.info-certificados.cadastrar.index', $response);
 
     }
     public function cadastrar(Request $request)
@@ -39,19 +39,18 @@ class InfoCerficadoController extends Controller
 
         try {
             // dd($request);
-            foreach ($request->id_classe as $id_classe) {
-                $response['id_classe'] = $id_classe;
-                $classe=Classe::find($id_classe);
-                $response['n'] = $request->n;
+
+                $response['id_classe'] = $request->id_classe;
+                $classe=fh_classes()->find($request->id_classe);
+                // dd(  $classe);
                 if (!$this->tem_registro_cadastrar($response)) {
-                    InfoCerficado::create($response);
+                    InfoCerficado::create($request->except(['_token', '_method']));
                 } else {
                     return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Registro já existe para a '.$classe->vc_classe.'ª Classe']);
 
-
-                }
+        
             }
-            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Números de negativas admintidas cadastradas com sucesso']);
+            return redirect()->route('admin.documentos.infos_certificado')->with('feedback', ['type' => 'success', 'sms' => 'Informações cadastradas com sucesso']);
 
         } catch (Exception $e) {
 
@@ -72,11 +71,10 @@ class InfoCerficadoController extends Controller
             if ($this->tem_registro($request)) {
                 return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Registro para esta classe já existe']);
             }
-            $data['n'] = $request->n;
-            $data['id_classe'] = $request->id_classe[0];
+          
 
             InfoCerficado::where('slug', $slug)->update(
-                $data
+                $request->except(['_token', '_method'])
             );
             return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Registro actualizado com sucesso']);
 
@@ -90,16 +88,16 @@ class InfoCerficadoController extends Controller
     //
     public function editar($slug)
     {
-        $n_negativa = fh_n_negativas()->where('n_negativas.slug', $slug)->first();
-        if ($n_negativa):
-            // dd($n_negativa);
-            $response['n_negativa'] = $n_negativa;
-            $response['classes'] = fh_classes()->get();
+        $info_certificado  = fh_infos_certificado()->where('info_cerficados.slug', $slug)->first();
+        if ($info_certificado ):
+            // dd($info_certificado );
+            $response['info_certificado'] = $info_certificado ;
+        
 
 
 
             // dd(  $data['n_negativa'] );
-            return view('admin.n-negativas.editar.index', $response);
+            return view('admin.info-certificados.editar.index', $response);
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 
@@ -109,22 +107,22 @@ class InfoCerficadoController extends Controller
 
     public function tem_registro($request)
     {
-        return fh_n_negativas()->where($request->except(['_token', '_method']))->count();
+        return fh_infos_certificado()->where($request->except(['_token', '_method']))->count();
     }
     public function tem_registro_cadastrar($request)
     {
-        // dd(fh_n_negativas()->where('n_negativas.id_classe',$request['id_classe'])->count());
-        return fh_n_negativas()->where('n_negativas.id_classe', $request['id_classe'])->count();
+        // dd(fh_infos_certificado()->where('info_cerficados.id_classe',$request['id_classe'])->count());
+        return fh_infos_certificado()->where('info_cerficados.id_classe', $request['id_classe'])->count();
     }
     public function eliminar($slug)
     {
 
 
-        $n_negativas = fh_n_negativas()->where('n_negativas.slug', $slug)->first();
-        if ($n_negativas):
-            // dd($n_negativas);
+        $info_cerficados = fh_infos_certificado()->where('info_cerficados.slug', $slug)->first();
+        if ($info_cerficados):
+            // dd($info_cerficados);
             InfoCerficado::where('slug', $slug)->delete();
-            $this->loggerData('Eliminou  números de negativas admintidas da ' . $n_negativas->vc_classe . 'ª Classe');
+            $this->loggerData('Eliminou  Informações da ' . $info_cerficados->vc_classe . 'ª Classe');
             return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Registro eliminado com sucesso']);
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
@@ -137,10 +135,10 @@ class InfoCerficadoController extends Controller
 
     public function index()
     {
-        $data['n_negativas'] = fh_n_negativas()->get();
+        $data['infos_certificado'] = fh_infos_certificado()->get();
 
 
         //  dd($data);
-        return view('admin.n-negativas.index', $data);
+        return view('admin.info-certificados.index', $data);
     }
 }

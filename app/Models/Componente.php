@@ -25,7 +25,9 @@ class Componente extends Model
     protected $fillable = [
         'id_cabecalho',
         'slug',
-        'vc_componente'
+        'vc_componente',
+        'id_classe',
+        'id_curso'
     ];
     public function tem_registro($array)
     {

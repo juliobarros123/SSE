@@ -52,8 +52,8 @@
 
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="id_classe" class="form-label">Para Classe:</label>
-                    <select name="id_classe" id="id_classe" class="form-control">
+                    <label for="id_classe_2" class="form-label">Para Classe:</label>
+                    <select name="id_classe_2" id="id_classe_2" class="form-control">
                         <option value="" >Selecciona a Classe</option>
                         @foreach (fh_classes()->get() as $classe)
                             <option value="{{ $classe->id }}">
@@ -63,29 +63,7 @@
                     </select>
 
                 </div>
-                <div class="form-group col-4">
-                    <label for="decreto" class="form-label"> Decreto Executivo nº:</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="decreto"
-                        placeholder="______/ _____ de _____" value="" id="decreto" required>
-                </div>
-               
-                <div class="form-group col-4">
-                    <label for="artigo" class="form-label"> Artigo:</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="artigo"
-                        placeholder="Nº" value="" id="artigo" required>
-                </div>
-                <div class="form-group col-4">
-                    <label for="LBSEE" class="form-label"> LBSEE de:</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="LBSEE"
-                        placeholder="__/__ de ___ de ___" value="" id="LBSEE" required>
-                </div>
-               
-                <div class="form-group col-4">
-                    <label for="lei" class="form-label"> Conjugada com a lei :</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="lei"
-                        placeholder="__/__ de ___ de _______-" value="" id="lei" required>
-                </div>
-           
+              
                 <div class="form-group col-4">
                     <label for="registo" class="form-label"> Registo nº:</label>
                     <input type="text" class="form-control border-secondary col-sm-12" name="registo"
@@ -97,17 +75,7 @@
                     <input type="text" class="form-control border-secondary col-sm-12" name="folha"
                         placeholder="Folha nº" value="" id="folha" required>
                 </div>
-                <div class="form-group col-4">
-                    <label for="processo" class="form-label" >Ensino:</label>
-                    <select name="ensino" id="" class="form-control" required>
-                        <option  selected disabled>Selecciona a opção</option>
-                        <option value="Iº CICLO DO ENSINO SECUNDÁRIO GERAL">IIº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
-                        <option value="IIº CICLO DO ENSINO SECUNDÁRIO GERAL">IIº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
-                        <option value="IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO ">IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO </option>
-                    
-                    </select>
-                   
-                </div>
+              
                 <div class="form-group col-4">
                     <label for="processo" class="form-label" >Com visto:</label>
                     <select name="visto" id="" class="form-control" required>

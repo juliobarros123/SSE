@@ -103,7 +103,7 @@
                         $mt1 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I'], $turma->it_idAnoLectivo);
                         $mt2 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['II'], $turma->it_idAnoLectivo);
                         $mt3 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['III'], $turma->it_idAnoLectivo);
-                        
+                        /* dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idAnoLectivo) */
                         $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
                         /* dd(  $ca ); */
                     @endphp

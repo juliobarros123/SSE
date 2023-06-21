@@ -17,9 +17,12 @@ class CreateComponentesTable extends Migration
             $table->id();
             $table->string('vc_componente')->nullable();
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
-            
+            $table->unsignedBigInteger('id_classe')->nullable();
+            $table->foreign('id_classe')->references('id')->on('classes')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('id_curso')->nullable();
+            $table->foreign('id_curso')->references('id')->on('cursos')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
- $table->string('slug')->unique();
+            $table->string('slug')->unique();
         });
     }
 
@@ -33,4 +36,3 @@ class CreateComponentesTable extends Migration
         Schema::dropIfExists('componentes');
     }
 }
-

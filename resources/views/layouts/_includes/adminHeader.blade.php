@@ -907,6 +907,16 @@
         </a>
     </li>
     <li class="nav-item has-treeview">
+        <a href="{{route('admin.documentos.infos_certificado')}}" class="nav-link">
+              <i class="nav-icon fas fa-chalkboard"></i>
+            <p>
+                Info. Certificados
+               
+            </p>
+        </a>
+    </li>
+    
+    <li class="nav-item has-treeview">
         <a href="{{route('documentos.certificados.emitir')}}" class="nav-link">
             <i class="nav-icon fas fa-chalkboard"></i>
             <p>
