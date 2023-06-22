@@ -2,6 +2,7 @@
     <h3> @yield('entidadade1')
 
         <br>
+        <br>
         <hr>
     </h3>
     <div class='director-signature'>
@@ -11,6 +12,7 @@
 </div>
 <div class='visa-container right'>
     <h3> @yield('entidadade2')
+        <br>
         <br>
         <hr>
     </h3>

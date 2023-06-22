@@ -29,7 +29,12 @@
         placeholder="__/__ de ___ de ___" value="{{ isset($info_certificado->LBSEE) ? $info_certificado->LBSEE : '' }}"
         id="LBSEE" required>
 </div>
-
+<div class="form-group col-4">
+    <label for="alinea" class="form-label"> Alínea:</label>
+    <input type="text" class="form-control border-secondary col-sm-12" name="alinea"
+        placeholder="Alinea do artigo" value="{{ isset($info_certificado->alinea) ? $info_certificado->alinea : '' }}"
+        id="alinea" required>
+</div>
 <div class="form-group col-4">
     <label for="lei" class="form-label"> Conjugada com a lei :</label>
     <input type="text" class="form-control border-secondary col-sm-12" name="lei"
@@ -48,7 +53,7 @@
         @endif
 
 
-        <option value="Iº CICLO DO ENSINO SECUNDÁRIO GERAL">IIº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
+        <option value="Iº CICLO DO ENSINO SECUNDÁRIO GERAL">Iº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
         <option value="IIº CICLO DO ENSINO SECUNDÁRIO GERAL">IIº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
         <option value="IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO ">IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO </option>
 

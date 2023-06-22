@@ -31,7 +31,8 @@ class InfoCerficado extends Model
         'artigo',
         'LBSEE',
         'lei',
-        'ensino'
+        'ensino',
+        'alinea'
 
     ];
 

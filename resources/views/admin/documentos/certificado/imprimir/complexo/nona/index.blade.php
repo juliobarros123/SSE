@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title> Lista de Alunos Matriculados</title>
+    <title> Certificado {{$aluno->processo}}</title>
     <style>
         <?php
         echo $css;
@@ -53,9 +53,12 @@ background-image-resolution: from-image;">
     @php
         $medias_acumulada_coluna = fh_arredondar(media($medias_acumulada_coluna));
     @endphp
+    @php
+    /* dd($cabecalho); */
+    @endphp
     <div class="bib">
-        <div>a) <strong>{{ $cabecalho->vc_nomeDirector }}</strong>, Diretor(a) do {{ $cabecalho->vc_escola }}, criada,
-            sob Decreto Executivo nº 40/06 de 15 de Maio.</div>
+        <div>a) <strong>{{ $cabecalho->vc_nomeDirector }}</strong>, Diretor(a) do {{ $cabecalho->vc_escola }} Nº {{$cabecalho->vc_numero_escola}}, criada,
+            sob Decreto Executivo nº {{$info_certificado->decreto}}.</div>
 
 
         <div class="bib-part">
@@ -70,9 +73,9 @@ background-image-resolution: from-image;">
         </div>
 
         <div class="bib-part">
-            Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o 1 CICLO DO ENSINO SECUNDÁRIO
+            Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o {{$info_certificado->ensino}}
             GERAL,
-            conforme o disposto na alínea c) do artigo 109º da LBSEE nº 17/16 de 07 de Outubro, com a Média
+            conforme o disposto na alínea {{$info_certificado->alinea}}) do artigo {{$info_certificado->artigo}}º da LBSEE nº {{$info_certificado->LBSEE}}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por ciclos de
             aprendizagem:
         </div>
@@ -95,7 +98,7 @@ background-image-resolution: from-image;">
             <th class="th-cab-notas" colspan="1" style="text-align: center">DISCIPLINA
             </th>
             @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
-                <th class="th-cab-notas" style="text-align: center">{{ $i }}ª Classe</th>
+                <th class="th-cab-notas" style="text-align: center">{{ $i }}ª CLASSE</th>
             @endfor
             <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
             <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
@@ -108,7 +111,7 @@ background-image-resolution: from-image;">
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
-                    <td class="desciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                    <td class="desciplina td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
@@ -126,7 +129,7 @@ background-image-resolution: from-image;">
                             }
                             array_push($medias_acumulada_linha, $ca);
                         @endphp
-                        <td class="nota-valor td td-boder">
+                        <td class="nota-valor" style="text-align: center">
                             {{ menor_zero($ca) ? $ca : '' }}</td>
                     @endfor
 
@@ -136,15 +139,15 @@ background-image-resolution: from-image;">
                         
                     @endphp
 
-                    <td class="nota-valor td td-boder">
+                    <td class="nota-valor" style="text-align:center">
 
                         {{ intval($media) }}
 
                     </td>
-                    <td class="nota-extenso td td-boder-bottom td-boder-top ">
+                    <td style="border-right: none;text-align:right; ">
                         {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
                     </td>
-                    <td class="valores td td-boder-bottom td-boder-top td-boder-right">Valores</td>
+                    <td style=" border-left: none">Valores</td>
 
                 </tr>
 
@@ -162,7 +165,7 @@ background-image-resolution: from-image;">
         <div class="bib-part">
             Para efeitos legais lhe é passado o presente Certificado, que consta no livro de registo
             nº
-            ____/20___, folha_______ assinado por mim e autenticado com carimbo a óleo/selo branco em uso neste
+            {{$registo}}, folha {{$folha}} assinado por mim e autenticado com carimbo a óleo/selo branco em uso neste
             estabelecimento de ensino. </div>
     </div>
     <div class="lib">
@@ -174,6 +177,7 @@ background-image-resolution: from-image;">
     @section('entidadade1-valor', $cabecalho->vc_nomeSubdirectorPedagogico)
 
     @section('entidadade2', ' O Director Geral')
+
     @section('entidadade2-valor', $cabecalho->vc_nomeDirector)
     @include('layouts._includes.fragments.lista.footer.visto-2')
 

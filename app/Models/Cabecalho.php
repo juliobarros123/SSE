@@ -37,7 +37,7 @@ class Cabecalho extends Model
         'id', 'vc_logo', 'vc_ensignia', 'vc_escola', 'vc_acronimo', 'vc_nif', 'vc_republica', 'vc_ministerio',
         'vc_endereco', 'it_telefone', 'vc_email', 'vc_nomeDirector',
         'vc_nomeSubdirectorPedagogico', 'vc_nomeSubdirectorAdminFinanceiro','vc_tipo_escola','it_id_municipio',
-        'vc_numero_escola','assinatura_director'
+        'vc_numero_escola','assinatura_director','director_municipal'
 
     ];
 }

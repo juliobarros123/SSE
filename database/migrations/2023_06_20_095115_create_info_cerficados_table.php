@@ -23,6 +23,7 @@ class CreateInfoCerficadosTable extends Migration
             $table->string('lei')->nullable();
             $table->string('ensino')->nullable();
             $table->foreignId('id_classe')->constrained('classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
+            $table->string('alinea')->nullable();
 
             $table->timestamps();
             $table->string('slug')->unique();

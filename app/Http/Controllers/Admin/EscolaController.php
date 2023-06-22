@@ -139,7 +139,8 @@ class EscolaController extends Controller
                 'vc_nomeSubdirectorPedagogico' => $request->vc_nomeSubdirectorPedagogico,
                 'it_id_municipio' => $request->it_id_municipio,
                 'vc_tipo_escola' => $request->vc_tipo_escola,
-                'assinatura_director' => $dados['assinatura_director']
+                'assinatura_director' => $dados['assinatura_director'],
+                'director_municipal' => $request->director_municipal
             ]);
 
             User::create(
@@ -302,7 +303,10 @@ class EscolaController extends Controller
             'vc_nomeSubdirectorPedagogico' => $request->vc_nomeSubdirectorPedagogico,
             'it_id_municipio' => $request->it_id_municipio,
             'vc_tipo_escola' => $request->vc_tipo_escola,
-            'assinatura_director' => $dados['assinatura_director']
+            'assinatura_director' => $dados['assinatura_director'],
+            'director_municipal' => $request->director_municipal
+
+            
         ]);
         $this->Logger->Log('info', 'Actualizou Uma Escola');
         return redirect()->route('admin/escola')->with('update', 1);

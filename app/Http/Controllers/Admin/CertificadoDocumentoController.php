@@ -30,61 +30,74 @@ class CertificadoDocumentoController extends Controller
     }
     public function imprimir(Request $request)
     {
+        $data['info_certificado'] = fh_infos_certificado()->where('classes.id', $request->id_classe_2)->first();
+        if ($data['info_certificado']) {
+            //    dd($data['info_certificado']);
+            $data['cabecalho'] = fh_cabecalho();
+            $classe = fh_classes()->where('classes.id', $request->id_classe_2)->first();
+            $data['classe_inicial'] = fh_classes()->where('classes.id', $request->id_classe)->first();
+            $data['classe_final'] = fh_classes()->where('classes.id', $request->id_classe_2)->first();
+            $data['aluno'] = fh_matriculas()->where('alunnos.processo', $request->processo)
+                ->whereBetween('classes.vc_classe', [$data['classe_inicial']->vc_classe, $data['classe_final']->vc_classe])
 
-        $data['cabecalho'] = fh_cabecalho();
-        $classe = fh_classes()->where('classes.id', $request->id_classe_2)->first();
-        $data['classe_inicial'] = fh_classes()->where('classes.id', $request->id_classe)->first();
-        $data['classe_final'] = fh_classes()->where('classes.id', $request->id_classe_2)->first();
-        $data['aluno'] = fh_matriculas()->where('alunnos.processo', $request->processo)
-            ->whereBetween('classes.vc_classe', [$data['classe_inicial']->vc_classe, $data['classe_final']->vc_classe])
-
-            ->first();
-        // dd(   $data['aluno']);
-        $data['disciplinas'] = fh_disciplinas_cursos_classes()
-            ->where('classes.vc_classe', '>=', $data['classe_inicial']->vc_classe)
-            ->where('classes.vc_classe', '<=', $data['classe_final']->vc_classe)
-            ->where('cursos.id', $data['aluno']->id_curso)->select('disciplinas.*')->get();
-        $data['componentes'] = fh_componentes()
-            ->where('classes.id', $data['classe_final']->id)
-            ->where('cursos.id', $data['aluno']->id_curso)->get();
-       
-// dd(   $data['disciplinas']);
-
-
-
-
-        //    dd(   $data );
-
-
+                ->first();
+            // dd(   $data['aluno']);
+            $data['disciplinas'] = fh_disciplinas_cursos_classes()
+                ->where('classes.vc_classe', '>=', $data['classe_inicial']->vc_classe)
+                ->where('classes.vc_classe', '<=', $data['classe_final']->vc_classe)
+                ->where('cursos.id', $data['aluno']->id_curso)->select('disciplinas.*')->get();
+            // dd( $data['disciplinas']);
+            $data['componentes'] = fh_componentes()
+                ->where('classes.vc_classe', '>=', $data['classe_inicial']->vc_classe)
+                ->where('classes.vc_classe', '<=', $data['classe_final']->vc_classe)
+                ->where('cursos.id', $data['aluno']->id_curso)
+                ->get();
+            // dd($data);
+            // dd(   $data['disciplinas']);
 
 
-        $data["visto"] = $request->visto;
-        $data["css"] = file_get_contents('css/certificado/style.css');
-        $mpdf = new \Mpdf\Mpdf([
-            'format' => 'A4',
-            'margin_top' => 14,
-            'margin_right' => 15,
-            'margin_left' => 15
-        ]);
-        // dd(medias_anuas_disciplina($request->processo,"ELECTR",[10,11,12]));
-        $mpdf->SetFont("times new roman");
-        $mpdf->setHeader();
-        $this->Logger->Log('info', "Imprimiu certificado do aluno com processo $request->processo ");
-        $html = "";
-        // if ($data['cabecalho']->vc_tipo_escola == "Liceu") {
-        //     $html = view("admin.documentos.certificado.imprimir.liceu.index",    $data);
-        // } else if ($data['cabecalho']->vc_tipo_escola == "Magisterio") {
-        //     $html = view("admin.documentos.certificado.imprimir.magisterio.index",    $data);
-        // } else if ($data['cabecalho']->vc_tipo_escola == "Instituto") {
-        //     $html = view("admin.documentos.certificado.imprimir.instituto.index",    $data);
-        // }
-        $html = view("admin.documentos.certificado.imprimir.complexo.nona.index", $data);
 
 
-        // return   $html;
-        $mpdf->writeHTML($html);
+            //    dd(   $data );
 
-        $mpdf->Output("Certificado $request->processo", "I");
+
+
+// dd($request);
+            $data["visto"] = $request->visto;
+            $data["folha"] = $request->folha;
+            $data["registo"] = $request->registo;
+
+
+            $data["css"] = file_get_contents('css/certificado/style.css');
+            $mpdf = new \Mpdf\Mpdf([
+                'format' => 'A4',
+                'margin_top' => 14,
+                'margin_right' => 15,
+                'margin_left' => 15
+            ]);
+            // dd(medias_anuas_disciplina($request->processo,"ELECTR",[10,11,12]));
+            $mpdf->SetFont("times new roman");
+            $mpdf->setHeader();
+            $this->Logger->Log('info', "Imprimiu certificado do aluno com processo $request->processo ");
+            $html = "";
+            // if ($data['cabecalho']->vc_tipo_escola == "Liceu") {
+            //     $html = view("admin.documentos.certificado.imprimir.liceu.index",    $data);
+            // } else if ($data['cabecalho']->vc_tipo_escola == "Magisterio") {
+            //     $html = view("admin.documentos.certificado.imprimir.magisterio.index",    $data);
+            // } else if ($data['cabecalho']->vc_tipo_escola == "Instituto") {
+            //     $html = view("admin.documentos.certificado.imprimir.instituto.index",    $data);
+            // }
+            $html = view("admin.documentos.certificado.imprimir.complexo.nona.index", $data);
+
+
+            // return   $html;
+            $mpdf->writeHTML($html);
+
+            $mpdf->Output("Certificado $request->processo", "I");
+        } else {
+            return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Antes, cadastre as informações Necesssário para o certificado. No menu (Info. Certificado)']);
+
+        }
     }
     public function order_dics_por_curso($processo)
     {

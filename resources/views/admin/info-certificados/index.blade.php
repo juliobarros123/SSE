@@ -31,6 +31,7 @@
                 <th>LBSSE</th>
                 <th>LEI</th>
                 <th>ENSINO</th>
+                <th>ALÍNEA</th>
                 <th>CLASSE</th>
                 <th>ACÇÕES</th>
             </tr>
@@ -45,6 +46,8 @@
                     <td>{{ $row->LBSEE }}</td>
                     <td>{{ $row->lei }}</td>
                     <td>{{ $row->ensino }}</td>
+                    <td>{{ $row->alinea  }}</td>
+
                     <td>{{ $row->vc_classe }}ª Classe</td>
               
                     <td class="text-center">

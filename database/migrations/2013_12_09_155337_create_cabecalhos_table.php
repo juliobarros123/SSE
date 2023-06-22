@@ -40,6 +40,7 @@ class CreateCabecalhosTable extends Migration
             $table->unsignedBigInteger("it_id_municipio")->nullable();
             $table->foreign('it_id_municipio')->references('id')->on('municipios')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->string('assinatura_director', 255)->nullable();
+            $table->string('director_municipal', 255)->nullable();
           
             $table->timestamps();
             $table->string('slug')->unique();

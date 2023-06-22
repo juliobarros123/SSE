@@ -23,15 +23,15 @@
                 @csrf
                 @method('PUT')
 
-                <div class="form-group col-sm-2">
+                {{-- <div class="form-group col-sm-2">
                     <label for="" class="form-label">ID da Escola</label>
                     <input type="text" class="form-control" value="{{ isset($cabecalho->id) ? $cabecalho->id : '' }}" name="id">
-                </div>
+                </div> --}}
 
                 @include('forms._formEscola.index')
-                <div class="form-group col-sm-2">
-                    <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Editar</button>
+                <div class="form-group col-12 d-flex justify-content-center">
+                 
+                    <button class="btn btn-dark w-25" type="submit">Editar </button>
                 </div>
             </form>
 

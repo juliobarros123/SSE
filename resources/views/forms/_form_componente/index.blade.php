@@ -7,9 +7,9 @@
 <div class="form-group col-md-4">
     <label for="id_curso" class="form-label">Curso:</label>
     <select name="id_curso" id="id_curso_sem_todas" class="form-control" required>
-        >
+        
         @if (isset($componente->id_curso))
-        <option selected value="{{$componente->id_curso}}">$componente->vc_nomeCurso</option>
+        <option selected value="{{$componente->id_curso}}">{{$componente->vc_nomeCurso}}</option>
 
         @else
             <option value="">Selecciona o Curso</option>

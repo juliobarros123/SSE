@@ -108,3 +108,8 @@
     <input type="text" class="form-control" placeholder="Número da escola" name="vc_numero_escola"
         value="{{ isset($cabecalho->vc_numero_escola) ? $cabecalho->vc_numero_escola : '' }}">
 </div>
+<div class="form-group col-sm-4">
+    <label for="" class="form-label">Director(a) Municipal</label>
+    <input type="text" class="form-control" placeholder="Nome do(a) Director(a) Municipal" name="director_municipal"
+        value="{{ isset($cabecalho->director_municipal) ? $cabecalho->director_municipal : '' }}">
+</div>

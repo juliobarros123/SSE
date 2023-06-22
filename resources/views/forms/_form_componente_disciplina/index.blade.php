@@ -1,17 +1,17 @@
 
-<div class="form-group col-md-3">
+<div class="form-group col-md-6">
     <label class="form-label">Componente:</label>
     <select class="form-control select-dinamico" name="id_componente" required >
         <option value="{{ isset($componente_disciplina) ? $componente_disciplina->id_componente : '' }}" selected>
-            {{ isset($componente_disciplina) ? $componente->vc_nomeCurso .'/'.$componente->vc_componente : 'Selecione a componente:' }}</option>
+            {{ isset($componente_disciplina) ?  $componente->vc_classe.'ª/'.$componente->vc_nomeCurso .'/'.$componente->vc_componente : 'Selecione a componente:' }}</option>
         @foreach (fh_componentes()->get() as $componente)
-            <option value="{{ $componente->id }}">{{ $componente->vc_nomeCurso }}/{{ $componente->vc_componente }} </option>
+            <option value="{{ $componente->id }}">{{ $componente->vc_classe }}ª/{{ $componente->vc_nomeCurso }}/{{ $componente->vc_componente }} </option>
             </option>
         @endforeach
     </select>
 </div>
 
-<div class="form-group col-md-4">
+<div class="form-group col-md-6">
     <label>Disciplinas</label>
     <select name="id_disciplina" class="form-control mySelect  "  >
         @isset($componente_disciplina)
