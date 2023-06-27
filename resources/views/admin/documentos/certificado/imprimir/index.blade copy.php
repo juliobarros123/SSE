@@ -65,7 +65,7 @@
 
 
 
-        .desciplina {
+        .disciplina {
 
             width: 380px;
             padding-bottom: 0px;
@@ -236,7 +236,7 @@ background-image-resolution: from-image;">
             @foreach ($notas as $nota)
                 @isset($nota[$disciplina[0]])
                     <tr>
-                        <td class="desciplina td">Física</td>
+                        <td class="disciplina td">Física</td>
                         <td class="nota-valor td">{{ $nota[$disciplina[0]][0]['cfd'] }}</td>
                         <td class="nota-extenso td">
                             {{ ucfirst(valorPorExtenso($nota[$disciplina[0]][0]['cfd'], false, false)) }}</td>

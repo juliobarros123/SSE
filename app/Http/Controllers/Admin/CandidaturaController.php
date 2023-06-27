@@ -279,9 +279,12 @@ class CandidaturaController extends Controller
             // dd(   $response['cursos']);
             $response['classes'] = fh_classes()->get();
             // dd($response['classes']);
-            $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->orderby('id', 'desc')->first();
+            $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('id', 'desc')->first();
             // $response['anoLectivo'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
+            if (!$response['idadesdecandidaturas']) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
 
+            }
             $response['cabecalho'] = fh_cabecalho();
             $response['provincias'] = fh_provincias()->get();
             // dd($response['provincias']);

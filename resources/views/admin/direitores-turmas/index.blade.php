@@ -60,6 +60,7 @@
                                         <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        
                                         <a href="{{ route('direitores-turmas.editar', $dt->slug) }}"
                                             class="dropdown-item">Editar</a>
                                         <a href="{{ route('direitores-turmas.eliminar', $dt->slug) }}" class="dropdown-item"

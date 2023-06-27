@@ -564,7 +564,7 @@ function fha_colspan($id_disciplina, $id_classe, $id_curso)
     $cabecalho = fh_cabecalho();
     if (!($cabecalho->vc_tipo_escola != "Técnico" || $classe->vc_classe < 10)) {
         // dd("ola");
-        $cont = temDisciplinaNoClasseAnterior($id_disciplina, $classe->vc_classe, $id_curso) + 1;
+        $cont = temDisciplinaNoClasseAnterior($id_disciplina, $classe->vc_classe, $id_curso);
         // dd($cont);
     }
     $c = 0;
@@ -943,12 +943,7 @@ function fha_media_trimestral_geral_2($processo, $id_disciplina, $trimestre_arra
         $exame = isset($notas_III->fl_nota2) && $notas_III->fl_nota2 ? $notas_III->fl_nota2 : 0;
         $pesos_notas_exames = fh_pesos_notas_exames()->first();
         // dd($media,$exame);
-        if($pesos_notas_exames){
         $ca = ($media * $pesos_notas_exames->peso_medias_trimestral) + ($exame * $pesos_notas_exames->peso_nota_exame);
-        }else{
-        $ca =fh_arredondar(media([$media ,$exame]));
-
-        }
         //    dd( $media,$exame,$ca   );
         //    dd( $media, $exame, $ca);
         $media = $ca;
@@ -1004,15 +999,60 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
         $exame = isset($notas_III->fl_nota2) && $notas_III->fl_nota2 ? $notas_III->fl_nota2 : 0;
         $pesos_notas_exames = fh_pesos_notas_exames()->first();
         // dd($media,$exame);
-        if($pesos_notas_exames){
-            $ca = ($media * $pesos_notas_exames->peso_medias_trimestral) + ($exame * $pesos_notas_exames->peso_nota_exame);
-            }else{
-            $ca =fh_arredondar(media([$media ,$exame]));
-    
-            }
+        $ca = ($media * $pesos_notas_exames->peso_medias_trimestral) + ($exame * $pesos_notas_exames->peso_nota_exame);
+        //    dd( $media,$exame,$ca   );
+        //    dd( $media, $exame, $ca);
         $media = $ca;
     }
+    if ($cabecalho->vc_tipo_escola == 'Técnico' && count($trimestre_array) == 3 && $matricula->vc_classe >= 10) {
+        //   dd("ola");
+        $medias_acumulada_linha = [];
+        // dd($matricula->vc_classe);
+        $classes = fh_disciplinas_cursos_classes()
+            ->where('disciplinas_cursos_classes.it_curso', $matricula->id_curso)
+            ->where('disciplinas.id', $id_disciplina)
+            ->where('classes.vc_classe', '<=', $matricula->vc_classe)
+            ->select('classes.*', 'disciplinas.vc_nome')
+            ->orderBy('classes.vc_classe', 'asc')->get();
 
+        // dd($classes,$processo);
+        foreach ($classes as $classe) {
+            // if($classes->count()>=2){
+// dd($classes);
+// }
+            $matricula = fh_matriculas()
+                ->where('alunnos.processo', $processo)
+                ->where('classes.vc_classe', $classe->vc_classe)
+                ->where('turmas.it_idAnoLectivo', $id_ano_lectivo)
+                ->get();
+            //   dd( $matricula );
+            $matricula = $matricula->sortDesc()->first();
+            // dd($matricula);
+            if ($matricula) {
+                $ca = fha_media_trimestral_geral_2($processo, $id_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
+                //    dd( $ca);
+            } else {
+                $ca = 0;
+            }
+
+
+            $ca = fh_arredondar($ca);
+            array_push($medias_acumulada_linha, $ca);
+
+            $media = media($medias_acumulada_linha);
+            $medias_acumulada_linha = [];
+
+            array_push($medias_acumulada_linha, $media);
+            //  if( $classe->vc_classe==12){
+            //     dd( $ca,$medias_acumulada_linha );
+            // }
+
+
+        }
+        // dd($medias_acumulada_linha);
+        $media = media($medias_acumulada_linha);
+        // dd(  $media);
+    }
     //   dd(  $media);
     return fh_arredondar($media);
 
@@ -1023,21 +1063,11 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
 function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
 {
     $notas = array();
-    $medias_acumulada_linha = array();
-    $classe_corrente = Classe::find($id_classe);
     $matricula = fh_matriculas()
         ->where('turmas.it_idClasse', $id_classe)
         ->where('alunnos.processo', $processo)
         ->orderBy('anoslectivos.ya_fim', 'desc')
         ->first();
-        if(!$matricula){
-            $matricula = fh_matriculas()
-            ->where('classes.vc_classe', '<=', $classe_corrente->vc_classe)
-            ->where('alunnos.processo', $processo)
-            ->orderBy('anoslectivos.ya_fim', 'desc')
-            ->first();
-            // dd(    $matricula);
-        }
     $classes = fh_disciplinas_cursos_classes()
         ->where('disciplinas_cursos_classes.it_curso', $matricula->it_idCurso)
         ->where('disciplinas.id', $id_disciplina)
@@ -1045,106 +1075,27 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
         ->select('classes.*', 'disciplinas.vc_nome')
         ->orderBy('classes.vc_classe', 'desc')
         ->get();
-    // dd(   $classes);
     $cabecalho = fh_cabecalho();
-    if ($cabecalho->vc_tipo_escola == "Geral" || $classe_corrente->vc_classe < 10) {
-        $collect = collect();
-        $classes = $collect->push($classes->first());
-        // dd(   $classes);
-    } else if ($cabecalho->vc_tipo_escola == "Técnico") {
-        $classes = $classes;
+    if ($cabecalho->vc_tipo_escola == "Geral") {
+        $classes = collect($classes->first());
+    } else if($cabecalho->vc_tipo_escola == "Técnico") {
+        $classes = collect($classes->first());
 
     }
-    // dd( $classes);
-    foreach ($classes as $classe) {
-        // dd($classe);
+    foreach( $classes as  $classe){
         $matricula = fh_matriculas()
-            ->where('turmas.it_idClasse', $classe->vc_classe)
-            ->where('alunnos.processo', $processo)
-            ->orderBy('anoslectivos.ya_fim', 'desc')
-            ->first();
-            // dd($matricula,"o");
-        // $media = fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $matricula->it_idAnoLectivo);
-        // // dd( $media);
-        if ($matricula) {
-            $ca = fha_media_trimestral_geral($processo, $id_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-        } else {
-            $ca = 0;
-        }
+        ->where('turmas.it_idClasse', $classe)
+        ->where('alunnos.processo', $processo)
+        ->orderBy('anoslectivos.ya_fim', 'desc')
+        ->first();
+    $media = fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $matricula->it_idAnoLectivo);
 
-// dd( $ca);
-        $ca = fh_arredondar($ca);
-        // dd( $ca);
-        array_push($medias_acumulada_linha, $ca);
-
-        $media = media($medias_acumulada_linha);
-        // dd($media);
-        $medias_acumulada_linha = [];
-
-        array_push($medias_acumulada_linha, $media);
     }
-    // dd( $medias_acumulada_linha);
-    // dd($media);
+    dd($media);
     return fh_arredondar($media);
 
 
 }
-// function fha_ca_classe($processo, $id_disciplina, $trimestre_array, $classe)
-// {
-//     $notas = array();
-//     $medias_acumulada_linha = array();
-//     $classe = fh_classes()->where('classes.vc_classe', $classe)->first();
-//     $matricula = fh_matriculas()
-//         ->where('turmas.it_idClasse', $classe)
-//         ->where('alunnos.processo', $processo)
-//         ->orderBy('anoslectivos.ya_fim', 'desc')
-//         ->first();
-//     $classes = fh_disciplinas_cursos_classes()
-//         ->where('disciplinas_cursos_classes.it_curso', $matricula->it_idCurso)
-//         ->where('disciplinas.id', $id_disciplina)
-//         ->where('classes.vc_classe', '<=', $matricula->vc_classe)
-//         ->select('classes.*', 'disciplinas.vc_nome')
-//         ->orderBy('classes.vc_classe', 'desc')
-//         ->get();
-//     // dd(   $classes);
-//     $cabecalho = fh_cabecalho();
-//     if ($cabecalho->vc_tipo_escola == "Geral") {
-//         $classes = collect($classes->first());
-//     } else if ($cabecalho->vc_tipo_escola == "Técnico") {
-//         $classes = $classes;
-
-//     }
-
-//     foreach ($classes as $classe) {
-//         // dd($classe);
-//         $matricula = fh_matriculas()
-//             ->where('turmas.it_idClasse', $classe->vc_classe)
-//             ->where('alunnos.processo', $processo)
-//             ->orderBy('anoslectivos.ya_fim', 'desc')
-//             ->first();
-//         $media = fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array, $matricula->it_idAnoLectivo);
-//         if ($matricula) {
-//             $ca = fha_media_trimestral_geral($processo, $id_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-//         } else {
-//             $ca = 0;
-//         }
-
-
-//         $ca = fh_arredondar($ca);
-//         // dd( $ca);
-//         array_push($medias_acumulada_linha, $ca);
-
-//         $media = media($medias_acumulada_linha);
-//         // dd($media);
-//         $medias_acumulada_linha = [];
-
-//         array_push($medias_acumulada_linha, $media);
-//     }
-//     // dd($media);
-//     return fh_arredondar($media);
-
-
-// }
 function fha_nota_exame($processo, $id_disciplina, $id_ano_lectivo)
 {
     $notas_III = fh_mt_trimestre_por_ano($processo, $id_disciplina, 'III', $id_ano_lectivo)->first();
@@ -1230,7 +1181,7 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
         }
         if (is_string($nota_recurso)) {
             // $nota = fha_media_trimestral_geral($processo, $disciplina->id, ['I', 'II', 'III'], $id_ano_lectivo);
-            $nota =fha_ca($processo, $disciplina->id, ['I', 'II', 'III'], $id_classe);
+            $nota = fha_cfd_ext($processo, $disciplina->id, $id_classe);
             // dd($nota, $processo);
         } else {
             $nota = intval($nota_recurso);
@@ -1341,7 +1292,7 @@ function fha_cfd_ext($processo, $id_disciplina, $id_classe_limit)
     $nota = 0;
     $cabecalho = fh_cabecalho();
     $classe = Classe::find($id_classe_limit);
-    if ($cabecalho->vc_tipo_escola == "Geral" || $classe->vc_classe < 10) {
+    if ($cabecalho->vc_tipo_escola != "Instituto" || $classe->vc_classe < 10) {
         $matriculas = fh_matriculas()
             ->where('alunnos.processo', $processo)
             ->where('classes.vc_classe', $classe->vc_classe)->limit(1)->get();

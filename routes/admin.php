@@ -23,8 +23,8 @@ Route::get('/caderneta/{id}', ['as' => 'caderneta', 'uses' => 'Admin\BoletimTurm
 
 Route::get('/{id}/{trimestre}/gerarBoletimTurma/xlsx', ['as' => 'turmas.boletimTurmwas.xlsx', 'uses' => 'Admin\BoletimTurmaController@ver']);
 
-Route::get('notas-seca/aluno-processos/{processo}/{estudando}', ['as' => 'aluno-processoS', 'uses' => 'Admin\NotaSecaController@alunoProcesso']);
-Route::get('notas-seca/vrf_disciplina_terminal/{id_disciplina}/{id_turma}/{estado}/{processo}/{classe}', ['as' => 'vrf_disciplina_terminal', 'uses' => 'Admin\NotaSecaController@vrf_disciplina_terminal']);
+Route::get('notas-finais/aluno-processos/{processo}/{estudando}', ['as' => 'aluno-processoS', 'uses' => 'Admin\NotaSecaController@alunoProcesso']);
+Route::get('notas-finais/vrf_disciplina_terminal/{id_disciplina}/{id_turma}/{estado}/{processo}/{classe}', ['as' => 'vrf_disciplina_terminal', 'uses' => 'Admin\NotaSecaController@vrf_disciplina_terminal']);
 
 Route::get('classes_por_curso/{curso}', ['as' => 'classes_por_curso', 'uses' => 'Admin\CandidaturaController@classes_por_curso']);
 
@@ -58,10 +58,10 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //===================== End Candidatos =====================
     /* start nota seca */
-    Route::group(['prefix' => 'notas-seca'], function () {
+    Route::group(['prefix' => 'notas-finais'], function () {
 
-        Route::get('/inserir/{id_turma}', ['as' => 'notas-seca.inserir', 'uses' => 'Admin\NotaSecaController@inserir']);
-        Route::post('/cadastrar/{id_turma}', ['as' => 'notas-seca.cadastrar', 'uses' => 'Admin\NotaSecaController@cadastrar']);
+        Route::get('/inserir/{id_turma}', ['as' => 'notas-finais.inserir', 'uses' => 'Admin\NotaSecaController@inserir']);
+        Route::post('/cadastrar/{slug_turma}', ['as' => 'notas-finais.cadastrar', 'uses' => 'Admin\NotaSecaController@cadastrar']);
         Route::post('/{it_idCurso}/{it_idClasse}/{t_idTurma}/{id_anoLectivo}/{vc_tipodaNota}/{it_disciplina}/inserir', ['as' => 'nota_em_carga_diplomado.inserir', 'uses' => 'Admin\NotaDinamicaDiplomadoController@inserir']);
         Route::get('/buscar_notas', ['as' => 'nota_em_carga_diplomado.buscar_notas', 'uses' => 'Admin\NotaDinamicaDiplomadoController@buscar_notas']);
         Route::get('/pesquisar', ['as' => 'nota_em_carga_diplomado.pesquisar', 'uses' => 'Admin\NotaDinamicaDiplomadoController@pesquisar']);

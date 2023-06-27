@@ -37,10 +37,12 @@ background-image-resolution: from-image;">
                         ->where('alunnos.processo', $aluno->processo)
                         ->where('classes.vc_classe', $i)
                         ->get();
+                   
                     $matricula = $matricula->sortDesc()->first();
-                    
+
                     if ($matricula) {
                         $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
+                  
                     } else {
                         $ca = 0;
                     }
@@ -69,24 +71,16 @@ background-image-resolution: from-image;">
     <div class="bib">
         <div>a) <strong>{{ $cabecalho->vc_nomeDirector }}</strong>, Diretor(a) do {{ $cabecalho->vc_escola }} Nº
             {{ $cabecalho->vc_numero_escola }}, criada,
-            sob Decreto Executivo nº {{ $info_certificado->decreto }}.</div>
-
-
-        <div class="bib-part">
-            Certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
+            sob Decreto Executivo nº {{ $info_certificado->decreto }},
+            certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
             {{ $aluno->vc_nomePai }} e de
             {{ $aluno->vc_nomeMae }}, nascida(o) aos {{ dataPorExtenso(sub_traco_barra($aluno->dt_dataNascimento)) }},
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}.
-
-        </div>
-
-        <div class="bib-part">
-            Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do 
             {{ $info_certificado->ensino }}
-            GERAL,
+            , na área de  <strong>{{$aluno->vc_nomeCurso}} </strong>
             conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
@@ -117,9 +111,26 @@ background-image-resolution: from-image;">
         </tr>
 
         @foreach ($componentes as $componente)
-            @php
-                // dd($componente);
-            @endphp
+            <tr>
+
+                <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
+
+                @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
+                    <td class="nota-valor" style="text-align: center">
+                    </td>
+                @endfor
+                <td class="nota-valor" style="text-align:center">
+
+
+
+                </td>
+
+                <td style="border-right: none;text-align:right; ">
+
+                </td>
+                <td style=" border-left: none"></td>
+
+            </tr>
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
@@ -142,6 +153,10 @@ background-image-resolution: from-image;">
                             } else {
                                 $ca = 0;
                             }
+                            /* if( $i==11){
+                        dd($ca);
+
+                    } */
                             if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
                                 array_push($medias_acumulada_linha, $ca);
                             } else {

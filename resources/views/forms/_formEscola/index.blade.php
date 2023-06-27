@@ -49,6 +49,10 @@
         <option value="Liceu">Liceu</option>
         <option value="Magistério">Magistério</option>
         <option value="Instituto">Instituto</option>
+        <option value="Técnico">Técnico</option>
+        <option value="Geral">Geral</option>
+
+
     </select>
  
 </div>

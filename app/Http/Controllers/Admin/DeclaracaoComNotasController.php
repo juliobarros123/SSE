@@ -75,11 +75,11 @@ class DeclaracaoComNotasController extends Controller
     $trimestres[2] = "III";
     $cont = 0;
 
-    $desciplinas =  Disciplina_Curso_Classe::all();
+    $disciplinas =  Disciplina_Curso_Classe::all();
   
-    foreach ($desciplinas as  $desciplina) {
+    foreach ($disciplinas as  $disciplina) {
 
-      $DadoGeral[$cont] = $this->buscarDadosDoAluno($bi, $desciplina->id);
+      $DadoGeral[$cont] = $this->buscarDadosDoAluno($bi, $disciplina->id);
       $cont++;
     }
 

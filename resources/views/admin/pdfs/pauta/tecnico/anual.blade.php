@@ -38,13 +38,10 @@
     </div>
     <table class="table">
         <thead>
-
-
             @php
                 $estatistica_resultados = collect();
                 $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
             @endphp
-
             <tr>
                 <th class="th" rowspan="2">Nº ORDEM</th>
                 <th class="th" rowspan="2">PROCESSO</th>
@@ -71,7 +68,24 @@
                     <th>MFT</th>
                     <th>EX</th>
                 @endif
-                <th colspan="1" rowspan="1" class="th">CA</th>
+
+                <th colspan="1" rowspan="1" class="th">CA({{ $turma->vc_classe }})</th>
+                @php
+                    $classes = fh_disciplinas_cursos_classes()
+                        ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
+                        ->where('disciplinas.id', $disciplina->id)
+                        ->where('classes.vc_classe', '<', $turma->vc_classe)
+                        ->select('classes.*', 'disciplinas.vc_nome')
+                        ->orderBy('classes.vc_classe', 'desc')
+                        ->get();
+                @endphp
+                @if ($cabecalho->vc_tipo_escola == 'Técnico' && $turma->vc_classe>=10 )
+                    @foreach ($classes as $classe)
+                        <th colspan="1" rowspan="1" class="th">CA({{ $classe->vc_classe }})</th>
+                    @endforeach
+        
+                    <th colspan="1" rowspan="1" class="th">CAF({{ $turma->vc_classe }})</th>
+                @endif
                 @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
                     <th colspan="1" rowspan="1" class="th">CFD</th>
                 @endif
@@ -100,7 +114,7 @@
 
                     <?php foreach ($disciplinas as $disciplina) {?>
                     @php
-                    /* dd($disciplinas); */
+                        /* dd($disciplinas); */
                         $mt1 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I'], $turma->it_idAnoLectivo);
                         $mt2 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['II'], $turma->it_idAnoLectivo);
                         $mt3 = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['III'], $turma->it_idAnoLectivo);
@@ -128,12 +142,39 @@
 
                     <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
                         {{ $ca }}</td>
+                    @php
+                        $classes = fh_disciplinas_cursos_classes()
+                            ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
+                            ->where('disciplinas.id', $disciplina->id)
+                            ->where('classes.vc_classe', '<', $turma->vc_classe)
+                            ->select('classes.*', 'disciplinas.vc_nome')
+                            ->orderBy('classes.vc_classe', 'desc')
+                            ->get();
+                        /* dd(    $classes ); */
+                        $ca_classe_anterior = 0;
+                    @endphp
+
+                    @if ($cabecalho->vc_tipo_escola == 'Técnico' && $turma->vc_classe>=10)
+                        @foreach ($classes as $classe)
+                            @php
+                                $ca_classe_anterior = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
+                            @endphp
+                            <td colspan="1" class="td"
+                                style="{{ $ca_classe_anterior >= 10 ? 'color:blue' : 'color:red' }}">
+                                {{ $ca_classe_anterior }}</td>
+                        @endforeach
 
 
-             
+                        @php
+                            $caf = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idClasse);
+                        @endphp
+                        <td colspan="1" class="td" style="{{ $caf >= 10 ? 'color:blue' : 'color:red' }}">
+                            {{ $caf }}</td>
+                    @endif
+
                     @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
                         @php
-                            $cfd = fha_cfd_ext($aluno->processo, $disciplina->id,$turma->it_idClasse);
+                            $cfd = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idClasse)
                         @endphp
 
                         <td colspan="1" class="td" style="{{ $cfd >= 10 ? 'color:blue' : 'color:red' }}">

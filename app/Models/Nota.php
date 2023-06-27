@@ -16,6 +16,7 @@ Email II: geral@itel.gov.ao*/
 namespace App\Models;
 
 use App\Models\Turma;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,8 @@ class Nota extends Model
             $hash_bcrypt = Hash::make(slug_gerar());
             $stringSemBarras = str_replace('/', '', $hash_bcrypt);
             $model->slug = $stringSemBarras;
+            $model->id_cabecalho =Auth::User()->id_cabecalho;
+
         });
     }
 

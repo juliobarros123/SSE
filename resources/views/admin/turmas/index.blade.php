@@ -73,7 +73,7 @@
                     @if (!$anolectivo)
                         <td>{{ $turma->vc_anoLectivo }}</td>
                     @endif
-                    <td>
+                    <td >
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -100,8 +100,8 @@
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                                             Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' 
                                     )
-                                        <a href="{{ route('notas-seca.inserir', $turma->id_turma ? $turma->id_turma : $turma->id) }}"
-                                            class="dropdown-item">Inserir nota seca</a>
+                                         <a href="{{ route('notas-finais.inserir',$turma->slug) }}"
+                                            class="dropdown-item">Inserir Notas Finais</a>
                                             @endif
                                         <a href="{{ route('turmas.eliminar', ['slug' => $turma->slug]) }}"
                                             class="dropdown-item"

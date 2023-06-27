@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('titulo', 'Escola/Listar')
- @section('conteudo')
+@section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
             <h3>Lista de Escolas</h3>
@@ -9,17 +9,17 @@
 
 
     @if (acc_admin_desenvolvedor())
-   
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-dark" href="{{ url('admin/escola/cadastrar') }}">
-            <strong class="text-light">Cadastrar</strong>
-        </a>
-       
-    </div>
-@endif
+        <div class="d-flex justify-content-end mb-3">
+            <a class="btn btn-dark" href="{{ url('admin/escola/cadastrar') }}">
+                <strong class="text-light">Cadastrar</strong>
+            </a>
+
+        </div>
+    @endif
+    <div class="table-responsive">
 
     <table id="example" class="display table table-hover">
-           <thead class="">
+        <thead class="">
             <tr class="text-center">
                 <th>ID</th>
                 <th>ESCOLA</th>
@@ -44,29 +44,29 @@
                     <td>{{ $cabecalho->it_telefone }}</td>
                     <td>{{ $cabecalho->vc_nif }}</td>
                     <td>{{ $cabecalho->vc_nomeMunicipio }}</td>
-                    <td>  <img src="{{ asset('/' . $cabecalho->assinatura_director) }}" id="myImg" alt=""
-                        width="50px">
-</td>
-                    
+                    <td> <img src="{{ asset('/' . $cabecalho->assinatura_director) }}" id="myImg" alt=""
+                            width="50px">
+                    </td>
+
                     <td>
 
                         @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                        <div class="dropdown">
-                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-clone" aria-hidden="true"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                <a class="dropdown-item" href="{{ route('admin/escola/editar', $cabecalho->id) }}">Editar
-                                </a>
-                                <a class="dropdown-item"
-                                    href="{{ route('admin/escola/visualizar', $cabecalho->id) }}">Visualizar
-                                </a>
+                                    <a class="dropdown-item"
+                                        href="{{ route('admin/escola/editar', $cabecalho->id) }}">Editar
+                                    </a>
+                                    <a class="dropdown-item"
+                                        href="{{ route('admin/escola/visualizar', $cabecalho->id) }}">Visualizar
+                                    </a>
 
+                                </div>
                             </div>
-                        </div>
-
                         @endif
 
                     </td>
@@ -74,19 +74,18 @@
             @endforeach
         </tbody>
     </table>
-    <script src="{{asset('/js/datatables/jquery-3.5.1.js')}}"></script>
+    </div>
+    <script src="{{ asset('/js/datatables/jquery-3.5.1.js') }}"></script>
 
-    <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>
+    <script src="{{ asset('/js/sweetalert2.all.min.js') }}"></script>
     @if (session('update'))
         <script>
             Swal.fire({
                 icon: 'success',
                 title: 'Escola editada com sucesso',
             })
-
         </script>
     @endif
     @include('admin.layouts.footer')
 
 @endsection
-

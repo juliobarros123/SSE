@@ -113,7 +113,7 @@
 
 
 
-        .desciplina {
+        .disciplina {
 
             width: 380px;
             padding-bottom: 0px;
@@ -402,7 +402,7 @@ background-image-resolution: from-image;">
                     @isset($nota[$disciplina->vc_acronimo])
                         <tr>
 
-                            <td class="desciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                            <td class="disciplina td td-boder">{{ $disciplina->vc_nome }}</td>
                             <td class="nota-valor td td-boder">
                                 @php
                                     $cfd = intval(isset($nota[$disciplina->vc_acronimo][0]['rec']) ? $nota[$disciplina->vc_acronimo][0]['rec'] : (isset($nota[$disciplina->vc_acronimo][0]['cfd']) ? $nota[$disciplina->vc_acronimo][0]['cfd'] : 0));
@@ -422,7 +422,7 @@ background-image-resolution: from-image;">
 
                 {{-- @if ($disciplina->vc_acronimo == 'E.C.S.')
                     <tr>
-                        <td class="desciplina td td-boder">Média do Plano Curricular (PC) </td>
+                        <td class="disciplina td td-boder">Média do Plano Curricular (PC) </td>
                         <td class="nota-valor td td-boder">{{ $media }} </td>
                         <td class="nota-extenso td td-boder-bottom">
                             {{ ucfirst(valorPorExtenso($media, false, false)) }}</td>
@@ -437,7 +437,7 @@ background-image-resolution: from-image;">
         @endforeach
         <tr>
 
-            <td class="desciplina td td-boder "><strong> Média Anual</strong></td>
+            <td class="disciplina td td-boder "><strong> Média Anual</strong></td>
             <td class="nota-valor td td-boder">
 
                 {{ $media }}
@@ -450,7 +450,7 @@ background-image-resolution: from-image;">
         </tr>
         {{-- <tr>
 
-            <td class="desciplina td td-boder "><strong>Prova
+            <td class="disciplina td td-boder "><strong>Prova
                     de Aptidão Profissional
                 </strong></td>
             <td class="nota-valor td td-boder">
@@ -469,7 +469,7 @@ background-image-resolution: from-image;">
     </tr> --}}
         {{-- <tr>
 
-        <td class="desciplina td td-boder "><strong>Nota de Estagio Curricular
+        <td class="disciplina td td-boder "><strong>Nota de Estagio Curricular
             </strong></td>
         <td class="nota-valor td td-boder">
 
@@ -483,7 +483,7 @@ background-image-resolution: from-image;">
     </tr> --}}
         <tr>
 
-            <td class="desciplina td td-boder "><strong>Média Final do Curso (4º MA+PAP+NEC)/6
+            <td class="disciplina td td-boder "><strong>Média Final do Curso (4º MA+PAP+NEC)/6
                 </strong></td>
             <td class="nota-valor td td-boder">
 

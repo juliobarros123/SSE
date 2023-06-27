@@ -6,7 +6,9 @@
     <style>
         <?php
         echo $css;
-        ?>
+        ?> .disciplina {
+            width: 350px;
+        }
     </style>
 </head>
 
@@ -28,39 +30,45 @@ background-image-resolution: from-image;">
             @php
                 $medias_acumulada_linha = [];
             @endphp
-            @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
+            @for ($i = $classe_final->vc_classe; $i <= $classe_final->vc_classe; $i++)
                 @php
                     $classe = fh_classes()
                         ->where('classes.vc_classe', $i)
                         ->first();
-                    $matricula = fh_matriculas()
-                        ->where('alunnos.processo', $aluno->processo)
-                        ->where('classes.vc_classe', $i)
-                        ->get();
+                        $matricula = fh_matriculas()
+                                ->where('alunnos.processo', $aluno->processo)
+                                ->where('classes.vc_classe', '<=', $i)
+                                ->get();
+
                     $matricula = $matricula->sortDesc()->first();
-                    
+                // dd(   $matricula);
                     if ($matricula) {
-                        $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
+                        $ca = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe_final->id);
                     } else {
                         $ca = 0;
                     }
+                    // dd( $ca,"l");
                     if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
+                        // dd("ol");
                         array_push($medias_acumulada_linha, $ca);
                     }
+                    // dd($medias_acumulada_linha);
                 @endphp
             @endfor
 
             @php
+                // dd($medias_acumulada_linha);
                 if (count($medias_acumulada_linha)) {
                     $media = fh_arredondar(media($medias_acumulada_linha));
                     array_push($medias_acumulada_coluna, $media);
                 }
-                
+                // dd(  $media);
             @endphp
         @endforeach
     @endforeach
 
     @php
+    // dd($medias_acumulada_coluna);
         $medias_acumulada_coluna = fh_arredondar(media($medias_acumulada_coluna));
     @endphp
     @php
@@ -69,24 +77,18 @@ background-image-resolution: from-image;">
     <div class="bib">
         <div>a) <strong>{{ $cabecalho->vc_nomeDirector }}</strong>, Diretor(a) do {{ $cabecalho->vc_escola }} Nº
             {{ $cabecalho->vc_numero_escola }}, criada,
-            sob Decreto Executivo nº {{ $info_certificado->decreto }}.</div>
-
-
-        <div class="bib-part">
-            Certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
+            sob Decreto Executivo nº {{ $info_certificado->decreto }},
+            certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>,
+            filho(a) de
             {{ $aluno->vc_nomePai }} e de
             {{ $aluno->vc_nomeMae }}, nascida(o) aos {{ dataPorExtenso(sub_traco_barra($aluno->dt_dataNascimento)) }},
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}.
-
-        </div>
-
-        <div class="bib-part">
-            Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, concluiu no ano lectivo de
+            {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do
             {{ $info_certificado->ensino }}
-            GERAL,
+            , na área de <strong>{{ $aluno->vc_nomeCurso }} </strong>
             conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
@@ -107,46 +109,60 @@ background-image-resolution: from-image;">
         @endphp
 
         <tr>
-            <th class="th-cab-notas" colspan="1" style="text-align: center">DISCIPLINA
+            <th class="th-cab-notas" colspan="1" style="text-align: left">DISCIPLINA
             </th>
-            @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
-                <th class="th-cab-notas" style="text-align: center">{{ $i }}ª CLASSE</th>
-            @endfor
             <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
             <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
         </tr>
 
         @foreach ($componentes as $componente)
-            @php
-                // dd($componente);
-            @endphp
+            <tr>
+
+                <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
+
+
+                <td class="nota-valor" style="text-align:center">
+
+
+
+                </td>
+
+                <td style="border-right: none;text-align:right; ">
+
+                </td>
+                <td style=" border-left: none"></td>
+
+            </tr>
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
                     <td class="disciplina td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
-                    @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
+                    @for ($i = $classe_final->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
                             $classe = fh_classes()
                                 ->where('classes.vc_classe', $i)
                                 ->first();
+                            // dd(   $classe);
                             $matricula = fh_matriculas()
                                 ->where('alunnos.processo', $aluno->processo)
-                                ->where('classes.vc_classe', $i)
+                                ->where('classes.vc_classe', '<=', $i)
                                 ->get();
-                            $matricula = $matricula->sortDesc()->first();
-                            
+                            $matricula = $matricula->sortBy([['vc_classe', 'desc']])->first();
+                           
+                            // dd( $matricula );
                             if ($matricula) {
                                 // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                                $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                            } else {
-                                $ca = 0;
+                                $ca = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
+                           
                             }
-                            if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
+                            // dd( $ca);
+                            if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe_final->id)) {
                                 array_push($medias_acumulada_linha, $ca);
                             } else {
                                 $ca = -1;
                             }
+                            // dd( $ca );
                             /* array_push($medias_acumulada_linha, $ca); */
                         @endphp
                         <td class="nota-valor" style="text-align: center">
@@ -166,12 +182,6 @@ background-image-resolution: from-image;">
                         
                     @endphp
 
-                    <td class="nota-valor" style="text-align:center">
-
-
-                        {{ menor_zero($media) ? $media : '-------' }}
-
-                    </td>
                     @php
                         if ($media <= -1) {
                             $media = 0;

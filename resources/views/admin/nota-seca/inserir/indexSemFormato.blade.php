@@ -15,7 +15,7 @@
 
         <div class="card-body">
             <form method="POST" class="" target="_blank"
-                action="{{route('notas-seca.cadastrar',['id_turma'=>$id_turma])}}">
+                action="{{route('notas-finais.cadastrar',['id_turma'=>$id_turma])}}">
                 @csrf
                 <?php $contador = 1; ?>
 

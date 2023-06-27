@@ -41,9 +41,10 @@ class CartaoAlunosController extends Controller
 
     public function recebeAluno(Request $request)
     {
+       
         $matricula=fh_matriculas()
         ->where('alunnos.processo', $request->processo)
-        ->where('anoslectivos.id', $request->id_ano_lectivo)
+        ->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo)
         ->first();
         if( $matricula):
         $data['request']=$request->all();

@@ -70,7 +70,7 @@ class AlunnoController extends Controller
 
             if ($aluno) {
                 $turmas = fh_turmas()->where('cursos.id', $aluno->id_curso)
-                    ->where('anoslectivos.id', fha_ano_lectivo_publicado()->id_anoLectivo)
+                    ->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)
                     ->where('turmas.it_qtdeAlunos', '>', 0)
                     ->get();
             }
@@ -87,8 +87,12 @@ class AlunnoController extends Controller
         // dd(   $response['cursos']);
         $response['classes'] = fh_classes()->get();
         // dd($response['classes']);
-        $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->orderby('id', 'desc')->first();
+        $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('idadesdecandidaturas.id', 'desc')->first();
+        if (!$response['idadesdecandidaturas']) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
 
+        }
+// dd(  $response['idadesdecandidaturas']);
         $response['cabecalho'] = fh_cabecalho();
         $response['provincias'] = fh_provincias()->get();
         return view('admin.alunos.importar.index', $response);
@@ -114,7 +118,12 @@ class AlunnoController extends Controller
             // $vezes = Candidatura::where([['it_estado_candidato', 1], ['vc_bi', $request->vc_bi]])->count();
 
             //rotina que cadastra o formulário
-
+            $processo_existe=fh_alunos()->where('alunnos.processo',$request->processo)->count();
+            if ($processo_existe) {
+                
+                    return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => "Erro, O processo $request->processo Existe"]);
+                
+            }
             $processo_actual = fh_processo_actual()->first();
             if ($processo_actual) {
                 if ($processo_actual->it_processo < $request->processo) {
@@ -170,7 +179,7 @@ class AlunnoController extends Controller
                 'id_classe' => $request->id_classe,
                 'id_curso' => isset($request->id_curso) ? $request->id_curso :
                 fh_cursos()->first()->id,
-                'id_ano_lectivo' => fh_ultimo_ano_lectivo()->id
+                'id_ano_lectivo' => fh_anos_lectivos_publicado()->first()->id_anoLectivo
             ]);
 
             Alunno::create([

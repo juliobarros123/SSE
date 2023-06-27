@@ -105,7 +105,7 @@
                                     <a href="{{ route('turmas.editar', $row->id_turma ? $row->id_turma : $row->id) }}"
                                         class="dropdown-item">Editar</a>
                                         @endif
-                                    <a href="{{ route('notas-seca.inserir', $row->id_turma ? $row->id_turma : $row->id) }}"
+                                    <a href="{{ route('notas-finais.inserir', $row->id_turma ? $row->id_turma : $row->id) }}"
                                         class="dropdown-item">Inserir nota seca</a>
                                     <a href="{{ route('turmas.eliminar', ['id' => $row->id_turma ? $row->id_turma : $row->id]) }}"
                                         class="dropdown-item" data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>

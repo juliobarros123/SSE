@@ -112,7 +112,7 @@
         }
 
 
-        .desciplina {
+        .disciplina {
 
             width: 270px;
             padding-bottom: 0px;
@@ -426,7 +426,7 @@ background-image-resolution: from-image;">
 
                         <tr>
 
-                            <td class="desciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                            <td class="disciplina td td-boder">{{ $disciplina->vc_nome }}</td>
                             <td class="nota-valor td td-boder">
                                 {{ menor_zero($medias_anuas_disciplina[0]) ? $medias_anuas_disciplina[0] : '' }}</td>
                             <td class="nota-valor td td-boder">
@@ -454,7 +454,7 @@ background-image-resolution: from-image;">
 
                 {{-- @if ($disciplina->vc_acronimo == 'E.C.S.')
                     <tr>
-                        <td class="desciplina td td-boder">Média do Plano Curricular (PC) </td>
+                        <td class="disciplina td td-boder">Média do Plano Curricular (PC) </td>
                         <td class="nota-valor td td-boder">{{ $media }} </td>
                         <td class="nota-extenso td td-boder-bottom">
                             {{ ucfirst(valorPorExtenso($media, false, false)) }}</td>
@@ -470,7 +470,7 @@ background-image-resolution: from-image;">
 
         {{-- <tr>
 
-            <td class="desciplina td td-boder "><strong>Prova
+            <td class="disciplina td td-boder "><strong>Prova
                     de Aptidão Profissional
                 </strong></td>
             <td class="nota-valor td td-boder">
@@ -489,7 +489,7 @@ background-image-resolution: from-image;">
     </tr> --}}
         {{-- <tr>
 
-        <td class="desciplina td td-boder "><strong>Nota de Estagio Curricular
+        <td class="disciplina td td-boder "><strong>Nota de Estagio Curricular
             </strong></td>
         <td class="nota-valor td td-boder">
 

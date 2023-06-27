@@ -58,6 +58,8 @@
                                         data-target=".bd-example-modal-sm{{ $dt->id }}">Pauta Trimestral</a>
                                     <a href="{{ route('admin.pautaFinal.gerar', $dt->slug_turma) }}" class="dropdown-item"
                                         target="_blank">Pauta Anual</a>
+                                        <a href="{{ route('notas-finais.inserir',$dt->slug_turma) }}"
+                                            class="dropdown-item">Inserir Notas Finais</a>
 
 
                                 </div>

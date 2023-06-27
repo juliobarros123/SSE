@@ -111,7 +111,7 @@
         }
 
 
-        .desciplina {
+        .disciplina {
 
             width: 270px;
             padding-bottom: 0px;
@@ -370,7 +370,7 @@ background-image-resolution: from-image;">
         if ($matricula) {
 
         $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'],
-        $matricula->id_ano_lectivo);
+        $matricula->it_idAnoLectivo);
         } else {
         $ca = 0;
         }
@@ -440,7 +440,7 @@ background-image-resolution: from-image;">
             $componente->id)->select('disciplinas.*')->get() as $disciplina)
             <tr>
 
-                <td class="desciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                <td class="disciplina td td-boder">{{ $disciplina->vc_nome }}</td>
 
                 @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                     @php
@@ -451,9 +451,9 @@ background-image-resolution: from-image;">
                     $matricula = $matricula->sortDesc()->first();
 
                     if ($matricula) {
-                    // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->id_ano_lectivo);
+                    // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
                     $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'],
-                    $matricula->id_ano_lectivo);
+                    $matricula->it_idAnoLectivo);
                     } else {
                     $ca = 0;
                     }

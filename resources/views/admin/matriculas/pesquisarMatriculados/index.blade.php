@@ -58,7 +58,7 @@
 
                     <div class="form-group col-md-4">
                         <label for="id_classe" class="form-label">Classe:</label>
-                        <select name="id_classe" id="id_classe" class="form-control">
+                        <select name="id_classe" id="id_classe" class="form-control" required>
                             <option value="Todas" >Todas</option>
                             @foreach ($classes as $classe)
                                 <option value="{{ $classe->id }}">

@@ -73,7 +73,7 @@
             <!-- Start Right navbar links -->
             <ul class="navbar-nav ml-auto d-flex flex-row flex-wrap mt-1">
                 <!-- itens a direita do menu -->
-
+{{-- @dump($ano_lectivo_publicado) --}}
                 {{-- <li class="nav-item ">
                     <div class="nav-item-user">
                         School management: {{ fh_cabecalho()->vc_escola }}

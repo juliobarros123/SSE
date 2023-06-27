@@ -58,9 +58,9 @@
     </div>
     {{-- @dump($idadesdecandidaturas) --}}
 
-    @php
+    {{-- @php
        $idadesdecandidaturas= fh_idades_admissao()->first();
-    @endphp
+    @endphp --}}
         @if ($idadesdecandidaturas)
         <div class="form-group col-md-4">
             <div class="form-date">
@@ -75,7 +75,7 @@
         <div class="form-group col-md-4">
             <div class="form-date">
                 <label for="dt_dataNascimento" class="form-label">Data de Nascimento <small
-                        class="campo-obrigatorio">*</small></label>
+                        class="campo-obrigatorio">*(Não existe um intervalo de idades admissível)</small></label>
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
                     value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" required />
             </div>
@@ -180,7 +180,7 @@
         <label for="id_curso" class="form-label">Curso à se Candidatar <small
                 class="campo-obrigatorio">*</small></label>
         {{-- @dump($cursos) --}}
-        <select class="form-control" name="id_curso" id="id_curso">
+        <select class="form-control" name="id_curso" id="id_curso_sem_todas">
             @isset($candidato)
                 <option value="{{ $candidato->id_curso }}">{{ $candidato->vc_shortName }}</option>
             @else

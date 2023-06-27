@@ -345,7 +345,7 @@ class MatriculaController extends Controller
 
 
             $response['turmas'] = fh_turmas()->where('cursos.id', $matricula->it_idCurso)
-                ->where('anoslectivos.id', fha_ano_lectivo_publicado()->id_anoLectivo)
+                ->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)
                 ->where('turmas.it_qtdeAlunos', '>', 0)
                 ->get();
             $response['matricula'] = $matricula;

@@ -125,7 +125,7 @@ class TurmaController extends Controller
                 $request->id_ano_lectivo = $filtro_turma['id_ano_lectivo'];
             }
         }
-        $turmas = fh_turmas();
+        $turmas = fh_turmas_2();
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
             $turmas = $turmas->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);

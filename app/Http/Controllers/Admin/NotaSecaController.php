@@ -32,8 +32,8 @@ class NotaSecaController extends Controller
         $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
         $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
- 
-    public  function fh_disciplinas_cursos_classes()
+
+    public function fh_disciplinas_cursos_classes()
     {
         $datas = DB::table('disciplinas_cursos_classes')
             ->join('disciplinas', 'disciplinas_cursos_classes.it_disciplina', '=', 'disciplinas.id')
@@ -44,226 +44,27 @@ class NotaSecaController extends Controller
 
         return $datas;
     }
-    public function inserir($id_turma)
+    public function inserir($slug_turma)
     {
+        $response['turma'] = fh_turmas_slug($slug_turma)->first();
 
+        if ($response['turma']) {
+            //   dd( $response['turma']);
+            $response['alunos'] = fha_turma_alunos($slug_turma);
+            $response['disciplinas_cursos_classes'] = fh_disciplinas_cursos_classes()
+                ->where('cursos.id', $response['turma']->it_idCurso)
+                ->where('classes.id', $response['turma']->it_idClasse)->
+                select('disciplinas.vc_acronimo', 'disciplinas_cursos_classes.*')->get();
+            // fha_disciplinas(, $response['turma']->it_idClasse);
 
+            // dd($response['turma']->it_idCurso);
 
-        $response['id_turma'] = $id_turma;
-        $response['turma'] = Turma::find($id_turma);
-        $curso = Curso::find($response['turma']->it_idCurso);
-        $response['disciplinas'] = $this->pegarDisciplinas($id_turma);
-
-        $orderDisciplinas = $this->orderDisciplinas($curso->vc_shortName, $response['turma']->vc_classeTurma);
-        // dd($orderDisciplinas,  $response['disciplinas'] );
-        $response['alunos'] = $this->turma->alunos($id_turma);
-        // dd($orderDisciplinas->count());
-        if ($orderDisciplinas->count()) {
-            $response['disciplinas'] = $this->orgDisciplinas($orderDisciplinas, $response['disciplinas']);
-            // dd(    $response['disciplinas'] );
+            return view('admin.nota-seca.inserir.index', $response);
         } else {
-            $response['disciplinas'] =   $response['disciplinas'];
-            return view('admin.nota-seca.inserir.indexSemFormato', $response);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado!']);
         }
-
-
-        //   dd( $disciplinas);
-
-
-        return view('admin.nota-seca.inserir.index', $response);
     }
-    public function orgDisciplinas($padraoDisciplinas, $dccs)
-    {
-        $cont = 0;
-        $novaOrdem = collect();
-        foreach ($dccs as $dcc) {
 
-            $result = $padraoDisciplinas->where("disc", $dcc->vc_acronimo);
-
-            if ($result->count()) {
-
-                $novaOrdem->push([
-                    "id" => $dcc->id,
-                    "it_disciplina" => $dcc->it_disciplina,
-                    "it_curso" => $dcc->it_curso,
-                    "it_classe" => $dcc->it_classe,
-                    "it_estado_dcc" => $dcc->it_estado_dcc,
-                    "created_at" => $dcc->created_at,
-                    "updated_at" => $dcc->updated_at,
-                    "vc_nome" => $dcc->vc_nome,
-                    "vc_acronimo" => $dcc->vc_acronimo,
-                    "vc_nomeCurso" => $dcc->vc_nomeCurso,
-                    "vc_classe" => $dcc->vc_classe,
-                    "position" => $result[$result->keys()[0]]["position"]
-
-                ]);
-                $novaOrdem->all();
-                $cont++;
-            }
-        }
-
-
-
-        $sorted = $novaOrdem->sortBy([
-            ["position", "asc"],
-
-        ]);
-        $sorted->values()->all();
-        return $sorted;
-    }
-    public function orderDisciplinas($abbrCurso, $classe)
-    {
-        if ($abbrCurso == "Informática" && $classe == 11) {
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'QUI', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'ELECTR', 'position' => 7],
-                ['disc' => 'EMP', 'position' => 8],
-                ['disc' => 'T.L.P.', 'position' => 9],
-                ['disc' => 'S.E.A.C.', 'position' => 10],
-                ['disc' => 'T.I.C.', 'position' => 11],
-                ['disc' => 'DES. TÉC.', 'position' => 12]
-
-            ];
-        } else if ($abbrCurso == "Informática" && $classe == 10) {
-            // dd("ola");
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'QUI', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'ELECTR', 'position' => 7],
-                ['disc' => 'EMP', 'position' => 8],
-                ['disc' => 'T.L.P.', 'position' => 9],
-                ['disc' => 'S.E.A.C.', 'position' => 10],
-                ['disc' => 'T.I.C.', 'position' => 11]
-
-
-            ];
-        } else if ($abbrCurso == "Informática" && $classe == 12) {
-            // dd($abbrCurso == "Informática" && $classe == 12);
-            $discOrg = [
-                ['disc' => 'MAT', 'position' => 1],
-                ['disc' => 'FÍS', 'position' => 2],
-                ['disc' => 'O.G.I.', 'position' => 3],
-                ['disc' => 'EMP', 'position' => 4],
-                ['disc' => 'T.L.P.', 'position' => 5],
-                ['disc' => 'T.R.E.I.', 'position' => 6],
-                ['disc' => 'S.E.A.C.', 'position' => 7],
-                ['disc' => 'PROJ. TECN.', 'position' => 8],
-                ['disc' => 'ING. TEC', 'position' => 9],
-
-            ];
-        } else if ($abbrCurso == "Electrónica e Telecomunicações" && $classe == 10) {
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'QUI', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'INF', 'position' => 7],
-                ['disc' => 'EMP', 'position' => 8],
-                ['disc' => 'E. ELECTR.', 'position' => 9],
-                ['disc' => 'TEC. TELECOM.', 'position' => 10],
-                ['disc' => 'P.O.L.', 'position' => 11],
-
-
-            ];
-        } else if ($abbrCurso == "Electrónica e Telecomunicações" && $classe == 11) {
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'QUI', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'INF', 'position' => 7],
-                ['disc' => 'EMP', 'position' => 8],
-                ['disc' => 'DES. TÉC.', 'position' => 9],
-                ['disc' => 'E. ELECTR.', 'position' => 10],
-                ['disc' => 'SIST. DIG.', 'position' => 11],
-                ['disc' => 'TEC. TELECOM.', 'position' => 12],
-                ['disc' => 'P.O.L.', 'position' => 13],
-
-            ];
-        } else if ($abbrCurso == "Electrónica e Telecomunicações" && $classe == 12) {
-            $discOrg = [
-                ['disc' => 'MAT', 'position' => 1],
-                ['disc' => 'FÍS', 'position' => 2],
-                ['disc' => 'O.G.I.', 'position' => 3],
-                ['disc' => 'EMP', 'position' => 4],
-                ['disc' => 'E. ELECTR.', 'position' => 5],
-                ['disc' => 'SIST. DIG.', 'position' => 6],
-                ['disc' => 'TELCOM', 'position' => 7],
-                ['disc' => 'TEC. TELECOM.', 'position' => 8],
-                ['disc' => 'P.O.L.', 'position' => 9],
-                ['disc' => 'PROJ. TECN.', 'position' => 10],
-                ['disc' => 'ING. TEC', 'position' => 11],
-            ];
-        } else if ($abbrCurso == "Info e Sistemas Multimédia" && $classe == 10) {
-
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'INF', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'EMP', 'position' => 7],
-                ['disc' => 'DES. TÉC.', 'position' => 8],
-                ['disc' => 'SIST . INF.', 'position' => 9],
-                ['disc' => 'D.C.A.', 'position' => 10],
-                ['disc' => 'TEC. MULT', 'position' => 11],
-
-
-            ];
-        } else if ($abbrCurso == "Info e Sistemas Multimédia" && $classe == 11) {
-            $discOrg = [
-                ['disc' => 'L. PORT', 'position' => 1],
-                ['disc' => 'L. ING', 'position' => 2],
-                ['disc' => 'F.A.I.', 'position' => 3],
-                ['disc' => 'MAT', 'position' => 4],
-                ['disc' => 'INF', 'position' => 5],
-                ['disc' => 'FÍS', 'position' => 6],
-                ['disc' => 'EMP', 'position' => 7],
-
-                ['disc' => 'SIST . INF.', 'position' => 8],
-                ['disc' => 'D.C.A.', 'position' => 9],
-                ['disc' => 'TEC. MULT', 'position' => 10],
-
-
-            ];
-        } else if ($abbrCurso == "Info e Sistemas Multimédia" && $classe == 12) {
-            $discOrg = [
-                ['disc' => 'MAT', 'position' => 1],
-                ['disc' => 'FÍS', 'position' => 2],
-                ['disc' => 'O.G.I.', 'position' => 3],
-                ['disc' => 'EMP', 'position' => 4],
-                ['disc' => 'SIST . INF.', 'position' => 5],
-                ['disc' => 'D.C.A.', 'position' => 6],
-                ['disc' => 'TEC. MULT', 'position' => 7],
-                ['disc' => 'P.P.M.', 'position' => 8],
-                ['disc' => 'PROJ. TECN.', 'position' => 9],
-                ['disc' => 'ING. TEC', 'position' => 10],
-            ];
-        } else if ($classe == 13) {
-            $discOrg = [
-                ['disc' => 'PROJ. TECN.', 'position' => 1],
-                ['disc' => 'P.A.P.', 'position' => 2],
-                ['disc' => 'E.C.S.', 'position' => 3]
-            ];
-        } else {
-            $discOrg = collect();
-        }
-        return collect($discOrg);
-    }
     public function pegar($id_turma)
     {
     }
@@ -271,9 +72,9 @@ class NotaSecaController extends Controller
     {
         $id_curso = Turma::find($id_turma)->it_idCurso;
         $id_classe = Turma::find($id_turma)->it_idClasse;
-        $disciplinas = $this->fh_disciplinas_cursos_classes()->where('classes.id',     $id_classe)
-            ->where('cursos.id',  $id_curso)->get();
-        return     $disciplinas;
+        $disciplinas = $this->fh_disciplinas_cursos_classes()->where('classes.id', $id_classe)
+            ->where('cursos.id', $id_curso)->get();
+        return $disciplinas;
     }
     public function vrf_disciplina_terminal($id_disciplina, $id_turma, $estado, $processoAluno, $classe)
     {
@@ -288,10 +89,10 @@ class NotaSecaController extends Controller
         for ($cont = $nota->classe; $cont >= 10; $cont--) {
             $turma = Turma::find($nota->id_turma);
             $classe = Classe::where('vc_classe', $cont)->first();
-            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id',    $classe->id)
-                ->where('disciplinas.id',   $nota->disciplina)
+            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id', $classe->id)
+                ->where('disciplinas.id', $nota->disciplina)
                 ->where('cursos.id', $turma->it_idCurso)->first();
-            $this->updateNota($nota->processo, $nota,  $turma->it_idClasse,  $turma->it_idAnoLectivo,   $dcc->id, $turma->id);
+            $this->updateNota($nota->processo, $nota, $turma->it_idClasse, $turma->it_idAnoLectivo, $dcc->id, $turma->id);
         }
         // $divisor = $this->acharDivisor($nota->classe);
         // $mts = $this->dividirNota($nota->nota, $divisor);
@@ -300,7 +101,8 @@ class NotaSecaController extends Controller
     {
         $classes = array();
         if ($estado == 1) {
-            $processosAluno = $this->matricula->processosAluno($processoAluno)->where('classes.vc_classe', '<', $classe)->get();;
+            $processosAluno = $this->matricula->processosAluno($processoAluno)->where('classes.vc_classe', '<', $classe)->get();
+            ;
         } else {
             $processosAluno = $this->matricula->processosAluno($processoAluno)->get();
         }
@@ -309,9 +111,9 @@ class NotaSecaController extends Controller
         $tllClassesInseridas = 0;
         foreach ($processosAluno as $processo) {
 
-            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id',    $processo->it_idClasse)
+            $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id', $processo->it_idClasse)
                 ->where('cursos.id', $processo->it_idCurso)
-                ->where('disciplinas.id',   $id_disciplina)
+                ->where('disciplinas.id', $id_disciplina)
                 ->first();
             $turma = Turma::find($processo->it_idTurma);
             // dd($turma);
@@ -324,25 +126,34 @@ class NotaSecaController extends Controller
         }
         return $classes;
     }
-    public function cadastrar(Request $request, $id_turma)
+    public function cadastrar(Request $request, $slug_turma)
     {
 
-        $disciplinas = $this->pegarDisciplinas($id_turma);
-        $alunos = $this->turma->alunos($id_turma);
-        $turma = Turma::find($id_turma);
+        $turma = fh_turmas_slug($slug_turma)->first();
+
+        $alunos = fha_turma_alunos($slug_turma);
+        $disciplinas_cursos_classes = fh_disciplinas_cursos_classes()
+            ->where('cursos.id', $turma->it_idCurso)
+            ->where('classes.id', $turma->it_idClasse)->
+            select('disciplinas.vc_acronimo', 'disciplinas_cursos_classes.*')->get();
+// dd($request);
         $id_curso = $turma->it_idCurso;
         $id_classe = $turma->it_idClasse;
         $it_idAnoLectivo = $turma->it_idAnoLectivo;
         foreach ($alunos as $aluno) {
-            foreach ($disciplinas as $item) {
+            foreach ($disciplinas_cursos_classes as $dcc) {
+                if (isset($request["idDCC_$dcc->id" . "_" . "$aluno->processo"])) {
+                    if($aluno->processo==2){
+                        // dd($request["idDCC_$dcc->id" . "_" . "$aluno->processo"],$aluno->processo,$dcc->id);
 
-                if (isset($request["idDCC_$item->id" . "_" . "$aluno->id_aluno"])) {
-                    $this->updateNota($aluno->id_aluno, $request["idDCC_$item->id" . "_" . "$aluno->id_aluno"],   $id_classe,  $it_idAnoLectivo,  $item->id, $id_turma);
+                    }
+                    $this->updateNota($aluno->processo, $request["idDCC_$dcc->id" . "_" . "$aluno->processo"], $id_classe, $it_idAnoLectivo, $dcc->id, $turma->id);
                 }
             }
         }
 
-        return redirect()->back()->with('status', '1');
+        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => "Notas cadastradas com sucesso"]);
+
 
         // if ($tllClassesInseridas) {
         //     
@@ -358,7 +169,7 @@ class NotaSecaController extends Controller
     public function gerarPencentualDecimal($number)
     {
         $percentualDecimal = $number / 100;
-        return   $percentualDecimal;
+        return $percentualDecimal;
     }
     public function eliminarElement($element, $collection)
     {
@@ -367,8 +178,8 @@ class NotaSecaController extends Controller
         $keys->all();
         foreach ($keys as $key) {
             if ($collection[$key] == $element) {
-                $collection =  $collection->except([$key]);
-                return  $collection;
+                $collection = $collection->except([$key]);
+                return $collection;
             }
         }
     }
@@ -401,51 +212,61 @@ class NotaSecaController extends Controller
         $fl_nota2 += $notaComplementar;
         $fl_mac += $notaComplementar;
 
-        return [floor($fl_nota1),floor($fl_nota2+1),floor($fl_mac)];
+        return [floor($fl_nota1), floor($fl_nota2 + 1), floor($fl_mac)];
     }
     public function updateNota($processo, $nota, $id_classe, $id_anoLectivo, $id_CCD, $it_idTurma)
     {
 
         $trimestre = "I";
-
+        $aluno = fha_aluno_processo($processo);
 
         while ($trimestre != "IIII") {
-            $notas = $this->gerarNotasTrimestral($nota);
 
 
-            $mediana = (($notas[0] + $notas[1] + $notas[0]) / 3 );
-            $linha =  Nota::where('id_aluno', $processo)
-                ->where('id_classe', $id_classe)
-                ->where('it_disciplina', $id_CCD)
-                ->where('id_turma', $it_idTurma)
-                ->where('vc_tipodaNota', $trimestre)
-                ->where('id_ano_lectivo', $id_anoLectivo)->count();
+            $linha = fh_notas()
+                ->where('alunnos.processo', $processo)
+                ->where('notas.id_classe', $id_classe)
+                ->where('notas.id_disciplina_curso_classe', $id_CCD)
+                ->where('notas.id_turma', $it_idTurma)
+                ->where('notas.vc_tipodaNota', $trimestre)
+                ->where('notas.id_ano_lectivo', $id_anoLectivo)->count();
+                // dd(   $linha );
             if ($linha) {
-                Nota::where('id_aluno', $processo)
-                    ->where('id_classe', $id_classe)
-                    ->where('it_disciplina', $id_CCD)
-                    ->where('vc_tipodaNota', $trimestre)
-                    ->where('id_ano_lectivo', $id_anoLectivo)
-                    ->where('id_turma', $it_idTurma)
+                fh_notas()
+                    ->where('alunnos.processo', $processo)
+                    ->where('notas.id_classe', $id_classe)
+                    ->where('notas.id_disciplina_curso_classe', $id_CCD)
+                    ->where('notas.id_turma', $it_idTurma)
+                    ->where('notas.vc_tipodaNota', $trimestre)
+                    ->where('notas.id_ano_lectivo', $id_anoLectivo)
                     ->update([
                         'fl_nota1' => $nota,
-                        'fl_nota2' =>  $nota,
+                        'fl_nota2' => $nota,
                         'fl_mac' => $nota,
                         'fl_media' => $nota,
 
                     ]);
+                    // if($processo==2 && $id_CCD=3){
+                    // dd(  fh_notas()
+                    // ->where('alunnos.processo', $processo)
+                    // ->where('notas.id_classe', $id_classe)
+                    // ->where('notas.id_disciplina_curso_classe', $id_CCD)
+                    // ->where('notas.id_turma', $it_idTurma)
+                    // ->where('notas.vc_tipodaNota', $trimestre)
+                    // ->where('notas.id_ano_lectivo', $id_anoLectivo)->get());
+                    // }
             } else {
                 Nota::create([
-                    'id_aluno' => $processo,
+                    'id_aluno' => $aluno->id,
                     'id_classe' => $id_classe,
-                    'it_disciplina' => $id_CCD,
+                    'id_disciplina_curso_classe' => $id_CCD,
                     'vc_tipodaNota' => $trimestre,
                     'id_turma' => $it_idTurma,
                     'id_ano_lectivo' => $id_anoLectivo,
                     'fl_nota1' => $nota,
                     'fl_nota2' => $nota,
-                    'fl_mac' =>$nota,
-                    'fl_media' =>$nota,
+                    'fl_mac' => $nota,
+                    'fl_media' => $nota,
                 ]);
             }
             $trimestre = $trimestre . 'I';

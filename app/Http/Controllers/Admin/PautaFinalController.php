@@ -71,7 +71,13 @@ class PautaFinalController extends Controller
             $mpdf->setHeader();
             $this->Logger->Log('info', 'Imprimiu Pauta Anual com o título ' . $data['titulo']);
             // dd($response);
-            $html = view("admin.pdfs.pauta.anual", $data);
+            // if ( $data['turma']->vc_classe <= 9 && $data['cabecalho']->vc_tipo_escola == "Geral") {
+            //     $html = view("admin.pdfs.pauta.anual", $data);
+            // } else if($data['turma']->vc_classe >=10 && $data['cabecalho']->vc_tipo_escola == "Técnico")  {
+                $html = view("admin.pdfs.pauta.tecnico.anual", $data);
+
+
+            // } 
 
             $mpdf->writeHTML($html);
 

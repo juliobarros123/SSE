@@ -875,49 +875,49 @@
     </script>
 
 
-<script>
-    $('#id_curso_sem_todas').change(function() {
-        var curso = $(this).find("option:selected").text();
-        // console.log(curso);
-        // alert("ola");
-        var url = "{{ url('/') }}"
-        url = url + '/classes_por_curso/' + curso;
+    <script>
+        $('#id_curso_sem_todas').change(function() {
+            var curso = $(this).find("option:selected").text();
+            // console.log(curso);
+            // alert("ola");
+            var url = "{{ url('/') }}"
+            url = url + '/classes_por_curso/' + curso;
 
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: url,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            async: false,
-            success: function(classes) {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                async: false,
+                success: function(classes) {
 
-                console.log(classes);
-                // alert("ola");
-                $("#id_classe").empty();
-                $("#id_classe").append('<option value="">Selecciona a Classe</option>');
-           
-
-                $.each(classes, function(index, classe) {
-
-                    //  console.log(classe,)
-                    $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
-                        .vc_classe +
-                        'ª Classe</option>');
+                    console.log(classes);
+                    // alert("ola");
+                    $("#id_classe").empty();
+                    $("#id_classe").append('<option value="">Selecciona a Classe</option>');
 
 
-                });
+                    $.each(classes, function(index, classe) {
+
+                        //  console.log(classe,)
+                        $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
+                            .vc_classe +
+                            'ª Classe</option>');
+
+
+                    });
 
 
 
 
-            }
+                }
+            });
+
+
         });
-
-
-    });
-</script>
+    </script>
 @endisset
 
 <script>
@@ -1434,9 +1434,48 @@ vc_tipodaNota
     });
 </script>
 
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" /> --}}
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" /> --}}
 
+{{-- <style>
+@media (max-width: 767px) {
+    .table-responsive{
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+}
+@media (min-width: 767px) {
+    .table-responsive{
+        overflow: inherit !important; /* Sometimes needs !important */
+    }
+}
 
+</style> --}}
+<script>
+    $(document).on('shown.bs.dropdown', '.table-responsive', function(e) {
+        // The .dropdown container
+        var $container = $(e.target);
+
+        // Find the actual .dropdown-menu
+        var $dropdown = $container.find('.dropdown-menu');
+        if ($dropdown.length) {
+            // Save a reference to it, so we can find it after we've attached it to the body
+            $container.data('dropdown-menu', $dropdown);
+        } else {
+            $dropdown = $container.data('dropdown-menu');
+        }
+
+        $dropdown.css('top', ($container.offset().top + $container.outerHeight()) + 'px');
+        $dropdown.css('left', $container.offset().left + 'px');
+        $dropdown.css('position', 'absolute');
+        $dropdown.css('display', 'block');
+        $dropdown.appendTo('body');
+    });
+
+    $(document).on('hide.bs.dropdown', '.table-responsive', function(e) {
+        // Hide the dropdown menu bound to this button
+        $(e.target).data('dropdown-menu').css('display', 'none');
+    });
+</script>
 </body>
 
 </html>

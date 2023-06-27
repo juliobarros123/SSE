@@ -44,8 +44,7 @@
 
                     <th>CURSO</th>
                     <th>CLASSE</th>
-
-
+                    <th class="text-center">ANO LECTIVO DE INGRESSO</th>
                     <th>ACÇÕES</th>
                 </tr>
             </thead>
@@ -58,11 +57,7 @@
                     </td>
                     <td>{{ $aluno->vc_nomeCurso }}</td>
                     <td>{{ $aluno->vc_classe }}ª Classe</td>
-
-
-
-
-
+                    <td  class="text-center">{{ $aluno->ya_inicio }}/{{$aluno->ya_fim}}</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
