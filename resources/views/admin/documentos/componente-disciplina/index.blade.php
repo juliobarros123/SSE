@@ -24,6 +24,8 @@
             <tr class="text-center">
                 <th>ID</th>
                 <th>CURSO</th>
+                <th>CLASSE</th>
+\
                 <th>COMPONENTE</th>
                 <th>DISCIPLINA</th>
                 <th>AÇÕES</th>
@@ -35,6 +37,7 @@
                 <tr class="text-center">
                     <td>{{ $componente->id }}</td>
                     <th>{{ $componente->vc_nomeCurso }}</th>
+                    <th>{{ $componente->vc_classe }}.ª Classe</th>
 
                     <th>{{ $componente->vc_componente }}</th>
                     <th>{{ $componente->vc_nome }}</th>

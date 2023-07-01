@@ -22,7 +22,7 @@ class Disciplina_Curso_Classe extends Model
         });
     }
     protected $table = 'disciplinas_cursos_classes';
-    protected $fillable = ['id_cabecalho','slug', 'it_disciplina', 'it_curso', 'it_classe', 'it_estado_dcc','terminal'];
+    protected $fillable = ['pap','id_cabecalho','slug', 'it_disciplina', 'it_curso', 'it_classe', 'it_estado_dcc','terminal'];
 
   
 

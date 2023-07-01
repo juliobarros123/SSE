@@ -17,6 +17,7 @@ use Image;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Logger;
 use Illuminate\Support\Facades\Auth;
+use Notas;
 
 
 class MatriculaController extends Controller
@@ -74,7 +75,7 @@ class MatriculaController extends Controller
                 $request->id_classe = $matriculados_lista_pdf['id_classe'];
             }
             // dd($request->ciclo);
-           
+
         }
 
         $data['ano_lectivo'] = 'Todos';
@@ -113,7 +114,7 @@ class MatriculaController extends Controller
         // dd($matriculados->get());
         // dd($matriculados);
         // dd( $data['classes']);
-  
+
         // dd( $request);
         $matriculados_lista_pdf = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
@@ -487,6 +488,7 @@ class MatriculaController extends Controller
             if ($m) {
                 $this->diminuir_inscritos($matricula->it_idTurma, 1);
                 $this->loggerData("Eliminou a matricula do aluno(a) com processo  $matricula->processo . ' na turma de ' . $matricula->vc_nomedaTurma . ' na ' . $matricula->vc_classe . 'ª classe no curso de ' . $matricula->vc_nomeCurso");
+                eliminar_notas($matricula->id_aluno, $matricula->it_idTurma);
                 return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Matricula eliminada com sucesso']);
 
             } else {
@@ -499,6 +501,7 @@ class MatriculaController extends Controller
 
         }
     }
+   
 
     /////pesquisar aluno /////////////////
     public function pesquisaraluno()

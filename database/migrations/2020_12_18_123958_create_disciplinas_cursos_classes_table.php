@@ -20,6 +20,8 @@ class CreateDisciplinasCursosClassesTable extends Migration
             $table->foreignId('it_classe')->constrained('classes')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->string('terminal');
+            $table->string('pap')->nullable();
+
             $table->timestamps();
  $table->string('slug')->unique();
         });

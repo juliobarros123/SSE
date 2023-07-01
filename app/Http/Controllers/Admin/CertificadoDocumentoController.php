@@ -54,6 +54,7 @@ class CertificadoDocumentoController extends Controller
                     ->where('classes.vc_classe', '<=', $data['classe_final']->vc_classe)
                     ->where('cursos.id', $data['aluno']->id_curso)
                     ->get();
+                    // dd($data['componentes'])
                 // dd($data);
                 // dd(   $data['disciplinas']);
 
@@ -90,8 +91,12 @@ class CertificadoDocumentoController extends Controller
                 //     $html = view("admin.documentos.certificado.imprimir.instituto.index",    $data);
                 // }
                 // dd($data['cabecalho']->vc_tipo_escola);
-                if ($data['classe_inicial']->vc_classe >= 7 && $data['classe_final']->vc_classe <= 9) {
 
+                if($data['classe_inicial']->vc_classe >= 1 && $data['classe_final']->vc_classe <= 6){
+                    $html = view("admin.documentos.certificado.imprimir.complexo.ensino-primario.index", $data);
+
+                }
+                else if ($data['classe_inicial']->vc_classe >= 7 && $data['classe_final']->vc_classe <= 9) {
                     $html = view("admin.documentos.certificado.imprimir.complexo.nona.index", $data);
                 } else if ($data['classe_inicial']->vc_classe >= 10 && $data['cabecalho']->vc_tipo_escola == "Geral") {
                     $html = view("admin.documentos.certificado.imprimir.complexo.medio.geral.index", $data);

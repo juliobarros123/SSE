@@ -3,7 +3,7 @@
     <label for="it_curso">Curso</label>
     <select name="it_curso" id="it_curso" class="form-control border-secondary " required>
         @if (!isset($disciplina_curso_classe->it_curso))
-            <option value="" selected disabled>Celecione o curso</option>
+            <option value="" selected disabled>Seleccione o curso</option>
         @endif
         @foreach ($cursos as $curso)
             <option value="{{ $curso->id }}" 
@@ -55,5 +55,18 @@
         <option value="Não Terminal">Não Terminal</option>
 
         <option value="Terminal">Terminal</option>
+    </select>
+</div>
+<div class="form-group col-md-3">
+    <label for="pap">P.A.P</label>
+    <select class="form-control  border-secondary " name="pap" id="pap" required>
+        @if (isset($disciplina_curso_classe))
+            <option value="{{$disciplina_curso_classe->pap}}" selected disabled>{{$disciplina_curso_classe->pap}}
+            </option>
+        @endif
+    
+            <option value="Não" >Não</option>
+            <option value="Sim" >Sim</option>
+       
     </select>
 </div>

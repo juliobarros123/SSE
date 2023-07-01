@@ -33,6 +33,8 @@
                 <th>CURSO</th>
                 <th>CLASSE</th>
                 <th>TERMIMAL</th>
+                <th>P.A.P</th>
+
                 <th>ACÇÕES</th>
             </tr>
         </thead>
@@ -49,6 +51,10 @@
                     {{$row->terminal}}
                        
                     </td>
+                    <td>
+                        {{$row->pap}}
+                           
+                        </td>
                     <td class="text-center">
 
                         @if (Auth::user()->vc_tipoUtilizador != 'Visitante')

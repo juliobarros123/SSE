@@ -29,25 +29,27 @@ background-image-resolution: from-image;">
                 $medias_acumulada_linha = [];
             @endphp
             @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
+                @if ($i % 2 == 0)
                 @php
+                /* @dd($i);  */
                     $classe = fh_classes()
-                        ->where('classes.vc_classe', $i)
-                        ->first();
+                    ->where('classes.vc_classe', $i)
+                    ->first();
+/* dd($classe); */
                     $matricula = fh_matriculas()
-                        ->where('alunnos.processo', $aluno->processo)
-                        ->where('classes.vc_classe', $i)
-                        ->get();
+                    ->where('alunnos.processo', $aluno->processo)
+                    ->where('classes.vc_classe', $i)
+                    ->get();
+                    /* dd($matricula); */
                     $matricula = $matricula->sortDesc()->first();
-                    
-                    if ($matricula) {
-                        $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                    } else {
-                        $ca = 0;
-                    }
+
+                    $ca = fha_ca_certificado_6($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
+                  
                     if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
-                        array_push($medias_acumulada_linha, $ca);
+                    array_push($medias_acumulada_linha, $ca);
                     }
-                @endphp
+                    @endphp
+                @endif
             @endfor
 
             @php
@@ -73,7 +75,8 @@ background-image-resolution: from-image;">
 
 
         <div class="bib-part">
-            Certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
+            Certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>,
+            filho(a) de
             {{ $aluno->vc_nomePai }} e de
             {{ $aluno->vc_nomeMae }}, nascida(o) aos {{ dataPorExtenso(sub_traco_barra($aluno->dt_dataNascimento)) }},
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
@@ -85,8 +88,7 @@ background-image-resolution: from-image;">
 
         <div class="bib-part">
             Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o
-            {{ $info_certificado->ensino }}
-            ,
+            {{ $info_certificado->ensino }},
             conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
@@ -107,14 +109,35 @@ background-image-resolution: from-image;">
         @endphp
 
         <tr>
-            <th class="th-cab-notas" colspan="1" style="text-align: center">DISCIPLINA
+            <th class="" colspan="" rowspan="2" style="text-align: center">DISCIPLINA
             </th>
+            @php
+                $cont_ciclo = 'I';
+            @endphp
             @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
-                <th class="th-cab-notas" style="text-align: center">{{ $i }}ª CLASSE</th>
+                @if ($i % 2 == 0)
+            
+                    <th class="" rowspan="1" style="text-align: center">{{ $cont_ciclo }} Ciclo</th>
+                    @php
+                        $cont_ciclo = "$cont_ciclo" . 'I';
+                    @endphp
+                @endif
             @endfor
-            <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
-            <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
+            <th class="th-cab-notas" rowspan="2" style="text-align: center">MÉDIA FINAL</th>
+            <th class="th-cab-notas" colspan="2" rowspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
+
+
+        <tr>
+            @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
+                @if ($i % 2 == 0)
+                    <th class="" style="text-align: center">
+                        {{ $i }}ª
+                        CLASSE</th>
+                @endif
+            @endfor
         </tr>
+
+
 
         @foreach ($componentes as $componente)
             @php
@@ -126,31 +149,34 @@ background-image-resolution: from-image;">
                     <td class="disciplina td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
-                        @php
-                            $classe = fh_classes()
-                                ->where('classes.vc_classe', $i)
-                                ->first();
-                            $matricula = fh_matriculas()
-                                ->where('alunnos.processo', $aluno->processo)
-                                ->where('classes.vc_classe', $i)
-                                ->get();
-                            $matricula = $matricula->sortDesc()->first();
-                            
-                            if ($matricula) {
-                                // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                                $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                            } else {
-                                $ca = 0;
-                            }
-                            if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
-                                array_push($medias_acumulada_linha, $ca);
-                            } else {
-                                $ca = -1;
-                            }
-                            /* array_push($medias_acumulada_linha, $ca); */
-                        @endphp
-                        <td class="nota-valor" style="text-align: center">
-                            {{ menor_zero($ca) ? $ca : '-------' }}</td>
+                        @if ($i % 2 == 0)
+                            @php
+                                /* dd($i); */
+                                $classe = fh_classes()
+                                    ->where('classes.vc_classe', $i)
+                                    ->first();
+                                /* dd( $classe ); */
+                                $matricula = fh_matriculas()
+                                    ->where('alunnos.processo', $aluno->processo)
+                                    ->where('classes.vc_classe', $i)
+                                    ->get();
+                                $matricula = $matricula->sortDesc()->first();
+                                
+                              
+                                    $ca = fha_ca_certificado_6($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
+                               
+                                /* dd($ca); */
+                                if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
+                                    array_push($medias_acumulada_linha, $ca);
+                                } else {
+                                    $ca = -1;
+                                }
+                                /* array_push($medias_acumulada_linha, $ca); */
+                            @endphp
+                            <td class="nota-valor" style="text-align: center">
+                                {{ menor_zero($ca) ? $ca : '-------' }}</td>
+                        @endif
+
                         @php
                             $ca = 0;
                         @endphp
@@ -165,7 +191,6 @@ background-image-resolution: from-image;">
                         }
                         
                     @endphp
-
                     <td class="nota-valor" style="text-align:center">
 
 
@@ -181,6 +206,7 @@ background-image-resolution: from-image;">
                         {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
                     </td>
                     <td style=" border-left: none">Valores</td>
+
 
                 </tr>
 
