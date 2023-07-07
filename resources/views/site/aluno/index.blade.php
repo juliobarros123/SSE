@@ -7,171 +7,31 @@
     <div class="card-title">Seja Bem vindo</div>
   </div>
 </div>
+
+
+
 <div class="row ">
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
+    <div class=" mb-3 col-md-12">
+        <div class="card-body">
+    <div class="card-title">Disciplinas para o ano letivo atual:</div>
 
-                  <div class="col-md-4">
-                      P1=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
+        </div>
       </div>
-  </div>
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
+    @foreach ($disciplinas as $item)
+        <div class="col-md-3">
+            {{-- @dump($item) --}}
+            <div class="card">
 
-                  <div class="col-md-4">
-                      P1=<span>10</span>
+                <img src="{{asset('images/300.png')}}" alt="Disciplina 1" class="card-img-top">
+                <div class="card-body">
+                 
+                        <p class="card-text">Disciplinas: {{$item->disciplina}}</p>
+                      
+                </div>
+            </div>
+        </div>
+    @endforeach
 
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
-
-                  <div class="col-md-4">
-                      P1=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
-
-                  <div class="col-md-4">
-                      P1=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
-
-                  <div class="col-md-4">
-                      P1=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-lg-4 mb-4">
-      <div class="card">
-          <div class="card-body">
-              <h5 class="card-title">Disciplina: Matemática</h5>
-              <p class="card-text">Notas:</p>
-              <div class="row">
-
-                  <div class="col-md-4">
-                      P1=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P2=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P3=<span>10</span>
-
-                  </div>
-                  <div class="col-md-4">
-                      P4=<span>10</span>
-
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
 </div>
-
 
 @endsection

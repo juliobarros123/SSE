@@ -76,6 +76,7 @@ Route::group(['prefix' => 'painel/alunos'], function () {
     Route::any('/pauta', ['as' => 'painel.alunos.pauta', 'uses' => 'Site\AlunoController@pauta']);
 
     Route::any('/cartoes_pagamento', ['as' => 'painel.alunos.cartoes_pagamento', 'uses' => 'Site\AlunoController@cartoes_pagamento']);
+    Route::any('/professores', ['as' => 'painel.alunos.professores', 'uses' => 'Site\AlunoController@professores']);
     
 });
 Route::get('/d', ['as' => 'alunos.d', 'uses' => 'Site\AlunoController@d']);

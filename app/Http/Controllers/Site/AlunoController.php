@@ -49,13 +49,19 @@ class AlunoController extends Controller
     {
 
         if (session()->get('aluno_login')) {
-            $aluno_login = session()->get('aluno_login');
+            $matricula = fh_matriculas()
+            ->where('alunnos.processo', session()->get('aluno_login')['processo'])
+            ->orderBy('anoslectivos.ya_fim','desc')
+            ->first();
+            $response['disciplinas'] = fh_turmas_professores()->where('turmas.id',$matricula->it_idTurma)->get();
 
-            // dd( $aluno_login); 
+    //    dd(   $response['professores']);
+
+            return view('site.aluno.index',$response);
+
         } else {
 
         }
-        return view('site.aluno.index');
 
     }
     public function d()
@@ -140,8 +146,10 @@ class AlunoController extends Controller
             storeSession('pagamento_estado_pesquisar', $pagamento_estado_pesquisar);
             $matricula = fh_matriculas()->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo)
                 ->where('alunnos.processo', $request->processo)->first();
-            $classe = fh_classes()->where('classes.id', $matricula->id_classe)->first();
+            // if( $matricula)
             if ($matricula):
+                $classe = fh_classes()->where('classes.id', $matricula->id_classe)->first();
+
                 $tipo_pagamento = fh_tipos_pagamento()
                     ->where('tipo_pagamentos.id_classe', $matricula->id_classe)
                     ->where('tipo_pagamentos.tipo', 'Mensalidades')
@@ -176,5 +184,21 @@ class AlunoController extends Controller
         $response = array();
         return view('site.aluno.cartao-pagemento.index', $response);
 
+    }
+    public function professores(Request $request)
+    {
+        $response = [];
+        if (session()->get('aluno_login')) {
+            $processo = session()->get('aluno_login')['processo'];
+
+            $response['turmas'] = fh_matriculas()->where('alunnos.processo', $processo)->get();
+            // dd( $response['turmas']);
+            if ($request->id_turma) {
+                // dd($request->id_turma);
+                $response['professores'] = fh_turmas_professores()->where('turmas.id', $request->id_turma)->get();
+        //    dd($response['professores']);
+            }
+            return view('site.aluno.professores.index', $response);
+        }
     }
 }
