@@ -51,7 +51,7 @@
                 <th class="th" rowspan="2">NOME</th>
                 @foreach ($disciplinas as $disciplina)
                     @php
-                        //   dd(  $disciplina);
+                      
                     @endphp
                     @php
                         $colspan = fha_colspan($disciplina->id, $turma->it_idClasse, $turma->it_idCurso);

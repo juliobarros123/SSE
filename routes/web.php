@@ -67,3 +67,16 @@ Route::get('confirmados/{filename}', function ($filename)
 
     return $response;
 });
+
+
+Route::group(['prefix' => 'painel/alunos'], function () {
+    Route::post('/login', ['as' => 'login.alunos', 'uses' => 'Site\AlunoController@index']);
+
+    Route::get('/', ['as' => 'painel.alunos', 'uses' => 'Site\AlunoController@painel']);
+    Route::any('/pauta', ['as' => 'painel.alunos.pauta', 'uses' => 'Site\AlunoController@pauta']);
+
+    Route::any('/cartoes_pagamento', ['as' => 'painel.alunos.cartoes_pagamento', 'uses' => 'Site\AlunoController@cartoes_pagamento']);
+    
+});
+Route::get('/d', ['as' => 'alunos.d', 'uses' => 'Site\AlunoController@d']);
+Route::get('/erro', ['as' => 'errors.permissao', 'uses' => 'Site\AlunoController@erro']);

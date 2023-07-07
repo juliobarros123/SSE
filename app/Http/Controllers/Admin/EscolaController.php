@@ -160,7 +160,22 @@ class EscolaController extends Controller
                     'desenvolvedor' => 0
                 ]
             );
-
+            User::create(
+                [
+                    'vc_nomeUtilizador' => 'Aluno',
+                    'vc_primemiroNome' => "Aluno",
+                    'vc_apelido' => 'Aluno',
+                    'vc_email' => $request->vc_email,
+                    'email_verified_at' => now(),
+                    'password' => bcrypt("12345678"),
+                    // password
+                    'vc_telefone' => "",
+                    'vc_tipoUtilizador' => "Aluno",
+                    'vc_genero' => "F",
+                    'remember_token' => Str::random(10),
+                    'id_cabecalho' => $cab->id
+                ]
+            );
             Activador_da_candidatura::create([
                 'it_estado' => 1,
                 'id_cabecalho' => $cab->id

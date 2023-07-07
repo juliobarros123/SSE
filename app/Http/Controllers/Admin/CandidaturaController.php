@@ -279,10 +279,11 @@ class CandidaturaController extends Controller
             // dd(   $response['cursos']);
             $response['classes'] = fh_classes()->get();
             // dd($response['classes']);
-            $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('id', 'desc')->first();
+            $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('idadesdecandidaturas.id', 'desc')->first();
             // $response['anoLectivo'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
+        //   dd(   $response['idadesdecandidaturas']);
             if (!$response['idadesdecandidaturas']) {
-                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
+                return redirect()->route('errors.permissao')->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
 
             }
             $response['cabecalho'] = fh_cabecalho();
@@ -349,7 +350,7 @@ class CandidaturaController extends Controller
                 'vc_estadoCivil' => $request->vc_estadoCivil,
                 'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
                 'vc_email' => $request->vc_email,
-                'tokenKey' => $this->generateRandomString(),
+                'tokenKey' => gerarCodigo(),
                 'vc_residencia' => $request->vc_residencia,
                 'vc_naturalidade' => $request->vc_naturalidade,
                 'vc_provincia' => $request->vc_provincia,
@@ -474,7 +475,7 @@ class CandidaturaController extends Controller
                 'vc_estadoCivil' => $request->vc_estadoCivil,
                 'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
                 'vc_email' => $request->vc_email,
-                'tokenKey' => $this->generateRandomString(),
+           
                 'vc_residencia' => $request->vc_residencia,
                 'vc_naturalidade' => $request->vc_naturalidade,
                 'vc_provincia' => $request->vc_provincia,

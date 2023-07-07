@@ -26,6 +26,7 @@ class CertificadoDocumentoController extends Controller
     }
     public function emitir()
     {
+        // dd(gerarCodigo());
         return view('admin.documentos.certificado.index');
     }
     public function imprimir(Request $request)
