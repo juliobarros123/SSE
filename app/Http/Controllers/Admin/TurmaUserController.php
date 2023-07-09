@@ -127,7 +127,7 @@ class TurmaUserController extends Controller
         $response['anoslectivos'] = fha_ano_lectivo_publicado();
         //dd();
         $response['anoLectivoPublicado'] = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
-        $response['turmas'] = fh_turmas()->get();
+        $response['turmas'] = fh_turmas_2()->get();
         // dd(  $response['turmas'] );
         $response['disciplinas'] = fh_disciplinas()->get();
         $response['classes'] = fh_classes()->get();
@@ -204,11 +204,11 @@ class TurmaUserController extends Controller
                 // dd($turma_professor);
 // dd( $turma_professor);
                 $atribuicao = $turma_professor;
-                $turma = fh_turmas()->where('turmas.id', $turma_professor->it_idTurma)->first();
+                $turma = fh_turmas_2()->where('turmas.id', $turma_professor->it_idTurma)->first();
 
                 $alp = fha_ano_lectivo_publicado();
 
-                $turmas = fh_turmas()->where('turmas.it_idAnoLectivo', $alp->id_anoLectivo)->get();
+                $turmas = fh_turmas_2()->where('turmas.it_idAnoLectivo', $alp->id_anoLectivo)->get();
                 $classe = Classe::find($atribuicao->it_idClasse);
                 $classes = fh_classes()->get();
                 $disciplinas = fh_disciplinas()->get();

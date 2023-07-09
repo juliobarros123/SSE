@@ -205,7 +205,7 @@ class MatriculaController extends Controller
     {
         // $anoLectivo = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
         // $turmas = Turma::where([['it_estado_turma', 1], ['vc_anoLectivo', $anoLectivo->ya_inicio . "-" . $anoLectivo->ya_fim]])->get();
-        $response['turmas'] = fh_turmas()->get();
+        $response['turmas'] = fh_turmas_2()->get();
         $response['alunos'] = fh_alunos()->get();
         // dd(fha_ano_lectivo_publicado());
         // dd(  $alunos );
@@ -251,7 +251,7 @@ class MatriculaController extends Controller
                     $dados['vc_imagem'] = $dir . "/" . $input['imagename'];
 
                 }
-                $turma = fh_turmas()->where('turmas.id', $request->it_idTurma)->first();
+                $turma = fh_turmas_2()->where('turmas.id', $request->it_idTurma)->first();
 
 
                 if (($turma->it_qtdeAlunos - $turma->it_qtMatriculados) <= 0) {
@@ -345,7 +345,7 @@ class MatriculaController extends Controller
             $response['classes'] = fh_classes()->get();
 
 
-            $response['turmas'] = fh_turmas()->where('cursos.id', $matricula->it_idCurso)
+            $response['turmas'] = fh_turmas_2()->where('cursos.id', $matricula->it_idCurso)
                 ->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)
                 ->where('turmas.it_qtdeAlunos', '>', 0)
                 ->get();
@@ -402,7 +402,7 @@ class MatriculaController extends Controller
                 $dados['vc_imagem'] = $dir . "/" . $input['imagename'];
 
             }
-            $turma_nova = fh_turmas()->where('turmas.id', $request->it_idTurma)->first();
+            $turma_nova = fh_turmas_2()->where('turmas.id', $request->it_idTurma)->first();
 
             $matricula_anterior = fh_matriculas()->where('matriculas.slug', $slug)->first();
 

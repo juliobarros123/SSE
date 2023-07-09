@@ -1,3 +1,20 @@
+<div class="form-group col-4">
+    <label for="tipo_documento" class="form-label">Tipo de Documento:</label>
+    <select name="tipo_documento" id="" class="form-control" required>
+        @if (isset($info_certificado->tipo_documento))
+            <option value="{{ $info_certificado->tipo_documento }}">{{ $info_certificado->tipo_documento }}</option>
+        @else
+            <option value="" selected disabled>Selecione o tipo de documento</option>
+        @endif
+
+        <option value="Certificado">Certificado</option>
+        <option value="Declaração">Declaração</option>
+
+
+    </select>
+
+</div>
+
 <div class="form-group col-md-4">
     <label for="id_classe">Classe</label>
     <select class="form-control border-secondary  select-dinamico" name="id_classe" id="id_classe" required>
@@ -31,9 +48,8 @@
 </div>
 <div class="form-group col-4">
     <label for="alinea" class="form-label"> Alínea:</label>
-    <input type="text" class="form-control border-secondary col-sm-12" name="alinea"
-        placeholder="Alinea do artigo" value="{{ isset($info_certificado->alinea) ? $info_certificado->alinea : '' }}"
-        id="alinea" required>
+    <input type="text" class="form-control border-secondary col-sm-12" name="alinea" placeholder="Alinea do artigo"
+        value="{{ isset($info_certificado->alinea) ? $info_certificado->alinea : '' }}" id="alinea" required>
 </div>
 <div class="form-group col-4">
     <label for="lei" class="form-label"> Conjugada com a lei :</label>
@@ -46,8 +62,7 @@
     <label for="processo" class="form-label">Ensino:</label>
     <select name="ensino" id="" class="form-control" required>
         @if (isset($info_certificado->id_classe))
-        <option value="{{$info_certificado->ensino}}">{{$info_certificado->ensino}}</option>
-
+            <option value="{{ $info_certificado->ensino }}">{{ $info_certificado->ensino }}</option>
         @else
             <option value="" selected disabled>Selecione a classe</option>
         @endif

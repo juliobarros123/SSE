@@ -1,56 +1,195 @@
-
-    /*
-    To change this license header, choose License Headers in Project Properties.
-    To change this template file, choose Tools | Templates
-    and open the template in the editor.
-    */
-
-    /*
-        Created on : 20/12/2020
-        Author     : Maria Teresa Andŕe Mbuta
-    */
-
-    body {
-        font-family: 'Arial';
-        color: #00174d;
-        font-size: 10px;
-        font-weight: bold;
-
-        }
-
-        .foto {
-        margin-left: 22px;
-        margin-bottom: -25px;
-        margin-top: 92px;
-        }
-        .data{
-            margin-top: -3px;
-        }
-        .nome {
-        margin-left: 38px;
-        margin-bottom: 0px;
-        margin-top: 18%;
-        }
-
-        .funcao {
-        margin-left: 45px;
-        margin-bottom: -2px;
-        }
-
-        .bi {
-        margin-left: 33px;
-        /* margin-bottom: 8px; */
-        }
-
-        .director {
-        padding-top: 16%;
-        margin-left: 53px;
-        }
-
-        .nomeDirector {
-        margin-left: 15%;
-        margin-top: -1%;
-        padding-top: 2%;
-        margin-left: -5px;
-        }
+body{
+      font-family: 'roboto', sans-serif;
+    }
+    .titulo{
+    text-align: center;
+    margin-top: -10px;
+    }
+  
+    
+   
+    .box-imagem{
+    
+      width: 94px;
+      position:fixed;
+      bottom: 1px;
+      right: 3px;
+    
+      height: 100px;
+    }
+    .foto{
+    
+      width: 100%;
+      height: 99px;
       
+    }
+    .ano_lectivo{
+      position:fixed;
+      top: 145px;
+    
+      font-size: 8px;
+    
+      left:0px;
+      width: 92px;
+    }
+    .validade{
+      position:fixed;
+      top: 145px;
+    
+    
+      font-size: 8px;
+    
+      left: 94px;
+      width: 92px;
+    }
+    .curso{
+      position:fixed;
+      top: 160px;
+    
+      font-size: 8px;
+    
+      left: 0px;
+      width: 164px;
+    
+    }
+    .hr-custom{
+      margin-top: 15px;
+      margin-bottom: 0px;
+      width: 70%;
+    }
+    .visa-container {
+      width: 100%;
+      height: 40px;
+      text-align: center;
+      position: fixed;
+      font-size: 10px;
+    /* background-color:red ; */
+      /* top: 155px; */
+      bottom: 0px;
+    }
+    .assinatura-director{
+      height: 40px;
+      width: 50%;
+    }
+    .box-assinatura-director{
+      width: 100%;
+      height: 1px;
+      text-align: center;
+      position: fixed;
+      font-size: 10px;
+      /* background-color: red; */
+      /* top: 170px; */
+    
+    }
+    .header {
+      text-align: center;
+    
+    }
+    
+    .info-cabecalho {
+      font-size: 8px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 0px;
+      text-transform: uppercase;
+      color: #1151a0;
+    }
+    .logo{
+      height: 35px;
+    
+    }
+    .logo-escola{
+    
+      height: 35px;
+    }
+    .box-logo-escola{
+      position: fixed;
+     
+      background-color: red;
+      top: 10px;
+    }
+    .losango{
+        position: fixed;
+        top: 29%;
+        left: 18%;
+        transform: translate(-50%, -50%);
+        width: 128px;
+        height: 123px;
+     
+        border-radius: 100px;
+        
+      
+    }
+   .info-funcionario{
+    text-transform: uppercase;
+    color:#1151a0;
+ 
+   }
+   .valor{
+text-transform: uppercase;
+color: #313a3a;
+
+   }   
+   .nome{
+    position:fixed;
+    top: 71%;
+ 
+    font-size: 8px;
+    text-align: center;
+    width: 100%;
+   
+    left: 0px;
+  } 
+   .funcao{
+    position:fixed;
+    top: 75%;
+    font-size: 8px;
+    
+    text-align: center;
+    width: 100%;
+   
+    left: 0px;
+    
+   }
+   .contacto{
+    position:fixed;
+    top: 79%;
+    font-size: 8px;
+    
+    text-align: center;
+    width: 100%;
+   
+    left: 0px;
+   }
+   .bi{
+    position:fixed;
+    top: 83%;
+    font-size: 8px;
+    
+    text-align: center;
+    width: 100%;
+   
+    left: 0px;
+   }
+   .validade{
+    position:fixed;
+    top: 83%;
+    font-size: 8px;
+    
+    text-align: center;
+    width: 100%;
+   
+    left: 0px;
+   }
+   .titulo{
+    text-transform: uppercase;
+    text-align: center;
+    color: #1151a0;
+    font-size: 11px;
+    margin-top: 0px;
+   }
+   .director{
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #313a3a;
+   }

@@ -355,6 +355,8 @@ function fha_meus_director_turmas()
         if ($director_turma) {
             $std = new stdClass();
             $std->id = $director_turma->id;
+            
+            $std->id_director = $director_turma->id_user;
 
             $std->curso = $director_turma->vc_nomeCurso;
             $std->curso = $director_turma->vc_nomeCurso;

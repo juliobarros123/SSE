@@ -157,7 +157,7 @@ class NotaDinamca extends Controller
         try{
         $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
 // dd( $turma_professor);
-        $turma = fh_turmas()->where('turmas.id',$turma_professor->id_turma)->first();
+        $turma = fh_turmas_2()->where('turmas.id',$turma_professor->id_turma)->first();
      
         $alunos = fha_turma_alunos($turma->slug);
 

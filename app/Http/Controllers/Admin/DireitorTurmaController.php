@@ -32,7 +32,7 @@ class DireitorTurmaController extends Controller
 
         $data['users'] = fh_professores()->get();
 
-        $data['turmas'] = fh_turmas()->get();
+        $data['turmas'] = fh_turmas_2()->get();
 
 
         return view('admin.direitores-turmas.cadastrar.index', $data);
@@ -124,7 +124,7 @@ class DireitorTurmaController extends Controller
             $data['director_turma'] = $director_turma;
             $data['users'] = fh_professores()->get();
 
-            $data['turmas'] = fh_turmas()->get();
+            $data['turmas'] = fh_turmas_2()->get();
 
             return view('admin.direitores-turmas.editar.index', $data);
         else:

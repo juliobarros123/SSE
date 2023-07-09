@@ -18,7 +18,7 @@ class CreateInfoCerficadosTable extends Migration
            
             $table->string('decreto')->nullable();
             $table->string('artigo')->nullable();
-
+            $table->string('tipo_documento')->nullable();
             $table->string('LBSEE')->nullable();
             $table->string('lei')->nullable();
             $table->string('ensino')->nullable();

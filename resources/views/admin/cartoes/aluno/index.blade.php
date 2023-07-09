@@ -38,6 +38,26 @@
                         class="form-control border-secondary" id="validade" required>
                 </div>
                 <div class="form-group col-md-4">
+                    <label for="vc_anolectivo" class="form-label">Tipo de Imprensão:</label>
+                        <select name="tipo_impressao" id="tipo_impressao" class="form-control" required>
+                            <option value="" >Selecciona o Tipo de Impressão</option>
+                           
+                                <option value="PVC">
+                               PVC
+                                </option>
+                                <option value="CARTOLINA">
+                                    CARTOLINA
+                                     </option>
+                                     <option value="A4">
+                                        A4
+                                         </option>
+                            
+                        </select>
+              
+
+
+                </div>
+                <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
 
@@ -62,6 +82,8 @@
 
 
                 </div>
+
+             
                 <div class=" d-flex justify-content-center w-100">
                     <button class="form-control btn btn-dark w-25">Imprimir</button>
                 </div>

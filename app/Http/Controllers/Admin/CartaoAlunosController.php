@@ -48,19 +48,25 @@ class CartaoAlunosController extends Controller
         ->first();
         if( $matricula):
         $data['request']=$request->all();
+        $data['matricula']=$matricula;
+        $data['cabecalho']=fh_cabecalho();
+
     //   dd($data['request']);
         $data["css"] = file_get_contents('css/cartao/aluno/style.css');
         $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
         
             $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8', 'margin_top' => 0,
-                'margin_left' => 5,
-                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [54, 84]
+                'mode' => 'utf-8', 'margin_top' => 2,
+                'margin_left' => 3,
+                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [60, 90]
             ]);
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
             $mpdf->AddPage('L');
+            // dd($request->tipo_impressao);
+            if($request->tipo_impressao=='CARTOLINA'){
             $html = view("admin/pdfs/cartao/aluno/index", $data);
+            }
             $mpdf->writeHTML($html);
             $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) '.Auth::User()->vc_primeiroNome.' '.Auth::User()->vc_ultimoaNome);
             $mpdf->Output("aluno.pdf", "I");

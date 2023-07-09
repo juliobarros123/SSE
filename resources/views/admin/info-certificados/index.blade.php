@@ -26,6 +26,8 @@
         <thead class="">
             <tr class="text-center">
                 <th>ID</th>
+                <th>TIPO DE DOCUMENTO</th>
+
                 <th>DECRETO</th>
                 <th>ARTIGO</th>
                 <th>LBSSE</th>
@@ -41,6 +43,8 @@
             @foreach ($infos_certificado as $row)
                 <tr class="text-center">
                     <td>{{ $row->id }}</td>
+                    <td>{{ $row->tipo_documento }}</td>
+
                     <td>{{ $row->decreto }}</td>
                     <td>{{ $row->artigo }}</td>
                     <td>{{ $row->LBSEE }}</td>

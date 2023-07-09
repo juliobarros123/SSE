@@ -680,19 +680,6 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     // End Cartao Aluno
 
-    // Start Cartão do funcionário
-    // Route::get('/admin/funcionarios', ['as' => 'admin/funcionarios', 'uses' => 'Admin\Funcionario@show'])->middleware('access.controll.administrador');
-    // Route::get('/admin/funcionario/cadastrar', ['as' => 'admin/funcionario/cadastrar', 'uses' => 'Admin\Funcionario@create'])->middleware('access.controll.administrador');
-    // Route::post('/admin/funcionario/cadastrar', ['as' => 'admin/funcionario/cadastrar', 'uses' => 'Admin\Funcionario@store'])->middleware('access.controll.administrador');
-    // Route::get('/admin/funcionarios/listar', ['as' => 'admin.funcionarios.listar', 'uses' => 'Admin\Funcionario@listar'])->middleware('access.controll.administrador');
-
-    // Route::get('/admin/funcionario/editar/{id}', ['as' => 'admin/funcionario/editar', 'uses' => 'Admin\Funcionario@edit'])->middleware('access.controll.administrador');
-    // Route::put('/admin/funcionario/editar/{id}', ['as' => 'admin/funcionario/atualizar', 'uses' => 'Admin\Funcionario@update'])->middleware('access.controll.administrador');
-    // Route::get('/admin/funcionario/eliminar/{id}', ['as' => 'admin/funcionario/eliminar', 'uses' => 'Admin\Funcionario@destroy'])->middleware('access.controll.administrador');
-    // Route::get('/admin/funcionario/gerar/cartao/{id}', ['as' => 'admin/funcionario/gerar/cartao', 'uses' => 'Admin\Funcionario@gerar'])->middleware('access.controll.administrador');
-    // Route::get(' admin/funcionarios/listas/imprimir', ['as' => ' admin/funcionarios/listas/imprimir', 'uses' => 'Admin\Funcionario@imprimir'])->middleware('access.controll.administrador');
-
-
     Route::get('/admin/funcionarios', ['as' => 'admin/funcionarios', 'uses' => 'Admin\Funcionario@show']);
     Route::get('/admin/funcionario/cadastrar', ['as' => 'admin/funcionario/cadastrar', 'uses' => 'Admin\Funcionario@create']);
     Route::post('/admin/funcionario/cadastrar', ['as' => 'admin/funcionario/cadastrar', 'uses' => 'Admin\Funcionario@store']);
@@ -702,8 +689,10 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::put('/admin/funcionario/editar/{slug}', ['as' => 'admin/funcionario/atualizar', 'uses' => 'Admin\Funcionario@update']);
     Route::get('/admin/funcionario/eliminar/{slug}', ['as' => 'admin/funcionario/eliminar', 'uses' => 'Admin\Funcionario@destroy']);
     Route::get('/admin/funcionario/gerar/cartao/{slug}', ['as' => 'admin/funcionario/gerar/cartao', 'uses' => 'Admin\Funcionario@gerar']);
-    Route::get(' admin/funcionarios/listas/imprimir', ['as' => ' admin/funcionarios/listas/imprimir', 'uses' => 'Admin\Funcionario@imprimir']);
-
+    Route::get('admin/funcionarios/listas/imprimir', ['as' => ' admin/funcionarios/listas/imprimir', 'uses' => 'Admin\Funcionario@imprimir']);
+    Route::get('admin/funcionarios/cartao_imprimir/{slug}', ['as' => 'admin.funcionarios.listas.cartao_imprimir', 'uses' => 'Admin\Funcionario@cartao_imprimir']);
+   
+    
 
 
 
@@ -1094,6 +1083,13 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
         });
 
+        Route::group(['prefix' => 'declaracoes/'], function () {
+            Route::get('/emitir', ['as' => 'documentos.declaracoes.emitir', 'uses' => 'Admin\DeclaracaoDocumentoController@emitir']);
+            Route::post('/imprimir', ['as' => 'documentos.declaracoes.imprimir', 'uses' => 'Admin\DeclaracaoDocumentoController@imprimir']);
+            // Route::post('/gerar', ['as' => 'relatorio.estatistico.alunos.resultados-finais.gerar', 'uses' => 'Admin\ResultadoFinalAlunoController@gerar']);
+
+        });
+        
         Route::group(['prefix' => 'anulacao_matricula/'], function () {
             Route::get('/emitir', ['as' => 'documentos.anulacao_matricula.emitir', 'uses' => 'Admin\AnulacaoMatriculaDocumentoController@emitir']);
             Route::post('/imprimir', ['as' => 'documentos.anulacao_matricula.imprimir', 'uses' => 'Admin\AnulacaoMatriculaDocumentoController@imprimir']);

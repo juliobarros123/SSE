@@ -23,7 +23,8 @@ use Illuminate\Http\Request;
 use App\Models\Logger;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 class Funcionario extends Controller
 {
     //
@@ -87,7 +88,7 @@ class Funcionario extends Controller
             $this->loggerData('Adicionou o(a) Funcionáro(a) ' . $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . ' com o id ' . $request->id . 'com a função de ' . $request->vc_funcao);
             $it_id_funcionario = DB::table('funcionarios')->max('id');
             $id_mes = 1;
-    
+
             return redirect()->back()->with('status', '1');
         } catch (\Exception $exception) {
             dd($exception);
@@ -97,8 +98,8 @@ class Funcionario extends Controller
 
     public function edit($slug)
     {
-        $response['funcionario']=fh_funcionarios()->where('funcionarios.slug',$slug)->first();
-        
+        $response['funcionario'] = fh_funcionarios()->where('funcionarios.slug', $slug)->first();
+
         if ($response['funcionario']):
             $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->where('vc_TipoCartao', 'Funcionário')->first();
 
@@ -112,43 +113,43 @@ class Funcionario extends Controller
     public function update(Request $request, $slug)
     {
         // dd($slug);
-        try{
-        $dados = $request->except(['_token','_method']);
+        try {
+            $dados = $request->except(['_token', '_method']);
 
-        $request->validate([
-            'vc_primeiroNome' => 'required',
-            'vc_ultimoNome' => 'required',
-            'vc_bi' => 'required',
-            'vc_funcao' => 'required',
-            'ya_anoValidade' => 'required',
-            'dt_nascimento' => 'required',
-            'vc_agente' => 'required'
-        ]);
+            $request->validate([
+                'vc_primeiroNome' => 'required',
+                'vc_ultimoNome' => 'required',
+                'vc_bi' => 'required',
+                'vc_funcao' => 'required',
+                'ya_anoValidade' => 'required',
+                'dt_nascimento' => 'required',
+                'vc_agente' => 'required'
+            ]);
 
-        if ($request->hasFile('vc_foto')) {
-            $imagem = $request->file('vc_foto');
-            $num = rand(1111, 9999);
-            $dir = public_path("images/funcionarios");
-            $extensao = $imagem->guessClientExtension();
-            $nomeImagem = 'vc_foto' . "_" . $num . "." . $extensao;
-            $imagem->move($dir, $nomeImagem);
-            $dados['vc_foto'] = "images/funcionarios" . "/" . $nomeImagem;
-       
-            // unlink($cff->vc_foto);
-            // $imagem->move($dir, $nomeImagem);
+            if ($request->hasFile('vc_foto')) {
+                $imagem = $request->file('vc_foto');
+                $num = rand(1111, 9999);
+                $dir = public_path("images/funcionarios");
+                $extensao = $imagem->guessClientExtension();
+                $nomeImagem = 'vc_foto' . "_" . $num . "." . $extensao;
+                $imagem->move($dir, $nomeImagem);
+                $dados['vc_foto'] = "images/funcionarios" . "/" . $nomeImagem;
+
+                // unlink($cff->vc_foto);
+                // $imagem->move($dir, $nomeImagem);
+            }
+            $cf = ModelsFuncionario::where('funcionarios.slug', $slug)->update($dados);
+
+
+            //dd($dados);
+            $this->loggerData('Actualizou Funcionário ', $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . 'com  função ' . $request->vc_funcao);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio editado com sucesso']);
+
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
+
         }
-        $cf = ModelsFuncionario::where('funcionarios.slug',$slug)->update($dados);
-      
-
-        //dd($dados);
-        $this->loggerData('Actualizou Funcionário ', $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . 'com  função ' . $request->vc_funcao);
-        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio editado com sucesso']);
-
-    }catch(\Exception $ex){
-        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
-
-        
-    }
     }
 
     public function destroy($slug)
@@ -156,8 +157,8 @@ class Funcionario extends Controller
 
         //$response = ModelsFuncionario::find($id);
         //$response->delete();
-        $response = ModelsFuncionario::where('funcionarios.slug',$slug)->first();
-        ModelsFuncionario::where('funcionarios.slug',$slug)->delete();
+        $response = ModelsFuncionario::where('funcionarios.slug', $slug)->first();
+        ModelsFuncionario::where('funcionarios.slug', $slug)->delete();
 
         //unlink($response->vc_foto);
         $this->loggerData('Eliminou Funcionário ', $response->vc_primeiroNome . ' ' . $response->vc_ultimoNome . 'com  função ' . $response->vc_funcao);
@@ -165,90 +166,64 @@ class Funcionario extends Controller
 
     }
 
-    public function gerar($id)
+    public function cartao_imprimir($slug)
     {
+        $funcionario = fh_funcionarios()->where('funcionarios.slug', $slug)->first();
+        if ($funcionario):
 
-        if ($data['response'] = ModelsFuncionario::where([['it_estado_funcionario', 1]])->find($id)):
-            $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->first();
-            //gerar cartão
-            $data['cabecalho'] = Cabecalho::find(1);
+            $data['funcionario'] = $funcionario;
+            $data['cabecalho'] = fh_cabecalho();
+            $configVariables = new ConfigVariables();
+            $fontVariables = new FontVariables();
+            $fontData = $fontVariables->getDefaults();
 
-            /* $data["bootstrap"] = file_get_contents("css/listas/bootstrap.min.css");
-            $data["css"] = file_get_contents("css/listas/style.css"); */
-            if ($data['cabecalho']->vc_nif == "5000298182") {
+            $fontDir = public_path('fonts/Roboto'); // Caminho para a pasta com os arquivos de fonte Roboto
 
-                //$url = 'cartões/CorMarie/aluno.png';
-                // 
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
+            $defaultConfig = (new ConfigVariables())->getDefaults();
+            $fontDirs = $defaultConfig['fontDir'];
 
-            } else if ($data['cabecalho']->vc_nif == "7301002327") {
+            $defaultFontConfig = (new FontVariables())->getDefaults();
+            $fontData = $defaultFontConfig['fontdata'];
 
-                //$url = 'cartões/InstitutoPolitécnicodoUIGE/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000303399") {
+            $fontData['roboto'] = [
+                'R' => 'Roboto-Regular.ttf',
+                'B' => 'Roboto-Bold.ttf',
+                'I' => 'Roboto-Italic.ttf',
+                'BI' => 'Roboto-BoldItalic.ttf',
+            ];
 
-                //$url = 'cartões/negage/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-
-            } else if ($data['cabecalho']->vc_nif == "5000820440") {
-                // dd(5000820440);
-                //$url = 'cartões/Quilumosso/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000305308") {
-
-                //$url = 'cartões/Foguetao/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "7301002572") {
-
-                //$url = 'cartões/LiceuUíge/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "7301003617") {
-
-                //$url = 'cartões/ldc/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else if ($data['cabecalho']->vc_nif == "5000300926") {
-
-                //$url = 'cartões/imagu/aluno.png';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            } else {
-                //$url = 'images/cartao/aluno.jpg';
-                $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
-                $data["bootstrap"] = file_get_contents('css/listas/bootstrap.min.css');
-            }
 
             $mpdf = new \Mpdf\Mpdf([
+                'fontDir' => array_merge($fontDirs, [
+                    $fontDir,
+                ]),
+                'fontdata' => $fontData,
                 'mode' => 'utf-8',
-                'margin_top' => 0,
-                'margin_left' => 5,
+                'margin_top' => 1,
+                'margin_left' => 0,
                 'margin_right' => 0,
                 'margin_bottom' => 0,
                 'format' => [85, 54]
             ]);
-
+            $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
             $mpdf->AddPage('L');
-            $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) ' . $data['response']->vc_primeiroNome . ' ' . $data['response']->vc_ultimoNome . ' com o id ' . $data['response']->id);
+            $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) ' . $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome . ' com o id ' . $funcionario->id);
             $html = view("admin/pdfs/cartao/funcionario/index", $data);
             $mpdf->writeHTML($html);
             $mpdf->Output("funcionario.pdf", "I");
 
         else:
-            return redirect('admin/funcionarios')->with('aviso', 'Não existe nenhum Funcionário com esse ID');
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, funciónario não existe']);
+
+
         endif;
     }
     public function imprimir()
     {
 
-        $data['funcionarios'] =fh_funcionarios()->orderby('funcionarios.vc_primeiroNome', 'asc')->orderby('funcionarios.vc_ultimoNome', 'asc')->get();
+        $data['funcionarios'] = fh_funcionarios()->orderby('funcionarios.vc_primeiroNome', 'asc')->orderby('funcionarios.vc_ultimoNome', 'asc')->get();
         $mpdf = new \Mpdf\Mpdf();
 
 

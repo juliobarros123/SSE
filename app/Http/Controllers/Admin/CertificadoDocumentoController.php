@@ -31,7 +31,9 @@ class CertificadoDocumentoController extends Controller
     }
     public function imprimir(Request $request)
     {
-        $data['info_certificado'] = fh_infos_certificado()->where('classes.id', $request->id_classe_2)->first();
+        $data['info_certificado'] = fh_infos_certificado()->where('classes.id', $request->id_classe_2)
+        ->where('info_cerficados.tipo_documento','Certificado')->first()
+        ->first();
         $classe = fh_classes()->where('classes.id', $request->id_classe_2)->first();
         if ($data['info_certificado']) {
             //    dd($data['info_certificado']);

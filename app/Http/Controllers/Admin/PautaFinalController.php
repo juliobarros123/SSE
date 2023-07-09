@@ -50,38 +50,46 @@ class PautaFinalController extends Controller
     {
         try {
             // dd($slug_turma);
-            $turma = fh_turmas_slug($slug_turma)->first();
-            //   dd( $turma);
-            $turma_alunos = fha_turma_alunos($slug_turma);
-            $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
-            //  dd( $disciplinas );
-            $data['turma'] = $turma;
-            // dd(  $data['turma']);
-            $data['cabecalho'] = fh_cabecalho();
-            $data['alunos'] = $turma_alunos;
-            // dd( $data['turma_alunos']);
-            // dd( $data['cabecalho']);
-            // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
-            $data['css'] = file_get_contents('css/lista/style-2.css');
-            // Dados para a tabela
-            $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
-            $mpdf = new \Mpdf\Mpdf(['format' => 'A1-L']);
-            // dd(   $data['titulo']);
-            $mpdf->SetFont("arial");
-            $mpdf->setHeader();
-            $this->Logger->Log('info', 'Imprimiu Pauta Anual com o título ' . $data['titulo']);
-            // dd($response);
-            // if ( $data['turma']->vc_classe <= 9 && $data['cabecalho']->vc_tipo_escola == "Geral") {
-            //     $html = view("admin.pdfs.pauta.anual", $data);
-            // } else if($data['turma']->vc_classe >=10 && $data['cabecalho']->vc_tipo_escola == "Técnico")  {
+            $turma = fh_turmas_2()->where('turmas.slug', $slug_turma)->first();
+
+            if ($turma):
+
+                //   dd( $turma);
+                $turma_alunos = fha_turma_alunos($slug_turma);
+                $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
+                //  dd( $disciplinas );
+                $data['turma'] = $turma;
+                // dd(  $data['turma']);
+                $data['cabecalho'] = fh_cabecalho();
+                $data['alunos'] = $turma_alunos;
+                // dd( $data['turma_alunos']);
+                // dd( $data['cabecalho']);
+                // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
+                $data['css'] = file_get_contents('css/lista/style-2.css');
+                // Dados para a tabela
+                $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
+                $mpdf = new \Mpdf\Mpdf(['format' => 'A1-L']);
+                // dd(   $data['titulo']);
+                $mpdf->SetFont("arial");
+                $mpdf->setHeader();
+                $this->Logger->Log('info', 'Imprimiu Pauta Anual com o título ' . $data['titulo']);
+                // dd($response);
+                // if ( $data['turma']->vc_classe <= 9 && $data['cabecalho']->vc_tipo_escola == "Geral") {
+                //     $html = view("admin.pdfs.pauta.anual", $data);
+                // } else if($data['turma']->vc_classe >=10 && $data['cabecalho']->vc_tipo_escola == "Técnico")  {
                 $html = view("admin.pdfs.pauta.tecnico.anual", $data);
 
 
-            // } 
+                // } 
 
-            $mpdf->writeHTML($html);
+                $mpdf->writeHTML($html);
 
-            $mpdf->Output("Pauta final " . $data['titulo'] . ".pdf", "I");
+                $mpdf->Output("Pauta final " . $data['titulo'] . ".pdf", "I");
+            else:
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+            endif;  
             // return view('admin.pdfs.pauta_final.index',$response);
         } catch (Exception $ex) {
             dd($ex);
@@ -288,9 +296,11 @@ class PautaFinalController extends Controller
                                                     //  if($nota>=10){
                                                     $cls = $dataOutrosAnos['ACS'][$i]['vc_classe'];
                                                     //   dd("Ola");
-                                                    array_push($arrayNotasClasses, array(
-                                                        "$cls" . "classe" => $nota
-                                                    )
+                                                    array_push(
+                                                        $arrayNotasClasses,
+                                                        array(
+                                                            "$cls" . "classe" => $nota
+                                                        )
                                                     );
 
 

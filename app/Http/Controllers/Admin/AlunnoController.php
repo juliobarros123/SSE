@@ -69,7 +69,7 @@ class AlunnoController extends Controller
             $aluno = fha_aluno_processo($processo);
 
             if ($aluno) {
-                $turmas = fh_turmas()->where('cursos.id', $aluno->id_curso)
+                $turmas = fh_turmas_2()->where('cursos.id', $aluno->id_curso)
                     ->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)
                     ->where('turmas.it_qtdeAlunos', '>', 0)
                     ->get();

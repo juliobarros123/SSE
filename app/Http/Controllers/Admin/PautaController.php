@@ -214,34 +214,38 @@ class PautaController extends Controller
         //   $n=  ;
 
         $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
+        if ($turma_professor):
+            $turma = fh_turmas_2()->where('turmas.id', $turma_professor->id_turma)->first();
+            // dd(  $turma_professor );
+            $alunos = fha_turma_alunos($turma->slug);
 
-        $turma = fh_turmas()->where('turmas.id', $turma_professor->id_turma)->first();
-        // dd(  $turma_professor );
-        $alunos = fha_turma_alunos($turma->slug);
+            $response['trimestre'] = $trimestre;
+            $response['alunos'] = $alunos;
+            $response['turma'] = $turma;
+            $response['turma_professor'] = $turma_professor;
+            $response['trimestre'] = $trimestre;
+            $response['cabecalho'] = fh_cabecalho();
+            // dd($response['turma_professor']);
+            $response["css"] = file_get_contents('css/lista/style-2.css');
 
-        $response['trimestre'] = $trimestre;
-        $response['alunos'] = $alunos;
-        $response['turma'] = $turma;
-        $response['turma_professor'] = $turma_professor;
-        $response['trimestre'] = $trimestre;
-        $response['cabecalho'] = fh_cabecalho();
-        // dd($response['turma_professor']);
-        $response["css"] = file_get_contents('css/lista/style-2.css');
+            // $mpdf = new \Mpdf\Mpdf(['format' => [210, 297]]);
+            $mpdf = new \Mpdf\Mpdf([
+                'mode' => 'utf-8',
+                'format' => [210, 297],
+                'margin_top' => 5,
 
-        // $mpdf = new \Mpdf\Mpdf(['format' => [210, 297]]);
-        $mpdf = new \Mpdf\Mpdf([
-            'mode' => 'utf-8',
-            'format' => [210, 297],
-            'margin_top' => 5,
+            ]);
+            $mpdf->setHeader();
+            $this->Logger->Log('info', 'Imprimi mini pauta');
+            $html = view("admin/pdfs/pauta/mini/trimestral", $response);
+            $mpdf->writeHTML($html);
+            // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
+            $mpdf->Output("pauta.pdf", "I");
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 
-        ]);
-        $mpdf->setHeader();
-        $this->Logger->Log('info', 'Imprimi mini pauta');
-        $html = view("admin/pdfs/pauta/mini/trimestral", $response);
-        $mpdf->writeHTML($html);
-        // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
-        $mpdf->Output("pauta.pdf", "I");
 
+        endif;
 
     }
     public $email;
@@ -362,31 +366,37 @@ class PautaController extends Controller
 
     public function trimestral($slug_turma, $trimestre)
     {
-        $turma = fh_turmas()->where('turmas.slug', $slug_turma)->first();
-        $response['director_turma'] = fh_directores_turmas()->where('turmas.id', $turma->id)->first();
-        $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
-      
-        $alunos = fha_turma_alunos($slug_turma);
-        $response['trimestre'] = $trimestre;
-        $response['alunos'] = $alunos;
-        $response['turma'] = $turma;
-        $response['trimestre'] = $trimestre;
-        $response['cabecalho'] = fh_cabecalho();
+        $turma = fh_turmas_2()->where('turmas.slug', $slug_turma)->first();
+        if ($turma):
+            $response['director_turma'] = fh_directores_turmas()->where('turmas.id', $turma->id)->first();
+            $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
 
-        $response["css"] = file_get_contents('css/lista/style-2.css');
-        $mpdf = new \Mpdf\Mpdf([
-            'mode' => 'utf-8',
-            'format' => [210, 297],
-            'margin_top' => 5,
+            $alunos = fha_turma_alunos($slug_turma);
+            $response['trimestre'] = $trimestre;
+            $response['alunos'] = $alunos;
+            $response['turma'] = $turma;
+            $response['trimestre'] = $trimestre;
+            $response['cabecalho'] = fh_cabecalho();
 
-        ]);
-        $mpdf->setHeader();
-        $this->Logger->Log('info', 'Imprimi mini pauta');
-        $html = view("admin/pdfs/pauta/trimestral/index", $response);
+            $response["css"] = file_get_contents('css/lista/style-2.css');
+            $mpdf = new \Mpdf\Mpdf([
+                'mode' => 'utf-8',
+                'format' => [210, 297],
+                'margin_top' => 5,
 
-        $mpdf->writeHTML($html);
-        // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
-        $mpdf->Output("pauta.pdf", "I");
+            ]);
+            $mpdf->setHeader();
+            $this->Logger->Log('info', 'Imprimi mini pauta');
+            $html = view("admin/pdfs/pauta/trimestral/index", $response);
+
+            $mpdf->writeHTML($html);
+            // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
+            $mpdf->Output("pauta.pdf", "I");
+        else:
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
+
+
+        endif;
 
     }
 

@@ -81,9 +81,11 @@
                                         <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a href="{{ route('admin.funcionarios.listas.cartao_imprimir', $funcionario->slug) }}"
+                                            class="dropdown-item">Imprimir Cartão</a>
                                         <a href="{{ route('admin/funcionario/editar', $funcionario->slug) }}"
                                             class="dropdown-item">Editar</a>
-
+                                            
                                         <a data-confirm="Tem certeza que deseja eliminar?"
                                             href="{{ route('admin/funcionario/eliminar', $funcionario->slug) }}"
                                             class="dropdown-item">Eliminar</a>

@@ -29,7 +29,7 @@
         <tbody class="bg-white">
             @if ($directores)
                 @foreach ($directores as $dt)
-                    {{-- @dump($dt) --}}
+            
                     <tr class="text-center">
                         <th>{{ $dt->id }}</th>
                         <th>{{ $dt->director }}</th>
@@ -39,7 +39,7 @@
                         <td>{{ $dt->curso }}</td>
                         <td>{{ $dt->classe }}ª classe</td>
                         <td>
-                            
+
                             <div class="dropdown">
                                 <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -51,16 +51,16 @@
 
                                     <a href="{{ route('turmas.imprimir_alunos', $dt->slug_turma) }}" class="dropdown-item"
                                         target="_blank">Lista</a>
-
-                                    <a href="{{ route('admin.atribuicao.professores', $dt->slug_turma) }}"
-                                        class="dropdown-item" target="_blank">Professores</a>
-                                    <a href="" class="dropdown-item" data-toggle="modal"
-                                        data-target=".bd-example-modal-sm{{ $dt->id }}">Pauta Trimestral</a>
-                                    <a href="{{ route('admin.pautaFinal.gerar', $dt->slug_turma) }}" class="dropdown-item"
-                                        target="_blank">Pauta Anual</a>
-                                        <a href="{{ route('notas-finais.inserir',$dt->slug_turma) }}"
+                                    @if (Auth::User()->id == $dt->id_director)
+                                        <a href="{{ route('admin.atribuicao.professores', $dt->slug_turma) }}"
+                                            class="dropdown-item" target="_blank">Professores</a>
+                                        <a href="" class="dropdown-item" data-toggle="modal"
+                                            data-target=".bd-example-modal-sm{{ $dt->id }}">Pauta Trimestral</a>
+                                        <a href="{{ route('admin.pautaFinal.gerar', $dt->slug_turma) }}"
+                                            class="dropdown-item" target="_blank">Pauta Anual</a>
+                                        <a href="{{ route('notas-finais.inserir', $dt->slug_turma) }}"
                                             class="dropdown-item">Inserir Notas Finais</a>
-
+                                    @endif
 
                                 </div>
 

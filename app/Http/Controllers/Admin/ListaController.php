@@ -27,7 +27,7 @@ class ListaController extends Controller
     public function propinas_turmas_pesquisar()
     {
         // dd("ola");
-        $response['turmas'] = fh_turmas()->get();
+        $response['turmas'] = fh_turmas_2()->get();
 
         return view('admin.lista.propinas_turma.pesquisar.index', $response);
 
@@ -70,7 +70,7 @@ class ListaController extends Controller
     //    dd($matriculas);
         storeSession('propinas_turma_aluno_lista', $propinas_turma_aluno_lista);
  
-        $data['turma'] = fh_turmas()->where('turmas.id',$request->id_turma)->first();
+        $data['turma'] = fh_turmas_2()->where('turmas.id',$request->id_turma)->first();
   
         $data['cabecalho'] = fh_cabecalho();
         $data['turma_alunos'] = $matriculas;
