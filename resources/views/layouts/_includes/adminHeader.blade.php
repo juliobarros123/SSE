@@ -910,7 +910,7 @@
         <a href="{{route('admin.documentos.infos_certificado')}}" class="nav-link">
               <i class="nav-icon fas fa-chalkboard"></i>
             <p>
-                Info. Certificados
+                Info. Certificado/Declaração
                
             </p>
         </a>

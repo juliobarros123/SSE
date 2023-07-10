@@ -33462,7 +33462,8 @@ input[type="email"],
 input[type="password"],
 input[type="search"],
 input[type="date"] ,
-input[type="file"] 
+input[type="file"] ,
+input[type="tel"] 
 {
     color: black !important;
     background-color: white !important;

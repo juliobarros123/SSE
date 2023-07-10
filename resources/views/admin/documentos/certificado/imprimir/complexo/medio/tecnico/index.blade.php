@@ -35,23 +35,23 @@ background-image-resolution: from-image;">
                     $classe = fh_classes()
                         ->where('classes.vc_classe', $i)
                         ->first();
-                        $matricula = fh_matriculas()
-                                ->where('alunnos.processo', $aluno->processo)
-                                ->where('classes.vc_classe', '<=', $i)
-                                ->get();
-
+                    $matricula = fh_matriculas()
+                        ->where('alunnos.processo', $aluno->processo)
+                        ->where('classes.vc_classe', '<=', $i)
+                        ->get();
+                    
                     $matricula = $matricula->sortDesc()->first();
-                // dd(   $matricula);
+                    // dd(   $matricula);
                     if ($matricula) {
                         $ca = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe_final->id);
                     } else {
                         $ca = 0;
                     }
                     // dd( $ca,"l");
-                    if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
-                        // dd("ol");
-                        array_push($medias_acumulada_linha, $ca);
-                    }
+                    // if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
+                    //     // dd("ol");
+                    array_push($medias_acumulada_linha, $ca);
+                    // }
                     // dd($medias_acumulada_linha);
                 @endphp
             @endfor
@@ -68,7 +68,7 @@ background-image-resolution: from-image;">
     @endforeach
 
     @php
-    // dd($medias_acumulada_coluna);
+        // dd($medias_acumulada_coluna);
         $medias_acumulada_coluna = fh_arredondar(media($medias_acumulada_coluna));
     @endphp
     @php
@@ -85,7 +85,7 @@ background-image-resolution: from-image;">
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, concluiu no ano lectivo de
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº <strong>{{$aluno->processo}}</strong>, concluiu no ano lectivo de
             {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do
             {{ $info_certificado->ensino }}
             , na área de <strong>{{ $aluno->vc_nomeCurso }} </strong>
@@ -100,6 +100,7 @@ background-image-resolution: from-image;">
 
     <table class="table">
         @php
+            $pc = $medias_acumulada_coluna;
             $medias_acumulada_linha = [];
             $medias_acumulada_coluna = [];
         @endphp
@@ -108,30 +109,18 @@ background-image-resolution: from-image;">
             $medias_anuas_disciplina = [];
         @endphp
 
-        <tr>
-            <th class="th-cab-notas" colspan="1" style="text-align: left">DISCIPLINA
-            </th>
-            <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
-            <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
-        </tr>
 
         @foreach ($componentes as $componente)
             <tr>
-
+                @if ($loop->index == 0)
                 <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
 
+                    <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
+                    <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
+                    @else
+                <td class="disciplina td td-boder" colspan="4"> <strong>{{ $componente->vc_componente }}</strong></td>
 
-                <td class="nota-valor" style="text-align:center">
-
-
-
-                </td>
-
-                <td style="border-right: none;text-align:right; ">
-
-                </td>
-                <td style=" border-left: none"></td>
-
+                @endif
             </tr>
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
@@ -149,19 +138,18 @@ background-image-resolution: from-image;">
                                 ->where('classes.vc_classe', '<=', $i)
                                 ->get();
                             $matricula = $matricula->sortBy([['vc_classe', 'desc']])->first();
-                           
+                            
                             // dd( $matricula );
                             if ($matricula) {
                                 // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
                                 $ca = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
-                           
                             }
                             // dd( $ca);
-                            if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe_final->id)) {
-                                array_push($medias_acumulada_linha, $ca);
-                            } else {
-                                $ca = -1;
-                            }
+                            // if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe_final->id)) {
+                            //     array_push($medias_acumulada_linha, $ca);
+                            // } else {
+                            //     $ca = -1;
+                            // }
                             // dd( $ca );
                             /* array_push($medias_acumulada_linha, $ca); */
                         @endphp
@@ -203,7 +191,72 @@ background-image-resolution: from-image;">
                 @endphp
             @endforeach
         @endforeach
+
+        <tr>
+            <td class="disciplina td td-boder"> <strong>Classificação Final do Plano Curricular(PC)</strong> </td>
+            <td class="nota-valor" style="text-align: center">
+                {{ $pc }}
+            </td>
+
+            <td style="border-right: none;text-align:right; ">
+                {{ ucfirst(valorPorExtenso(intval(intval($pc)))) }}
+            </td>
+            <td style=" border-left: none">Valores</td>
+
+
+        </tr>
+        <tr>
+            <td class="disciplina td td-boder"> <strong>Classificação do Estágio Curricular(EC)</strong> </td>
+            <td class="nota-valor" style="text-align: center">
+                {{ $ec = fha_nota_pap($aluno->processo, 'EC') }}
+            </td>
+
+            <td style="border-right: none;text-align:right; ">
+                {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
+            </td>
+            <td style=" border-left: none">Valores</td>
+
+
+        </tr>
+        <tr>
+            <td class="disciplina td td-boder"> <strong> Classificação da Prova de Aptidão Profissional(PAP)</strong>
+            </td>
+
+
+
+
+
+            <td class="nota-valor" style="text-align: center">
+                {{ $pap = fha_nota_pap($aluno->processo, 'PAP') }}
+            </td>
+
+            <td style="border-right: none;text-align:right; ">
+                {{ ucfirst(valorPorExtenso(intval(intval($pap)))) }}
+            </td>
+            <td style=" border-left: none">Valores</td>
+
+
+        </tr>
+        <tr>
+            <td class="disciplina td td-boder"> <strong> Classificação Final do Curso = (4*PC+PAP+EC) / 6</strong> </td>
+
+
+
+
+
+            <td class="nota-valor" style="text-align: center">
+                {{ $cfc = fh_arredondar((4 * $pc + $pap + $ec) / 6) }}
+            </td>
+
+            <td style="border-right: none;text-align:right; ">
+                {{ ucfirst(valorPorExtenso(intval(intval($cfc)))) }}
+            </td>
+            <td style=" border-left: none">Valores</td>
+
+
+        </tr>
     </table>
+
     <div class="lib">
         <div class="bib-part">
             Para efeitos legais lhe é passado o presente Certificado, que consta no livro de registo

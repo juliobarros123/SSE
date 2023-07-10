@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('titulo', 'Cadastrar Informações para o Certificado')
+@section('titulo', 'Cadastrar Informações para o Certificado/Declaração')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Cadastrar Informações para o Certificado</h3>
+            <h3>Cadastrar Informações para o Certificado/Declaração</h3>
         </div>
     </div>
     <script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>

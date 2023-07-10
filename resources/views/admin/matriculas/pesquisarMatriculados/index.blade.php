@@ -21,14 +21,14 @@
                         <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
     
     
-                        @if (isset($ano_lectivo_publicado))
+                        {{-- @if (isset($ano_lectivo_publicado))
                             <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
                                 <option value="{{ $id_anoLectivo_publicado }}">
                                     {{ $ano_lectivo_publicado }}
                                 </option>
                             </select>
                             <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
-                        @else
+                        @else --}}
     
                             <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
                                 <option value="Todos" >Todos</option>
@@ -38,7 +38,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                        @endif
+                        {{-- @endif --}}
     
     
                     </div>

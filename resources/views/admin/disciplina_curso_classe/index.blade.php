@@ -33,7 +33,7 @@
                 <th>CURSO</th>
                 <th>CLASSE</th>
                 <th>TERMIMAL</th>
-                <th>P.A.P</th>
+                <th>TIPO(13ª CLASSE)</th>
 
                 <th>ACÇÕES</th>
             </tr>

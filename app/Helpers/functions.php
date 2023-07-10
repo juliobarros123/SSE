@@ -153,6 +153,29 @@ function fh_aluno_slug($slug)
     return fh_alunos()->where('alunnos.slug', $slug)->first();
 }
 
+function fha_nota_pap($processo,$tipo)
+{
+    // dd($processo);
+    $matricula = fh_matriculas()
+        ->where('alunnos.processo', $processo)
+        ->orderBy('classes.vc_classe', 'desc')
+        ->select('turmas.it_idAnoLectivo','turmas.it_idCurso', 'matriculas.*')->first();
+    // dd($matricula);
+    $ddc = fh_disciplinas_cursos_classes()
+        ->where('disciplinas_cursos_classes.it_curso', $matricula->it_idCurso)
+        ->where('pap', $tipo)
+        ->first();
+        // dd(   $ddc);
+    if ($ddc) {
+        return fha_media_trimestral_geral($processo, $ddc->it_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
+    } else {
+        return 0;
+    }
+    // dd($ddc);
+
+
+
+}
 
 function fh_matriculas()
 {
@@ -355,7 +378,7 @@ function fha_meus_director_turmas()
         if ($director_turma) {
             $std = new stdClass();
             $std->id = $director_turma->id;
-            
+
             $std->id_director = $director_turma->id_user;
 
             $std->curso = $director_turma->vc_nomeCurso;
@@ -1056,15 +1079,15 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
     $notas = array();
     $medias_acumulada_linha = array();
     $classe_corrente = Classe::find($id_classe);
-    $aluno=fha_aluno_processo($processo);
+    $aluno = fha_aluno_processo($processo);
     // dd( $aluno);$aluno->id_curso
     $matricula = fh_matriculas()
         ->where('turmas.it_idClasse', $id_classe)
         ->where('alunnos.processo', $processo)
         ->orderBy('anoslectivos.ya_fim', 'desc')
         ->first();
-        // dd(    $matricula);
-  
+    // dd(    $matricula);
+
     $classes = fh_disciplinas_cursos_classes()
         ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
         ->where('disciplinas.id', $id_disciplina)
@@ -1104,7 +1127,7 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
         // dd( $ca);
         array_push($medias_acumulada_linha, $ca);
 
-    
+
         // dd($media);
         // $medias_acumulada_linha = [];
 
@@ -1550,7 +1573,7 @@ function fhap_media_geral($processo, $id_classe, $id_ano_lectivo)
         $nota = $media_trimestral_geral;
         array_push($notas, $nota);
     }
-// dd($notas);
+    // dd($notas);
     $nota = media($notas);
     // dd($nota);
     return fh_arredondar($nota);

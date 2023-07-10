@@ -38,6 +38,8 @@
                 <th>FOTOGRAFIA</th>
                 <th>NOME</th>
                 <th>BI</th>
+                <th>TELEFONE</th>
+
                 <th>FUNÇÃO</th>
                 <th>ANO DE VALIDADE</th>
                 <th>Data de Nascimento</th>
@@ -57,6 +59,8 @@
                         </th>
                         <th>{{ $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome }}</th>
                         <th>{{ $funcionario->vc_bi }}</th>
+                        <th>{{ $funcionario->vc_telefone }}</th>
+
                         <td>{{ $funcionario->vc_funcao }}</td>
                         <td>{{ $funcionario->ya_anoValidade }}</td>
                         <td>{{ $funcionario->dt_nascimento }}</td>

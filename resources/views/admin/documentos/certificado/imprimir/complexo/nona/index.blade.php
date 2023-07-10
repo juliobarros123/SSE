@@ -79,7 +79,7 @@ background-image-resolution: from-image;">
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}.
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº <strong>{{$aluno->processo}}</strong>.
 
         </div>
 

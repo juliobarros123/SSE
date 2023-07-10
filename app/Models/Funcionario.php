@@ -29,6 +29,7 @@ class Funcionario extends Model
         'ya_anoValidade',
         'dt_nascimento',
         'vc_agente',
+        'vc_telefone',
         'it_estado_funcionario'
 
     ];

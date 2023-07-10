@@ -24,7 +24,12 @@
         value="{{ isset($funcionario->vc_bi) ? $funcionario->vc_bi : '' }}" name="vc_bi" minlength="14"
         maxlength="14" placeholder="Bilhete de Identidade" required>
 </div>
-
+<div class="col-md-4">
+    <label for="vc_telefone" class="form-label">Telefone</label>
+    <input type="tel" class="form-control border-secondary"
+        value="{{ isset($funcionario->vc_telefone) ? $funcionario->vc_telefone : '+244 9' }}" name="vc_telefone" minlength="14"
+        maxlength="14" placeholder="+xxx 9xxxxxxxx" required>
+</div>
 <div class="col-md-4">
     <label for="vc_funcao" class="form-label">Função</label>
     <select type="text" class="form-control border-secondary" name="vc_funcao" required>
@@ -66,6 +71,7 @@
 
     </select>
 </div>
+
 <div class="col-md-4">
     <label for="ya_anoValidade" class="form-label">Válido até</label>
     <input type="number" class="form-control border-secondary"
@@ -74,7 +80,7 @@
 </div>
 <div class="col-md-4">
     <label for="dt_nascimento" class="form-label">Data de Nascimento</label>
-    <input type="date" class="form-control border-secondary"
+    <input type="date" class="form-control border-secondary" required
         value="{{ isset($funcionario->dt_nascimento) ? $funcionario->dt_nascimento : '' }}"
         max="<?php echo date('Y-m-d'); ?>" min="1921-01-01" name="dt_nascimento">
 </div>

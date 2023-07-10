@@ -74,7 +74,8 @@ class ComponenteDisciplinaController extends Controller
         $response['componente_disciplina'] = fh_componentes_disciplinas()->where('componente_disciplinas.slug', $slug)->first();
         if ($response['componente_disciplina']):
             ComponenteDisciplina::where('componente_disciplinas.slug', $slug)->delete();
-            return view('admin.documentos.componente-disciplina.editar.index', $response);
+            return redirect()->route('admin.documentos.componentes-disciplinas')->with('feedback', ['type' => 'success', 'sms' => 'Vínculo Eliminado com sucesso!']);
+
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
         endif;

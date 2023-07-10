@@ -23,6 +23,9 @@ class CreateFuncionariosTable extends Migration
             $table->string('vc_agente')->nullable();
             $table->date('dt_nascimento');
             $table->year('ya_anoValidade')->nullable();
+            
+            $table->string('vc_telefone')->nullable();
+
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
 
             $table->timestamps();

@@ -58,15 +58,16 @@
     </select>
 </div>
 <div class="form-group col-md-3">
-    <label for="pap">P.A.P</label>
+    <label for="pap">Tipo(13ª Classe)</label>
     <select class="form-control  border-secondary " name="pap" id="pap" required>
         @if (isset($disciplina_curso_classe))
             <option value="{{$disciplina_curso_classe->pap}}" selected disabled>{{$disciplina_curso_classe->pap}}
             </option>
         @endif
     
-            <option value="Não" >Não</option>
-            <option value="Sim" >Sim</option>
+            <option value="Normal" >Normal</option>
+            <option value="PAP" >PAP</option>
+            <option value="EC" >EC</option>
        
     </select>
 </div>

@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Editar Informações para o Certificado')
+@section('titulo', 'Editar Informações para o Certificado/Declaração')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Editar Informações para o Certificado</h3>
+            <h3>Editar Informações para o Certificado/Declaração</h3>
         </div>
     </div>
 

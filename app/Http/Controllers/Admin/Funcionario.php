@@ -116,15 +116,15 @@ class Funcionario extends Controller
         try {
             $dados = $request->except(['_token', '_method']);
 
-            $request->validate([
-                'vc_primeiroNome' => 'required',
-                'vc_ultimoNome' => 'required',
-                'vc_bi' => 'required',
-                'vc_funcao' => 'required',
-                'ya_anoValidade' => 'required',
-                'dt_nascimento' => 'required',
-                'vc_agente' => 'required'
-            ]);
+            // $request->validate([
+            //     'vc_primeiroNome' => 'required',
+            //     'vc_ultimoNome' => 'required',
+            //     'vc_bi' => 'required',
+            //     'vc_funcao' => 'required',
+            //     'ya_anoValidade' => 'required',
+            //     'dt_nascimento' => 'required',
+               
+            // ]);
 
             if ($request->hasFile('vc_foto')) {
                 $imagem = $request->file('vc_foto');
@@ -137,13 +137,16 @@ class Funcionario extends Controller
 
                 // unlink($cff->vc_foto);
                 // $imagem->move($dir, $nomeImagem);
+            }else{
+                $dados['vc_foto'] = "images/funcionarios/modelo.png";
+
             }
             $cf = ModelsFuncionario::where('funcionarios.slug', $slug)->update($dados);
 
 
             //dd($dados);
             $this->loggerData('Actualizou Funcionário ', $request->vc_primeiroNome . ' ' . $request->vc_ultimoNome . 'com  função ' . $request->vc_funcao);
-            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio editado com sucesso']);
+            return redirect()->route('admin.funcionarios.listar')->with('feedback', ['type' => 'success', 'sms' => 'Funcionàrio editado com sucesso']);
 
         } catch (\Exception $ex) {
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
