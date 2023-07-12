@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
+    @if (Auth::user()->vc_tipoUtilizador == 'Administrador' || Auth::user()->vc_tipoUtilizador == 'Director Geral' || Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' || Auth::user()->vc_tipoUtilizador == 'Preparador')
         <div class="d-flex justify-content-end mb-3">
             <a class="btn btn-dark" href="{{ route('permissao_selecao.criar') }}">
                 <strong class="text-light">Cadastrar Permissão</strong>

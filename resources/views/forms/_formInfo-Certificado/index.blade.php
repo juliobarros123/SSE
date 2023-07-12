@@ -70,7 +70,7 @@
         <option value="ENSINO PRIMÁRIO">ENSINO PRIMÁRIO</option>
         <option value="Iº CICLO DO ENSINO SECUNDÁRIO GERAL">Iº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
         <option value="IIº CICLO DO ENSINO SECUNDÁRIO GERAL">IIº CICLO DO ENSINO SECUNDÁRIO GERAL</option>
-        <option value="IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO ">IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO </option>
+        <option value="IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO">IIº CICLO DO ENSINO SECUNDÁRIO TÉCNICO </option>
 
     </select>
 

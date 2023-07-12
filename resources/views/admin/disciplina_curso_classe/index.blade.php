@@ -12,7 +12,7 @@
 
     @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
+            Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
             Auth::user()->vc_tipoUtilizador == 'Preparador')
 
 

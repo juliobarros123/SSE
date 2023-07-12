@@ -12,8 +12,13 @@
         @enderror
     </div>
 </div>
+<div class="col-md-3">
+    <label for="dt_nascimento" class="form-label">Fotografia</label>
+    <input name="profile_photo_path" type="file" id="file" class="form-control border-secondary"
+    value="{{ isset($funcionario->profile_photo_path) ? $funcionario->profile_photo_path : '' }}">
+</div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group ">
         <label for="vc_primemiroNome">{{ __('Nome') }}</label>
 
@@ -43,30 +48,56 @@
         @enderror
     </div>
 </div>
-<div class="col-md-4">
+@if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+Auth::user()->vc_tipoUtilizador == 'Director Geral' )
+<div class="col-md-3">
     <label for="vc_tipoUtilizador">{{ __('Nivel') }}</label>
     <select type="text" class="form-control border-secondary" id="nivel"  name="vc_tipoUtilizador" required>
         @isset($user)
             <option value="{{ isset($user->vc_tipoUtilizador) ? $user->vc_tipoUtilizador : '' }}">
                 {{ $user->vc_tipoUtilizador }}</option>
         @else
-            <option disabled value="" selected>selecione o nível de acesso</option>
+            <option disabled value="" selected>Selecione o nível de acesso</option>
         @endisset
         <option value="Director Geral">Director Geral</option>
         <option value="Administrador">Administrador</option>
         <option value="Sub Directoria Pedagógica">Sub Directoria Pedagógica</option>
-        <option value="RH">Recursos Humanos</option>
         <option value="Secretaria">Secretaria</option>
         <option value="Comissão">Comissão</option>
         <option value="Professor">Professor</option>
-        <option value="Preparador">Preparador</option>
+        <option value="Estudande">Estudande</option>
+        <option value="Coordenação Pedagógica">Coordenação Pedagógica</option>
         <option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>
-        <option value="Gabinete Pedagógico">Gabinete Pedagógico</option>
         <option value="Candidato">Candidato</option>
    
     </select>
-</div>
-<div class="col-md-2">
+</div> 
+@else
+<div class="col-md-3" hidden>
+    <label for="vc_tipoUtilizador">{{ __('Nivel') }}</label>
+    <select type="text" class="form-control border-secondary" id="nivel"  name="vc_tipoUtilizador" required>
+        @isset($user)
+            <option value="{{ isset($user->vc_tipoUtilizador) ? $user->vc_tipoUtilizador : '' }}">
+                {{ $user->vc_tipoUtilizador }}</option>
+        @else
+            <option disabled value="" selected>Selecione o nível de acesso</option>
+        @endisset
+        <option value="Director Geral">Director Geral</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Sub Directoria Pedagógica">Sub Directoria Pedagógica</option>
+        <option value="Secretaria">Secretaria</option>
+        <option value="Comissão">Comissão</option>
+        <option value="Professor">Professor</option>
+        <option value="Estudande">Estudande</option>
+        <option value="Coordenação Pedagógica">Coordenação Pedagógica</option>
+        <option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>
+        <option value="Candidato">Candidato</option>
+   
+    </select>
+</div> 
+@endif
+
+{{-- <div class="col-md-2">
     <div class="form-group" >
         <label for="it_n_agente">{{ __('Numero de agente') }}</label>
         <input  id="n_agente" value="{{ isset($user->it_n_agente) ? $user->it_n_agente : '' }}"
@@ -79,22 +110,15 @@
             </span>
         @enderror
     </div>
-</div>
-<div class="col-md-2">
-    <div class="form-group ">
-        <label for="vc_telefone">{{ __('Telefone') }}</label>
-        <input value="{{ isset($user->vc_telefone) ? $user->vc_telefone : '' }}" id="vc_tipoUtilizador" id="vc_telefone"
-            placeholder="Telefone" type="number" min="900000000" class="form-control @error('vc_telefone') is-invalid @enderror border-secondary" name="vc_telefone"
-            value="{{ old('vc_telefone') }}" required autocomplete="vc_telefone" autofocus>
+</div> --}}
 
-        @error('vc_telefone')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-    </div>
+<div class="col-md-3">
+    <label for="vc_telefone" class="form-label">Telefone</label>
+    <input type="tel" class="form-control border-secondary"
+        value="{{ isset($user->vc_telefone) ? $user->vc_telefone : '+244 9' }}" name="vc_telefone" minlength="14"
+        maxlength="14" placeholder="+xxx 9xxxxxxxx" required>
 </div>
-<div class="col-md-2">
+<div class="col-md-3">
     <label for="vc_genero">{{ __('Genero') }}</label>
     <select type="text" class="form-control border-secondary" name="vc_genero" required>
         @isset($user)
@@ -107,7 +131,7 @@
     </select>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-3">
     <div class="form-group ">
         <label for="email">{{ __('Email') }}</label>
         <input value="{{ isset($user->vc_email) ? $user->vc_email : '' }}" id="email" type="email"
@@ -122,7 +146,7 @@
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group ">
         <label for="password">{{ __('Senha') }}</label>
         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror border-secondary"
@@ -136,7 +160,7 @@
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group ">
         <label for="password-confirm">{{ __('Confirmar a senha') }}</label>
         <input id="password-confirm" type="password" class="form-control border-secondary" name="password_confirmation" required

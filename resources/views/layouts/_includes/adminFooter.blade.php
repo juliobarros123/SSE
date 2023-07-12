@@ -1476,6 +1476,169 @@ vc_tipodaNota
         $(e.target).data('dropdown-menu').css('display', 'none');
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Dados de exemplo
+    var url_origem = "{{ url('/') }}";
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: url_origin + '/alunos_por_classes',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        async: false,
+        success: function(response) {
+            console.log(response);
+            var barChartData = {
+                labels: response.classes,
+                datasets: [{
+                    label: 'Gráfico de Barras',
+                    data: response.matriculados,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+            new Chart(document.getElementById('bar-chart'), {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: url_origin + '/alunos_por_turmas',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        async: false,
+        success: function(response) {
+            console.log(response);
+            var pieChartData = {
+                labels: response.turmas,
+                datasets: [{
+                    label: 'Gráfico de Pizza',
+                    data: response.matriculados,
+                    backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)',
+                        'rgba(75, 192, 192, 0.5)', 'rgba(255, 205, 86, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 205, 86, 1)', 'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            new Chart(document.getElementById('pie-chart'), {
+                type: 'pie',
+                data: pieChartData
+            });
+        }
+    });
+
+
+
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: url_origin + '/candidatos_por_ano_lectivo',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        async: false,
+        success: function(response) {
+            console.log(response);
+            var lineChartData = {
+                labels: response.anos_lectivos,
+                datasets: [{
+                    label: 'Gráfico de Linhas',
+                    data: response.candidatos,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 1
+                }]
+            };
+            new Chart(document.getElementById('line-chart'), {
+                type: 'line',
+                data: lineChartData
+            });
+        }
+    });
+
+
+
+
+
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: url_origin + '/alunos_por_cursos',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        async: false,
+        success: function(response) {
+            console.log(response);
+            var polarAreaChartData = {
+                labels:response.cursos,
+                datasets: [{
+                    label: 'Gráfico de Área Polar',
+                    data: response.alunos,
+                    backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)',
+                        'rgba(75, 192, 192, 0.5)', 'rgba(255, 205, 86, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 205, 86, 1)', 'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            new Chart(document.getElementById('polar-area-chart'), {
+                type: 'polarArea',
+                data: polarAreaChartData
+            });
+        }
+    });
+    var radarChartData = {
+        labels: ['A', 'B', 'C', 'D', 'E'],
+        datasets: [{
+            label: 'Gráfico Radar',
+            data: [10, 15, 20, 18, 25],
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 1
+        }]
+    };
+
+
+
+    // Renderizando os gráficos
+
+
+
+
+
+
+    new Chart(document.getElementById('radar-chart'), {
+        type: 'radar',
+        data: radarChartData
+    });
+</script>
 </body>
 
 </html>

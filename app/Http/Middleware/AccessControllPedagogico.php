@@ -19,7 +19,7 @@ class AccessControllPedagogico
         if(auth()->user()->vc_tipoUtilizador=='Administrador'){
             return $next($request);
  
-        }else if(auth()->user()->vc_tipoUtilizador=='Cordenação Pedagógica'){
+        }else if(auth()->user()->vc_tipoUtilizador=='Coordenação Pedagógica'){
             return $next($request);
         }
         else if(auth()->user()->vc_tipoUtilizador=='Chefe de Departamento Pedagógico'){

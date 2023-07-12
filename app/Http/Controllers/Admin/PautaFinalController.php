@@ -77,7 +77,13 @@ class PautaFinalController extends Controller
                 // if ( $data['turma']->vc_classe <= 9 && $data['cabecalho']->vc_tipo_escola == "Geral") {
                 //     $html = view("admin.pdfs.pauta.anual", $data);
                 // } else if($data['turma']->vc_classe >=10 && $data['cabecalho']->vc_tipo_escola == "Técnico")  {
-                $html = view("admin.pdfs.pauta.tecnico.anual", $data);
+                if($turma->vc_classe==13){
+                    $html = view("admin.pdfs.pauta.tecnico.anual_13", $data);
+
+                }else{
+                    $html = view("admin.pdfs.pauta.tecnico.anual", $data);
+
+                }
 
 
                 // } 

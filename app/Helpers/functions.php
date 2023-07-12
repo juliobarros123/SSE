@@ -115,6 +115,7 @@ function candidado_transferido($id_candidato)
 
 
 }
+
 function fh_alunos()
 {
 
@@ -602,7 +603,10 @@ function fh_classes()
 }
 function fha_colspan($id_disciplina, $id_classe, $id_curso)
 {
-
+    $classe = fh_classes()->where('classes.id', $id_classe)->first();
+if( $classe->vc_classe==13){
+    return 3;
+}else{
     $c = 0;
     $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
         ->where('disciplinas_cursos_classes.it_curso', $id_curso)
@@ -612,7 +616,6 @@ function fha_colspan($id_disciplina, $id_classe, $id_curso)
         ->orderBy('classes.vc_classe', 'desc')
         ->first();
     $cabecalho = fh_cabecalho();
-    $classe = fh_classes()->where('classes.id', $id_classe)->first();
 
     if ($disciplina_curso_classe_actual) {
         $cont = 4;
@@ -641,6 +644,7 @@ function fha_colspan($id_disciplina, $id_classe, $id_curso)
 
     // dd($colspan);
     return $cont;
+}
 }
 
 

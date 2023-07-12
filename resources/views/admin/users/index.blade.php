@@ -39,6 +39,8 @@
         <thead class="">
             <tr >
                 <th>ID</th>
+                <th>FOTOGRAFIA</th>
+
                 <th>NOME</th>
                 <th>E-MAIL</th>
                 <th>Nº TELEFONE</th>
@@ -52,7 +54,10 @@
 
                 @foreach ($users as $user)
                     <tr>
+                        
                         <th>{{ $user->id }}</th>
+                        <th> <img src="{{ asset('/' . $user->profile_photo_path) }}" id="myImg" alt=""
+                            width="50px"></th>
                         <th>{{ $user->vc_primemiroNome . ' ' . $user->vc_apelido }}</th>
 
                         <th>{{ $user->vc_email }}</th>
@@ -146,20 +151,19 @@
                 $('#' + id)
                     .append('<option value="Director Geral">Director Geral</option>')
                     .append('<option value="Administrador">Administrador</option>')
-                    .append(
-                        '<option value="Sub Directoria Pedagógica">Sub Directoria Pedagógica</option>')
-                    .append('<option value="RH">Recursos Humanos</option>')
+                    .append('<option value="Coordenação Pedagógica">Coordenação Pedagógica</option>')
                     .append('<option value="Secretaria">Secretaria</option>')
                     .append('<option value="Comissão">Comissão</option>')
                     .append('<option value="Professor">Professor</option>')
-                    .append('<option value="Preparador">Preparador</option>')
-                    .append('<option value="Visitante">Visitante</option>')
+                    .append('<option value="Sub Directoria Pedagógica">Sub Directoria Pedagógica</option>')
+                   
+                    .append('<option value="Estudande">Estudande</option>')
+                    .append('<option value="Candidato">Candidato</option>')
                     .append(
                         '<option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>'
-                    )
-                    .append('<option value="Gabinete Pedagógico">Gabinete Pedagógico</option>');
+                    );
             }
-
+   
             $('#' + id).change(function() {
                 console.log('ola');
                 var nivel = $('#' + id).val();

@@ -80,7 +80,7 @@
                     </select>
 
                 </div>
-                <div class="card col-sm-12">
+                {{-- <div class="card col-sm-12">
                     <div class="card-body ">
                         <div class="d-flex justify-content-end">
                             <div class="form-group w-25">
@@ -117,8 +117,6 @@
                                 <input type="number" class="form-control  w-100  so_nota" name="nota_unica11">
                             </div>
                         </div>
-
-                        {{--  --}}
 
                         <div class="d-flex justify-content-center w-100 so_idade " id="so_idade">
                             <div class="form-group w-100 text-center so_idade">
@@ -168,7 +166,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div> --}}
 
 
                 <div class=" d-flex justify-content-center w-100">

@@ -7,6 +7,15 @@
         <?php
         echo $css;
         ?>
+        .visa-container.left {
+    left: 340;
+    bottom: 40;
+  }
+
+  .visa-container.right {
+    right: 340;
+    bottom: 40;
+  }
     </style>
 </head>
 
@@ -71,28 +80,30 @@
 
                 <th colspan="1" rowspan="1" class="th">CA({{ $turma->vc_classe }})</th>
                 @php
-                $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
+                    $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
                         ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
                         ->where('disciplinas.id', $disciplina->id)
                         ->where('classes.vc_classe', $turma->vc_classe)
-                        ->select('classes.*', 'disciplinas.vc_nome','disciplinas_cursos_classes.terminal')
+                        ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
                         ->orderBy('classes.vc_classe', 'desc')
                         ->first();
-              
+                    
                     $classes = fh_disciplinas_cursos_classes()
                         ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
                         ->where('disciplinas.id', $disciplina->id)
                         ->where('classes.vc_classe', '<', $turma->vc_classe)
-                        ->select('classes.*', 'disciplinas.vc_nome','disciplinas_cursos_classes.terminal')
+                        ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
                         ->orderBy('classes.vc_classe', 'desc')
                         ->get();
                 @endphp
-                @if ($cabecalho->vc_tipo_escola == 'Técnico' && $turma->vc_classe>=10  && $disciplina_curso_classe_actual->terminal=='Terminal')
+                @if (
+                    $cabecalho->vc_tipo_escola == 'Técnico' &&
+                        $turma->vc_classe >= 10 &&
+                        $disciplina_curso_classe_actual->terminal == 'Terminal')
                     @foreach ($classes as $classe)
                         <th colspan="1" rowspan="1" class="th">CA({{ $classe->vc_classe }})</th>
-
                     @endforeach
-                   
+
                 @endif
                 @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
                     <th colspan="1" rowspan="1" class="th">CFD</th>
@@ -151,27 +162,29 @@
                     <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
                         {{ $ca }}</td>
                     @php
-                    $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
-                        ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
-                        ->where('disciplinas.id', $disciplina->id)
-                        ->where('classes.vc_classe', $turma->vc_classe)
-                        ->select('classes.*', 'disciplinas.vc_nome','disciplinas_cursos_classes.terminal')
-                        ->orderBy('classes.vc_classe', 'desc')
-                        ->first();
-              
+                        $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
+                            ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
+                            ->where('disciplinas.id', $disciplina->id)
+                            ->where('classes.vc_classe', $turma->vc_classe)
+                            ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
+                            ->orderBy('classes.vc_classe', 'desc')
+                            ->first();
+                        
                         $classes = fh_disciplinas_cursos_classes()
                             ->where('disciplinas_cursos_classes.it_curso', $turma->it_idCurso)
                             ->where('disciplinas.id', $disciplina->id)
                             ->where('classes.vc_classe', '<', $turma->vc_classe)
-                            ->select('classes.*', 'disciplinas.vc_nome','disciplinas_cursos_classes.terminal')
+                            ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
                             ->orderBy('classes.vc_classe', 'desc')
                             ->get();
                         /* dd(    $classes ); */
                         $ca_classe_anterior = 0;
                     @endphp
 
-                    @if ($cabecalho->vc_tipo_escola == 'Técnico' && $turma->vc_classe>=10  && $disciplina_curso_classe_actual->terminal=='Terminal')
-
+                    @if (
+                        $cabecalho->vc_tipo_escola == 'Técnico' &&
+                            $turma->vc_classe >= 10 &&
+                            $disciplina_curso_classe_actual->terminal == 'Terminal')
                         @foreach ($classes as $classe)
                             @php
                                 $ca_classe_anterior = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
@@ -180,14 +193,11 @@
                                 style="{{ $ca_classe_anterior >= 10 ? 'color:blue' : 'color:red' }}">
                                 {{ $ca_classe_anterior }}</td>
                         @endforeach
-
-
-                   
                     @endif
 
                     @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso))
                         @php
-                            $cfd = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idClasse)
+                            $cfd = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idClasse);
                         @endphp
 
                         <td colspan="1" class="td" style="{{ $cfd >= 10 ? 'color:blue' : 'color:red' }}">
@@ -233,8 +243,17 @@
         </tbody>
 
     </table>
+
+  
     @include('layouts._includes.fragments.lista.footer.index')
-    @include('layouts._includes.fragments.lista.footer.visto')
+    @section('entidadade1', 'Sub Director Pedagógico')
+
+    @section('entidadade1-valor', $cabecalho->vc_nomeSubdirectorPedagogico)
+
+    @section('entidadade2', ' O Director Geral')
+
+    @section('entidadade2-valor', $cabecalho->vc_nomeDirector)
+    @include('layouts._includes.fragments.lista.footer.visto-2')
 
 
 

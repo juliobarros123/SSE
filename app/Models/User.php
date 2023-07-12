@@ -34,6 +34,7 @@ class User extends Authenticatable implements JWTSubject
         'vc_telefone',
         'vc_genero',
         'it_estado_user',
+        'profile_photo_path',
         'desenvolvedor'
     ];
     protected static function boot()

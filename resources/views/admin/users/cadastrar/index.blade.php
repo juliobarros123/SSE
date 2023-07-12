@@ -21,7 +21,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ url('admin/users/salvar')}}" method="post" class="row">
+            <form action="{{ url('admin/users/salvar')}}" method="post" class="row" enctype="multipart/form-data">
                 @csrf
 
                 @include('forms._formUser.index')

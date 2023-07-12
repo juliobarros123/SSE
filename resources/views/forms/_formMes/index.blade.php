@@ -58,7 +58,7 @@
         <option value="00">Auxiliar de limpeza</option>
         <option value="00">Secretaria</option>
         <option value="00">RH</option>
-        <option value="00">Cordenação Pedagógica</option>
+        <option value="00">Coordenação Pedagógica</option>
     </select>
 </div>
 

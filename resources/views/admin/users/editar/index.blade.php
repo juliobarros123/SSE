@@ -12,7 +12,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form form action="{{ route('admin.users.atualizar', $user->slug) }}" method="post" class="row">
+            <form form action="{{ route('admin.users.atualizar', $user->slug) }}"  enctype="multipart/form-data" method="post" class="row">
                 @method('put')
                 @csrf
                 @include('forms._formUser.index')

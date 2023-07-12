@@ -88,8 +88,7 @@ background-image-resolution: from-image;">
 
         <div class="bib-part">
             Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o
-            {{ $info_certificado->ensino }},
-            conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
+            {{$info_certificado->ensino}},conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
         </div>

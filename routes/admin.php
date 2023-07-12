@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('alunos_por_classes/', ['as' => 'admin.alunos_por_classes', 'uses' => 'Ajax\EstatisticaController@alunos_por_classes']);
+Route::get('alunos_por_turmas/', ['as' => 'admin.alunos_por_turmas', 'uses' => 'Ajax\EstatisticaController@alunos_por_turmas']);
+Route::get('candidatos_por_ano_lectivo/', ['as' => 'admin.candidatos_por_ano_lectivo', 'uses' => 'Ajax\EstatisticaController@candidatos_por_ano_lectivo']);
+Route::get('alunos_por_cursos/', ['as' => 'admin.alunos_por_cursos', 'uses' => 'Ajax\EstatisticaController@alunos_por_cursos']);
 
 Route::get('admin/cidadao/{bi}', ['as' => 'admin.cidadao', 'uses' => 'Admin\AlunnoController@cidadao']);
 
@@ -232,9 +236,9 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::post('admin/users/salvar', ['as' => 'admin.users.salvar', 'uses' => 'Admin\UserController@salvar'])->middleware('access.controll.administrador');
     Route::get('admin/users/cadastrar', ['as' => 'admin.users.cadastrar', 'uses' => 'Admin\UserController@create'])->middleware('access.controll.administrador');
     Route::get('admin/users/excluir/{slug}', ['as' => 'admin.users.excluir', 'uses' => 'Admin\UserController@excluir'])->middleware('access.controll.administrador');
-    Route::put('admin/users/atualizar/{slug}', ['as' => 'admin.users.atualizar', 'uses' => 'Admin\UserController@atualizar'])->middleware('access.controll.administrador');
+    Route::put('admin/users/atualizar/{slug}', ['as' => 'admin.users.atualizar', 'uses' => 'Admin\UserController@atualizar']);
     Route::get('admin/users/ver/{slug}', ['as' => 'users', 'uses' => 'Admin\UserController@ver'])->middleware('access.controll.administrador');
-    Route::get('admin/users/editar/{slug}', ['as' => 'admin.users.editar', 'uses' => 'Admin\UserController@editar'])->middleware('access.controll.administrador');
+    Route::get('admin/users/editar/{slug}', ['as' => 'admin.users.editar', 'uses' => 'Admin\UserController@editar']);
 
     Route::get('admin/user/editar/{id}', ['as' => 'admin.user.editar', 'uses' => 'Admin\UserController@editarPessoal']);
     Route::put('admin/user/atualizar/{id}', ['as' => 'admin.user.atualizar', 'uses' => 'Admin\UserController@atualizarPessoal']);

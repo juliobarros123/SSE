@@ -38,7 +38,7 @@ class UtilizadorRepository implements UtilizadorInterface
     {
 
 
-        User::create([
+      return  User::create([
             'vc_nomeUtilizador' => $input['vc_nomeUtilizador'],
             'vc_email' => $input['vc_email'],
             'vc_tipoUtilizador' => $input['vc_tipoUtilizador'],
@@ -46,7 +46,7 @@ class UtilizadorRepository implements UtilizadorInterface
             'vc_primemiroNome' => $input['vc_primemiroNome'],
             'vc_apelido' => $input['vc_apelido'],
             'vc_genero' => $input['vc_genero'],
-            'it_n_agente' => $input['it_n_agente'],
+            // 'it_n_agente' => $input['it_n_agente'],
             'password' => Hash::make($input['password']),
             'id_cabecalho' => Auth::User()->id_cabecalho,
         ]);
@@ -73,7 +73,7 @@ class UtilizadorRepository implements UtilizadorInterface
     {
 
         $dados = $input[0];
-        // dd(  $dados,"o");
+        // dd($input,  $dados,"o");
         User::where('users.slug',$slug)->update([
             'vc_nomeUtilizador' => $dados['vc_nomeUtilizador'],
             'vc_email' => $dados['vc_email'],
@@ -82,7 +82,7 @@ class UtilizadorRepository implements UtilizadorInterface
             'vc_primemiroNome' => $dados['vc_primemiroNome'],
             'vc_apelido' => $dados['vc_apelido'],
             'vc_genero' => $dados['vc_genero'],
-            'it_n_agente' => $dados['it_n_agente'],
+            // 'it_n_agente' => $dados['it_n_agente'],
             'password' => Hash::make($dados['password']),
         ]);
 

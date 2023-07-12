@@ -79,14 +79,37 @@ class UserController extends Controller
         try {
             $dados = $request->all();
             // dd( $dados);
+            if ($request->hasFile('profile_photo_path')) {
+                $imagem = $request->file('profile_photo_path');
+                $num = rand(1111, 9999);
+                $dir = public_path("images/users");
+                $extensao = $imagem->guessClientExtension();
+                $nomeImagem = 'profile_photo_path' . "_" . $num . "." . $extensao;
+                $imagem->move($dir, $nomeImagem);
+                $dados['profile_photo_path'] = "images/users" . "/" . $nomeImagem;
+
+                // unlink($cff->vc_foto);
+                // $imagem->move($dir, $nomeImagem);
+            }else{
+                $dados['profile_photo_path'] = "images/users/modelo.png";
+
+            }
             Validator::make($dados, [
                 'vc_nomeUtilizador' => ['required', 'string', 'max:255'],
                 'vc_email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => $this->passwordRules(),
             ])->validate();
         
-            $this->loggerData("Adicionou Utilizador ");
-            $this->user->store($dados);
+        //   dd( $dados['profile_photo_path']);
+          $user=  $this->user->store($dados);
+        //   dd($user);
+          if($user){
+            User::find($user->id)->update([
+                'profile_photo_path'=>$dados['profile_photo_path']
+            ]);
+
+          }
+          $this->loggerData("Adicionou Utilizador ");
             return redirect()->route('admin.users')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador cadastrado com sucesso']);
 
         } catch (\Exception $exception) {
@@ -124,17 +147,38 @@ class UserController extends Controller
             $dados[] = $input;
             // dd( $dados);
             if ($user = fha_users($slug)):
-
+                if ($input->hasFile('profile_photo_path')) {
+                    $imagem = $input->file('profile_photo_path');
+                    $num = rand(1111, 9999);
+                    $dir = public_path("images/users");
+                    $extensao = $imagem->guessClientExtension();
+                    $nomeImagem = 'profile_photo_path' . "_" . $num . "." . $extensao;
+                    $imagem->move($dir, $nomeImagem);
+                    $dados['profile_photo_path'] = "images/users" . "/" . $nomeImagem;
+    
+                    // unlink($cff->vc_foto);
+                    // $imagem->move($dir, $nomeImagem);
+                }else{
+                    $dados['profile_photo_path'] = $user->profile_photo_path;
+    
+                }
                 $this->user->update($dados, $slug);
+                if($user){
+                    User::find($user->id)->update([
+                        'profile_photo_path'=>$dados['profile_photo_path']
+                    ]);
+        
+                  }
                 $this->loggerData("Actualizou Utilizador");
 
-                return redirect()->route('admin/users/listar')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador editado com sucesso']);
+                return redirect()->route('admin.users')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador editado com sucesso']);
 
             else:
                 return redirect('/')->with('teste', '1');
 
             endif;
         } catch (\Exception $ex) {
+            dd($ex);
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
 
 

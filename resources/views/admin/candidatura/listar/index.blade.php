@@ -25,7 +25,7 @@
 
     @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Cordenação Pedagógica' ||
+            Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
             Auth::user()->vc_tipoUtilizador == 'Preparador')
         {{-- <div class="d-flex justify-content-end mb-3">
 
@@ -108,7 +108,6 @@
 
                       
                                     @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-                                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                                             Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                                             Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico')

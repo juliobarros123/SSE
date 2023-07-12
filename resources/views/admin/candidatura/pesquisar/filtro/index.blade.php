@@ -57,20 +57,6 @@
                 <div class="card col-sm-12" hidden>
                     <div class="card-body ">
 
-
-
-
-
-
-                        {{--  --}}
-
-
-
-
-
-
-
-
                         <div class="d-flex justify-content-center " id="">
                             <div class="form-group  w-100  text-center row ">
                                 <div class="form-group col-sm-6 ">

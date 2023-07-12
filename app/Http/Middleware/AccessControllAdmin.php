@@ -27,7 +27,7 @@ class AccessControllAdmin
         }else if(auth()->user()->vc_tipoUtilizador=='Comissão'){
             return redirect()->back()->with('permissao', '1');
         }
-        else if(auth()->user()->vc_tipoUtilizador=='Cordenação Pedagógica'){
+        else if(auth()->user()->vc_tipoUtilizador=='Coordenação Pedagógica'){
             return redirect()->back()->with('permissao', '1');
         }
         else if(auth()->user()->vc_tipoUtilizador=='Chefe de Departamento Pedagógico'){
