@@ -37,6 +37,8 @@
             Curso escolhido: <b>
                 <?php echo $candidato->vc_nomeCurso; ?>
             </b><br>
+            Classe de Inscrição: <b>
+                <?php echo $candidato->vc_classe;?>ª<br>
             Codigo de Inscrição: <b>
                 <?php echo $candidato->id; ?>
             </b><br>
@@ -105,6 +107,9 @@
             Curso escolhido: <b>
                 <?php echo $candidato->vc_nomeCurso; ?>
             </b><br>
+        
+            Classe de Inscrição: <b>
+                <?php echo $candidato->vc_classe; ?>ª<br>
             Codigo de Inscrição: <b>
                 <?php echo $candidato->id; ?>
             </b><br>

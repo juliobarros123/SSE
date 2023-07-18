@@ -169,7 +169,7 @@ class AlunnoController extends Controller
                 'vc_provincia' => $request->vc_provincia,
                 'vc_bi' => $request->vc_bi,
                 'media' => $request->media,
-                'tipo_candidato' => 'Comun',
+                'tipo_candidato' => 'Importado',
                 'it_estado_candidato' => "1",
                 'dt_emissao' => $request->dt_emissao,
                 'vc_EscolaAnterior' => $request->vc_EscolaAnterior,

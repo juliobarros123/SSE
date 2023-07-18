@@ -74,7 +74,7 @@
                                         $mac = fha_mac_trimestre_por_ano($matricula->processo, $disciplina->id, $trimestre, $turma->it_idAnoLectivo);
                                         $nota1 = fha_nota1_trimestre_por_ano($matricula->processo, $disciplina->id, $trimestre, $turma->it_idAnoLectivo);
                                         $nota2 = fha_nota2_trimestre_por_ano($matricula->processo, $disciplina->id, $trimestre, $turma->it_idAnoLectivo);
-                                        $media = fha_media_trimestral_geral($matricula->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
+                                        $media = fha_media_trimestral_geral($matricula->processo, $disciplina->id, [$trimestre], $turma->it_idAnoLectivo);
                                         
                                     @endphp
                                     <div class="col-md-4">

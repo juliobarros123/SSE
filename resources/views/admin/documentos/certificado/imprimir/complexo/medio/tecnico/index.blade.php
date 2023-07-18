@@ -151,7 +151,7 @@ background-image-resolution: from-image;">
                             //     $ca = -1;
                             // }
                             // dd( $ca );
-                            /* array_push($medias_acumulada_linha, $ca); */
+                             array_push($medias_acumulada_linha, $ca); 
                         @endphp
                         <td class="nota-valor" style="text-align: center">
                             {{ menor_zero($ca) ? $ca : '-------' }}</td>
@@ -212,7 +212,7 @@ background-image-resolution: from-image;">
             </td>
 
             <td style="border-right: none;text-align:right; ">
-                {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
+                {{ ucfirst(valorPorExtenso(intval(intval($ec)))) }}
             </td>
             <td style=" border-left: none">Valores</td>
 

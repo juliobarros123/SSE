@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Editar número de negativas admintidas')
+@section('titulo', 'Editar número de negativas admitidas')
 
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Editar números de negativas admintidas</h3>
+            <h3>Editar números de negativas admitidas</h3>
         </div>
     </div>
 

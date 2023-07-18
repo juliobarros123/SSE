@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{asset('/css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
     <script src="{{ asset('js/sweetalert2.all.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('css/select-2.css') }}">
 </head>
 
 <body>

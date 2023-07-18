@@ -154,23 +154,23 @@ class NotaDinamca extends Controller
     public function alunos($slug_turma_user, $trimestre)
     {
         // dd("ola");
-        try{
-        $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
-// dd( $turma_professor);
-        $turma = fh_turmas_2()->where('turmas.id',$turma_professor->id_turma)->first();
-     
-        $alunos = fha_turma_alunos($turma->slug);
+        try {
+            $turma_professor = fh_turmas_professores()->where('turmas_users.slug', $slug_turma_user)->first();
+            // dd( $turma_professor);
+            $turma = fh_turmas_2()->where('turmas.id', $turma_professor->id_turma)->first();
 
-        // $nota=fhap_media_geral(113, $turma_professor->it_idClasse,$turma_professor->id_ano_lectivo);
-        // dd(  $nota );
-        $response['trimestre'] = $trimestre;
-        $response['alunos'] = $alunos;
-        $response['turma'] = $turma;
-        $response['turma_professor'] = $turma_professor;
+            $alunos = fha_turma_alunos($turma->slug);
+
+            // $nota=fhap_media_geral(113, $turma_professor->it_idClasse,$turma_professor->id_ano_lectivo);
+            // dd(  $nota );
+            $response['trimestre'] = $trimestre;
+            $response['alunos'] = $alunos;
+            $response['turma'] = $turma;
+            $response['turma_professor'] = $turma_professor;
 
 
-        return view('admin.nota_em_carga.mostrar_alunos.index', $response);
-        }catch(Exception $ex){
+            return view('admin.nota_em_carga.mostrar_alunos.index', $response);
+        } catch (Exception $ex) {
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 
 
@@ -233,60 +233,62 @@ class NotaDinamca extends Controller
             }
             foreach ($alunos as $aluno) {
                 $notas = $request->all();
-                $nota1 =fh_arredondar( $notas["fl_nota1_$aluno->processo"]);
-                $nota2 = fh_arredondar($notas["fl_nota2_$aluno->processo"]);
-                $mac = fh_arredondar($notas["fl_mac_$aluno->processo"]);
-                $mediana =fh_arredondar( (($nota1 + $nota2 + $mac) / 3));
+                // dd( $notas);
+                if (isset($notas["fl_nota1_$aluno->processo"])) {
+                    $nota1 = fh_arredondar($notas["fl_nota1_$aluno->processo"]);
+                    $nota2 = fh_arredondar($notas["fl_nota2_$aluno->processo"]);
+                    $mac = fh_arredondar($notas["fl_mac_$aluno->processo"]);
+                    $mediana = fh_arredondar((($nota1 + $nota2 + $mac) / 3));
 
-                $linha = Nota::join('alunnos', 'alunnos.id', 'notas.id_aluno')
-                    ->where('id_classe', $turma_professor->it_idClasse)
-                    ->where('id_disciplina_curso_classe', $disciplina_curso_classe->id)
-                    ->where('id_turma', $turma_professor->id_turma)
-                    ->where('vc_tipodaNota', $request->trimestre)
-                    ->where('alunnos.processo', $aluno->processo)
-                    ->where('id_ano_lectivo', $turma_professor->id_ano_lectivo)
-                    ->select('notas.*')
-                    ->where('notas.id_cabecalho', Auth::User()->id_cabecalho)
+                    $linha = Nota::join('alunnos', 'alunnos.id', 'notas.id_aluno')
+                        ->where('id_classe', $turma_professor->it_idClasse)
+                        ->where('id_disciplina_curso_classe', $disciplina_curso_classe->id)
+                        ->where('id_turma', $turma_professor->id_turma)
+                        ->where('vc_tipodaNota', $request->trimestre)
+                        ->where('alunnos.processo', $aluno->processo)
+                        ->where('id_ano_lectivo', $turma_professor->id_ano_lectivo)
+                        ->select('notas.*')
+                        ->where('notas.id_cabecalho', Auth::User()->id_cabecalho)
 
-                    ->first();
+                        ->first();
 
-                if ($linha) {
-                    Nota::where('id', $linha->id)->update([
-                        'fl_nota1' => $nota1,
-                        'fl_nota2' => $nota2,
-                        'fl_mac' => $mac,
-                        'fl_media' => $mediana,
+                    if ($linha) {
+                        Nota::where('id', $linha->id)->update([
+                            'fl_nota1' => $nota1,
+                            'fl_nota2' => $nota2,
+                            'fl_mac' => $mac,
+                            'fl_media' => $mediana,
 
-                    ]);
+                        ]);
 
-                } else {
-                    Nota::create([
-                        'id_classe' => $turma_professor->it_idClasse,
-                        'id_disciplina_curso_classe' => $disciplina_curso_classe->id,
-                        'id_turma' => $turma_professor->id_turma,
-                        'vc_tipodaNota' => $request->trimestre,
-                        'fl_nota1' => $nota1,
-                        'fl_nota2' => $nota2,
-                        'fl_mac' => $mac,
-                        'id_aluno' => $aluno->id_aluno,
-                        'fl_media' => $mediana,
-                        'id_ano_lectivo' => $turma_professor->id_ano_lectivo,
-                        'id_cabecalho' => Auth::User()->id_cabecalho
-                    ]);
+                    } else {
+                        Nota::create([
+                            'id_classe' => $turma_professor->it_idClasse,
+                            'id_disciplina_curso_classe' => $disciplina_curso_classe->id,
+                            'id_turma' => $turma_professor->id_turma,
+                            'vc_tipodaNota' => $request->trimestre,
+                            'fl_nota1' => $nota1,
+                            'fl_nota2' => $nota2,
+                            'fl_mac' => $mac,
+                            'id_aluno' => $aluno->id_aluno,
+                            'fl_media' => $mediana,
+                            'id_ano_lectivo' => $turma_professor->id_ano_lectivo,
+                            'id_cabecalho' => Auth::User()->id_cabecalho
+                        ]);
+                    }
                 }
-
             }
 
             // dd("Ola");
-            $slug_turma_user =$request->slug_turma_professor;
+            $slug_turma_user = $request->slug_turma_professor;
             $trimestre = $request->trimestre;
             $slug_disciplina_curso_classe = $disciplina_curso_classe->slug;
             return redirect('admin/pautas/mini/disciplina/' . $slug_turma_user . '/' . $trimestre . '/' . $slug_disciplina_curso_classe);
 
         } catch (Exception $ex) {
-            //       dd($it_disciplina);
+            dd($ex);
             //  dd( $ex);
-            return redirect('nota_em_carga/buscar_alunos')->with('error', '1');
+            return redirect()->back()->with('error', '1');
 
         }
     }

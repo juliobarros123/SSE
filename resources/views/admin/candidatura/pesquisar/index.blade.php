@@ -33,24 +33,24 @@
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
 
-                    @if (isset($ano_lectivo_publicado))
+                    {{-- @if (isset($ano_lectivo_publicado))
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
                             <option value="{{ $id_anoLectivo_publicado }}">
                                 {{ $ano_lectivo_publicado }}
                             </option>
                         </select>
                         <p class="text-danger  "> Atenção: Ano lectivo publicado</p>
-                    @else
+                    @else --}}
 
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
-                            <option value="Todos" >Todos</option>
+                            {{-- <option value="Todos" >Todos</option> --}}
                             @foreach ($anoslectivos as $anolectivo)
                                 <option value="{{ $anolectivo->id }}">
                                     {{ $anolectivo->ya_inicio . '-' . $anolectivo->ya_fim }}
                                 </option>
                             @endforeach
                         </select>
-                    @endif
+                    {{-- @endif --}}
 
 
                 </div>
@@ -169,8 +169,9 @@
                 </div> --}}
 
 
-                <div class=" d-flex justify-content-center w-100">
-                    <button class="form-control btn btn-dark">Pesquisar</button>
+                 <div class="form-group col-sm-12 d-flex justify-content-center">
+                    <label for="" class="text-white form-label">.</label>
+                    <button class="form-control btn col-md-3 btn-dark">Pesquisar</button>
                 </div>
 
             </form>

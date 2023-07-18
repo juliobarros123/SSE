@@ -70,9 +70,9 @@
                     </div>
 
                 </div>
-                <div class="d-flex justify-content-center">
-
-                    <button class=" btn btn-dark ">Pesquisar</button>
+                <div class="form-group col-sm-12 d-flex justify-content-center">
+                    <label for="" class="text-white form-label">.</label>
+                    <button class="form-control btn col-md-3 btn-dark">Pesquisar</button>
                 </div>
 
             </form>

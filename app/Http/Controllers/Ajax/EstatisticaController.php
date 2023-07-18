@@ -59,7 +59,9 @@ class EstatisticaController extends Controller
         $alunos = array();
         ;
         foreach (fh_cursos()->get() as $curso) {
+            // dd($curso);
             $cont_alunos = fh_alunos()->where('candidatos.id_curso', $curso->id)->count();
+            // dd($cont_alunos);
             array_push($alunos, $cont_alunos);
             array_push($cursos, $curso->vc_nomeCurso);
         }

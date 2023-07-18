@@ -85,14 +85,19 @@
 
                                     <a href="{{ route('turmas.imprimir_alunos', $turma->slug ) }}"
                                         class="dropdown-item" target="_blank">Lista</a>
-                                 
+                                        <a href="{{ route('turmas.imprimir_crendencias', $turma->slug ) }}"
+                                            class="dropdown-item" target="_blank">Lista de Credências</a>
+                                        
                                     <a href="{{ route('admin.atribuicao.professores', $turma->slug) }}"
                                         class="dropdown-item" target="_blank">Professores</a>
                                         <a href="" class="dropdown-item" data-toggle="modal"
                                         data-target=".bd-example-modal-sm{{ $turma->id }}">Pauta Trimestral</a>
-                                    <a href="{{ route('admin.pautaFinal.gerar',$turma->slug) }}"
-                                        class="dropdown-item" target="_blank">Pauta Anual</a>
-                                       
+                                    <a href="{{ route('admin.pautaFinal.gerar',['slug_turma'=>$turma->slug,'formato'=>'A3']) }}"
+                                        class="dropdown-item" target="_blank">Pauta Anual(A3)</a>
+                                        <a href="{{ route('admin.pautaFinal.gerar',['slug_turma'=>$turma->slug,'formato'=>'A2']) }}"
+                                            class="dropdown-item" target="_blank">Pauta Anual(A2)</a>
+                                            <a href="{{ route('admin.pautaFinal.gerar',['slug_turma'=>$turma->slug,'formato'=>'A1']) }}"
+                                                class="dropdown-item" target="_blank">Pauta Anual(A1)</a>
                                     @if (Auth::user()->vc_tipoUtilizador != 'Professor')
                                         <a href="{{ route('turmas.editar',  $turma->slug) }}"
                                             class="dropdown-item">Editar</a>

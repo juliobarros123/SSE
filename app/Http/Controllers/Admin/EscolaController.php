@@ -19,6 +19,7 @@ use App\Models\Activador_da_candidatura;
 use App\Models\AnoLectivo;
 use App\Models\AnoLectivoPublicado;
 use App\Models\Cabecalho;
+use App\Models\CadeadoPauta;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class EscolaController extends Controller
     public function store(Request $request)
     {
         //
+        // dd( $request);
         try {
             if ($request->hasFile('vc_logo')) {
 
@@ -162,15 +164,31 @@ class EscolaController extends Controller
             );
             User::create(
                 [
-                    'vc_nomeUtilizador' => 'Aluno',
-                    'vc_primemiroNome' => "Aluno",
-                    'vc_apelido' => 'Aluno',
-                    'vc_email' => $request->vc_email,
+                    'vc_nomeUtilizador' => 'Estudante',
+                    'vc_primemiroNome' => "Estudante",
+                    'vc_apelido' => 'Estudante',
+                    'vc_email' =>"$cab->vc_acronimo".Str::random(3)."estudante@gmail.com",
                     'email_verified_at' => now(),
                     'password' => bcrypt("12345678"),
                     // password
                     'vc_telefone' => "",
-                    'vc_tipoUtilizador' => "Aluno",
+                    'vc_tipoUtilizador' => "Estudante",
+                    'vc_genero' => "F",
+                    'remember_token' => Str::random(10),
+                    'id_cabecalho' => $cab->id
+                ]
+            );
+            User::create(
+                [
+                    'vc_nomeUtilizador' => 'Candidato',
+                    'vc_primemiroNome' => "Candidato",
+                    'vc_apelido' => 'Candidato',
+                    'vc_email' =>"$cab->vc_acronimo".Str::random(3)."candidato@gmail.com",
+                    'email_verified_at' => now(),
+                    'password' => bcrypt("12345678"),
+                    // password
+                    'vc_telefone' => "",
+                    'vc_tipoUtilizador' => "Candidato",
                     'vc_genero' => "F",
                     'remember_token' => Str::random(10),
                     'id_cabecalho' => $cab->id
@@ -200,6 +218,13 @@ class EscolaController extends Controller
                     'id_cabecalho' => $cab->id
                 ]
             );
+            CadeadoPauta::create(
+                [
+                    'estado' => 'Indisponível',
+                    'id_cabecalho' => $cab->id
+                ]
+            );
+        
             $this->Logger->Log('info', 'Adicionou Uma Escola ' . $request->vc_escola);
             return redirect()->route('admin/escola');
         } catch (\Exception $ex) {
@@ -255,6 +280,7 @@ class EscolaController extends Controller
     public function update(Request $request, $id)
     {
         //
+       
         if ($request->hasFile('vc_logo')) {
 
             $image = $request->file('vc_logo');

@@ -1,12 +1,63 @@
-<!-- JS -->
-<script src="{{ asset('/vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('/vendor/boostrap/bootstrap.min.js') }}"></script>
-<script src="{{ asset('/vendor/acc-wizard-master/release/acc-wizard.min.js') }}"></script>
-<script src="{{ asset('/vendor/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('/vendor/jquery-validation/dist/additional-methods.min.js') }}"></script>
-<script src="{{ asset('/vendor/jquery-steps/jquery.steps.min.js') }}"></script>
-<script src="{{ asset('/vendor/minimalist-picker/dobpicker.js') }}"></script>
-<script src="{{ asset('/js/main.js') }}"></script>
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+
+<div id="sidebar-overlay"></div>
+</div>
+<!-- ./wrapper -->
+<!-- jQuery -->
+<script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{{-- <!-- ChartJS -->
+<script src="{{asset('/plugins/chart.js/Chart.min.js')}}"></script> --}}
+<!-- Sparkline -->
+<script src="{{ asset('/plugins/sparklines/sparkline.js') }}"></script>
+<!-- JQVMap -->
+{{-- <script src="{{asset('/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+<script src="{{asset('/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script> --}}
+<!-- jQuery Knob Chart -->
+<script src="{{ asset('/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+<!-- daterangepicker -->
+<script src="{{ asset('/js/select2.min.js') }}"></script>
+<script src="{{ asset('/js/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('/js/jquery.sparkline.min.js') }}"></script>
+<script src="{{ asset('/js/jquery.steps.min.js') }}"></script>
+<script src="{{ asset('/js/select2.min.js') }}"></script>
+<script src="{{ asset('/js/jquery.timepicker.js') }}"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')}}"></script> --}}
+
+<script src="{{ asset('/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ asset('/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+<!-- Summernote -->
+<script src="{{ asset('/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<!-- overlayScrollbars -->
+<script src="{{ asset('/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('/dist/js/adminlte.js') }}"></script>
+{{-- <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{asset('/dist/js/pages/dashboard.js')}}"></script> --}}
+
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('/dist/js/demo.js') }}"></script>
+{{-- Datatables --}}
+<script src="{{ asset('/js/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('/js/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<!-- sweetalert -->
+<script src="{{ asset('/js/sweetalert2.all.min.js') }}"></script>
+
+
 
 <script>
     $("#vc_bi").keyup(function() {
@@ -127,7 +178,7 @@
     $('#id_provincia').change(function() {
         var provincia = $(this).val();
         // var idMunicipio = $('#id_municipio').val();
-        // alert(id)
+        // alert(provincia);
         let url_origin = "{{ url('/') }}";
 
         $.ajax({
@@ -143,12 +194,13 @@
                 // response.forEach(element => {
                 //     console.log
                 // })
-                //console.log(municipios);
+                // console.log(municipios);
+                // alert("ol");
                 $("#id_municipio").empty();
-                $("#id_municipio").append('<option select  "> Selecionar o Município</option>');
+                $("#id_municipio").append('<option select value=""> Selecionar o Município</option>');
                 $.each(municipios, function(municipio) {
 
-                    //console.log(municipios[municipio].vc_nome);
+                    console.log(municipios[municipio].vc_nome);
 
                     $("#id_municipio").append('<option value="' + municipios[
                             municipio].id + ' " selected>' + municipios[municipio]
@@ -167,6 +219,12 @@
 
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('.select-dinamico').select2();
+    });
+</script>
+
 </body>
 
 </html>

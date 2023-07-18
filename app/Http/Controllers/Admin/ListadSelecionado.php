@@ -23,7 +23,7 @@ use App\Models\Estudante;
 use Illuminate\Http\Request;
 use App\Models\Logger;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Classe;
 class ListadSelecionado extends Controller
 {
     //
@@ -61,12 +61,15 @@ class ListadSelecionado extends Controller
         $data['curso'] = 'Todos';
         $data['classe'] = 'Todas';
 
+        // dd($request);
     
        $alunos = fh_alunos();
     //    dd(   $alunos->get());
+    // dd($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo);
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
-            $ano_lectivo = fh_anos_lectivos_publicado()->first();
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $ano_lectivo = fh_anos_lectivos()->find($request->id_ano_lectivo);
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            // dd(  $data['anolectivo']);
            $alunos =$alunos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
 
@@ -90,6 +93,7 @@ class ListadSelecionado extends Controller
 
         storeSession('filtro_aluno_lista', $filtro_aluno_lista);
         $data['alunos'] =$alunos->get();
+        // dd(  $data);
         $data["css"] = file_get_contents('css/lista/style-2.css');
         $data['cabecalho'] = fh_cabecalho();
         $mpdf = new \Mpdf\Mpdf([
@@ -97,6 +101,7 @@ class ListadSelecionado extends Controller
             'margin_top' => 5,
 
         ]);
+ 
         $mpdf->setHeader();
         $this->loggerData('Imprimiu Lista dos Selecionados a Matricula');
         $html = view("admin/pdfs/listas/selecionados/index", $data);

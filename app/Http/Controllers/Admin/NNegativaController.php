@@ -51,7 +51,7 @@ class NNegativaController extends Controller
 
                 }
             }
-            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Números de negativas admintidas cadastradas com sucesso']);
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Números de negativas admitidas cadastradas com sucesso']);
 
         } catch (Exception $e) {
 
@@ -124,7 +124,7 @@ class NNegativaController extends Controller
         if ($n_negativas):
             // dd($n_negativas);
             NNegativa::where('slug', $slug)->delete();
-            $this->loggerData('Eliminou  números de negativas admintidas da ' . $n_negativas->vc_classe . 'ª Classe');
+            $this->loggerData('Eliminou  números de negativas admitidas da ' . $n_negativas->vc_classe . 'ª Classe');
             return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Registro eliminado com sucesso']);
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);

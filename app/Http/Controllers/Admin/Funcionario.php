@@ -138,7 +138,7 @@ class Funcionario extends Controller
                 // unlink($cff->vc_foto);
                 // $imagem->move($dir, $nomeImagem);
             }else{
-                $dados['vc_foto'] = "images/funcionarios/modelo.png";
+                $dados['vc_foto'] = ModelsFuncionario::where('funcionarios.slug', $slug)->vc_foto;
 
             }
             $cf = ModelsFuncionario::where('funcionarios.slug', $slug)->update($dados);
@@ -172,10 +172,12 @@ class Funcionario extends Controller
     public function cartao_imprimir($slug)
     {
         $funcionario = fh_funcionarios()->where('funcionarios.slug', $slug)->first();
+        // dd($funcionario);
         if ($funcionario):
 
             $data['funcionario'] = $funcionario;
             $data['cabecalho'] = fh_cabecalho();
+            if($data['cabecalho']->assinatura_director){
             $configVariables = new ConfigVariables();
             $fontVariables = new FontVariables();
             $fontData = $fontVariables->getDefaults();
@@ -208,15 +210,20 @@ class Funcionario extends Controller
                 'margin_bottom' => 0,
                 'format' => [85, 54]
             ]);
+            // dd($funcionario);
             $data["css"] = file_get_contents('css/cartao/funcionario/style.css');
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
             $mpdf->AddPage('L');
+            // dd("o");
             $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) ' . $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome . ' com o id ' . $funcionario->id);
             $html = view("admin/pdfs/cartao/funcionario/index", $data);
             $mpdf->writeHTML($html);
             $mpdf->Output("funcionario.pdf", "I");
+        }else{
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
 
+        }
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, funciónario não existe']);
 

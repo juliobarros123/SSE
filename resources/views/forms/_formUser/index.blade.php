@@ -65,7 +65,7 @@ Auth::user()->vc_tipoUtilizador == 'Director Geral' )
         <option value="Secretaria">Secretaria</option>
         <option value="Comissão">Comissão</option>
         <option value="Professor">Professor</option>
-        <option value="Estudande">Estudande</option>
+        <option value="Estudante">Estudante</option>
         <option value="Coordenação Pedagógica">Coordenação Pedagógica</option>
         <option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>
         <option value="Candidato">Candidato</option>
@@ -88,7 +88,7 @@ Auth::user()->vc_tipoUtilizador == 'Director Geral' )
         <option value="Secretaria">Secretaria</option>
         <option value="Comissão">Comissão</option>
         <option value="Professor">Professor</option>
-        <option value="Estudande">Estudande</option>
+        <option value="Estudante">Estudante</option>
         <option value="Coordenação Pedagógica">Coordenação Pedagógica</option>
         <option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>
         <option value="Candidato">Candidato</option>
@@ -149,8 +149,8 @@ Auth::user()->vc_tipoUtilizador == 'Director Geral' )
 <div class="col-md-3">
     <div class="form-group ">
         <label for="password">{{ __('Senha') }}</label>
-        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror border-secondary"
-        placeholder="Senha"name="password" required autocomplete="new-password">
+        <input id="password" required type="password"  class="form-control @error('password') is-invalid @enderror border-secondary"
+        placeholder="Senha"name="password"  minlength="8" required autocomplete="new-password">
 
         @error('password')
             <span class="invalid-feedback" role="alert">
@@ -163,7 +163,7 @@ Auth::user()->vc_tipoUtilizador == 'Director Geral' )
 <div class="col-md-3">
     <div class="form-group ">
         <label for="password-confirm">{{ __('Confirmar a senha') }}</label>
-        <input id="password-confirm" type="password" class="form-control border-secondary" name="password_confirmation" required
+        <input id="password-confirm" required minlength="8" type="password" class="form-control border-secondary" name="password_confirmation" required
         placeholder="Confirmar a senha" autocomplete="new-password">
     </div>
 </div>

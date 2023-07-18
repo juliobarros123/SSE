@@ -4,7 +4,7 @@
             <img class="card-img-top" src="{{ asset($matricula->vc_imagem) }}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">Nome:{{ $matricula->vc_primeiroNome }}
-                    {{ $matricula->vc_nomedoMeio }} {{ $matricula->vc_apelido }}</h5>
+                    {{ $matricula->vc_nomedoMeio?$matricula->vc_nomedoMeio:'' }} {{ $matricula->vc_apelido }}</h5>
                 <p class="card-text">Curso:{{ $matricula->vc_shortName }}</p>
             </div>
         @endisset

@@ -77,7 +77,7 @@ class ListadCandidatura extends Controller
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
             $ano_lectivo = fh_anos_lectivos_publicado()->first();
 
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             $candidados = $candidados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
 

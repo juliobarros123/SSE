@@ -108,8 +108,10 @@ class PagamentoController extends Controller
         storeSession('pagamento_estado_pesquisar', $pagamento_estado_pesquisar);
         $matricula = fh_matriculas()->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo)
             ->where('alunnos.processo', $request->processo)->first();
-        $classe = fh_classes()->where('classes.id', $matricula->id_classe)->first();
+        // dd($matricula);
         if ($matricula):
+        $classe = fh_classes()->where('classes.id', $matricula->id_classe)->first();
+
             $tipo_pagamento = fh_tipos_pagamento()
                 ->where('tipo_pagamentos.id_classe', $matricula->id_classe)
                 ->where('tipo_pagamentos.tipo', 'Mensalidades')
@@ -130,7 +132,7 @@ class PagamentoController extends Controller
                 }
 
             } else {
-                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => "Erro, cadastra o tipo de pagamento para $classe->vc_classe" . "ª Classe"]);
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => "Erro, cadastra o tipo de pagamento para essa Classe"]);
 
             }
             return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Tipo de pagamento eliminado com sucesso']);

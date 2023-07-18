@@ -87,7 +87,7 @@
 
 
                 <div class=" d-flex justify-content-center w-100">
-                    <button class="form-control btn btn-dark w-25">Imprimir</button>
+                    <button class="form-control btn btn-dark col-md-3">Imprimir</button>
                 </div>
 
             </form>

@@ -36,7 +36,7 @@
                     @else --}}
 
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control">
-                            <option value="Todos" >Todos</option>
+                            {{-- <option value="Todos" >Todos</option> --}}
 
                             @foreach ($anoslectivos as $anolectivo)
                                 <option value="{{ $anolectivo->id }}">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="id_curso" class="form-label">Curso:</label>
-                    <select name="id_curso" id="id_curso" class="form-control">
+                    <select name="id_curso" id="id_curso" class="form-control" required>
                         <option value="Todos" >Todos</option>
 
                         @foreach ($cursos as $curso)
@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="id_classe" class="form-label">Classe:</label>
-                    <select name="id_classe" id="id_classe" class="form-control">
+                    <select name="id_classe" id="id_classe" class="form-control" required>
                         <option value="Todas" >Todas</option>
                         @foreach ($classes as $classe)
                             <option value="{{ $classe->id }}">
@@ -74,11 +74,10 @@
 
                 </div>
 
-                <div class="form-group col-md-12 d-flex justify-content-center">
-
-                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
+                <div class="form-group col-sm-12 d-flex justify-content-center">
+                    <label for="" class="text-white form-label">.</label>
+                    <button class="form-control btn col-md-3 btn-dark">Pesquisar</button>
                 </div>
-
             </form>
         </div>
     </div>

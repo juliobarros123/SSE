@@ -81,7 +81,16 @@
         </tbody>
     </table>
     @include('layouts._includes.fragments.lista.footer.index')
-    @include('layouts._includes.fragments.lista.footer.visto')
+    @section('entidadade1', 'O Director de Turma')
+    @if (fha_director_turma($turma->id))
+        @section('entidadade1-valor', fha_director_turma($turma->id))
+    @else
+        @section('entidadade1-valor', '---------------------')
+    @endif
+    @section('entidadade2', 'O Director Geral')
+    @section('entidadade2-valor', $cabecalho->vc_nomeSubdirectorPedagogico)
+    @include('layouts._includes.fragments.lista.footer.visto-2')
+
    
 
    

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CadeadoPauta;
 use App\Models\CriterioDisciplina;
 use App\Models\DisciplinaExame;
 use App\Models\Funcionario;
@@ -154,19 +155,19 @@ function fh_aluno_slug($slug)
     return fh_alunos()->where('alunnos.slug', $slug)->first();
 }
 
-function fha_nota_pap($processo,$tipo)
+function fha_nota_pap($processo, $tipo)
 {
     // dd($processo);
     $matricula = fh_matriculas()
         ->where('alunnos.processo', $processo)
         ->orderBy('classes.vc_classe', 'desc')
-        ->select('turmas.it_idAnoLectivo','turmas.it_idCurso', 'matriculas.*')->first();
+        ->select('turmas.it_idAnoLectivo', 'turmas.it_idCurso', 'matriculas.*')->first();
     // dd($matricula);
     $ddc = fh_disciplinas_cursos_classes()
         ->where('disciplinas_cursos_classes.it_curso', $matricula->it_idCurso)
         ->where('pap', $tipo)
         ->first();
-        // dd(   $ddc);
+    // dd(   $ddc);
     if ($ddc) {
         return fha_media_trimestral_geral($processo, $ddc->it_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
     } else {
@@ -263,6 +264,7 @@ function fha_turma_alunos($slug)
             'candidatos.it_telefone',
             'candidatos.vc_email',
             'candidatos.vc_bi',
+            'candidatos.tokenKey'
         )
 
         ->get();
@@ -273,6 +275,10 @@ function fha_turma_alunos($slug)
 
 }
 
+function cadeados_pauta()
+{
+    return CadeadoPauta::where('id_cabecalho', Auth::User()->id_cabecalho);
+}
 function fha_turma_professores($slug)
 {
     $response['atribuicoes'] = DB::table('turmas_users')
@@ -359,6 +365,54 @@ function fh_turmas_professores()
     return $atribuicoes;
 
 }
+function fha_turmas_disciplinas_dcc($id_turma)
+{
+  $atribuicoes=Turma::join('classes', 'turmas.it_idClasse', 'classes.id')
+        ->join('cursos', 'turmas.it_idCurso', 'cursos.id')
+        ->join('anoslectivos', 'anoslectivos.id', 'turmas.it_idAnoLectivo')
+        ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->join('turmas_users', 'turmas_users.it_idTurma', 'turmas.id')
+        ->join('users', 'users.id', 'turmas_users.it_idUser')
+        ->join('disciplinas', 'disciplinas.id', 'turmas_users.it_idDisciplina')
+        ->join('disciplinas_cursos_classes', 'disciplinas_cursos_classes.it_disciplina', 'disciplinas.id')
+        ->where('users.vc_tipoUtilizador', 'professor')
+        ->where('turmas.id',$id_turma)
+        ->distinct()
+        ->select(
+            'cursos.*',
+            'anoslectivos.*',
+            'classes.*',
+            'users.vc_primemiroNome',
+            'users.vc_apelido',
+            'turmas.vc_nomedaTurma',
+            'turmas.it_qtMatriculados',
+            'turmas.it_qtdeAlunos',
+            'turmas.it_idCurso',
+            'turmas.id as id_turma',
+
+            'turmas.it_idCurso',
+            'turmas.it_idAnoLectivo as id_ano_lectivo',
+            'disciplinas.id as id_disciplina',
+            'disciplinas.vc_nome as disciplina',
+            'turmas_users.*',
+            'turmas_users.id as id',
+            'disciplinas_cursos_classes.terminal',
+            'disciplinas.*'
+        )
+        ->where('turmas_users.id_cabecalho', Auth::User()->id_cabecalho)->get();
+      return  removeDuplicatesFromCollection($atribuicoes);
+       
+}
+
+function removeDuplicatesFromCollection($collection)
+{
+    $uniqueItems = $collection->unique(function ($item) {
+        return $item->id;
+    });
+
+    return $uniqueItems->values();
+}
+
 function fha_meus_director_turmas()
 {
     $meus_directores = collect();
@@ -604,47 +658,47 @@ function fh_classes()
 function fha_colspan($id_disciplina, $id_classe, $id_curso)
 {
     $classe = fh_classes()->where('classes.id', $id_classe)->first();
-if( $classe->vc_classe==13){
-    return 3;
-}else{
-    $c = 0;
-    $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
-        ->where('disciplinas_cursos_classes.it_curso', $id_curso)
-        ->where('disciplinas.id', $id_disciplina)
-        ->where('classes.id', $id_classe)
-        ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
-        ->orderBy('classes.vc_classe', 'desc')
-        ->first();
-    $cabecalho = fh_cabecalho();
-
-    if ($disciplina_curso_classe_actual) {
-        $cont = 4;
-        if ($disciplina_curso_classe_actual->terminal == 'Terminal') {
-            if ($disciplina_curso_classe_actual->vc_classe >= 10) {
-                $recurso = 1;
-                $cont = $cont + $recurso;
-            }
-            $cont = $cont + 1;
-        }
-        if ($cabecalho->vc_tipo_escola == "Técnico" && $disciplina_curso_classe_actual->terminal == 'Terminal' && $classe->vc_classe >= 10) {
-
-            $cont = $cont + temDisciplinaNoClasseAnterior($id_disciplina, $classe->vc_classe, $id_curso);
-        }
-        if (fha_disciplina_exame($id_classe, $id_disciplina)) {
-            $cont = $cont + 2;
-        }
-
+    if ($classe->vc_classe == 13) {
+        return 3;
     } else {
-        $cont = 1;
+        $c = 0;
+        $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
+            ->where('disciplinas_cursos_classes.it_curso', $id_curso)
+            ->where('disciplinas.id', $id_disciplina)
+            ->where('classes.id', $id_classe)
+            ->select('classes.*', 'disciplinas.vc_nome', 'disciplinas_cursos_classes.terminal')
+            ->orderBy('classes.vc_classe', 'desc')
+            ->first();
+        $cabecalho = fh_cabecalho();
+
+        if ($disciplina_curso_classe_actual) {
+            $cont = 4;
+            if ($disciplina_curso_classe_actual->terminal == 'Terminal') {
+                if ($disciplina_curso_classe_actual->vc_classe >= 10) {
+                    $recurso = 1;
+                    $cont = $cont + $recurso;
+                }
+                $cont = $cont + 1;
+            }
+            if ($cabecalho->vc_tipo_escola == "Técnico" && $disciplina_curso_classe_actual->terminal == 'Terminal' && $classe->vc_classe >= 10) {
+
+                $cont = $cont + temDisciplinaNoClasseAnterior($id_disciplina, $classe->vc_classe, $id_curso);
+            }
+            if (fha_disciplina_exame($id_classe, $id_disciplina)) {
+                $cont = $cont + 2;
+            }
+
+        } else {
+            $cont = 1;
+        }
+
+
+
+
+
+        // dd($colspan);
+        return $cont;
     }
-
-
-
-
-
-    // dd($colspan);
-    return $cont;
-}
 }
 
 
@@ -726,6 +780,41 @@ function fh_directores_turmas()
                 'direitor_turmas.slug as slug'
             );
 
+
+
+
+
+}
+function fha_director_turma($id_turma)
+{
+
+
+    $director = DireitorTurma::join('turmas', 'direitor_turmas.id_turma', 'turmas.id')
+        ->join('classes', 'turmas.it_idClasse', '=', 'classes.id')
+        ->join('cursos', 'turmas.it_idCurso', '=', 'cursos.id')
+        ->join('users', 'direitor_turmas.id_user', 'users.id')
+        ->join('anoslectivos', 'anoslectivos.id', '=', 'turmas.it_idAnoLectivo')
+        ->where('turmas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->where('turmas.id', $id_turma)
+        ->select(
+            'cursos.*',
+            'anoslectivos.*',
+            'turmas.*',
+            'users.vc_primemiroNome',
+            'users.vc_apelido',
+
+            'users.vc_email',
+            'cursos.vc_nomeCurso',
+            'classes.vc_classe',
+            'direitor_turmas.*',
+            'direitor_turmas.id as id',
+            'direitor_turmas.slug as slug'
+        )->first();
+    if ($director) {
+        return $director->vc_primemiroNome . ' ' . $director->vc_apelido;
+    } else {
+
+    }
 
 
 
@@ -821,7 +910,20 @@ function fh_candidatos()
     }
 }
 
+function fha_candidatos_comum()
+{
+    return DB::table('candidatos')->leftjoin('cursos', 'cursos.id', 'candidatos.id_curso')
+        ->leftjoin('anoslectivos', 'anoslectivos.id', 'candidatos.id_ano_lectivo')
+        ->leftjoin('classes', 'classes.id', 'candidatos.id_classe')
+        ->orderby('candidatos.vc_primeiroNome', 'asc')
+        ->orderby('candidatos.vc_nomedoMeio', 'asc')
+        ->orderby('candidatos.vc_apelido', 'asc')
+        ->select('candidatos.*', 'cursos.*', 'classes.*', 'anoslectivos.*', 'candidatos.id as id', 'candidatos.slug as slug')
+        ->where('candidatos.id_cabecalho', Auth::User()->id_cabecalho)
+        ->where('candidatos.tipo_candidato', 'Comum');
 
+
+}
 // Start Metodos Notas
 
 function fh_notas()
@@ -1205,9 +1307,11 @@ function gerarCodigo()
 
     while (true) {
         $codigo = strval(rand(10000, 99999));
+        // dd(  $codigo );
         $existe = fh_candidatos()->where('candidatos.tokenKey', $codigo)->count();
+        // dd( $existe);
         if (!$existe) {
-            return $existe;
+            return $codigo;
         }
     }
 
@@ -2333,11 +2437,23 @@ function fha_pagou_com_multa($dataVencimento, $valorPagar, $diasTolerancia, $val
 
 function converterData($data)
 {
+    // dd($data);
     // Extrai a data e hora separadamente
     list($dataPart, $horaPart) = explode(' ', $data);
 
     // Divide a data em ano, mês e dia
     list($ano, $mes, $dia) = explode('-', $dataPart);
+
+    // Retorna a data no formato português
+    return $dia . '/' . $mes . '/' . $ano;
+}
+function converterDataSemHora($data)
+{
+    // dd($data);
+    // Extrai a data e hora separadamente
+
+    // Divide a data em ano, mês e dia
+    list($ano, $mes, $dia) = explode('-', $data);
 
     // Retorna a data no formato português
     return $dia . '/' . $mes . '/' . $ano;

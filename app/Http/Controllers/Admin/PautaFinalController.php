@@ -46,7 +46,7 @@ class PautaFinalController extends Controller
         return $disciplinas;
     }
 
-    public function gerar($slug_turma)
+    public function gerar($slug_turma,$formato)
     {
         try {
             // dd($slug_turma);
@@ -68,7 +68,7 @@ class PautaFinalController extends Controller
                 $data['css'] = file_get_contents('css/lista/style-2.css');
                 // Dados para a tabela
                 $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
-                $mpdf = new \Mpdf\Mpdf(['format' => 'A1-L']);
+                $mpdf = new \Mpdf\Mpdf(['format' => "$formato-L"]);
                 // dd(   $data['titulo']);
                 $mpdf->SetFont("arial");
                 $mpdf->setHeader();
@@ -81,6 +81,7 @@ class PautaFinalController extends Controller
                     $html = view("admin.pdfs.pauta.tecnico.anual_13", $data);
 
                 }else{
+                    // dd("1");
                     $html = view("admin.pdfs.pauta.tecnico.anual", $data);
 
                 }

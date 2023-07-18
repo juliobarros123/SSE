@@ -27,7 +27,7 @@
     @endif
 
     <table id="example" class="display table table-hover">
-        <thead class="thead-dark text-center">
+        <thead class=" text-center">
             <tr>
 
                 <th>ID</th>

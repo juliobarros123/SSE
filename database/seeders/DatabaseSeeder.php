@@ -3,6 +3,7 @@
 namespace database\Seeders;
 
 use App\Models\AnoLectivo;
+use App\Models\CadeadoPauta;
 use App\Models\Classe;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -141,7 +142,12 @@ class DatabaseSeeder extends Seeder
                     'id_cabecalho'=>id_first_cabecalho()
                 ]);
                 
-           
+                CadeadoPauta::create(
+                    [
+                        'estado' => 'Indisponível',
+                        'id_cabecalho'=>id_first_cabecalho()
+                    ]
+                );
         }
     }
     

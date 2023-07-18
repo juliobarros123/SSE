@@ -34,8 +34,9 @@
         @endif
         </div>
     @endif
-    <table id="example" class="display table table-hover">
-        <thead class="thead-dark text-center">
+    <div class="responsive-table">
+        <table id="example" class="display table table-hover">
+               <thead class="">
             <tr>
 
                 <th>ID</th>

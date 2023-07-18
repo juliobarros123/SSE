@@ -49,9 +49,12 @@ class HomeController extends Controller
      
         // dd('2022-08-18');
         if (Auth::user()->vc_tipoUtilizador == 'Candidato') {
+            // dd("ol");
             return redirect('candidatura');
         }
-
+        if (Auth::user()->vc_tipoUtilizador == 'Estudante') {
+            return redirect()->route('painel.alunos');
+        }
         //  dd(consultarRupePreCandidato_v3(13331780226));
         // $s=consultarRupe(22);
         // dd(isset($s["idOrigem"]));

@@ -36,7 +36,7 @@
 
 
 <div class="form-group col-md-4">
-    <label for="valor">{{ __('Valor') }}</label>
+    <label for="valor">{{ __('Valor da Propina') }}</label>
 
     <input value="{{ isset($tipo_pagamento->valor) ? $tipo_pagamento->valor : '' }}" id="valor" type="number"
         class="form-control @error('valor') is-invalid @enderror" name="valor" placeholder="Valor "

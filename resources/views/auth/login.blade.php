@@ -2,13 +2,12 @@
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/auth/style.css') }}">
 
-    <div class="container mt-5">
+    <div class="container ">
         <section class="ftco-section">
             <div class="container">
-           
                 <div class="row justify-content-center">
                     <div class="col-md-7 col-lg-5">
-                        <div class="login-wrap p-4 p-md-5">
+                        <div class="login-wrap pl-3 pr-3">
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <img rel="icon" src="{{ asset($caminhoLogo) }}" style="margin:auto;height:100%" />
 
@@ -29,14 +28,14 @@
                                     <button type="submit"
                                         class="form-control btn btn-primary rounded submit px-3">Acessar</button>
                                 </div>
-                                <div class="form-group d-md-flex">
-                                    <div class="w-50">
+                                <div class="form-group row pb-2">
+                                    <div class="col-md-6 text-center">
                                         <label class="checkbox-wrap checkbox-primary"> Lembre de mim
                                             <input type="checkbox" checked>
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <div class="w-50 text-md-right">
+                                    <div class="col-md-6 text-center text-md-right">
                                         <a href="#" data-toggle="modal" data-target="#exampleModal">Conta aluno</a>
                                     </div>
                                 </div>

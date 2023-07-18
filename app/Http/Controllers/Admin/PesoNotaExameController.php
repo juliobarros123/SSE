@@ -47,7 +47,7 @@ class PesoNotaExameController extends Controller
             PesoNotaExame::create($request->all());
             $this->loggerData('Cadastrou  peso de notas para exames');
 
-            return redirect()->route('configuracoes.pautas.pesos_notas_exames')->with('feedback', ['type' => 'success', 'sms' => 'Tipo de pagamento cadastrado com sucesso']);
+            return redirect()->route('configuracoes.pautas.pesos_notas_exames')->with('feedback', ['type' => 'success', 'sms' => 'Pesos de Notas para Exames Cadastrado com Sucesso']);
 
         } catch (Exception $e) {
 

@@ -33,7 +33,7 @@
     @endif
 
 
-
+    <div class="table-responsive">
 
     <table id="example" class=" table ">
         <thead class="">
@@ -116,6 +116,7 @@
             @endif
         </tbody>
     </table>
+    </div>
     <script src="{{ asset('/js/datatables/jquery-3.5.1.js') }}"></script>
 
     <script>
@@ -157,7 +158,7 @@
                     .append('<option value="Professor">Professor</option>')
                     .append('<option value="Sub Directoria Pedagógica">Sub Directoria Pedagógica</option>')
                    
-                    .append('<option value="Estudande">Estudande</option>')
+                    .append('<option value="Estudante">Estudante</option>')
                     .append('<option value="Candidato">Candidato</option>')
                     .append(
                         '<option value="Chefe de Departamento Pedagógico">Chefe de Departamento Pedagógico</option>'

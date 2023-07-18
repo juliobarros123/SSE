@@ -77,6 +77,14 @@ class UserController extends Controller
     public function salvar(Request $request)
     {
         try {
+
+
+            $userExiste = User::where('vc_email', $request->vc_tipoUtilizador)->first();
+            if ($userExiste) {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, E-mail já está sendo usado por uma conta Existente no Sistema']);
+
+            }
+
             $dados = $request->all();
             // dd( $dados);
             if ($request->hasFile('profile_photo_path')) {
@@ -90,7 +98,7 @@ class UserController extends Controller
 
                 // unlink($cff->vc_foto);
                 // $imagem->move($dir, $nomeImagem);
-            }else{
+            } else {
                 $dados['profile_photo_path'] = "images/users/modelo.png";
 
             }
@@ -99,21 +107,21 @@ class UserController extends Controller
                 'vc_email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => $this->passwordRules(),
             ])->validate();
-        
-        //   dd( $dados['profile_photo_path']);
-          $user=  $this->user->store($dados);
-        //   dd($user);
-          if($user){
-            User::find($user->id)->update([
-                'profile_photo_path'=>$dados['profile_photo_path']
-            ]);
 
-          }
-          $this->loggerData("Adicionou Utilizador ");
+            //   dd( $dados['profile_photo_path']);
+            $user = $this->user->store($dados);
+            //   dd($user);
+            if ($user) {
+                User::find($user->id)->update([
+                    'profile_photo_path' => $dados['profile_photo_path']
+                ]);
+
+            }
+            $this->loggerData("Adicionou Utilizador ");
             return redirect()->route('admin.users')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador cadastrado com sucesso']);
 
         } catch (\Exception $exception) {
-// dd($exception);
+            // dd($exception);
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado. Não foi possível repetir o e-mail, utilizador ou telefone']);
 
         }
@@ -155,20 +163,20 @@ class UserController extends Controller
                     $nomeImagem = 'profile_photo_path' . "_" . $num . "." . $extensao;
                     $imagem->move($dir, $nomeImagem);
                     $dados['profile_photo_path'] = "images/users" . "/" . $nomeImagem;
-    
+
                     // unlink($cff->vc_foto);
                     // $imagem->move($dir, $nomeImagem);
-                }else{
+                } else {
                     $dados['profile_photo_path'] = $user->profile_photo_path;
-    
+
                 }
                 $this->user->update($dados, $slug);
-                if($user){
+                if ($user) {
                     User::find($user->id)->update([
-                        'profile_photo_path'=>$dados['profile_photo_path']
+                        'profile_photo_path' => $dados['profile_photo_path']
                     ]);
-        
-                  }
+
+                }
                 $this->loggerData("Actualizou Utilizador");
 
                 return redirect()->route('admin.users')->with('feedback', ['type' => 'success', 'sms' => 'Utilizador editado com sucesso']);

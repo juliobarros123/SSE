@@ -66,5 +66,23 @@
             @yield('content')
         </main>
     </div>
+    <script src="{{ asset('js/aluno/jquery-3.5.1.slim.min.js') }}"></script>
+    <script src="{{ asset('js/aluno/popper.min.js') }}"></script>
+    <script src="{{ asset('js/aluno/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('/js/sweetalert2.all.min.js') }}"></script>
+    @if (session('feedback'))
+    {{-- @dump(session('feedback')); --}}
+
+    @if (isset(session('feedback')['type']))
+        <script>
+            Swal.fire(
+                '{{ session('feedback')['sms'] }}',
+                '',
+                '{{ session('feedback')['type'] }}'
+            )
+        </script>
+    @endif
+@endif
 </body>
 </html>

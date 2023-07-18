@@ -63,7 +63,8 @@
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
                     value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" max="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limiteaesquerda)); ?>"
                     min="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limitemaxima)); ?>" required />
-            </div>
+          <span>Dos {{calcularIdade($idadesdecandidaturas->dt_limiteaesquerda)}}({{converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda)}}) aos {{calcularIdade($idadesdecandidaturas->dt_limitemaxima)}}({{converterDataSemHora($idadesdecandidaturas->dt_limitemaxima)}}) de idade </span>
+                </div>
         </div>
     @else
         <div class="form-group col-md-4">
@@ -72,6 +73,8 @@
                         class="campo-obrigatorio">*</small></label>
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
                     value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" required />
+
+                    <span>Dos {{calcularIdade($idadesdecandidaturas->dt_limiteaesquerda)}}({{converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda)}}) aos {{calcularIdade($idadesdecandidaturas->dt_limitemaxima)}}({{converterDataSemHora($idadesdecandidaturas->dt_limitemaxima)}}) de idade </span>
             </div>
         </div>
     @endif
@@ -155,10 +158,10 @@
         </select>
 
     </div>
-
+{{-- @dump(fha_municipios()) --}}
     <div class="form-group col-sm-4">
         <label for="" class="form-label">Municipio</label>
-            <select class="form-control buscarMunicipio " name="vc_municipio" id="id_municipio" >
+            <select class="form-control select-dinamico " name="vc_municipio" id="id_municipio" required >
                 <option value="{{ isset($candidato) ? $candidato->vc_municipio : '' }}" selected>
                     {{ isset($candidato) ? $candidato->vc_municipio  : 'Selecione o Municipio:' }}</option>
                 @foreach (fha_municipios() as $municipio)

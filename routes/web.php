@@ -42,6 +42,12 @@ Route::get('monitoramento',['as'=>'post.monitoring','uses'=>'Admin\Monitoramento
 // Route::get('site', ['as' => 'site.site', 'uses' => 'SiteController@index']);
 //site inicial fim
 //formulário de candidatura inicio
+    //Início search municipios
+    Route::get('buscar/municipios/{id_provincia}', ['as' => 'buscar.municipios.searchMunicipe', 'uses' => 'Admin\DynamicSearch@searchMunicipe']);
+    //FIM search municipios
+    //Início search municipios
+    Route::get('buscar/municipios/{provincia}/nome', ['as' => 'buscar.municipios.nome', 'uses' => 'Admin\DynamicSearch@municipios_nome']);
+    //FIM search municipios
 
 Route::get('/admitido', ['as' => 'admitido', 'uses' => 'Admin\ConfirmacaoController@confirmar'])->middleware(['auth:sanctum', 'verified']);
 Route::post('/admitido/store', ['as' => 'admin.admitidoPost', 'uses' => 'Admin\ConfirmacaoController@confirmarStore'])->middleware(['auth:sanctum', 'verified']);;

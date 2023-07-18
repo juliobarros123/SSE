@@ -87,6 +87,12 @@ class CandidaturaController extends Controller
     }
     public function recebecandidaturas(Request $request)
     {
+        // dd(gerarCodigo());
+//        foreach (fh_candidatos()->get() as $c){
+// Candidatura::find($c->id)->update(['tokenKey'=>gerarCodigo()]);
+
+//        }
+
         if (session()->get('filtro_candidato')) {
             if (!$request->id_curso) {
                 $filtro_candidato = session()->get('filtro_candidato');
@@ -291,7 +297,9 @@ class CandidaturaController extends Controller
             // dd($response['provincias']);
             return view('site/candidatura', $response);
         } else {
-            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, cadastra o último número de processo registrado na escola.']);
+            $response['erro']="Erro. Por favor, cadastra o último número de processo registrado na escola.";
+            return view('errors.geral',$response);
+            // return redirect()->back()->with('feedb', ['type' => 'error', 'sms' => 'Erro. Por favor, cadastra o último número de processo registrado na escola.']);
 
         }
 
@@ -333,6 +341,7 @@ class CandidaturaController extends Controller
                 'vc_nomePai' => $request->vc_nomePai,
                 'vc_nomeMae' => $request->vc_nomeMae,
                 'vc_genero' => $request->vc_genero,
+                'vc_municipio' => $request->vc_municipio,
                 "LP_S" => $request->LP_S,
                 "LP_O" => $request->LP_O,
                 "LP_N" => $request->LP_N,
@@ -345,10 +354,9 @@ class CandidaturaController extends Controller
                 "QUIM_S" => $request->QUIM_S,
                 "QUIM_O" => $request->QUIM_O,
                 "QUIM_N" => $request->QUIM_N,
-
                 'vc_dificiencia' => $request->vc_dificiencia,
                 'vc_estadoCivil' => $request->vc_estadoCivil,
-                'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
+                'it_telefone' => $request->it_telefone,
                 'vc_email' => $request->vc_email,
                 'tokenKey' => gerarCodigo(),
                 'vc_residencia' => $request->vc_residencia,
@@ -356,7 +364,7 @@ class CandidaturaController extends Controller
                 'vc_provincia' => $request->vc_provincia,
                 'vc_bi' => $request->vc_bi,
                 'media' => $request->media,
-                'tipo_candidato' => 'Comun',
+                'tipo_candidato' => 'Comum',
                 'it_estado_candidato' => "1",
                 'dt_emissao' => $request->dt_emissao,
                 'vc_EscolaAnterior' => $request->vc_EscolaAnterior,
@@ -475,6 +483,7 @@ class CandidaturaController extends Controller
                 'vc_estadoCivil' => $request->vc_estadoCivil,
                 'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
                 'vc_email' => $request->vc_email,
+                'vc_municipio' => $request->vc_municipio,
            
                 'vc_residencia' => $request->vc_residencia,
                 'vc_naturalidade' => $request->vc_naturalidade,
@@ -595,6 +604,7 @@ class CandidaturaController extends Controller
 
     public function filtro_cadidatos(Request $request)
     {
+    
         $anoLectivo = $request->vc_anolectivo;
         $curso = $request->vc_curso;
         // return redirect("candidaturas/listar/$anoLectivo/$curso");

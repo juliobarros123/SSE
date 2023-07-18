@@ -20,7 +20,6 @@ Route::get('candidatos_por_ano_lectivo/', ['as' => 'admin.candidatos_por_ano_lec
 Route::get('alunos_por_cursos/', ['as' => 'admin.alunos_por_cursos', 'uses' => 'Ajax\EstatisticaController@alunos_por_cursos']);
 
 Route::get('admin/cidadao/{bi}', ['as' => 'admin.cidadao', 'uses' => 'Admin\AlunnoController@cidadao']);
-
 Route::get('/', ['as' => 'raiz', 'uses' => 'Admin\HomeController@raiz']);
 Route::get('/home', ['as' => 'home', 'uses' => 'Admin\HomeController@raiz']);
 Route::get('/caderneta/{id}', ['as' => 'caderneta', 'uses' => 'Admin\BoletimTurmaController@dados']);
@@ -141,7 +140,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //novas rotas pautas finais
     Route::group(['prefix' => 'pauta-final'], function () {
-        Route::get('/turma/{slug_turma}/', ['as' => 'admin.pautaFinal.gerar', 'uses' => 'Admin\PautaFinalController@gerar']);
+        Route::get('/turma/{slug_turma}/{formato}', ['as' => 'admin.pautaFinal.gerar', 'uses' => 'Admin\PautaFinalController@gerar']);
 
         //     Route::post('/listar', ['as' => 'admin.pautaFinal.listar.get', 'uses' => 'Admin\PautaFinalController@getListPautaFinal']);
         //     Route::get('/listar/{anoLectivo}/{Curso}/{classe}', ['as' => 'admin.pautaFinal.Listas.get', 'uses' => 'Admin\PautaFinalController@getListasPautaFinal']);
@@ -172,12 +171,6 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('buscar/provincias', ['as' => 'buscar.provincias.searchProvince', 'uses' => 'Admin\DynamicSearch@searchProvince']);
     //FIM search provincias
 
-    //Início search municipios
-    Route::get('buscar/municipios/{id_provincia}', ['as' => 'buscar.municipios.searchMunicipe', 'uses' => 'Admin\DynamicSearch@searchMunicipe']);
-    //FIM search municipios
-    //Início search municipios
-    Route::get('buscar/municipios/{provincia}/nome', ['as' => 'buscar.municipios.nome', 'uses' => 'Admin\DynamicSearch@municipios_nome']);
-    //FIM search municipios
 
 
     //Início search Turmas
@@ -500,6 +493,12 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
     //sddd
 
+    Route::group(['prefix' => 'pautas_online'], function () {
+        Route::get('/', ['as' => 'admin.pautas_online', 'uses' => 'Admin\CadeadoPautaController@index']);
+        Route::get('/mudar_estado/{estado}', ['as' => 'admin.pautas_online.mudar_estado', 'uses' => 'Admin\CadeadoPautaController@mudar_estado']);
+       
+    }
+    );
     Route::group(['prefix' => 'turmas'], function () {
 
         Route::get('/{id}/professor', ['as' => 'turmas.professor', 'uses' => 'Admin\TurmaController@turmasProfessor']);
@@ -513,16 +512,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
         Route::put('/{slug}/actualizar', ['as' => 'turmas.actualizar', 'uses' => 'Admin\TurmaController@actualizar'])->middleware('access.controll.administrador');
 
         Route::get('/{id}/imprimir_alunos', ['as' => 'turmas.imprimir_alunos', 'uses' => 'Admin\TurmaController@imprimir_alunos']);
-        Route::get('/{id}/gerarcadernetaTurmas', ['as' => 'turmas.gerarcadernetaTurmas', 'uses' => 'Admin\TurmaController@gerarcaderneta']);
-
-        Route::get('/{id}/gerarcadernetaTurmas/xlsx', ['as' => 'turmas.gerarcadernetaTurmas.xlsx', 'uses' => 'Admin\ExportController@exports']);
-        Route::get('/{id}/gerarcadernetaTurmas/xlsx/view', ['as' => 'turmas.gerarcadernetaTurmas.xlsx.view', 'uses' => 'Admin\ExportController@exportsView']);
-        Route::get('/{id}/verPauta', ['as' => 'turmas.gerarcadernetaTurmas.xlsx.view', 'uses' => 'Admin\ExportController@exportsView']);
-
-        Route::get('/{id}/{trimestre}/gerarBoletimTurma/xlsx', ['as' => 'turmas.boletimTurmas.xlsx', 'uses' => 'Admin\BoletimTurmaController@exports']);
-        Route::get('/{id}/gerarBoletimTurma/xlsx/view', ['as' => 'turmas.boletimTurmas.xlsx.view', 'uses' => 'Admin\BoletimTurmaController@exportsView']);
-        Route::get('/{id}/verBoletim', ['as' => 'turmas.boletimTurmas.xlsxview', 'uses' => 'Admin\BoletimTurmaController@exportsView']);
-
+        Route::get('/{slug}/imprimir_crendencias', ['as' => 'turmas.imprimir_crendencias', 'uses' => 'Admin\TurmaController@imprimir_crendencias']);
+       
 
         Route::get('eliminadas/', ['as' => 'turmas.eliminadas', 'uses' => 'Admin\TurmaController@eliminadas'])->middleware('access.controll.administrador');
         Route::get('recuperar/{id}', ['as' => 'turmas.recuperar', 'uses' => 'Admin\TurmaController@recuperar'])->middleware('access.controll.administrador');

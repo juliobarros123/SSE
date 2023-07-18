@@ -4,8 +4,8 @@
   
     <h3>{{$cabecalho->vc_republica}} <br>{{$cabecalho->vc_ministerio}} 
         <br>{{$cabecalho->vc_escola}} 
-   
+       <br> {{$cabecalho->vc_endereco}}
         
     </h3>
-    <p>{{$cabecalho->vc_endereco}}</p>
+  
 </div>

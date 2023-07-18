@@ -70,7 +70,7 @@
     @if ($funcionario)
         @section('entidadade1-valor', fha_coordenador_comissao())
     @else
-        @section('entidadade1-valor', '-----------------------')
+        @section('entidadade1-valor', fha_coordenador_comissao())
     @endif
     @section('entidadade2', 'O SUBDIRECTOR PEDAGÓGICO')
     @section('entidadade2-valor', $cabecalho->vc_nomeSubdirectorPedagogico)

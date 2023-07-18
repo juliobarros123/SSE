@@ -62,7 +62,49 @@ class TurmaController extends Controller
     }
 
 
+public function imprimir_crendencias(Estudante $estudantes, $slug)
+{
+    $turma_alunos = fha_turma_alunos($slug);
+    //    dd($turma_alunos);
 
+
+    //Metodo que gera as listas da turmas
+    $data['turma'] = fh_turmas_slug($slug)->first();
+    // dd(  $data['turma']);
+    $data['cabecalho'] = fh_cabecalho();
+    $data['turma_alunos'] = $turma_alunos;
+    // dd( $data['turma_alunos']);
+    // dd( $data['cabecalho']);
+    // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
+    $data['css'] = file_get_contents('css/lista/style-2.css');
+    // Dados para a tabela
+
+    // Carregar a view
+
+
+    // Parâmetros da view
+
+    $mpdf = new \Mpdf\Mpdf([
+        'mode' => 'utf-8',
+        'margin_top' => 5,
+
+    ]);
+
+    $mpdf->SetFont("arial");
+    $mpdf->setHeader();
+    $mpdf->defaultfooterline = 0;
+
+    $mpdf->setFooter('{PAGENO}');
+
+    $this->loggerData("Imprimiu Lista de credências da Turma " . $data['turma']->vc_nomedaTurma);
+
+    $html = view("admin/pdfs/listas/alunos-credencias/index", $data);
+    // return  $html;
+    $mpdf->writeHTML($html);
+
+    $mpdf->Output("lista-turma.pdf", "I");
+
+}
 
     public function turmas()
     {

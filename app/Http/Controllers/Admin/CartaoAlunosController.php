@@ -50,7 +50,7 @@ class CartaoAlunosController extends Controller
         $data['request']=$request->all();
         $data['matricula']=$matricula;
         $data['cabecalho']=fh_cabecalho();
-
+        if($data['cabecalho']->assinatura_director){
     //   dd($data['request']);
         $data["css"] = file_get_contents('css/cartao/aluno/style.css');
         $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
@@ -70,6 +70,10 @@ class CartaoAlunosController extends Controller
             $mpdf->writeHTML($html);
             $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) '.Auth::User()->vc_primeiroNome.' '.Auth::User()->vc_ultimoaNome);
             $mpdf->Output("aluno.pdf", "I");
+        }else{
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
+
+        }
         else :
             return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Aluno não existe, ou não deve estar matriculado neste ano lectivo!']);
 

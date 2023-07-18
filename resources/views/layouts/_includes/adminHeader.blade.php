@@ -93,7 +93,7 @@
                                 <div class="dropbtn">
                                     {{ obter_iniciais(Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido) }}
                                 </div>
-                                
+
                                 <div class="dropdown-content card ">
                                     <div class="container  d-flex justify-content-center">
 
@@ -120,7 +120,8 @@
 
                                                     <div class="button mt-2 d-flex flex-row align-items-center">
 
-                                                        <a href="{{route('admin.users.editar',Auth::User()->slug)}}" class="btn btn-sm btn-outline-primary w-100">Editar perfil</a>
+                                                        <a href="{{ route('admin.users.editar', Auth::User()->slug) }}"
+                                                            class="btn btn-sm btn-outline-primary w-100">Editar perfil</a>
                                                         <a class="btn btn-sm btn-primary w-100 ml-2"
                                                             href="{{ route('logout') }}"
                                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
@@ -207,10 +208,7 @@
 
                                 @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                                         Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                                    
-                                        Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' 
-                                       
-                                        )
+                                        Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico')
                             <li class="nav-header">Mod. de Gestão de Participantes</li>
                             <li class="nav-item has-treeview ">
                                 <a href="{{ url('admin/users/listar') }}" class="nav-link">
@@ -236,7 +234,7 @@
 
 
                             </li>
-                            <li class="nav-item has-treeview ">
+                            {{-- <li class="nav-item has-treeview ">
                                 <a href="{{ route('admin.funcionarios.listar') }}" class="nav-link">
                                     <i class="nav-icon fas fa-chalkboard"></i>
                                     <p>
@@ -244,7 +242,7 @@
 
 
                                     </p>
-                                </a>
+                                </a> --}}
                             <li class="nav-item has-treeview ">
                                 <a href="{{ url('admin/logs/pesquisar') }}" class="nav-link ">
                                     <i class="nav-icon fas fa-chalkboard"></i>
@@ -264,93 +262,98 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Comissão' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Preparador' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Secretaria')
-                          <li class="nav-header">Mód. de Gestão de Matrículas</li>
-                    @if (Auth::user()->vc_tipoUtilizador == 'Comissão' ||
+            <li class="nav-header">Mód. de Gestão de Matrículas</li>
+            @if (Auth::user()->vc_tipoUtilizador == 'Comissão' ||
                     Auth::user()->vc_tipoUtilizador == 'Secretaria' ||
                     Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                     Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                    Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                    Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                    Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                     Auth::user()->vc_tipoUtilizador == 'Preparador' ||
                     Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                    Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' )
-  
+                    Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                    Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
 
-            <li class="nav-item has-treeview ">
-                <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Candidatos
 
-                    </p>
-                </a>
+                <li class="nav-item has-treeview ">
+                    <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
+                        <i class="nav-icon fas fa-chalkboard"></i>
+                        <p>
+                            Candidatos
 
-            <li class="nav-item has-treeview ">
-                <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Alunos
+                        </p>
+                    </a>
 
-                    </p>
-                </a>
+                <li class="nav-item has-treeview ">
+                    <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
+                        <i class="nav-icon fas fa-chalkboard"></i>
+                        <p>
+                            Alunos
 
-            </li>
+                        </p>
+                    </a>
 
-            </li>
+                </li>
 
-            @if (
-            Auth::user()->vc_tipoUtilizador == 'Secretaria' ||
-            Auth::user()->vc_tipoUtilizador == 'Administrador' ||
-            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-            Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
-            Auth::user()->vc_tipoUtilizador == 'Preparador' ||
-            Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-            Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' )
-            <li class="nav-item has-treeview ">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Matriculas
+                </li>
 
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
+                @if (Auth::user()->vc_tipoUtilizador == 'Secretaria' ||
+                        Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                        Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                        Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                        Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                        Auth::user()->vc_tipoUtilizador == 'Preparador' ||
+                        Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                        Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                        Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
+                    <li class="nav-item has-treeview ">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-chalkboard"></i>
+                            <p>
+                                Matriculas
 
-                    @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                        <li class="nav-item">
-                            <a href="{{ url('Admin/matriculas/cadastrar') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Matricular Aluno</p>
-                            </a>
-                        </li>
-                    @endif
-                    <li class="nav-item">
-                        <a href="{{ url('Admin/matriculas/pesquisar') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Lista de Matriculados</p>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+
+                            @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
+                                <li class="nav-item">
+                                    <a href="{{ url('Admin/matriculas/cadastrar') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Matricular Aluno</p>
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="nav-item">
+                                <a href="{{ url('Admin/matriculas/pesquisar') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Lista de Matriculados</p>
+                                </a>
+                            </li>
+
+
+
+
+
+                        </ul>
                     </li>
+                @endif
+                <li class="nav-item has-treeview ">
+                    <a href="{{ route('admin.alunos.importar') }}" class="nav-link">
+                        <i class="nav-icon fas fa-chalkboard"></i>
+                        <p>
+                            Importar
 
-
-
-
-
-                </ul>
-            </li>
-            @endif
-            <li class="nav-item has-treeview ">
-                <a href="{{ route('admin.alunos.importar') }}" class="nav-link">
-                    <i class="nav-icon fas fa-chalkboard"></i>
-                    <p>
-                        Importar
-
-                    </p>
-                </a>
-            </li>
+                        </p>
+                    </a>
+                </li>
 
             @endif
             <li class="nav-item has-treeview ">
@@ -407,7 +410,8 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Comissão' ||
                 Auth::user()->vc_tipoUtilizador == 'Visitante')
             <li class="nav-header">Mod. de Gestão de Listas</li>
@@ -460,7 +464,8 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Visitante')
             <li class="nav-header">Mod. de Gestão de Relatórios</li>
             <li class="nav-item has-treeview">
@@ -506,7 +511,8 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                 Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Visitante')
             <li class="nav-header">Mod. de Relatórios
                 de Propinas
@@ -604,8 +610,10 @@
 
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
             <li class="nav-header"> Mod. de Recuperação(Aluno)</li>
 
             <li class="nav-item has-treeview">
@@ -624,7 +632,8 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
             <li class="nav-header">Mod. de Configuração de Pauta</li>
             <li class="nav-item has-treeview">
                 <a href="{{ route('configuracoes.pautas.n_negativas') }}" class="nav-link">
@@ -666,13 +675,24 @@
                 </a>
 
             </li>
+            <li id="cadeados de pautas" class="nav-item has-treeview">
+                <a href="{{ route('admin.pautas_online') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chalkboard"></i>
+                    <p>
+                        Pauta Online
+
+                    </p>
+                </a>
+
+            </li>
         @endif
 
 
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
             <li class="nav-header">Mod. de Configuração básica</li>
             <li class="nav-item has-treeview">
                 <a href="{{ url('/admin/anolectivo') }}" class="nav-link">
@@ -776,7 +796,8 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
             <li class="nav-header">Mod. de Gestão de Turmas</li>
 
             <li class="nav-item has-treeview">
@@ -824,18 +845,44 @@
         @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
                 Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Professor')
+
             <li class="nav-item has-treeview ">
-                <a href="{{ route('admin.atribuicoes.pesquisar') }}" class="nav-link">
+                <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-chalkboard"></i>
                     <p>
                         Turmas(Professores)
 
-
                     </p>
                 </a>
+                <ul class="nav nav-treeview">
 
+                    @if (Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                            Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                            Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                            Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                            Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' )
+                        <li class="nav-item">
+                            <a href="{{ url('admin/atribuicoes/cadastrar') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Atribuir</p>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a href="{{ route('admin.atribuicoes.pesquisar') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Listar</p>
+                        </a>
+                    </li>
+
+
+
+
+
+                </ul>
             </li>
             <li class="nav-item has-treeview">
                 <a href="{{ route('direitores-turmas.meus') }}" class="nav-link">
@@ -855,8 +902,9 @@
 
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica'
-                || Auth::user()->vc_tipoUtilizador == 'Secretaria')
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Secretaria')
             <li class="nav-header"> Mod. de Pagamentos</li>
 
             <li class="nav-item has-treeview">
@@ -904,7 +952,8 @@
 
         @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                 Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
-                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||  Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
+                Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' ||
                 Auth::user()->vc_tipoUtilizador == 'Secretaria')
             <li class="nav-header"> Mod. de Documentos</li>
             <li class="nav-item has-treeview">

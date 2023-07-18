@@ -34,21 +34,21 @@
                 <div class="col-lg-3">
                     <div class="statistic-card">
                         <h4>Alunos</h4>
-                        <p>Total: {{fh_candidatos()->where('candidatos.id_ano_lectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
+                        <p>Total: {{fh_alunos()->where('candidatos.id_ano_lectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
 
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="statistic-card">
                         <h4>Matriculados</h4>
-                        <p>Total: 200</p>
+                        <p>Total: {{fh_matriculas()->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
 
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="statistic-card">
                         <h4>Turmas</h4>
-                        <p>Total: 200</p>
+                        <p>Total: {{fh_turmas   ()->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
 
                     </div>
                 </div>

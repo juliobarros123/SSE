@@ -21,13 +21,13 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin/escola/cadastrar') }}" method="post" class="row">
+            <form action="{{ route('admin/escola/cadastrar') }}" method="post" class="row" enctype="multipart/form-data">
                 @csrf
                 @include('forms._formEscola.index')
 
                 <div class="form-group col-sm-4">
                     <label for="" class="text-white form-label">.</label>
-                    <button class="form-control btn btn-dark">Actualizar</button>
+                    <button class="form-control btn btn-dark">Cadastrar</button>
                 </div>
             </form>
 

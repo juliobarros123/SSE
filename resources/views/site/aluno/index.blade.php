@@ -25,7 +25,7 @@
                 <img src="{{asset('images/300.png')}}" alt="Disciplina 1" class="card-img-top">
                 <div class="card-body">
                  
-                        <p class="card-text">Disciplinas: {{$item->disciplina}}</p>
+                        <p class="card-text">Disciplinas: {{$item->vc_nome}}</p>
                       
                 </div>
             </div>

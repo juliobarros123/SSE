@@ -60,7 +60,7 @@ class RelatorioController extends Controller
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
             $ano_lectivo = fh_anos_lectivos_publicado()->first();
             // dd($ano_lectivo );
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             // dd($request->id_ano_lectivo);
             $candidatos = $candidatos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
@@ -169,7 +169,7 @@ class RelatorioController extends Controller
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
             $ano_lectivo = fh_anos_lectivos_publicado()->first();
             // dd($ano_lectivo );
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             // dd($request->id_ano_lectivo);
             $alunos = $alunos->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
@@ -285,7 +285,7 @@ class RelatorioController extends Controller
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
             $ano_lectivo = fh_anos_lectivos_publicado()->first();
             // dd($ano_lectivo );
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             // dd($request->id_ano_lectivo);
             $matriculados = $matriculados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }

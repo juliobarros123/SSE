@@ -133,6 +133,8 @@
                                         {{ date('d-m-Y', strtotime($aluno->dt_emissao)) }}<br>
                                         <b>Local de emissão do Bilhete de Identidade: </b>
                                         {{ $aluno->vc_localEmissao }}<br>
+                                        <b>Código de acesso: </b>
+                                        {{ $aluno->tokenKey }}<br>
                                     </p>
                                     {{-- <h5 class="text-left mb-2 mt-2 ml-2"><b>Dados Acadêmicos</b></h5> --}}
                                     <p class="ml-4">

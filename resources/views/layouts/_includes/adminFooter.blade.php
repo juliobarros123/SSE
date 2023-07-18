@@ -807,7 +807,7 @@
                     console.log(classes);
                     // alert("ola");
                     $("#id_classe").empty();
-                    $("#id_classe").append('<option value="">Selecciona a Classe</option>');
+                    // $("#id_classe").append('<option value="">Selecciona a Classe</option>');
 
 
                     $.each(classes, function(index, classe) {
@@ -851,7 +851,7 @@
                     console.log(classes);
                     // alert("ola");
                     $("#id_classe").empty();
-                    $("#id_classe").append('<option value="">Selecciona a Classe</option>');
+                    // $("#id_classe").append('<option value="">Selecciona a Classe</option>');
                     $("#id_classe").append('<option value="Todas">Todas</option>');
 
                     $.each(classes, function(index, classe) {
@@ -1242,7 +1242,7 @@ vc_tipodaNota
                    <img class="card-img-top" src="/${data.aluno.vc_imagem}" alt="Card image cap">
                     <div class="card-body">
                    <h5 class="card-title">Nome:${data.aluno.vc_primeiroNome}
-                    ${data.aluno.vc_nomedoMeio} ${data.aluno.vc_apelido}</h5>
+                    ${data.aluno.vc_nomedoMeio?data.aluno.vc_nomedoMeio:''} ${data.aluno.vc_apelido}</h5>
                    <p class="card-text">Curso: ${data.aluno.vc_shortName}</p>
               
                </div>
@@ -1476,10 +1476,10 @@ vc_tipodaNota
         $(e.target).data('dropdown-menu').css('display', 'none');
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+@if(Request::url() === url('/'))
 <script>
-    // Dados de exemplo
+  
     var url_origem = "{{ url('/') }}";
     $.ajax({
         type: 'GET',
@@ -1514,8 +1514,6 @@ vc_tipodaNota
             });
         }
     });
-
-
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -1548,9 +1546,6 @@ vc_tipodaNota
             });
         }
     });
-
-
-
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -1577,11 +1572,6 @@ vc_tipodaNota
             });
         }
     });
-
-
-
-
-
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -1614,31 +1604,12 @@ vc_tipodaNota
             });
         }
     });
-    var radarChartData = {
-        labels: ['A', 'B', 'C', 'D', 'E'],
-        datasets: [{
-            label: 'Gráfico Radar',
-            data: [10, 15, 20, 18, 25],
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderWidth: 1
-        }]
-    };
-
-
-
-    // Renderizando os gráficos
-
-
-
-
-
-
-    new Chart(document.getElementById('radar-chart'), {
-        type: 'radar',
-        data: radarChartData
-    });
+ 
 </script>
+@endif
+
+
+
 </body>
 
 </html>

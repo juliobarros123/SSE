@@ -33,7 +33,7 @@
                 <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
-
+{{-- @dump($id_anoLectivo_publicado) --}}
                     @if (isset($ano_lectivo_publicado))
                         <select name="id_ano_lectivo" id="id_ano_lectivo" class="form-control" readonly>
                             <option value="{{ $id_anoLectivo_publicado }}">
@@ -82,9 +82,9 @@
 
                 </div>
 
-                <div class="form-group col-md-12 d-flex justify-content-center">
-
-                    <button class="form-control btn btn-dark w-25">Pesquisar</button>
+                 <div class="form-group col-sm-12 d-flex justify-content-center">
+                    <label for="" class="text-white form-label">.</label>
+                    <button class="form-control btn col-md-3 btn-dark">Pesquisar</button>
                 </div>
 
             </form>

@@ -24,82 +24,88 @@
     @endif
     {{-- @dump($atribuicoes) --}}
 
+    <div class="table-responsive">
+        <table id="example" class="display table table-hover">
+            <thead class="">
+                <tr>
+                    <th>ID</th>
+                    <th>PROFESSOR</th>
+                    <th>CURSO</th>
+                    <th>ANO LECTIVO</th>
+                    <th>TURMA</th>
+                    <th>CLASSE</th>
+                    <th>ALUNOS</th>
+                    <th>DISCIPLINA</th>
+                    <th>ACÇÕES</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($atribuicoes)
+                    @foreach ($atribuicoes as $atribuicao)
+                        <tr class="">
+                            <th>{{ $atribuicao->id }}</th>
+                            <th>{{ $atribuicao->vc_primemiroNome }} {{ $atribuicao->vc_apelido }}</th>
+                            <td>{{ $atribuicao->vc_nomeCurso }}</td>
+                            <td>{{ $atribuicao->ya_inicio }}/{{ $atribuicao->ya_fim }}</td>
+                            <td>{{ $atribuicao->vc_nomedaTurma }}</td>
+                            <td>{{ $atribuicao->vc_classe }}ª Classe</td>
+                            <td>{{ $atribuicao->it_qtMatriculados }} </td>
+                            <td>{{ $atribuicao->disciplina }} </td>
 
-    <table id="example" class="display table table-hover">
-        <thead class="">
-            <tr>
-                <th>ID</th>
-                <th>PROFESSOR</th>
-                <th>CURSO</th>
-                <th>ANO LECTIVO</th>
-                <th>TURMA</th>
-                <th>CLASSE</th>
-                <th>ALUNOS</th>
-                <th>DISCIPLINA</th>
-                <th>ACÇÕES</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if ($atribuicoes)
-                @foreach ($atribuicoes as $atribuicao)
-                    <tr class="">
-                        <th>{{ $atribuicao->id }}</th>
-                        <th>{{ $atribuicao->vc_primemiroNome }} {{ $atribuicao->vc_apelido }}</th>
-                        <td>{{ $atribuicao->vc_nomeCurso }}</td>
-                        <td>{{ $atribuicao->ya_inicio }}/{{ $atribuicao->ya_fim }}</td>
-                        <td>{{ $atribuicao->vc_nomedaTurma }}</td>
-                        <td>{{ $atribuicao->vc_classe }}ª Classe</td>
-                        <td>{{ $atribuicao->it_qtMatriculados }} </td>
-                        <td>{{ $atribuicao->disciplina }} </td>
+                            <td>
 
-                        <td>
+                                @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
+                                    <div class="dropdown">
+                                        <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                            @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
-                                <div class="dropdown">
-                                    <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        <i class="fa fa-clone fa-sm" aria-hidden="true"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a href="{{ route('admin.atribuicoes.editar', $atribuicao->slug) }}"
-                                            class="dropdown-item">Editar</a>
-                                        <a href="{{ route('admin.atribuicoes.excluir', $atribuicao->slug) }}"
-                                            class="dropdown-item"
-                                            data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
-                                        <a href="" class="dropdown-item" data-toggle="modal"
-                                            data-target=".bd-example-modal-sm{{ $atribuicao->id }}">Pauta</a>
-                                        <a href="" class="dropdown-item" data-toggle="modal"
-                                            data-target=".bd-example-modal-inserir{{ $atribuicao->id }}">Inserir</a>
-                                        {{-- <a data-toggle="modal" data-target=".bd-example-modal-lg{{ $atribuicao->ident }}"
+                                            @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
+                                                    Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
+                                                    Auth::user()->vc_tipoUtilizador == 'Chefe de Departamento Pedagógico' ||
+                                                    Auth::user()->vc_tipoUtilizador == 'Gabinete Pedagógico')
+                                                <a href="{{ route('admin.atribuicoes.editar', $atribuicao->slug) }}"
+                                                    class="dropdown-item">Editar</a>
+                                                <a href="{{ route('admin.atribuicoes.excluir', $atribuicao->slug) }}"
+                                                    class="dropdown-item"
+                                                    data-confirm="Tem certeza que deseja eliminar?">Eliminar</a>
+                                            @endif
+                                            <a href="" class="dropdown-item" data-toggle="modal"
+                                                data-target=".bd-example-modal-sm{{ $atribuicao->id }}">Pauta</a>
+                                            <a href="" class="dropdown-item" data-toggle="modal"
+                                                data-target=".bd-example-modal-inserir{{ $atribuicao->id }}">Inserir</a>
+                                            {{-- <a data-toggle="modal" data-target=".bd-example-modal-lg{{ $atribuicao->ident }}"
                                             class="dropdown-item">Disciplinas</a> --}}
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                        </td>
-                    </tr>
-
+                            </td>
+                        </tr>
 
 
 
 
-                    <div class="modal fade bd-example-modal-sm{{ $atribuicao->id }}" tabindex="-1" role="dialog"
-                        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">TRIMESTRES</h5>
 
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @php
-                                    $disciplina_curso_classe = fhap_disciplinas_cursos_classes($atribuicao->id_disciplina, $atribuicao->it_idCurso, $atribuicao->it_idClasse);
-                                    //    dd(                                $disciplina_curso_classe);
-                                @endphp
-                               
+                        <div class="modal fade bd-example-modal-sm{{ $atribuicao->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">TRIMESTRES</h5>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    @php
+                                        $disciplina_curso_classe = fhap_disciplinas_cursos_classes($atribuicao->id_disciplina, $atribuicao->it_idCurso, $atribuicao->it_idClasse);
+                                        //    dd(                                $disciplina_curso_classe);
+                                    @endphp
+
                                     @if ($disciplina_curso_classe)
                                         <a target="_blank"
                                             href="{{ route('admin.pauta.mini.disciplina', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I', 'slug_disciplina_curso_classe' => $disciplina_curso_classe->slug]) }}"
@@ -113,7 +119,8 @@
                                             href="{{ route('admin.pauta.mini.disciplina', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'III', 'slug_disciplina_curso_classe' => $disciplina_curso_classe->slug]) }}"
                                             class="dropdown-item">IIIº TRIMESTRE</a>
                                     @else
-                                        <small class="text-danger w-100">Para inserir nota, configura( Disciplina\Curso\Classe)
+                                        <small class="text-danger w-100">Para inserir nota, configura(
+                                            Disciplina\Curso\Classe)
                                         </small>
                                     @endif
 
@@ -121,44 +128,45 @@
 
                             </div>
                         </div>
-                    </div>
+    </div>
 
-                    <div class="modal fade bd-example-modal-inserir{{ $atribuicao->id }}" tabindex="-1" role="dialog"
-                        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-center" id="exampleModalLabel">INSERIR NOTA <br>
-                                        ESCOLHA O TRIMESTRE</h5>
-                                    {{-- <small class="text-info">Clica no trimestre</small> --}}
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @if ($disciplina_curso_classe)
-                                    <div class="modal-body">
-                                        <a target="_blank"
-                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I']) }}"
-                                            class="dropdown-item">Iº TRIMESTRE</a>
-                                        <a target="_blank"
-                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'II']) }}"
-                                            class="dropdown-item">IIº TRIMESTRE</a>
-                                        <a target="_blank"
-                                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'III']) }}"
-                                            class="dropdown-item">IIIº TRIMESTRE</a>
+    <div class="modal fade bd-example-modal-inserir{{ $atribuicao->id }}" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">INSERIR NOTA <br>
+                        ESCOLHA O TRIMESTRE</h5>
+                    {{-- <small class="text-info">Clica no trimestre</small> --}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @if ($disciplina_curso_classe)
+                    <div class="modal-body">
+                        <a target="_blank"
+                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'I']) }}"
+                            class="dropdown-item">Iº TRIMESTRE</a>
+                        <a target="_blank"
+                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'II']) }}"
+                            class="dropdown-item">IIº TRIMESTRE</a>
+                        <a target="_blank"
+                            href="{{ route('nota_em_carga.alunos', ['slug_turma_user' => $atribuicao->slug, 'trimestre' => 'III']) }}"
+                            class="dropdown-item">IIIº TRIMESTRE</a>
 
-                                    </div>
-                                    @else
-                                    <small class="text-danger">Para inserir nota, configura( Disciplina\Curso\Classe)
-                                    </small>
-                                @endif
-                            </div>
-                        </div>
                     </div>
-                @endforeach
-            @endif
-        </tbody>
+                @else
+                    <small class="text-danger">Para inserir nota, configura( Disciplina\Curso\Classe)
+                    </small>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endforeach
+    @endif
+    </tbody>
     </table>
+    </div>
     <script src="{{ asset('/js/datatables/jquery-3.5.1.js') }}"></script>
 
     <script>

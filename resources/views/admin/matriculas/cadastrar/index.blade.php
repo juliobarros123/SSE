@@ -25,9 +25,9 @@
 
                 @include('forms._formMatricula.index')
 
-                <div class="d-flex justify-content-center col-md-12">
-
-                    <button class=" btn btn-dark w-25 ">Cadastrar</button>
+                 <div class="form-group col-sm-12 d-flex justify-content-center">
+                    <label for="" class="text-white form-label">.</label>
+                    <button class="form-control btn col-md-3 btn-dark">Cadastrar</button>
                 </div>
             </form>
         </div>

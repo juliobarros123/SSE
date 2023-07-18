@@ -20,7 +20,7 @@
                 @include('forms._formFuncionario.index')
                 <div class="form-group col-sm-12 d-flex justify-content-center mt-2">
                        
-                    <button class="form-control btn btn-dark w-25">Editar</button>
+                    <button class="form-control btn btn-dark col-md-3">Editar</button>
                 </div>
             </form>
 

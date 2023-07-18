@@ -171,9 +171,9 @@
     @include('layouts._includes.fragments.lista.footer.index')
     @section('entidadade1', 'O COORDENADOR DA COMISSÃO')
     @if (0)
-        @section('entidadade1-valor', 'xxxxxxxxxx')
+        @section('entidadade1-valor', fha_coordenador_comissao())
     @else
-        @section('entidadade1-valor', '-----------------------')
+        @section('entidadade1-valor', fha_coordenador_comissao())
     @endif
     @section('entidadade2', 'O SUBDIRECTOR PEDAGÓGICO')
     @section('entidadade2-valor', $cabecalho->vc_nomeSubdirectorPedagogico)

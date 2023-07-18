@@ -37,8 +37,8 @@
 
          <div class="nome"><span class="info-funcionario">Nome</span> : <span class="valor">{{ $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome }}</span></div>
          <div class="funcao"><span class="info-funcionario">Função</span> : <span class="valor">{{ $funcionario->vc_funcao }}</span></div>
-         <div class="contacto"><span class="info-funcionario">Contacto</span> : <span class="valor">992945957</span></div>
-         /* <div class="bi"><span class="info-funcionario">B.I</span> : <span class="valor">{{$funcionario->vc_bi}}</span></div> */
+         <div class="contacto"><span class="info-funcionario">Contacto</span> : <span class="valor">{{ $funcionario->vc_telefone}}</span></div>
+       
          <div class="validade"><span class="info-funcionario">Validade</span> : <span class="valor">{{$funcionario->ya_anoValidade}}</span></div>
          <div class="visa-container " >
       
@@ -48,8 +48,8 @@
           </div>
       <hr class="hr-custom">
 
-      <div>
-          <i>{{ $cabecalho->vc_nomeDirector }} </i>
+      <div class="director">
+          {{ $cabecalho->vc_nomeDirector }} 
 
       </div>
   </div>

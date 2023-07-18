@@ -45,7 +45,7 @@
             </div>
                 <div class="form-group  d-flex justify-content-center">
                    
-                    <button class="form-control btn btn-dark w-25" >Pesquisar</button>
+                    <button class="form-control btn btn-dark col-md-3" >Pesquisar</button>
                 </div>
 
             </form>

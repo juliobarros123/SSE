@@ -32,8 +32,6 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    private $Logger;
-
     public function __construct()
     {
         $this->Logger = new Logger();
@@ -43,6 +41,9 @@ class CursoController extends Controller
         $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
         $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
+ 
+
+    
     public function index()
     {
 
@@ -169,10 +170,11 @@ class CursoController extends Controller
     {
         try {
 
-            $response = Curso::find($id);
-            $response->update(['it_estado_curso' => 0]);
+            $response = Curso::where('slug',$id)->first();
+            Curso::where('slug',$id)->delete();
             $this->loggerData("Eliminou Um Curso " . $response->vc_nomeCurso);
-            return redirect()->back()->with('curso.eliminar.success', '1');
+            return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Curso eliminado com Sucesso']);
+
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('curso.eliminar.error', '1');

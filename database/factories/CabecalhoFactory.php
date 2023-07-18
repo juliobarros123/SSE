@@ -30,7 +30,7 @@ class CabecalhoFactory extends Factory
             'vc_acronimo' => "PAE",
             'vc_nif' => "399393003994940994900",
             'vc_republica' => "República de Angola",
-            'vc_ministerio' => "Ministério das telecomunicações",
+            'vc_ministerio' => "Ministério da Educação",
             'vc_endereco' => "Luanda",
             'it_telefone' => 999555999,
             'vc_email' => "pea@gmail.com",
