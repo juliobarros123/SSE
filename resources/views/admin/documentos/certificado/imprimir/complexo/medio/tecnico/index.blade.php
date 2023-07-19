@@ -70,6 +70,10 @@ background-image-resolution: from-image;">
     @php
         // dd($medias_acumulada_coluna);
         $medias_acumulada_coluna = fh_arredondar(media($medias_acumulada_coluna));
+        $ec = fha_nota_pap($aluno->processo, 'EC');
+        $pc = $medias_acumulada_coluna;
+        $pap = fha_nota_pap($aluno->processo, 'PAP');
+        $cfc = fh_arredondar((4 * $pc + $pap + $ec) / 6);
     @endphp
     @php
         /* dd($cabecalho); */
@@ -85,13 +89,14 @@ background-image-resolution: from-image;">
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº <strong>{{$aluno->processo}}</strong>, concluiu no ano lectivo de
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº
+            <strong>{{ $aluno->processo }}</strong>, concluiu no ano lectivo de
             {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do
             {{ $info_certificado->ensino }}
             , na área de <strong>{{ $aluno->vc_nomeCurso }} </strong>
             conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
-            Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
+            Final de {{ $cfc }} Valores, obtida nas seguintes classificações por disciplina:
         </div>
     </div>
     <br>
@@ -113,13 +118,13 @@ background-image-resolution: from-image;">
         @foreach ($componentes as $componente)
             <tr>
                 @if ($loop->index == 0)
-                <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
+                    <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
 
                     <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
                     <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
-                    @else
-                <td class="disciplina td td-boder" colspan="4"> <strong>{{ $componente->vc_componente }}</strong></td>
-
+                @else
+                    <td class="disciplina td td-boder" colspan="4">
+                        <strong>{{ $componente->vc_componente }}</strong></td>
                 @endif
             </tr>
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
@@ -151,7 +156,7 @@ background-image-resolution: from-image;">
                             //     $ca = -1;
                             // }
                             // dd( $ca );
-                             array_push($medias_acumulada_linha, $ca); 
+                            array_push($medias_acumulada_linha, $ca);
                         @endphp
                         <td class="nota-valor" style="text-align: center">
                             {{ menor_zero($ca) ? $ca : '-------' }}</td>
@@ -245,7 +250,7 @@ background-image-resolution: from-image;">
 
 
             <td class="nota-valor" style="text-align: center">
-                {{ $cfc = fh_arredondar((4 * $pc + $pap + $ec) / 6) }}
+                {{ $cfc}}
             </td>
 
             <td style="border-right: none;text-align:right; ">
