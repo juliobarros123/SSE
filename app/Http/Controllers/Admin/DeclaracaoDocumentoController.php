@@ -24,6 +24,7 @@ class DeclaracaoDocumentoController extends Controller
        {
            $data['info_declaracao'] =     $data['info_declaracao'] = fh_infos_certificado()->where('classes.id', $request->id_classe_2)
            ->where('info_cerficados.tipo_documento','Declaração')->first();
+        
            $classe = fh_classes()->where('classes.id', $request->id_classe_2)->first();
            if ($data['info_declaracao']) {
                //    dd($data['info_certificado']);
@@ -101,7 +102,7 @@ class DeclaracaoDocumentoController extends Controller
    
                }
            } else {
-               return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => "Antes, cadastre as informações Necesssário para o certificado da $classe->vc_classe" . "ª Classe. No menu (Info. Certificado)"]);
+               return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => "Antes, cadastre as informações Necesssário para a Declaração da $classe->vc_classe" . "ª Classe. No menu (Info. Certificado)"]);
    
            }
        }

@@ -41,6 +41,7 @@ class InfoCerficadoController extends Controller
             // dd($request);
 
                 $response['id_classe'] = $request->id_classe;
+                $response['tipo_documento'] = $request->tipo_documento;
                 $classe=fh_classes()->find($request->id_classe);
                 // dd(  $classe);
                 if (!$this->tem_registro_cadastrar($response)) {
@@ -111,8 +112,10 @@ class InfoCerficadoController extends Controller
     }
     public function tem_registro_cadastrar($request)
     {
+        // dd($request);
         // dd(fh_infos_certificado()->where('info_cerficados.id_classe',$request['id_classe'])->count());
-        return fh_infos_certificado()->where('info_cerficados.id_classe', $request['id_classe'])->count();
+        return fh_infos_certificado()->where('info_cerficados.id_classe', $request['id_classe'])
+        ->where('info_cerficados.tipo_documento', $request['tipo_documento'])->count();
     }
     public function eliminar($slug)
     {
