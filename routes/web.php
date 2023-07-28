@@ -22,7 +22,7 @@ use App\Http\Controllers\admin\controllerTurma;
 // });
 
 
-Route::get('/ex-alunos',['as'=>'site.diplomado','uses'=>'Admin\DiplomadosController@Site']);
+Route::get('/ex-alunos', ['as' => 'site.diplomado', 'uses' => 'Admin\DiplomadosController@Site']);
 
 
 
@@ -35,30 +35,30 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('monitoramento',['as'=>'post.monitoring','uses'=>'Admin\MonitoramentoController@index']);
+Route::get('monitoramento', ['as' => 'post.monitoring', 'uses' => 'Admin\MonitoramentoController@index']);
 
 
 //site inicial inicio
 // Route::get('site', ['as' => 'site.site', 'uses' => 'SiteController@index']);
 //site inicial fim
 //formulário de candidatura inicio
-    //Início search municipios
-    Route::get('buscar/municipios/{id_provincia}', ['as' => 'buscar.municipios.searchMunicipe', 'uses' => 'Admin\DynamicSearch@searchMunicipe']);
-    //FIM search municipios
-    //Início search municipios
-    Route::get('buscar/municipios/{provincia}/nome', ['as' => 'buscar.municipios.nome', 'uses' => 'Admin\DynamicSearch@municipios_nome']);
-    //FIM search municipios
+//Início search municipios
+Route::get('buscar/municipios/{id_provincia}', ['as' => 'buscar.municipios.searchMunicipe', 'uses' => 'Admin\DynamicSearch@searchMunicipe']);
+//FIM search municipios
+//Início search municipios
+Route::get('buscar/municipios/{provincia}/nome', ['as' => 'buscar.municipios.nome', 'uses' => 'Admin\DynamicSearch@municipios_nome']);
+//FIM search municipios
 
 Route::get('/admitido', ['as' => 'admitido', 'uses' => 'Admin\ConfirmacaoController@confirmar'])->middleware(['auth:sanctum', 'verified']);
-Route::post('/admitido/store', ['as' => 'admin.admitidoPost', 'uses' => 'Admin\ConfirmacaoController@confirmarStore'])->middleware(['auth:sanctum', 'verified']);;
+Route::post('/admitido/store', ['as' => 'admin.admitidoPost', 'uses' => 'Admin\ConfirmacaoController@confirmarStore'])->middleware(['auth:sanctum', 'verified']);
+;
 
 //formulário de candidatura fim
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('confirmados/{filename}', function ($filename)
-{
-    $path = public_path('confirmados/'.$filename);
+Route::get('confirmados/{filename}', function ($filename) {
+    $path = public_path('confirmados/' . $filename);
     //dd($path);
 
     if (!File::exists($path)) {
@@ -78,12 +78,12 @@ Route::get('confirmados/{filename}', function ($filename)
 Route::group(['prefix' => 'painel/alunos'], function () {
     Route::post('/login', ['as' => 'login.alunos', 'uses' => 'Site\AlunoController@index']);
 
-    Route::get('/', ['as' => 'painel.alunos', 'uses' => 'Site\AlunoController@painel']);
-    Route::any('/pauta', ['as' => 'painel.alunos.pauta', 'uses' => 'Site\AlunoController@pauta']);
+    Route::middleware(['auth:sanctum'])->get('/', ['as' => 'painel.alunos', 'uses' => 'Site\AlunoController@painel']);
+    Route::middleware(['auth:sanctum'])->any('/pauta', ['as' => 'painel.alunos.pauta', 'uses' => 'Site\AlunoController@pauta']);
 
-    Route::any('/cartoes_pagamento', ['as' => 'painel.alunos.cartoes_pagamento', 'uses' => 'Site\AlunoController@cartoes_pagamento']);
-    Route::any('/professores', ['as' => 'painel.alunos.professores', 'uses' => 'Site\AlunoController@professores']);
-    
+    Route::middleware(['auth:sanctum'])->any('/cartoes_pagamento', ['as' => 'painel.alunos.cartoes_pagamento', 'uses' => 'Site\AlunoController@cartoes_pagamento']);
+    Route::middleware(['auth:sanctum'])->any('/professores', ['as' => 'painel.alunos.professores', 'uses' => 'Site\AlunoController@professores']);
+
 });
 Route::get('/d', ['as' => 'alunos.d', 'uses' => 'Site\AlunoController@d']);
 Route::get('/erro', ['as' => 'errors.permissao', 'uses' => 'Site\AlunoController@erro']);

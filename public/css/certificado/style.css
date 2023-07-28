@@ -154,6 +154,9 @@ td{
   width: 230px;
   font-size: 11px;
 }
+.upper-case{
+  text-transform: uppercase;
+}
 .visto-director-municipal{
   position: absolute;
   top:60px;

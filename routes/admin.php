@@ -376,6 +376,7 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
     Route::get('/admin/escola/visualizar/{id}', ['as' => 'admin/escola/visualizar', 'uses' => 'Admin\EscolaController@show'])->middleware('access.controll.administrador');
     Route::get('/admin/escola/aditar/{id}', ['as' => 'admin/escola/editar', 'uses' => 'Admin\EscolaController@edit'])->middleware('access.controll.administrador');
     Route::put('/admin/escola/editar/{id}', ['as' => 'admin/escola/atualizar', 'uses' => 'Admin\EscolaController@update'])->middleware('access.controll.administrador');
+    Route::get('{slug}/{estado}/mudar_estado', ['as' => 'admin.cabecalhos.mudar_estado', 'uses' => 'Admin\EscolaController@mudar_estado']);
     // End Cabeçalho da Escola
 
 

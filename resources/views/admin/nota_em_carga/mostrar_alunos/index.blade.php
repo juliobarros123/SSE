@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-
+{{-- @dump($turma) --}}
     <div class="card">
         <div class="card-body">
             <form method="POST" class="" target="_blank" action="{{ url('nota_em_carga/inserir') }}">
@@ -39,7 +39,7 @@
 
                 <?php $contador = 1; ?>
                 <div class="table-responsive">
-                    <table class="table table-hover " id="example">
+                    <table class="table table-hover ">
                         <thead>
                             <tr>
                                 <th scope="col">Nº </th>
@@ -114,25 +114,25 @@
                                         <td>
 
 
-                                            <input type="number" min="0" max="20" step="any"
+                                            <input type="number" min="0" max="{{nota_limit($turma->vc_classe)}}" step="any"
                                                 class="form-control border-secondary  " placeholder="MAC"
                                                 name="fl_mac_{{ $aluno->processo }}"
-                                                style="color:<?php echo $mac >= 10 ? 'blue' : 'red'; ?>!important" value="{{ $mac }}">
+                                                style="color:<?php echo $mac >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>!important" value="{{ $mac }}">
 
                                         </td>
                                         <td>
 
-                                            <input type="number" min="0" max="20" step="any"
+                                            <input type="number" min="0" max="{{nota_limit($turma->vc_classe)}}" step="any"
                                                 class="form-control border-secondary  " placeholder="Nota 1"
                                                 name="fl_nota1_{{ $aluno->processo }}"
-                                                style="color:<?php echo $nota1 >= 10 ? 'blue' : 'red'; ?>!important" value="{{ $nota1 }}">
+                                                style="color:<?php echo $nota1 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>!important" value="{{ $nota1 }}">
 
                                         </td>
                                         <td class="nota2">
-                                            <input type="number" min="0" max="20" step="any"
+                                            <input type="number" min="0" max="{{nota_limit($turma->vc_classe)}}" step="any"
                                                 class="form-control border-secondary  " placeholder="Nota 2"
                                                 name="fl_nota2_{{ $aluno->processo }}" value="{{ $nota2 }}"
-                                                style="color:<?php echo $nota2 >= 10 ? 'blue' : 'red'; ?>!important">
+                                                style="color:<?php echo $nota2 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>!important">
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center">

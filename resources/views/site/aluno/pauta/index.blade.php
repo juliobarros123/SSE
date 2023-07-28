@@ -78,19 +78,19 @@
                                         
                                     @endphp
                                     <div class="col-md-4">
-                                        MAC=<span style="color:<?php echo $mac >= 10 ? 'blue' : 'red'; ?>">{{ $mac }}</span>
+                                        MAC=<span style="color:<?php echo $mac >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $mac }}</span>
 
                                     </div>
                                     <div class="col-md-4">
-                                        P1=<span style="color:<?php echo $nota1 >= 10 ? 'blue' : 'red'; ?>">{{ $nota1 }}</span>
+                                        P1=<span style="color:<?php echo $nota1 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $nota1 }}</span>
 
                                     </div>
                                     <div class="col-md-4">
-                                        P2=<span style="color:<?php echo $nota2 >= 10 ? 'blue' : 'red'; ?>">{{ $nota2 }}</span>
+                                        P2=<span style="color:<?php echo $nota2 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $nota2 }}</span>
 
                                     </div>
                                     <div class="col-md-4">
-                                        Média=<span style="color:<?php echo $media >= 10 ? 'blue' : 'red'; ?>">{{ $media }}</span>
+                                        Média=<span style="color:<?php echo $media >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $media }}</span>
 
                                     </div>
 
@@ -124,13 +124,13 @@
                                         $ca = fha_media_trimestral_geral($matricula->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idAnoLectivo);
                                     @endphp
                                     <div class="col-md-4">
-                                        MT1=<span style="color:<?php echo $mt1 >= 10 ? 'blue' : 'red'; ?>">{{ $mt1 }}</span>
+                                        MT1=<span style="color:<?php echo $mt1 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $mt1 }}</span>
                                     </div>
                                     <div class="col-md-4">
-                                        MT2=<span style="color:<?php echo $mt2 >= 10 ? 'blue' : 'red'; ?>">{{ $mt2 }}</span>
+                                        MT2=<span style="color:<?php echo $mt2 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $mt2 }}</span>
                                     </div>
                                     <div class="col-md-4">
-                                        MT3=<span style="color:<?php echo $mt3 >= 10 ? 'blue' : 'red'; ?>">{{ $mt3 }}</span>
+                                        MT3=<span style="color:<?php echo $mt3 >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $mt3 }}</span>
                                     </div>
                                     @if (fha_disciplina_exame($turma->it_idClasse, $disciplina->id))
                                         @php
@@ -139,14 +139,14 @@
                                             $exame = fha_nota_exame($matricula->processo, $disciplina->id, $turma->it_idAnoLectivo);
                                         @endphp
                                         <div class="col-md-4">
-                                            MFT=<span style="color:<?php echo $mft >= 10 ? 'blue' : 'red'; ?>">{{ $mft }}</span>
+                                            MFT=<span style="color:<?php echo $mft >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $mft }}</span>
                                         </div>
                                         <div class="col-md-4">
-                                            EXAME=<span style="color:<?php echo $exame >= 10 ? 'blue' : 'red'; ?>">{{ $exame }}</span>
+                                            EXAME=<span style="color:<?php echo $exame >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $exame }}</span>
                                         </div>
                                     @endif
                                     <div class="col-md-4">
-                                        CA=<span style="color:<?php echo $ca >= 10 ? 'blue' : 'red'; ?>">{{ $ca }}</span>
+                                        CA=<span style="color:<?php echo $ca >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $ca }}</span>
                                     </div>
 
                                     @php
@@ -179,7 +179,7 @@
                                             @endphp
                                             <div class="col-md-4">
                                                 {{ $classe->vc_classe }}ª Classe=<span
-                                                    style="color:<?php echo $ca_classe_anterior >= 10 ? 'blue' : 'red'; ?>">{{ $ca_classe_anterior }}</span>
+                                                    style="color:<?php echo $ca_classe_anterior >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $ca_classe_anterior }}</span>
                                             </div>
                                         @endforeach
                                     @endif
@@ -191,7 +191,7 @@
                                             $cfd = fha_cfd_ext($matricula->processo, $disciplina->id, $turma->it_idClasse);
                                         @endphp
                                         <div class="col-md-4">
-                                            CFD=<span style="color:<?php echo $cfd >= 10 ? 'blue' : 'red'; ?>">{{ $cfd }}</span>
+                                            CFD=<span style="color:<?php echo $cfd >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $cfd }}</span>
                                         </div>
                                     @endif
                                     @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso) && $turma->vc_classe > 9)
@@ -199,7 +199,7 @@
                                             $rec = fh_nota_recurso($matricula->processo, $disciplina->id);
                                         @endphp
                                         <div class="col-md-4">
-                                            REC=<span style="color:<?php echo $rec >= 10 ? 'blue' : 'red'; ?>">{{ $rec }}</span>
+                                            REC=<span style="color:<?php echo $rec >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $rec }}</span>
                                         </div>
                                     @endif
 
@@ -219,7 +219,7 @@
                                 <div>
 
                                     MÉDIA:<span
-                                        style="{{ $media >= 10 ? 'color:blue' : 'color:red' }}">{{ $media }}</span>
+                                        style="{{ $media >= nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">{{ $media }}</span>
                                 </div>
                             </h5>
                         </div>

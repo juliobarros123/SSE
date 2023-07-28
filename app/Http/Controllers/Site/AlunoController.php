@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cabecalho;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -26,18 +27,31 @@ class AlunoController extends Controller
                     'processo' => $request->processo
                 ];
                 storeSession('aluno_login', $aluno_login);
-                
-                $user = User::where('vc_tipoUtilizador', 'Estudante')->where('id_cabecalho',$aluno->id_cabecalho)->first();
-                // dd(    $user);
-                if($user){
-                Auth::login($user);
 
-                // Redireciona para a página inicial ou outra página desejada
-                return redirect()->route('painel.alunos')->with('feedback', ['type' => 'success', 'sms' => 'Seja Bem-vindo!']);
-                // return view('site.aluno.index');
-                }else{
+                $user = User::where('vc_tipoUtilizador', 'Estudante')->where('id_cabecalho', $aluno->id_cabecalho)->first();
+                // dd(    $user);
+                if ($user) {
+                    $cab =  Cabecalho::find($user->id_cabecalho);
+
+                    if ($cab->estado_cabecalho == 'Activado') {
+                        Auth::login($user);
+                        return redirect()->route('painel.alunos')->with('feedback', ['type' => 'success', 'sms' => 'Seja Bem-vindo!']);
+
+                    } else {
+
+                        // Redireciona para a página inicial ou outra página desejada
+                        return redirect()->back()->with('feedback', [
+                            'type' => 'error',
+                            'sms' => 'O Prazo de uso do sistema Venceu'
+                        ]);
+                    }
+
+
+                    // Redireciona para a página inicial ou outra página desejada
+                    // return view('site.aluno.index');
+                } else {
                     session()->remove('aluno_login');
-                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Sua Escola não Está Configurada para o Acesso de Alunos.']);
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Sua Escola não Está Configurada para o Acesso de Alunos.']);
 
                 }
             } else {
@@ -58,22 +72,22 @@ class AlunoController extends Controller
 
         if (session()->get('aluno_login')) {
             $matricula = fh_matriculas()
-            ->where('alunnos.processo', session()->get('aluno_login')['processo'])
-            ->orderBy('anoslectivos.ya_fim','desc')
-            ->first();
-            $response['disciplinas']=fha_disciplinas($matricula->it_idCurso, $matricula->it_idClasse);
+                ->where('alunnos.processo', session()->get('aluno_login')['processo'])
+                ->orderBy('anoslectivos.ya_fim', 'desc')
+                ->first();
+            // $response['disciplinas'] = fha_disciplinas($matricula->it_idCurso, $matricula->it_idClasse);
 
-            // $response['disciplinas']=fha_turmas_disciplinas_dcc($matricula->it_idTurma);
+            $response['disciplinas']=fha_turmas_disciplinas_dcc($matricula->it_idTurma);
             // dd( $response['disciplinas']);
             // $response['disciplinas'] = fh_turmas_professores()->where('turmas.id',$matricula->it_idTurma)->get();
 
-    //    dd(   $response['professores']);
+            //    dd(   $response['professores']);
 
-            return view('site.aluno.index',$response);
+            return view('site.aluno.index', $response);
 
         } else {
-            $response['erro']="Usuário sem permissão para acessar essa página";
-            return view('errors.geral',$response);
+            $response['erro'] = "Usuário sem permissão para acessar essa página";
+            return view('errors.geral', $response);
 
         }
 
@@ -85,54 +99,54 @@ class AlunoController extends Controller
     }
     public function pauta(Request $dados_notas)
     {
-        $cadeado=cadeados_pauta()->first();
+        $cadeado = cadeados_pauta()->first();
 
-        if($cadeado->estado=='Disponível'){
-        if (Auth::check()) {
-            $aluno = session()->get('aluno_login');
+        if ($cadeado->estado == 'Disponível') {
+            if (Auth::check()) {
+                $aluno = session()->get('aluno_login');
 
-            // dd( $aluno); 
+                // dd( $aluno); 
 // dd($dados_notas);
-            if ($dados_notas->trimestre) {
-                $matricula = fh_matriculas()->where('alunnos.processo', $aluno['processo'])
-                    ->where('turmas.it_idAnoLectivo', $dados_notas->id_ano_lectivo)->first();
-                if ($matricula) {
-                    // dd(  $matricula );
-                    // fh_turmas_2()
-                    $turma = fh_turmas_2()->where('turmas.id', $matricula->it_idTurma)->first();
-                    // dd(     $turma);
-                    $response['disciplinas'] = fh_turma_disciplina($turma->slug)->get();
-                    $response['turma'] = $turma;
-                    $response['matricula'] = $matricula;
-                    $response['trimestre'] = $dados_notas->trimestre;
-                    $response['cabecalho'] = fh_cabecalho();
+                if ($dados_notas->trimestre) {
+                    $matricula = fh_matriculas()->where('alunnos.processo', $aluno['processo'])
+                        ->where('turmas.it_idAnoLectivo', $dados_notas->id_ano_lectivo)->first();
+                    if ($matricula) {
+                        // dd(  $matricula );
+                        // fh_turmas_2()
+                        $turma = fh_turmas_2()->where('turmas.id', $matricula->it_idTurma)->first();
+                        // dd(     $turma);
+                        $response['disciplinas'] = fh_turma_disciplina($turma->slug)->get();
+                        $response['turma'] = $turma;
+                        $response['matricula'] = $matricula;
+                        $response['trimestre'] = $dados_notas->trimestre;
+                        $response['cabecalho'] = fh_cabecalho();
 
-if( $matricula->vc_classe==13){
-    return view('site.aluno.pauta.index-13', $response);
+                        if ($matricula->vc_classe == 13) {
+                            return view('site.aluno.pauta.index-13', $response);
 
-}else{
-    return view('site.aluno.pauta.index', $response);
+                        } else {
+                            return view('site.aluno.pauta.index', $response);
 
-}
+                        }
 
+                    } else {
+                        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Aluno não se encontra matriculado para este Ano Lectivo']);
+
+                    }
+                    // dd($response['disciplinas']);
+                    // dd($matricula);
+                    // $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
                 } else {
-                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Aluno não se encontra matriculado para este Ano Lectivo']);
+                    return view('site.aluno.pauta.index');
 
                 }
-                // dd($response['disciplinas']);
-                // dd($matricula);
-                // $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
             } else {
-                return view('site.aluno.pauta.index');
-
+                return redirect('/login');
             }
         } else {
-            return redirect('/login');
-        }
-    }else{
-        return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'No momento, as pautas não estão disponíveis.']);
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'No momento, as pautas não estão disponíveis.']);
 
-    }
+        }
     }
     public function erro()
     {
@@ -195,7 +209,7 @@ if( $matricula->vc_classe==13){
                     }
 
                 } else {
-                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => "Erro, cadastra o tipo de pagamento para $classe->vc_classe" . "ª Classe"]);
+                    return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => "Erro, Não existe tipo de pagamento para $classe->vc_classe" . "ª Classe"]);
 
                 }
                 return redirect()->back()->with('feedback', ['status' => '1', 'sms' => 'Tipo de pagamento eliminado com sucesso']);
@@ -221,7 +235,7 @@ if( $matricula->vc_classe==13){
             if ($request->id_turma) {
                 // dd($request->id_turma);
                 $response['professores'] = fh_turmas_professores()->where('turmas.id', $request->id_turma)->get();
-        //    dd($response['professores']);
+                //    dd($response['professores']);
             }
             return view('site.aluno.professores.index', $response);
         }

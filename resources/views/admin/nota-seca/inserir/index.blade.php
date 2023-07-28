@@ -27,7 +27,7 @@
 
             </div>
        
-            @if (!$disciplinas_cursos_classes->count())
+            @if (!$turmas_disciplinas_dcc->count())
             <br>
             <h4 class="text-warning"> Víncula disciplinas com curso para está classe</h4>
                 
@@ -56,14 +56,14 @@
                 @csrf
 
 
-                <table id="example" class="display table table-hover">
+                <table  class="display table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Nº </th>
                             <th scope="col">PROCESSO</th>
                             <th scope="col">NOME COMPLETO</th>
                      
-                            @foreach ($disciplinas_cursos_classes as $disciplina)
+                            @foreach ($turmas_disciplinas_dcc as $disciplina)
                                 <th scope="col">{{ $disciplina['vc_acronimo'] }}</th>
                             @endforeach
 
@@ -76,17 +76,18 @@
                                 <th scope="row">{{ $aluno->processo }}</th>
                                 <td> {{ $aluno->vc_primeiroNome }} {{ $aluno->vc_nomedoMeio }}
                                     {{ $aluno->vc_apelido }}</td>
-                                @foreach ($disciplinas_cursos_classes as $dcc)
+                                @foreach ($turmas_disciplinas_dcc as $dcc)
                                     <td>
+                                        {{-- @dump($dcc) --}}
                                         <div class="form-group ">
                                             @php
-                                                $ca=fha_media_trimestral_geral($aluno->processo,  $dcc->it_disciplina, ['I','II','III'], $turma->it_idAnoLectivo);
+                                                $ca=fha_media_trimestral_geral($aluno->processo,  $dcc->id_disciplina, ['I','II','III'], $turma->it_idAnoLectivo);
                                             //    dd( $ca);
-                    //                             if($aluno->processo==2 && $dcc->id==3){
+                    //                             if($aluno->processo==2 && $dcc->id_dcc==3){
                     //                               $n=  fh_notas()
                     // ->where('alunnos.processo',$aluno->processo)
                
-                    // ->where('notas.id_disciplina_curso_classe', $dcc->id)
+                    // ->where('notas.id_disciplina_curso_classe', $dcc->id_dcc)
                    
              
                     // ->where('notas.id_ano_lectivo', $turma->it_idAnoLectivo)->get();
@@ -94,11 +95,11 @@
                     // }
                                            @endphp
                                          
-                                            <input type="number" min="0" max="20" step="any"
+                                            <input type="number" min="0" max="{{nota_limit($turma->vc_classe)}}" step="any"
                                             class="form-control " 
                                             placeholder="Nota"
-                                            style="color:<?php echo $ca >= 10 ? 'blue' : 'red'; ?>!important"
-                                            name="idDCC_{{ $dcc->id }}_{{ $aluno->processo }}"
+                                            style="color:<?php echo $ca >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>!important"
+                                            name="idDCC_{{ $dcc->id_dcc }}_{{ $aluno->processo }}"
                                             value="{{$ca }}">
                                           
                                             

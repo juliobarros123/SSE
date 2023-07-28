@@ -369,8 +369,11 @@ class PautaController extends Controller
         $turma = fh_turmas_2()->where('turmas.slug', $slug_turma)->first();
         if ($turma):
             $response['director_turma'] = fh_directores_turmas()->where('turmas.id', $turma->id)->first();
-            $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
-
+            // $response['disciplinas'] = fh_turma_disciplina($slug_turma)->get();
+            // dd($turma->id);
+            $response['disciplinas']=fha_turmas_disciplinas_dcc($turma->id);
+            // dd(  $response['disciplinas']);
+// dd("o");
             $alunos = fha_turma_alunos($slug_turma);
             $response['trimestre'] = $trimestre;
             $response['alunos'] = $alunos;

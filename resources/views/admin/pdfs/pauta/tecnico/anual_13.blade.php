@@ -40,7 +40,8 @@
         <thead>
             @php
                 $estatistica_resultados = collect();
-                $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
+                $response['disciplinas']=fha_turmas_disciplinas_dcc($turma->id);
+
             @endphp
             <tr>
                 <th class="th" rowspan="2">Nº ORDEM</th>
@@ -125,7 +126,7 @@
 
                   
 
-                    <td colspan="1" class="td" style="{{ $ca >= 10 ? 'color:blue' : 'color:red' }}">
+                    <td colspan="1" class="td" style="{{ $ca >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
                         {{ $ca }}</td>
                     @php
                     $disciplina_curso_classe_actual = fh_disciplinas_cursos_classes()
@@ -154,7 +155,7 @@
                                 $ca_classe_anterior = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
                             @endphp
                             <td colspan="1" class="td"
-                                style="{{ $ca_classe_anterior >= 10 ? 'color:blue' : 'color:red' }}">
+                                style="{{ $ca_classe_anterior >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
                                 {{ $ca_classe_anterior }}</td>
                         @endforeach
 
@@ -167,7 +168,7 @@
                             $cfd = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $turma->it_idClasse)
                         @endphp
 
-                        <td colspan="1" class="td" style="{{ $cfd >= 10 ? 'color:blue' : 'color:red' }}">
+                        <td colspan="1" class="td" style="{{ $cfd >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
                             {{ $cfd }}</td>
                     @endif
 
@@ -176,7 +177,7 @@
                             $rec = fh_nota_recurso($aluno->processo, $disciplina->id);
                         @endphp
 
-                        <td colspan="1" class="td" style="{{ $rec >= 10 ? 'color:blue' : 'color:red' }}">
+                        <td colspan="1" class="td" style="{{ $rec >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
                             {{ $rec }}</td>
                     @endif
                     <?php }?>
@@ -200,7 +201,7 @@
                         {{ $resultados[0] }}</td>
 
 
-                    <td colspan="1" class="td" style="{{ $media >= 10 ? 'color:blue' : 'color:red' }}">
+                    <td colspan="1" class="td" style="{{ $media >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
                         {{ $media }}</td>
                 </tr>
             @endforeach

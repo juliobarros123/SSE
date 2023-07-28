@@ -50,13 +50,16 @@ class NotaSecaController extends Controller
 
         if ($response['turma']) {
             //   dd( $response['turma']);
+            // $turma = descubrir_turma_por_ano_lectivo($processo, $id_ano_lectivo);
+            $response['turmas_disciplinas_dcc']=fha_turmas_disciplinas_dcc($response['turma']->id);
             $response['alunos'] = fha_turma_alunos($slug_turma);
-            $response['disciplinas_cursos_classes'] = fh_disciplinas_cursos_classes()
-                ->where('cursos.id', $response['turma']->it_idCurso)
-                ->where('classes.id', $response['turma']->it_idClasse)->
-                select('disciplinas.vc_acronimo', 'disciplinas_cursos_classes.*')->get();
+            // $response['turmas_disciplinas_dcc'] = fh_disciplinas_cursos_classes()
+            //     ->where('cursos.id', $response['turma']->it_idCurso)
+            //     ->where('classes.id', $response['turma']->it_idClasse)->
+            //     select('disciplinas.vc_acronimo', 'disciplinas_cursos_classes.*')->get();
             // fha_disciplinas(, $response['turma']->it_idClasse);
-
+            //   $response['disciplinas_cursos_classes']
+// dd(  $response['disciplinas_cursos_classes'],  $disciplinas);
             // dd($response['turma']->it_idCurso);
 
             return view('admin.nota-seca.inserir.index', $response);
@@ -92,7 +95,7 @@ class NotaSecaController extends Controller
             $dcc = $this->fh_disciplinas_cursos_classes()->where('classes.id', $classe->id)
                 ->where('disciplinas.id', $nota->disciplina)
                 ->where('cursos.id', $turma->it_idCurso)->first();
-            $this->updateNota($nota->processo, $nota, $turma->it_idClasse, $turma->it_idAnoLectivo, $dcc->id, $turma->id);
+            $this->updateNota($nota->processo, $nota, $turma->it_idClasse, $turma->it_idAnoLectivo, $dcc->id_dcc, $turma->id);
         }
         // $divisor = $this->acharDivisor($nota->classe);
         // $mts = $this->dividirNota($nota->nota, $divisor);
@@ -132,22 +135,20 @@ class NotaSecaController extends Controller
         $turma = fh_turmas_slug($slug_turma)->first();
 
         $alunos = fha_turma_alunos($slug_turma);
-        $disciplinas_cursos_classes = fh_disciplinas_cursos_classes()
-            ->where('cursos.id', $turma->it_idCurso)
-            ->where('classes.id', $turma->it_idClasse)->
-            select('disciplinas.vc_acronimo', 'disciplinas_cursos_classes.*')->get();
+        $turmas_disciplinas_dcc=fha_turmas_disciplinas_dcc($turma->id);
+
 // dd($request);
         $id_curso = $turma->it_idCurso;
         $id_classe = $turma->it_idClasse;
         $it_idAnoLectivo = $turma->it_idAnoLectivo;
         foreach ($alunos as $aluno) {
-            foreach ($disciplinas_cursos_classes as $dcc) {
-                if (isset($request["idDCC_$dcc->id" . "_" . "$aluno->processo"])) {
+            foreach ($turmas_disciplinas_dcc as $dcc) {
+                if (isset($request["idDCC_$dcc->id_dcc" . "_" . "$aluno->processo"])) {
                     if($aluno->processo==2){
-                        // dd($request["idDCC_$dcc->id" . "_" . "$aluno->processo"],$aluno->processo,$dcc->id);
+                        // dd($request["idDCC_$dcc->id_dcc" . "_" . "$aluno->processo"],$aluno->processo,$dcc->id_dcc);
 
                     }
-                    $this->updateNota($aluno->processo, $request["idDCC_$dcc->id" . "_" . "$aluno->processo"], $id_classe, $it_idAnoLectivo, $dcc->id, $turma->id);
+                    $this->updateNota($aluno->processo, $request["idDCC_$dcc->id_dcc" . "_" . "$aluno->processo"], $id_classe, $it_idAnoLectivo, $dcc->id_dcc, $turma->id);
                 }
             }
         }

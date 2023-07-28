@@ -58,7 +58,8 @@ class TurmaUserController extends Controller
         // dd($data);
         $data['turma'] = fh_turmas_slug($slug)->first();
         // dd( $data['turma']);
-        $data['disciplinas'] =  fha_disciplinas( $data['turma']->it_idCurso , $data['turma']->it_idClasse );
+        $data['disciplinas'] =  fha_turmas_disciplinas_dcc($data['turma']->id);
+     
 // dd($data['disciplinas']);
         $data['cabecalho'] = fh_cabecalho();
         $data["css"] = file_get_contents('css/lista/style-2.css');

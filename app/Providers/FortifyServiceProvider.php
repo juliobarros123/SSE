@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\Cabecalho;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 
@@ -13,8 +14,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Logger;
-
-
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -52,11 +51,37 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(fn () => view('auth.login'));
 
         Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('vc_email', $request->vc_email)->first();
-    
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
-                return $user;
+            $buscarEmail = null;
+
+            $user = User::where('vc_email', $buscarEmail ? $buscarEmail['vc_email'] : $request->vc_email)->first();
+
+
+            if (
+                $user &&
+                Hash::check($request->password, $user->password)
+            ) {
+
+                $cab =  Cabecalho::find($user->id_cabecalho);
+                if ($cab->estado_cabecalho == 'Activado') {
+                    return $user;
+                }else{
+                    
+                    $feedback = [
+                        'type' => 'error',
+                        'sms' =>'O Prazo de uso do sistema Venceu',
+                        'custom' =>'1'
+                    ];
+            
+                    storeSession('feedback', $feedback);
+                }
+            }else{
+                $feedback = [
+                    'type' => 'error',
+                    'sms' =>'Credências Inválidas',
+                    'custom' =>'1'
+                ];
+        
+                storeSession('feedback', $feedback);
             }
         });
 

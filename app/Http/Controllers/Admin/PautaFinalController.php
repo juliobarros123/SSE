@@ -54,9 +54,10 @@ class PautaFinalController extends Controller
 
             if ($turma):
 
-                //   dd( $turma);
+                //   dd( $turma->id);
                 $turma_alunos = fha_turma_alunos($slug_turma);
-                $disciplinas = fha_disciplinas($turma->it_idCurso, $turma->it_idClasse);
+                $data['disciplinas']= fha_turmas_disciplinas_dcc( $turma->id);
+              
                 //  dd( $disciplinas );
                 $data['turma'] = $turma;
                 // dd(  $data['turma']);
@@ -88,7 +89,7 @@ class PautaFinalController extends Controller
 
 
                 // } 
-
+                ini_set("pcre.backtrack_limit", "2000000");
                 $mpdf->writeHTML($html);
 
                 $mpdf->Output("Pauta final " . $data['titulo'] . ".pdf", "I");

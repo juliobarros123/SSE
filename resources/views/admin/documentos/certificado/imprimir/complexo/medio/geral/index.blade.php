@@ -113,7 +113,7 @@ background-image-resolution: from-image;">
         @foreach ($componentes as $componente)
             <tr>
 
-                <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
+                <td class="disciplina upper-case td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
 
                 @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                     <td class="nota-valor" style="text-align: center">
@@ -134,7 +134,7 @@ background-image-resolution: from-image;">
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
-                    <td class="disciplina td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
+                    <td class="disciplina  td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
@@ -150,6 +150,7 @@ background-image-resolution: from-image;">
                             if ($matricula) {
                                 // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
                                 $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
+                          
                             } else {
                                 $ca = 0;
                             }
@@ -192,10 +193,9 @@ background-image-resolution: from-image;">
                             $media = 0;
                         }
                     @endphp
-                    <td style="border-right: none;text-align:right; ">
-                        {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
+                                        <td style="text-align:center; " colspan="2">
+                        {{ ucfirst(valorPorExtenso(intval(intval($media)))) }} Valores
                     </td>
-                    <td style=" border-left: none">Valores</td>
 
                 </tr>
 

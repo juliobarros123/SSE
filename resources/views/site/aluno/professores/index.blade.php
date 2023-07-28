@@ -43,13 +43,12 @@
     @isset($professores)
 
 
-
     <div class="row ">
         @foreach ($professores as $item)
             <div class="col-md-3">
-                {{-- @dump($item) --}}
+        
                 <div class="card">
-                    <img src="{{asset('images/user.png')}}" alt="Professor 1" class="card-img-top" style="height: 300px;">
+                    <img src="{{asset($item->profile_photo_path)}}" alt="Professor 1" class="card-img-top" style="height: 250px;">
                     <div class="card-body">
                         
                         <h5 class="card-title">Nome:{{$item->vc_primemiroNome . ' ' . $item->vc_apelido }}</h5>

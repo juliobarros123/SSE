@@ -4,9 +4,9 @@
 
     <div class="container ">
         <section class="ftco-section">
-            <div class="container">
+            <div class="container p-2">
                 <div class="row justify-content-center">
-                    <div class="col-md-7 col-lg-5">
+                    <div class="col-md-5 p-0">
                         <div class="login-wrap pl-3 pr-3">
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <img rel="icon" src="{{ asset($caminhoLogo) }}" style="margin:auto;height:100%" />
@@ -30,13 +30,16 @@
                                 </div>
                                 <div class="form-group row pb-2">
                                     <div class="col-md-6 text-center">
-                                        <label class="checkbox-wrap checkbox-primary"> Lembre de mim
-                                            <input type="checkbox" checked>
-                                            <span class="checkmark"></span>
+                                     
+                                        <label class="form-control btn-sm btn-primary rounded submit"  style="height: 40px">    <input type="checkbox" >Lembre de mim
+                            
                                         </label>
+                                    
                                     </div>
                                     <div class="col-md-6 text-center text-md-right">
-                                        <a href="#" data-toggle="modal" data-target="#exampleModal">Conta aluno</a>
+                                      
+                                        <button type="button"  data-toggle="modal" data-target="#exampleModal"
+                                        class="form-control btn-sm btn-primary rounded submit " style="height: 40px">Conta aluno</button>
                                     </div>
                                 </div>
                             </form>

@@ -232,6 +232,18 @@ class EscolaController extends Controller
 
         }
     }
+    public function mudar_estado($slug, $estado)
+    {
+
+        Cabecalho::where('slug', $slug)->update(
+            [
+                'estado_cabecalho' => $estado
+            ]
+        );
+        
+        return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => "Contrato $estado com sucesso", 'alert' => 'success']);
+   
+    }
 
     /**
      * Display the specified resource.

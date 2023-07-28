@@ -440,7 +440,7 @@ background-image-resolution: from-image;">
             $componente->id)->select('disciplinas.*')->get() as $disciplina)
             <tr>
 
-                <td class="disciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                <td class="disciplina upper-case td td-boder">{{ $disciplina->vc_nome }}</td>
 
                 @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                     @php

@@ -166,8 +166,8 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
             $turmas = $turmas->where('turmas.it_idCurso', $request->id_curso);
         }
         $response['turmas'] = $turmas->get();
-        // $anolectivo = fh_anos_lectivos()->where('anoslectivos.id', $request->id_ano_lectivo)->first();
-        $anolectivo = fha_ano_lectivo_publicado();
+        $anolectivo = fh_anos_lectivos()->where('anoslectivos.id', $request->id_ano_lectivo)->first();
+        // $anolectivo = fha_ano_lectivo_publicado();
         $data = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,

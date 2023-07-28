@@ -429,7 +429,7 @@ background-image-resolution: from-image;">
 
                         <tr>
 
-                            <td class="disciplina td td-boder">{{ $disciplina->vc_nome }}</td>
+                            <td class="disciplina upper-case td td-boder">{{ $disciplina->vc_nome }}</td>
                             <td class="nota-valor td td-boder">
                                 {{ menor_zero($medias_anuas_disciplina[0]) ? $medias_anuas_disciplina[0] : "" }}</td>
                             <td class="nota-valor td td-boder">

@@ -65,12 +65,12 @@
                             
                             $media=  fha_media_trimestral_geral($aluno->processo, $disciplina->id, [$trimestre], $turma->it_idAnoLectivo);
                             @endphp
-                        <td style="color:<?php echo $media >= 10 ? 'blue' : 'red'; ?>">{{ $media }} </td>
+                        <td style="color:<?php echo $media >=  nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $media }} </td>
                     @endforeach
                     @php
                         $media = fhap_media_trimestre_disciplinas($aluno->processo, $trimestre, $turma->it_idClasse, $turma->it_idAnoLectivo);
                     @endphp
-                    <td style="color:<?php echo $media >= 10 ? 'blue' : 'red'; ?>">{{ $media }} </td>
+                    <td style="color:<?php echo $media >=  nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $media }} </td>
 
                    
 

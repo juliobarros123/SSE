@@ -118,19 +118,19 @@ background-image-resolution: from-image;">
         @foreach ($componentes as $componente)
             <tr>
                 @if ($loop->index == 0)
-                    <td class="disciplina td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
+                    <td class="disciplina upper-case td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
 
                     <th class="th-cab-notas" style="text-align: center">MÉDIA FINAL</th>
                     <th class="th-cab-notas" colspan="2" style="text-align: center">MÉDIA POR EXTENSO</th>
                 @else
-                    <td class="disciplina td td-boder" colspan="4">
+                    <td class="disciplina upper-case td td-boder" colspan="4">
                         <strong>{{ $componente->vc_componente }}</strong></td>
                 @endif
             </tr>
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
-                    <td class="disciplina td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
+                    <td class="disciplina  td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_final->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
@@ -148,6 +148,7 @@ background-image-resolution: from-image;">
                             if ($matricula) {
                                 // dd($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
                                 $ca = fha_ca($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
+                        //   dd( $ca);
                             }
                             // dd( $ca);
                             // if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe_final->id)) {
@@ -180,10 +181,9 @@ background-image-resolution: from-image;">
                             $media = 0;
                         }
                     @endphp
-                    <td style="border-right: none;text-align:right; ">
-                        {{ ucfirst(valorPorExtenso(intval(intval($media)))) }}
+                                        <td style="text-align:center; " colspan="2">
+                        {{ ucfirst(valorPorExtenso(intval(intval($media)))) }} Valores
                     </td>
-                    <td style=" border-left: none">Valores</td>
 
                 </tr>
 
@@ -198,7 +198,7 @@ background-image-resolution: from-image;">
         @endforeach
 
         <tr>
-            <td class="disciplina td td-boder"> <strong>Classificação Final do Plano Curricular(PC)</strong> </td>
+            <td class="disciplina  td td-boder"> <strong>Classificação Final do Plano Curricular(PC)</strong> </td>
             <td class="nota-valor" style="text-align: center">
                 {{ $pc }}
             </td>
@@ -211,7 +211,7 @@ background-image-resolution: from-image;">
 
         </tr>
         <tr>
-            <td class="disciplina td td-boder"> <strong>Classificação do Estágio Curricular(EC)</strong> </td>
+            <td class="disciplina  td td-boder"> <strong>Classificação do Estágio Curricular(EC)</strong> </td>
             <td class="nota-valor" style="text-align: center">
                 {{ $ec = fha_nota_pap($aluno->processo, 'EC') }}
             </td>
@@ -224,7 +224,7 @@ background-image-resolution: from-image;">
 
         </tr>
         <tr>
-            <td class="disciplina td td-boder"> <strong> Classificação da Prova de Aptidão Profissional(PAP)</strong>
+            <td class="disciplina  td td-boder"> <strong> Classificação da Prova de Aptidão Profissional(PAP)</strong>
             </td>
 
 
@@ -243,7 +243,7 @@ background-image-resolution: from-image;">
 
         </tr>
         <tr>
-            <td class="disciplina td td-boder"> <strong> Classificação Final do Curso = (4*PC+PAP+EC) / 6</strong> </td>
+            <td class="disciplina  td td-boder"> <strong> Classificação Final do Curso = (4*PC+PAP+EC) / 6</strong> </td>
 
 
 

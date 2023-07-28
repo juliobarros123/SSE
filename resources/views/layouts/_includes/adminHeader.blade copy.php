@@ -150,7 +150,7 @@
                     
                     <li class="nav-item dropdown ">
                        
-                        <a class="nav-link   nav-item-user d-flex align-items-center text-white " href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                        <a class="nav-link   nav-item-user" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                    
                             aria-haspopup="true" aria-expanded="false">
                             
@@ -160,28 +160,58 @@
                           
                         </a>
                   
-                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in "
-                            aria-labelledby="alertsDropdown" style="min-width: 20rem;">
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="alertsDropdown">
                             <div class=" ">
-                                <div class="card-body text-center">
-                                  <img src="{{asset(Auth::user()->profile_photo_path)}}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                  <h5 class="my-3 text-dark"> {{ Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido }}</h5>
-                                  <p class="mb-1 text-dark">{{ Auth::user()->vc_email }}</p>
+                                <div class="container  d-flex justify-content-center">
 
-                                  
-                                  <p class="mb-1 text-dark">{{ Auth::user()->vc_tipoUtilizador }}</p>
-                               
-                                  <div class="d-flex justify-content-center mb-2">
-                                    <a  href="{{ route('admin.users.editar', Auth::User()->slug) }}" class="btn btn-primary bg-secondary">Edita Perfil</a>
-                                    <a type="button" class="btn btn-primary ms-1   bg-danger" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >Sair</a>
-                                  </div>
+                                    <div class="">
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div>
+                                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
+                                                    class="rounded" width="155">
+                                            </div>
+
+                                            <div class="ml-3 w-100">
+
+                                                <h4 class="mb-0 mt-0 text-dark">
+                                                    {{ Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido }}
+                                                </h4>
+                                                <span class="text-dark">{{ Auth::user()->vc_email }}</span>
+                                                <br>
+                                                <span class="text-dark">{{ Auth::user()->vc_tipoUtilizador }}</span>
+
+
+
+
+                                                <div class="button mt-2 d-flex flex-row align-items-center">
+
+                                                    <a href="{{ route('admin.users.editar', Auth::User()->slug) }}"
+                                                        class="btn btn-sm btn-outline-primary w-100">Editar perfil</a>
+                                                    <a class="btn btn-sm btn-primary w-100 ml-2"
+                                                        href="{{ route('logout') }}"
+                                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
+
+
+                                                    <form id="logout-form" action="{{ route('logout') }}"
+                                                        method="POST">
+                                                        @csrf
+                                                    </form>
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
                                 </div>
-                              </div>
-                              <form id="logout-form" action="{{ route('logout') }}"
-                              method="POST">
-                              @csrf
-                          </form>
+                            </div>
+                            
             
             
                           
