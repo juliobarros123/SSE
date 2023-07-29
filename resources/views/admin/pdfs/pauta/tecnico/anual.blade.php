@@ -16,6 +16,7 @@
     right: 340;
     bottom: 40;
   }
+  
     </style>
 </head>
 
@@ -129,7 +130,7 @@
                     <td class="td text-center">
                         {{ $aluno->processo }}
                     </td>
-                    <td class="td">
+                    <td class="td nome-aluno">
                         {{ $aluno->vc_primeiroNome . ' ' . $aluno->vc_nomedoMeio . ' ' . $aluno->vc_apelido }}
                     </td>
 

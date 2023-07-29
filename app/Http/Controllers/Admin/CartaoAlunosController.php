@@ -22,7 +22,8 @@ use App\Models\Estudante;
 use App\Models\Logger;
 use App\Models\AnoValidadeCartao;
 use Illuminate\Support\Facades\Auth;
-
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 class CartaoAlunosController extends Controller
 {
     private $Logger;
@@ -30,9 +31,10 @@ class CartaoAlunosController extends Controller
     {
         $this->Logger = new Logger();
     }
-    public function loggerData($mensagem){
-        $dados_Auth = Auth::user()->vc_primemiroNome.' '.Auth::user()->vc_apelido.' Com o nivel de '.Auth::user()->vc_tipoUtilizador.' ';
-        $this->Logger->Log('info', $dados_Auth.$mensagem);
+    public function loggerData($mensagem)
+    {
+        $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
+        $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
     public function index()
     {
@@ -41,40 +43,78 @@ class CartaoAlunosController extends Controller
 
     public function recebeAluno(Request $request)
     {
-       
-        $matricula=fh_matriculas()
-        ->where('alunnos.processo', $request->processo)
-        ->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo)
-        ->first();
-        if( $matricula):
-        $data['request']=$request->all();
-        $data['matricula']=$matricula;
-        $data['cabecalho']=fh_cabecalho();
-        if($data['cabecalho']->assinatura_director){
-    //   dd($data['request']);
-        $data["css"] = file_get_contents('css/cartao/aluno/style.css');
-        $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
-        
-            $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8', 'margin_top' => 2,
-                'margin_left' => 3,
-                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [60, 90]
-            ]);
-            $mpdf->SetFont("arial");
-            $mpdf->setHeader();
-            $mpdf->AddPage('L');
-            // dd($request->tipo_impressao);
-            if($request->tipo_impressao=='CARTOLINA'){
-            $html = view("admin/pdfs/cartao/aluno/index", $data);
-            }
-            $mpdf->writeHTML($html);
-            $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) '.Auth::User()->vc_primeiroNome.' '.Auth::User()->vc_ultimoaNome);
-            $mpdf->Output("aluno.pdf", "I");
-        }else{
-            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
 
-        }
-        else :
+        $matricula = fh_matriculas()
+            ->where('alunnos.processo', $request->processo)
+            ->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo)
+            ->first();
+        if ($matricula):
+            $data['request'] = $request->all();
+            $data['matricula'] = $matricula;
+            $data['cabecalho'] = fh_cabecalho();
+            if ($data['cabecalho']->assinatura_director) {
+                //   dd($data['request']);
+                $data["css"] = file_get_contents('css/cartao/aluno/style.css');
+                $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
+
+                $mpdf = new \Mpdf\Mpdf([
+                    'mode' => 'utf-8',
+                    'margin_top' => 2,
+                    'margin_left' => 3,
+                    'margin_right' => 0,
+                    'margin_bottom' => 0,
+                    'format' => [60, 90]
+                ]);
+                $mpdf->SetFont("arial");
+                $mpdf->setHeader();
+                $mpdf->AddPage('L');
+                // dd($request->tipo_impressao);
+                if ($request->tipo_impressao == 'CARTOLINA') {
+                    $html = view("admin/pdfs/cartao/aluno/index", $data);
+                }
+                if ($request->tipo_impressao == 'PERSONALIZADO-PVC') {
+                    $configVariables = new ConfigVariables();
+                    $fontVariables = new FontVariables();
+                    $fontData = $fontVariables->getDefaults();
+
+                    $fontDir = public_path('fonts/Roboto'); // Caminho para a pasta com os arquivos de fonte Roboto
+
+                    $defaultConfig = (new ConfigVariables())->getDefaults();
+                    $fontDirs = $defaultConfig['fontDir'];
+
+                    $defaultFontConfig = (new FontVariables())->getDefaults();
+                    $fontData = $defaultFontConfig['fontdata'];
+
+                    $fontData['roboto'] = [
+                        'R' => 'Roboto-Regular.ttf',
+                        'B' => 'Roboto-Bold.ttf',
+                        'I' => 'Roboto-Italic.ttf',
+                        'BI' => 'Roboto-BoldItalic.ttf',
+                    ];
+                    $mpdf = new \Mpdf\Mpdf([
+                        'fontDir' => array_merge($fontDirs, [
+                            $fontDir,
+                        ]),
+                        'fontdata' => $fontData,
+                        'mode' => 'utf-8',
+                        'margin_top' => 1,
+                        'margin_left' => 0,
+                        'margin_right' => 0,
+                        'margin_bottom' => 0,
+                        'format' => [85, 54]
+                    ]);
+
+                    $data["css"] = file_get_contents('css/cartao/aluno/personalizado-pvc/style.css');
+                    $html = view("admin.pdfs.cartao.aluno.personalizado-pvc.index", $data);
+                }
+                $mpdf->writeHTML($html);
+                $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) ' . Auth::User()->vc_primeiroNome . ' ' . Auth::User()->vc_ultimoaNome);
+                $mpdf->Output("aluno.pdf", "I");
+            } else {
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
+
+            }
+        else:
             return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => 'Aluno não existe, ou não deve estar matriculado neste ano lectivo!']);
 
         endif;
@@ -85,15 +125,15 @@ class CartaoAlunosController extends Controller
 
         $c = $estudantes->StudentForCard($id);
         // dd(  $c);
-        $data['anoValidade']= AnoValidadeCartao::orderBy('id','desc')->where('vc_TipoCartao','Aluno')->first();
+        $data['anoValidade'] = AnoValidadeCartao::orderBy('id', 'desc')->where('vc_TipoCartao', 'Aluno')->first();
         $data["css"] = file_get_contents('css/cartao/aluno/style.css');
         $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
-        if ($c->count()) :
+        if ($c->count()):
             //Metodo que gera o cartão do aluno
-            $data['alunos'] =  $c;
+            $data['alunos'] = $c;
             $data['cabecalho'] = Cabecalho::find(1);
-           /*  $data["bootstrap"] = file_get_contents("css/cartao/bootstrap.min.css");
-            $data["css"] = file_get_contents("css/cartao/aluno/style.css"); */
+            /*  $data["bootstrap"] = file_get_contents("css/cartao/bootstrap.min.css");
+             $data["css"] = file_get_contents("css/cartao/aluno/style.css"); */
 
             if ($data['cabecalho']->vc_nif == "5000298182") {
 
@@ -112,7 +152,7 @@ class CartaoAlunosController extends Controller
                 $data["css"] = file_get_contents('css/cartao/aluno/style.css');
                 $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             } else if ($data['cabecalho']->vc_nif == "5000820440") {
-            
+
                 //$url = 'cartões/Quilumosso/aluno.png';
                 $data["css"] = file_get_contents('css/cartao/aluno/style.css');
                 $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
@@ -125,27 +165,30 @@ class CartaoAlunosController extends Controller
 
                 //$url = 'cartões/LiceuUíge/aluno.png';
                 $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
-             }else if ($data['cabecalho']->vc_nif == "7301003617") {
+            } else if ($data['cabecalho']->vc_nif == "7301003617") {
 
                 $data["css"] = file_get_contents('css/cartao/aluno/style.css');
                 $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
-            }else{
+            } else {
                 $data["css"] = file_get_contents('css/cartao/aluno/style.css');
                 $data["bootstrap"] = file_get_contents('css/cartao/bootstrap.min.css');
             }
             $mpdf = new \Mpdf\Mpdf([
-                'mode' => 'utf-8', 'margin_top' => 0,
+                'mode' => 'utf-8',
+                'margin_top' => 0,
                 'margin_left' => 5,
-                'margin_right' => 0, 'margin_bottom' => 0, 'format' => [54, 84]
+                'margin_right' => 0,
+                'margin_bottom' => 0,
+                'format' => [54, 84]
             ]);
             $mpdf->SetFont("arial");
             $mpdf->setHeader();
             $mpdf->AddPage('L');
             $html = view("admin/pdfs/cartao/aluno/index", $data);
             $mpdf->writeHTML($html);
-            $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) '.$c[0]->vc_primeiroNome.' '.$c[0]->vc_ultimoaNome);
+            $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) ' . $c[0]->vc_primeiroNome . ' ' . $c[0]->vc_ultimoaNome);
             $mpdf->Output("aluno.pdf", "I");
-        else :
+        else:
             return redirect('admin/cartaoaluno')->with('aviso', '1');
         endif;
     }

@@ -65,17 +65,12 @@
                 </div>
               
                 <div class="form-group col-4">
-                    <label for="registo" class="form-label"> Registo nº:</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="registo"
-                        placeholder=" ____/20___" value="" id="registo" required>
+                    <label for="numero" class="form-label">  Declaração nº:</label>
+                    <input type="text" class="form-control border-secondary col-sm-12" name="numero"
+                        placeholder="Nº" value="" id="numero" required>
                 </div>
 
-                <div class="form-group col-4">
-                    <label for="folha" class="form-label">Folha nº:</label>
-                    <input type="text" class="form-control border-secondary col-sm-12" name="folha"
-                        placeholder="Folha nº" value="" id="folha" required>
-                </div>
-              
+             
                 <div class="form-group col-4">
                     <label for="processo" class="form-label" >Com visto:</label>
                     <select name="visto" id="" class="form-control" required>

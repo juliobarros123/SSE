@@ -61,8 +61,8 @@ class DeclaracaoDocumentoController extends Controller
    
                    // dd($request);
                    $data["visto"] = $request->visto;
-                   $data["folha"] = $request->folha;
-                   $data["registo"] = $request->registo;
+                   $data["numero"] = $request->numero;
+               
    
    
                    $data["css"] = file_get_contents('css/certificado/style.css');

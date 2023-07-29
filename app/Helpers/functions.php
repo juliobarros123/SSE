@@ -626,6 +626,17 @@ function fha_ano_lectivo_publicado()
         ->where('id_cabecalho', Auth::User()->id_cabecalho)->first();
 
 }
+function fh_idades_admissao_2()
+{
+
+    return IdadedeCandidatura::where('idadesdecandidaturas.id_cabecalho', Auth::User()->id_cabecalho)
+        ->join('anoslectivos', 'anoslectivos.id', 'idadesdecandidaturas.id_ano_lectivo')
+        ->orderBy('idadesdecandidaturas.id', 'desc')
+
+        ->select('anoslectivos.*', 'idadesdecandidaturas.*', 'idadesdecandidaturas.id as id', 'idadesdecandidaturas.slug as slug');
+
+
+}
 function fh_idades_admissao()
 {
 
@@ -1142,8 +1153,8 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
 
     $cabecalho = fh_cabecalho();
     // dd( $cabecalho);
-    $disciplina=Disciplinas::find($id_disciplina);
-    
+    $disciplina = Disciplinas::find($id_disciplina);
+
     $disciplinas_exame = fh_disciplinas_exames()
         ->where('classes.id', $matricula->it_idClasse)
         ->where('disciplinas.id', $id_disciplina)->first();
@@ -1200,10 +1211,10 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
     } else {
         $nota_recurso = "0";
     }
-  
+
     if (!is_string($nota_recurso)) {
         // dd($nota_recurso);
-        $media =$nota_recurso;
+        $media = $nota_recurso;
     }
     //   dd(  $media);
     return fh_arredondar($media);
@@ -1217,6 +1228,8 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
     $notas = array();
     $medias_acumulada_linha = array();
     $classe_corrente = Classe::find($id_classe);
+    $disciplina=fh_disciplinas()->find($id_disciplina);
+    // dd( $disciplina);
     $aluno = fha_aluno_processo($processo);
     // dd( $aluno);$aluno->id_curso
     $matricula = fh_matriculas()
@@ -1240,17 +1253,36 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
         $classes = $collect->push($classes->first());
         // dd(   $classes);
     } else if ($cabecalho->vc_tipo_escola == "Técnico" && $classe_corrente->vc_classe >= 10) {
-        if (fha_disciplina_terminal($id_disciplina, $id_classe, $aluno->id_curso)) {
+      
+
+        $classe_terminal = fh_disciplinas_cursos_classes()
+            ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
+            ->where('disciplinas.id', $id_disciplina)
+            ->where('classes.vc_classe','<', $classe_corrente->vc_classe)
+            ->select('classes.*', 'disciplinas.vc_nome','disciplinas_cursos_classes.terminal')
+            ->orderBy('classes.vc_classe', 'desc')
+            ->first();
+            // dd( $classe_terminal);
+            $terminal=isset($classe_terminal->terminal)?($classe_terminal->terminal=="Terminal"?1:0):0;
+            // dd(   $terminal);
+            // if($disciplina->vc_nome=="Informática" && $classe_terminal->vc_classe==11){
+            //     dd("o",$disciplina->vc_nome);
+            // }
 
 
-            $classes=fh_disciplinas_cursos_classes()
+
+
+        if (fha_disciplina_terminal($id_disciplina, $id_classe, $aluno->id_curso) || $terminal) {
+
+
+            $classes = fh_disciplinas_cursos_classes()
                 ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
                 ->where('disciplinas.id', $id_disciplina)
-                ->where('classes.vc_classe','<=', $classe_corrente->vc_classe)
+                ->where('classes.vc_classe', '<=', $classe_corrente->vc_classe)
                 ->select('classes.*', 'disciplinas.vc_nome')
                 ->orderBy('classes.vc_classe', 'desc')
                 ->get();
-                // dd( $classes);
+            // dd( $classes);
         } else {
             $classes = fh_disciplinas_cursos_classes()
                 ->where('disciplinas_cursos_classes.it_curso', $aluno->id_curso)
@@ -1263,7 +1295,7 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
         }
 
 
-       
+
         // dd($classes);
 
 
@@ -1484,7 +1516,7 @@ function fh_notas_recursos()
 }
 function fh_nota_recurso($processo, $id_disciplina)
 {
-   $aluno= fha_aluno_processo($processo);
+    $aluno = fha_aluno_processo($processo);
     $notaRecurso = fh_notas_recursos()->where('nota_recursos.id_aluno', $aluno->id)->where('nota_recursos.id_disciplina', $id_disciplina)->orderBy('id', 'desc')->first();
     if ($notaRecurso) {
         return $notaRecurso->nota;

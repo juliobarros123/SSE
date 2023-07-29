@@ -427,9 +427,10 @@ class CandidaturaController extends Controller
     public function edit($slug)
     {
         $response['candidato'] = fh_candidato_slug($slug);
+        // dd( $response['candidato']);
         $response['cursos'] = fh_cursos()->get();
         $response['classes'] = fh_classes()->get();
-        $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->get();
+        $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->where('id_ano_lectivo',  $response['candidato']->id_ano_lectivo)->get();
         $response['provincias'] = fh_provincias()->get();
         // dd($response['provincias']);
         return view('admin/candidatura/editar/index', $response);

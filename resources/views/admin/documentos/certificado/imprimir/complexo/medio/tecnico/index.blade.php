@@ -93,7 +93,7 @@ background-image-resolution: from-image;">
             <strong>{{ $aluno->processo }}</strong>, concluiu no ano lectivo de
             {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do
             {{ $info_certificado->ensino }}
-            , na área de <strong>{{ $aluno->vc_nomeCurso }} </strong>
+            , na especialidade de <strong>{{ $aluno->vc_nomeCurso }} </strong>
             conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
             da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
             Final de {{ $cfc }} Valores, obtida nas seguintes classificações por disciplina:

@@ -91,62 +91,62 @@ class NotaDinamca extends Controller
 
         return $estado_permissoesNota;
     }
-    public function mostrar_alunos(Request $request)
-    {
+    // public function mostrar_alunos(Request $request)
+    // {
 
 
 
-        $dados['turmasUser'] = $turmaUser = $this->turmasProfessor();
+    //     $dados['turmasUser'] = $turmaUser = $this->turmasProfessor();
 
-        $dados['turmasUser'] = $dados['turmasUser']->where('id_turma_user', $request->id_turma_user);
+    //     $dados['turmasUser'] = $dados['turmasUser']->where('id_turma_user', $request->id_turma_user);
 
-        $dados['turmasUser']->all();
-
-
-        $turma_user = $dados['turmasUser'];
-
-        foreach ($turma_user as $turma_user) {
-            $id_turmaUser = $turma_user->id_turma_user;
-            $it_idCurso = $turma_user->it_idCurso;
-            $it_idClasse = $turma_user->it_idClasse;
-            $it_idTurma = $turma_user->id_turma;
-            $it_disciplina = $turma_user->id_disciplina;
-            $id_anoLectivo = $request->id_anoLectivo;
-            $vc_tipodaNota = $request->vc_tipodaNota;
+    //     $dados['turmasUser']->all();
 
 
-            $detalhes['it_idCurso'] = $turma_user->it_idCurso;
-            $detalhes['it_idClasse'] = $turma_user->it_idClasse;
-            $detalhes['it_idTurma'] = $turma_user->id_turma;
+    //     $turma_user = $dados['turmasUser'];
 
-            $detalhes['it_disciplina'] = $turma_user->id_disciplina;
-            $detalhes['id_anoLectivo'] = $request->id_anoLectivo;
-            $detalhes['vc_tipodaNota'] = $request->vc_tipodaNota;
-        }
+    //     foreach ($turma_user as $turma_user) {
+    //         $id_turmaUser = $turma_user->id_turma_user;
+    //         $it_idCurso = $turma_user->it_idCurso;
+    //         $it_idClasse = $turma_user->it_idClasse;
+    //         $it_idTurma = $turma_user->id_turma;
+    //         $it_disciplina = $turma_user->id_disciplina;
+    //         $id_anoLectivo = $request->id_anoLectivo;
+    //         $vc_tipodaNota = $request->vc_tipodaNota;
 
 
-        $ano_lectivo = $this->buscar_ano_lectivo($request->id_anoLectivo);
-        // dd( $ano_lectivo);
-        $alunos3 = $this->returnar_alunos_com_tri($it_idCurso, $it_idClasse, $it_idTurma, $ano_lectivo, $vc_tipodaNota, $id_turmaUser);
+    //         $detalhes['it_idCurso'] = $turma_user->it_idCurso;
+    //         $detalhes['it_idClasse'] = $turma_user->it_idClasse;
+    //         $detalhes['it_idTurma'] = $turma_user->id_turma;
 
-        $alunos = $this->returnar_alunos($it_idCurso, $it_idClasse, $it_idTurma, $ano_lectivo);
-        // dd( $alunos,'a');
-        // dd($alunos);
-        // $alunos1=$alunos->where('vc_tipodaNota', $vc_tipodaNota);
+    //         $detalhes['it_disciplina'] = $turma_user->id_disciplina;
+    //         $detalhes['id_anoLectivo'] = $request->id_anoLectivo;
+    //         $detalhes['vc_tipodaNota'] = $request->vc_tipodaNota;
+    //     }
 
-        // if ($alunos1->count()) {
-        //     $alunos=$alunos1;
-        // } else {
-        //     $alunos=$alunos3;
-        // }
 
-        $alunos = $this->filtrar_alunos($alunos3, $alunos);
+    //     $ano_lectivo = $this->buscar_ano_lectivo($request->id_anoLectivo);
+    //     // dd( $ano_lectivo);
+    //     $alunos3 = $this->returnar_alunos_com_tri($it_idCurso, $it_idClasse, $it_idTurma, $ano_lectivo, $vc_tipodaNota, $id_turmaUser);
 
-        //   dd(  $alunos);
-        $detalhes['estados_de_notas_unica'] = $this->buscar_notas_ativadas($vc_tipodaNota);
-        //   dd(  $detalhes['estados_de_notas_unica']);
-        return view('admin.nota_em_carga.mostrar_alunos.index', compact('alunos'), $detalhes);
-    }
+    //     $alunos = $this->returnar_alunos($it_idCurso, $it_idClasse, $it_idTurma, $ano_lectivo);
+    //     // dd( $alunos,'a');
+    //     // dd($alunos);
+    //     // $alunos1=$alunos->where('vc_tipodaNota', $vc_tipodaNota);
+
+    //     // if ($alunos1->count()) {
+    //     //     $alunos=$alunos1;
+    //     // } else {
+    //     //     $alunos=$alunos3;
+    //     // }
+
+    //     $alunos = $this->filtrar_alunos($alunos3, $alunos);
+
+    //     //   dd(  $alunos);
+    //     $detalhes['estados_de_notas_unica'] = $this->buscar_notas_ativadas($vc_tipodaNota);
+    //     //   dd(  $detalhes['estados_de_notas_unica']);
+    //     return view('admin.nota_em_carga.mostrar_alunos.index', compact('alunos'), $detalhes);
+    // }
 
 
 

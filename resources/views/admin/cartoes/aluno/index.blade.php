@@ -42,12 +42,13 @@
                         <select name="tipo_impressao" id="tipo_impressao" class="form-control" required>
                             <option value="" >Selecciona o Tipo de Impressão</option>
                            
-                                <option value="PVC">
-                               PVC
+                                <option value="PERSONALIZADO-PVC">
+                               PERSONALIZADO-PVC
                                 </option>
                                 <option value="CARTOLINA">
                                     CARTOLINA
                                      </option>
+                                     
                                      <option value="A4">
                                         A4
                                          </option>

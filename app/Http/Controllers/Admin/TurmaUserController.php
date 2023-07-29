@@ -128,7 +128,7 @@ class TurmaUserController extends Controller
         $response['anoslectivos'] = fha_ano_lectivo_publicado();
         //dd();
         $response['anoLectivoPublicado'] = $response['anoslectivos']->ya_inicio . "-" . $response['anoslectivos']->ya_fim;
-        $response['turmas'] = fh_turmas_2()->get();
+        $response['turmas'] = fh_turmas()->get();
         // dd(  $response['turmas'] );
         $response['disciplinas'] = fh_disciplinas()->get();
         $response['classes'] = fh_classes()->get();

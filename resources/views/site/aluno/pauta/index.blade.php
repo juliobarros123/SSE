@@ -178,7 +178,7 @@
                                                 $ca_classe_anterior = fha_ca($matricula->processo, $disciplina->id, ['I', 'II', 'III'], $classe->id);
                                             @endphp
                                             <div class="col-md-4">
-                                                {{ $classe->vc_classe }}ª Classe=<span
+                                                {{ $classe->vc_classe }}.ª =<span
                                                     style="color:<?php echo $ca_classe_anterior >= nota_positiva($turma->vc_classe) ? 'blue' : 'red'; ?>">{{ $ca_classe_anterior }}</span>
                                             </div>
                                         @endforeach

@@ -51,11 +51,20 @@
 
     </div>
     {{-- @dump($idadesdecandidaturas) --}}
-
-    @php
-       $idadesdecandidaturas= fh_idades_admissao()->first();
-    @endphp
-        @if ($idadesdecandidaturas)
+    @if ($candidato)
+        @php
+       
+            $idadesdecandidaturas = fh_idades_admissao_2()
+                ->where('id_ano_lectivo', $candidato->id_ano_lectivo)
+                ->first();
+                // dd(   $idadesdecandidaturas);
+        @endphp
+    @else
+        @php
+            $idadesdecandidaturas = fh_idades_admissao()->first();
+        @endphp
+    @endif
+    @if ($idadesdecandidaturas)
         <div class="form-group col-md-4">
             <div class="form-date">
                 <label for="dt_dataNascimento" class="form-label">Data de Nascimento <small
@@ -63,8 +72,12 @@
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
                     value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" max="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limiteaesquerda)); ?>"
                     min="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limitemaxima)); ?>" required />
-          <span>Dos {{calcularIdade($idadesdecandidaturas->dt_limiteaesquerda)}}({{converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda)}}) aos {{calcularIdade($idadesdecandidaturas->dt_limitemaxima)}}({{converterDataSemHora($idadesdecandidaturas->dt_limitemaxima)}}) de idade </span>
-                </div>
+                <span>Dos
+                    {{ calcularIdade($idadesdecandidaturas->dt_limiteaesquerda) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda) }})
+                    aos
+                    {{ calcularIdade($idadesdecandidaturas->dt_limitemaxima) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limitemaxima) }})
+                    de idade </span>
+            </div>
         </div>
     @else
         <div class="form-group col-md-4">
@@ -74,7 +87,11 @@
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
                     value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" required />
 
-                    <span>Dos {{calcularIdade($idadesdecandidaturas->dt_limiteaesquerda)}}({{converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda)}}) aos {{calcularIdade($idadesdecandidaturas->dt_limitemaxima)}}({{converterDataSemHora($idadesdecandidaturas->dt_limitemaxima)}}) de idade </span>
+                <span>Dos
+                    {{ calcularIdade($idadesdecandidaturas->dt_limiteaesquerda) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda) }})
+                    aos
+                    {{ calcularIdade($idadesdecandidaturas->dt_limitemaxima) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limitemaxima) }})
+                    de idade </span>
             </div>
         </div>
     @endif
@@ -83,7 +100,7 @@
 
     <div class="form-group col-md-4">
         <label for="vc_estadoCivil" class="form-label">Estado Civil</label>
-{{-- @dump($candidato) --}}
+        {{-- @dump($candidato) --}}
         <select class="form-control" name="vc_estadoCivil">
             @isset($candidato)
                 <option value="{{ $candidato->vc_estadoCivil }}">{{ $candidato->vc_estadoCivil }}</option>
@@ -158,17 +175,16 @@
         </select>
 
     </div>
-{{-- @dump(fha_municipios()) --}}
+
     <div class="form-group col-sm-4">
         <label for="" class="form-label">Municipio</label>
-            <select class="form-control select-dinamico " name="vc_municipio" id="id_municipio" required >
-                <option value="{{ isset($candidato) ? $candidato->vc_municipio : '' }}" selected>
-                    {{ isset($candidato) ? $candidato->vc_municipio  : 'Selecione o Municipio:' }}</option>
-                @foreach (fha_municipios() as $municipio)
-                    <option value="{{ $municipio->vc_nome }}">{{ $municipio->vc_nome }} </option>
-              
-                @endforeach
-            </select>
+        <select class="form-control select-dinamico " name="vc_municipio" id="id_municipio" required>
+            <option value="{{ isset($candidato) ? $candidato->vc_municipio : '' }}" selected>
+                {{ isset($candidato) ? $candidato->vc_municipio : 'Selecione o Municipio:' }}</option>
+            @foreach (fha_municipios() as $municipio)
+                <option value="{{ $municipio->vc_nome }}">{{ $municipio->vc_nome }} </option>
+            @endforeach
+        </select>
     </div>
     <div class="form-group col-md-4">
         <label for="el_email" class="form-label">E-mail</label>
@@ -223,14 +239,12 @@
         <label for="media" class="form-label">Média da escola anterior</label>
         <input type="number" class="form-control" step="any" class="form-control" name="media"
             id="vc_naturalidade" placeholder="Média da escola anterior" autocomplete="off"
-            value="{{ isset($candidato) ? $candidato->vc_naturalidade : '' }}"
-            />
+            value="{{ isset($candidato) ? $candidato->vc_naturalidade : '' }}" />
     </div>
     <div class="form-group col-md-4">
         <label for="media" class="form-label">Escola anterior</label>
         <input type="text" class="form-control" class="form-control" name="vc_EscolaAnterior"
             id="vc_EscolaAnterior" placeholder="Escola anterior" autocomplete="off"
-            value="{{ isset($candidato) ? $candidato->vc_EscolaAnterior : '' }}"
-            />
+            value="{{ isset($candidato) ? $candidato->vc_EscolaAnterior : '' }}" />
     </div>
 </div>

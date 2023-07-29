@@ -1,0 +1,192 @@
+body {
+  font-family: 'roboto', sans-serif;
+  text-transform: uppercase;
+}
+
+.titulo {
+  position: fixed;
+  top: 25px;
+  background-color: rgb(11, 25, 70);
+  font-size: 8px;
+  color: white;
+  left: 193px;
+}
+
+.nome {
+  position: fixed;
+  top: 50px;
+  /* background-color: red; */
+  font-size: 8px;
+
+  left: 164px;
+}
+
+.valor {
+  font-weight: bold;
+}
+
+.classe {
+  position: fixed;
+  top: 64px;
+  font-size: 8px;
+  left: 164px;
+  width: 90px;
+  /* background-color: red; */
+
+}
+
+.turno {
+  position: fixed;
+  top: 78px;
+  font-size: 8px;
+  left: 164px;
+  width: 90px;
+  /* background-color: red; */
+
+}
+
+.validade {
+  position: fixed;
+  top: 92px;
+  font-size: 8px;
+  left: 164px;
+  width: 60px;
+
+
+}
+
+.sala {
+  position: fixed;
+  top: 92px;
+  font-size: 8px;
+  left: 225px;
+  width: 65px;
+
+
+}
+
+.processo {
+  position: fixed;
+  top: 78px;
+  font-size: 8px;
+  left: 225px;
+  width: 90px;
+  /* background-color: red; */
+
+}
+
+.turma {
+  position: fixed;
+  top: 64px;
+  font-size: 8px;
+  left: 255px;
+  width: 65px;
+}
+
+.box-imagem {
+
+  width: 80px;
+  position: fixed;
+  bottom: 60px;
+  left: 36px;
+  height: 80px;
+
+  border: 1px solid rgb(11, 25, 70);
+}
+
+.foto {
+
+  width: 100%;
+  height: 99px;
+
+}
+
+.ano_lectivo {
+  position: fixed;
+  top: 106px;
+  font-size: 8px;
+  left: 164px;
+  width: 100px;
+}
+
+.curso {
+  position: fixed;
+  top: 120px;
+  font-size: 8px;
+  left: 164px;
+  width: 156px;
+
+}
+
+.hr-custom {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.visa-container {
+  width: 130px;
+  position: fixed;
+  bottom: 10px;
+  font-size: 8px;
+  right: 1px;
+  /* background-color: yellow; */
+  height: 50px;
+  text-align: center;
+
+}
+
+.assinatura-director {
+  height: 30px;
+  width: 50%;
+}
+
+.box-assinatura-director {
+  /* width: 100%; */
+  height: 1px;
+  text-align: center;
+  position: fixed;
+  font-size: 10px;
+  /* background-color: red; */
+  /* top: 170px; */
+
+}
+
+.header {
+  text-align: left;
+  color: white;
+  /* background-color: red; */
+  margin-top: -19.8px;
+  padding-top: 0px;
+
+}
+
+.info-cabecalho {
+  font-size: 7px;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 13px;
+  text-align: center;
+  /* background-color: red; */
+  width: 150px;
+
+}
+
+.logo {
+  height: 25px;
+  margin-top: -7px;
+
+}
+
+.logo-escola {
+  position: fixed;
+  height: 20px;
+  left: 10px;
+}
+
+.box-logo-escola {
+  position: fixed;
+
+  /* background-color: red; */
+  top: 10px;
+  left: 4px;
+}

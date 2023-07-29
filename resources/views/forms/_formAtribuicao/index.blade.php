@@ -58,7 +58,7 @@
 <div class="col-sm-4">
     <div class="form-group ">
         <label>Professor</label>
-        <select name="it_idUser" class="form-control  " required>
+        <select name="it_idUser" class="form-control select-dinamico " required>
             @isset($user)
                 <option value="{{ $user->id }}">{{ $user->vc_primemiroNome }} {{ $user->vc_apelido }}</option>
             @else

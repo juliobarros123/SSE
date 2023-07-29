@@ -1606,8 +1606,53 @@ vc_tipodaNota
     });
  
 </script>
-@endif
 
+@endif
+<script>
+    $('#id_provincia').change(function() {
+        var provincia = $(this).val();
+        // var idMunicipio = $('#id_municipio').val();
+        // alert(provincia);
+        let url_origin = "{{ url('/') }}";
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: url_origin + `/buscar/municipios/${provincia}/nome`,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            async: false,
+            success: function(municipios) {
+
+                // response.forEach(element => {
+                //     console.log
+                // })
+                // console.log(municipios);
+                // alert("ol");
+                $("#id_municipio").empty();
+                $("#id_municipio").append('<option select value=""> Selecionar o Município</option>');
+                $.each(municipios, function(municipio) {
+
+                    console.log(municipios[municipio].vc_nome);
+
+                    $("#id_municipio").append('<option value="' + municipios[
+                            municipio].id + ' " selected>' + municipios[municipio]
+                        .vc_nome +
+                        '</option>');
+
+
+                });
+
+
+
+
+            }
+        });
+
+
+    });
+</script>
 
 
 </body>

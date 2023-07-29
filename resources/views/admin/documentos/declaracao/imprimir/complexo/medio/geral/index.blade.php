@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title> Certificado {{ $aluno->processo }}</title>
+    <title> Declaração {{ $aluno->processo }}</title>
     <style>
         <?php
         echo $css;
@@ -15,9 +15,9 @@
 background-repeat: no-repeat;
 background-image-resize: 2;
 background-image-resolution: from-image;">
-    @include('layouts._includes.fragments.certificado.header')
+    @include('layouts._includes.fragments.declaracao.header')
     <div class="title">
-        CERTIFICADO
+        DECLARAÇÃO/ COM NOTAS Nº {{$numero}}
     </div>
     @php
         $medias_acumulada_linha = [];
@@ -37,12 +37,10 @@ background-image-resolution: from-image;">
                         ->where('alunnos.processo', $aluno->processo)
                         ->where('classes.vc_classe', $i)
                         ->get();
-                   
                     $matricula = $matricula->sortDesc()->first();
-
+                    
                     if ($matricula) {
                         $ca = fha_media_trimestral_geral($aluno->processo, $disciplina->id, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-                  
                     } else {
                         $ca = 0;
                     }
@@ -71,18 +69,20 @@ background-image-resolution: from-image;">
     <div class="bib">
         <div>a) <strong>{{ $cabecalho->vc_nomeDirector }}</strong>, Diretor(a) do {{ $cabecalho->vc_escola }} Nº
             {{ $cabecalho->vc_numero_escola }}, criada,
-            sob Decreto Executivo nº {{ $info_certificado->decreto }},
-            certifica que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
+            sob Decreto Executivo nº {{ $info_declaracao->decreto }}.
+            Declara que <strong>{{ "$aluno->vc_primeiroNome $aluno->vc_nomedoMeio $aluno->vc_apelido" }}</strong>, filho(a) de
             {{ $aluno->vc_nomePai }} e de
             {{ $aluno->vc_nomeMae }}, nascida(o) aos {{ dataPorExtenso(sub_traco_barra($aluno->dt_dataNascimento)) }},
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, o curso do 
-            {{ $info_certificado->ensino }}
-            , na área de  <strong>{{$aluno->vc_nomeCurso}} </strong>
-            conforme o disposto na alínea {{ $info_certificado->alinea }}) do artigo {{ $info_certificado->artigo }}º
-            da LBSEE nº {{ $info_certificado->LBSEE }}, com a Média
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº <strong>{{$aluno->processo}}</strong>.
+            Concluiu no ano lectivo de {{ $aluno->ya_inicio . '/' . $aluno->ya_fim }}, a
+            <strong>{{ $classe_final->vc_classe }}ª Classe</strong> 
+            ,
+            na área de  <strong>{{$aluno->vc_nomeCurso}} </strong>
+            conforme o disposto na alínea {{ $info_declaracao->alinea }}) do artigo {{ $info_declaracao->artigo }}º
+            da LBSEE nº {{ $info_declaracao->LBSEE }}, com a Média
             Final de {{ $medias_acumulada_coluna }} Valores, obtida nas seguintes classificações por disciplina:
         </div>
     </div>
@@ -111,30 +111,13 @@ background-image-resolution: from-image;">
         </tr>
 
         @foreach ($componentes as $componente)
-            <tr>
-
-                <td class="disciplina upper-case td td-boder"> <strong>{{ $componente->vc_componente }}</strong></td>
-
-                @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
-                    <td class="nota-valor" style="text-align: center">
-                    </td>
-                @endfor
-                <td class="nota-valor" style="text-align:center">
-
-
-
-                </td>
-
-                <td style="border-right: none;text-align:right; ">
-
-                </td>
-                <td style=" border-left: none"></td>
-
-            </tr>
+            @php
+                // dd($componente);
+            @endphp
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
-                    <td class="disciplina upper-case td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
+                    <td class="disciplinatd td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
@@ -153,10 +136,6 @@ background-image-resolution: from-image;">
                             } else {
                                 $ca = 0;
                             }
-                            /* if( $i==11){
-                        dd($ca);
-
-                    } */
                             if (fhap_disciplinas_cursos_classes($disciplina->id, $aluno->id_curso, $classe->id)) {
                                 array_push($medias_acumulada_linha, $ca);
                             } else {
@@ -210,9 +189,7 @@ background-image-resolution: from-image;">
     </table>
     <div class="lib">
         <div class="bib-part">
-            Para efeitos legais lhe é passado o presente Certificado, que consta no livro de registo
-            nº
-            {{ $registo }}, folha {{ $folha }} assinado por mim e autenticado com carimbo a óleo/selo
+            Para efeitos legais lhe é passado a presente DECLARAÇÃO, assinado por mim e autenticado com carimbo a óleo/selo
             branco em uso neste
             estabelecimento de ensino. </div>
     </div>

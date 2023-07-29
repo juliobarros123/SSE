@@ -17,7 +17,7 @@ background-image-resize: 2;
 background-image-resolution: from-image;">
     @include('layouts._includes.fragments.declaracao.header')
     <div class="title">
-        DECLARAÇÃO/ COM NOTAS Nº
+        DECLARAÇÃO/ COM NOTAS Nº {{$numero}}
     </div>
     @php
         $medias_acumulada_linha = [];
@@ -79,7 +79,7 @@ background-image-resolution: from-image;">
             natural de(o) {{ $aluno->vc_naturalidade }}, Município de
             {{ $aluno->vc_municipio }}, Província de {{ $aluno->vc_provincia }}, portadora(o) do B.I./Passaporte nº
             {{ $aluno->vc_bi }}, passado(a) pela Direção Nacional de Identificação, aos
-            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}.
+            {{ dataPorExtenso(sub_traco_barra($aluno->dt_emissao)) }}, com processo individual nº <strong>{{$aluno->processo}}</strong>.
 
         </div>
 
@@ -123,7 +123,7 @@ background-image-resolution: from-image;">
             @foreach (fh_componentes_disciplinas()->where('componente_disciplinas.id_componente', $componente->id)->select('disciplinas.*')->get() as $disciplina)
                 <tr>
 
-                    <td class="disciplina upper-case td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
+                    <td class="disciplina  td td-boder"> <strong>{{ $disciplina->vc_nome }}</strong></td>
 
                     @for ($i = $classe_inicial->vc_classe; $i <= $classe_final->vc_classe; $i++)
                         @php
@@ -195,9 +195,7 @@ background-image-resolution: from-image;">
     </table>
     <div class="lib">
         <div class="bib-part">
-            Para efeitos legais lhe é passado o presente Certificado, que consta no livro de registo
-            nº
-            {{ $registo }}, folha {{ $folha }} assinado por mim e autenticado com carimbo a óleo/selo
+            Para efeitos legais lhe é passado a presente DECLARAÇÃO, assinado por mim e autenticado com carimbo a óleo/selo
             branco em uso neste
             estabelecimento de ensino. </div>
     </div>

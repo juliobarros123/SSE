@@ -32,8 +32,8 @@ class CertificadoDocumentoController extends Controller
     public function imprimir(Request $request)
     {
         $data['info_certificado'] = fh_infos_certificado()->where('classes.id', $request->id_classe_2)
-        ->where('info_cerficados.tipo_documento','Certificado')->first();
-    
+            ->where('info_cerficados.tipo_documento', 'Certificado')->first();
+
         $classe = fh_classes()->where('classes.id', $request->id_classe_2)->first();
         if ($data['info_certificado']) {
             //    dd($data['info_certificado']);
@@ -42,9 +42,10 @@ class CertificadoDocumentoController extends Controller
             $data['classe_inicial'] = fh_classes()->where('classes.id', $request->id_classe)->first();
             $data['classe_final'] = fh_classes()->where('classes.id', $request->id_classe_2)->first();
             $data['aluno'] = fh_matriculas()->where('alunnos.processo', $request->processo)
+                ->orderBy('anoslectivos.ya_fim', 'desc')
                 ->whereBetween('classes.vc_classe', [$data['classe_inicial']->vc_classe, $data['classe_final']->vc_classe])
-
                 ->first();
+            // dd(   $data['aluno'] );
             if ($data['aluno']) {
                 // dd(   $data['aluno']);
                 $data['disciplinas'] = fh_disciplinas_cursos_classes()
@@ -58,7 +59,7 @@ class CertificadoDocumentoController extends Controller
                     ->where('cursos.id', $data['aluno']->id_curso)
                     ->where('classes.id', $data['classe_final']->id)
                     ->get();
-                    // dd($data['componentes']);
+                // dd($data['componentes']);
                 // dd($data);
                 // dd(   $data['disciplinas']);
 
@@ -96,11 +97,10 @@ class CertificadoDocumentoController extends Controller
                 // }
                 // dd($data['cabecalho']->vc_tipo_escola);
 
-                if($data['classe_inicial']->vc_classe >= 1 && $data['classe_final']->vc_classe <= 6){
+                if ($data['classe_inicial']->vc_classe >= 1 && $data['classe_final']->vc_classe <= 6) {
                     $html = view("admin.documentos.certificado.imprimir.complexo.ensino-primario.index", $data);
 
-                }
-                else if ($data['classe_inicial']->vc_classe >= 7 && $data['classe_final']->vc_classe <= 9) {
+                } else if ($data['classe_inicial']->vc_classe >= 7 && $data['classe_final']->vc_classe <= 9) {
                     $html = view("admin.documentos.certificado.imprimir.complexo.nona.index", $data);
                 } else if ($data['classe_inicial']->vc_classe >= 10 && $data['cabecalho']->vc_tipo_escola == "Geral") {
                     $html = view("admin.documentos.certificado.imprimir.complexo.medio.geral.index", $data);

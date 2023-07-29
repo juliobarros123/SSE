@@ -11,7 +11,7 @@
 
     <div class="card">
         <div class="card-body">
-            <h5>As Componentes só devem ser Cadastradas para Classes de Término de Ensinno(6ª,9ª,12ª ou 13ª)<br>
+            <h5>As Componentes só devem ser Cadastradas para Classes de Término de Ensino(6ª,9ª,12ª ou 13ª),No caso de Certificados.<br>
 
             </h5>
 
