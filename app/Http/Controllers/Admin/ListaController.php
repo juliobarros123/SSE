@@ -97,13 +97,13 @@ class ListaController extends Controller
 
         $mpdf->setFooter('{PAGENO}');
 
-        $this->loggerData("Imprimiu Lista da Propinas Da turma " . $data['turma']->vc_nomedaTurma);
+        $this->loggerData("Imprimiu Lista da Propinas Da turma " . $data['turma']->vc_nomedaTurma.'-'.$request->estado);
 
         $html = view("admin.pdfs.listas.propinas_turma.index", $data);
         // return  $html;
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("lista-turma.pdf", "I");
+        $mpdf->Output("Lista da Propinas Da turma " . $data['turma']->vc_nomedaTurma.'-'. $request->mes."-".$request->estado.".pdf", "I");
 
     }
 

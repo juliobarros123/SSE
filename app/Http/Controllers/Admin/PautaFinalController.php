@@ -69,7 +69,9 @@ class PautaFinalController extends Controller
                 $data['css'] = file_get_contents('css/lista/style-2.css');
                 // Dados para a tabela
                 $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
-                $mpdf = new \Mpdf\Mpdf(['format' => "$formato-L"]);
+                $mpdf = new \Mpdf\Mpdf([  'mode' => 'utf-8',
+                'margin_top' => 5,
+    'format' => "$formato-L"]);
                 // dd(   $data['titulo']);
                 $mpdf->SetFont("arial");
                 $mpdf->setHeader();

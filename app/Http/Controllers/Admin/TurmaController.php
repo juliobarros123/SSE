@@ -102,7 +102,7 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
     // return  $html;
     $mpdf->writeHTML($html);
 
-    $mpdf->Output("lista-turma.pdf", "I");
+    $mpdf->Output("Lista-de-credências-".$data['turma']->vc_nomeTurma.".pdf", "I");
 
 }
 
@@ -331,7 +331,8 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
         // return  $html;
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("lista-turma.pdf", "I");
+        $mpdf->Output("Lista-de-alunos-".$data['turma']->vc_nomeTurma.".pdf", "I");
+
 
     }
 

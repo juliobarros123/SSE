@@ -217,9 +217,15 @@ class Funcionario extends Controller
             $mpdf->AddPage('L');
             // dd("o");
             $this->loggerData('Emitiu Cartão do(a) Funcionáro(a) ' . $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome . ' com o id ' . $funcionario->id);
-            $html = view("admin/pdfs/cartao/funcionario/index", $data);
+    //   if(Auth::user()->id==1){
+    //     $html = view("admin/pdfs/cartao/funcionario/index-empresa", $data);
+
+    //   }else{
+        $html = view("admin/pdfs/cartao/funcionario/index", $data);
+
+    //   }
             $mpdf->writeHTML($html);
-            $mpdf->Output("funcionario.pdf", "I");
+            $mpdf->Output("passe-funcionario- $funcionario->vc_primeiroNome $funcionario->vc_ultimoNome.pdf", "I");
         }else{
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
 

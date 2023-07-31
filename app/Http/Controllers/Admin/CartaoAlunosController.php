@@ -109,7 +109,7 @@ class CartaoAlunosController extends Controller
                 }
                 $mpdf->writeHTML($html);
                 $this->loggerData('Emitiu o(a) Cartão do(a) Aluno(a) ' . Auth::User()->vc_primeiroNome . ' ' . Auth::User()->vc_ultimoaNome);
-                $mpdf->Output("aluno.pdf", "I");
+                $mpdf->Output("Cartão -Processo $request->processo-".$matricula->ya_inicio.'-'.$matricula->ya_fim."ª Classe.pdf", "I");
             } else {
                 return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Erro, coloca a assinatura do Director']);
 

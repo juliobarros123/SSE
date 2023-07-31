@@ -21,11 +21,11 @@
         background-image-resize: 1;
         background-image-resolution: from-image;">
             <div class="header">
-                <img src="images/insignia-certificado.png" class="logo">
+                <img src="<?php echo $cabecalho->vc_logo; ?>"  width="90" height="50">
 
 
-                <h3 class="info-cabecalho">{{ $cabecalho->vc_republica }} <br>{{ $cabecalho->vc_ministerio }}
-                    <br>{{ $cabecalho->vc_escola }}
+                <h3 class="info-cabecalho">
+                    {{ $cabecalho->vc_escola }}
 
 
                 </h3>

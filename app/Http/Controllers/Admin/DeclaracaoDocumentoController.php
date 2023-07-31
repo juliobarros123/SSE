@@ -96,7 +96,8 @@ class DeclaracaoDocumentoController extends Controller
                    // return   $html;
                    $mpdf->writeHTML($html);
    
-                   $mpdf->Output("Certificado $request->processo", "I");
+                $mpdf->Output("Declaração -Processo $request->processo-".$data['classe_final']->vc_classe."ª Classe.pdf", "I");
+               
                } else {
                    return redirect()->back()->with('feedback', ['error' => 'success', 'sms' => "Aluno não existe na $classe->vc_classe" . "ª Classe."]);
    

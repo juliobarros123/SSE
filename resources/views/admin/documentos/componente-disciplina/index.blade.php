@@ -25,7 +25,8 @@
                 <th>ID</th>
                 <th>CURSO</th>
                 <th>CLASSE</th>
-\
+                <th>TIPO DE DOCOMENTO</th>
+
                 <th>COMPONENTE</th>
                 <th>DISCIPLINA</th>
                 <th>AÇÕES</th>
@@ -34,10 +35,13 @@
         <tbody class="bg-white">
 
             @foreach ($componente_disciplinas as $componente)
+        
                 <tr class="text-center">
                     <td>{{ $componente->id }}</td>
                     <th>{{ $componente->vc_nomeCurso }}</th>
+
                     <th>{{ $componente->vc_classe }}.ª Classe</th>
+                    <th>{{ $componente->tipo_documento }}</th>
 
                     <th>{{ $componente->vc_componente }}</th>
                     <th>{{ $componente->vc_nome }}</th>

@@ -51,7 +51,10 @@
 
     </div>
     {{-- @dump($idadesdecandidaturas) --}}
-    @if ($candidato)
+
+        
+
+    @if (isset($candidato))
         @php
        
             $idadesdecandidaturas = fh_idades_admissao_2()
@@ -64,6 +67,7 @@
             $idadesdecandidaturas = fh_idades_admissao()->first();
         @endphp
     @endif
+
     @if ($idadesdecandidaturas)
         <div class="form-group col-md-4">
             <div class="form-date">

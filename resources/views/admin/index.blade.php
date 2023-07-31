@@ -48,7 +48,7 @@
                 <div class="col-lg-3">
                     <div class="statistic-card">
                         <h4>Turmas</h4>
-                        <p>Total: {{fh_turmas   ()->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
+                        <p>Total: {{fh_turmas()->where('turmas.it_idAnoLectivo', fha_ano_lectivo_publicado()->id_anoLectivo)->count()}}</p>
 
                     </div>
                 </div>

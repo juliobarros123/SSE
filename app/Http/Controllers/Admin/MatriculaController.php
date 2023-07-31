@@ -87,11 +87,9 @@ class MatriculaController extends Controller
         $matriculados = fh_matriculas();
         //    dd($matriculados->get());
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
-            $ano_lectivo = fh_anos_lectivos_publicado()->first();
-            // dd($ano_lectivo );
-            $data['anolectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
-            // dd($request->id_ano_lectivo);
-            $matriculados = $matriculados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
+            $ano_lectivo = fh_anos_lectivos()->find($request->id_ano_lectivo);
+            $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
+            $matriculados = $matriculados->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
         }
         // dd($matriculados->get());
 
@@ -141,8 +139,9 @@ class MatriculaController extends Controller
         $html = view("admin/pdfs/listas/matriculas/index", $data);
 
         $mpdf->writeHTML($html);
+        $mpdf->Output("Lista-matriculados-$data[curso]- $data[classe].pdf", "I");
 
-        $mpdf->Output("Lista-matriculados.pdf", "I");
+      
 
     }
     public function matriculados(Request $request)

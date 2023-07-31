@@ -16,7 +16,7 @@ class CreateProcessosTable extends Migration
         Schema::create('processos', function (Blueprint $table) {
             $table->id();
         
-            $table->integer('it_processo')->unique();
+            $table->integer('it_processo');
             $table->integer('it_estado_processo')->default(1);
             $table->foreignId('id_cabecalho')->constrained('cabecalhos')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->timestamps();

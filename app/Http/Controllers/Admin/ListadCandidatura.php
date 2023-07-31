@@ -75,8 +75,7 @@ class ListadCandidatura extends Controller
         // dd($request);
 
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
-            $ano_lectivo = fh_anos_lectivos_publicado()->first();
-
+            $ano_lectivo = fh_anos_lectivos()->find($request->id_ano_lectivo);
             $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             $candidados = $candidados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
         }
@@ -116,7 +115,7 @@ class ListadCandidatura extends Controller
 
         $mpdf->writeHTML($html);
      
-        $mpdf->Output("listasdCandidaturas.pdf", "I");
+        $mpdf->Output("listas-de-Candidaturas-$data[curso]- $data[classe].pdf", "I");
     }
     public function index(Candidatura $Rcandidatos, $anoLectivo, $curso)
     {

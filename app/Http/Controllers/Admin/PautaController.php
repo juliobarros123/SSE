@@ -345,7 +345,7 @@ class PautaController extends Controller
         $this->Logger->Log('info', 'Imprimi mini pauta');
         $html = view("admin/pdfs/pauta/mini/geral", $data);
         $mpdf->writeHTML($html);
-        $mpdf->Output("pauta.pdf", "I");
+        $mpdf->Output("pauta".$data['turma']->vc_nomedaTurma."-".$data['turma']->vc_nomeCurso.".pdf", "I");
     }
 
     public function detalhes_turma($id_turma)
@@ -394,7 +394,8 @@ class PautaController extends Controller
 
             $mpdf->writeHTML($html);
             // $this->enviarEmail($mpdf, Auth::User()->vc_email, $datos, ' emails.nota.mini-pauta');
-            $mpdf->Output("pauta.pdf", "I");
+            $mpdf->Output("Pauta-".$response['turma']->vc_nomedaTurma."-".$response['turma']->vc_nomeCurso."-".$response['trimestre'].".pdf", "I");
+
         else:
             return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 

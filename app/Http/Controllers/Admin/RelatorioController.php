@@ -126,7 +126,7 @@ class RelatorioController extends Controller
 
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("listasdCandidaturas.pdf", "I");
+        $mpdf->Output("Relatório de candidaturas-$data[curso]-$data[ciclo].pdf", "I");
 
     }
 
@@ -235,7 +235,8 @@ class RelatorioController extends Controller
 
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("listasdCandidaturas.pdf", "I");
+        $mpdf->Output("Relatório de candidatos-aceitos-$data[curso]-$data[ciclo].pdf", "I");
+
 
     }
 
@@ -287,7 +288,7 @@ class RelatorioController extends Controller
             // dd($ano_lectivo );
             $data['ano_lectivo'] = $ano_lectivo->ya_inicio . '/' . $ano_lectivo->ya_fim;
             // dd($request->id_ano_lectivo);
-            $matriculados = $matriculados->where('candidatos.id_ano_lectivo', $request->id_ano_lectivo);
+            $matriculados = $matriculados->where('turmas.it_idAnoLectivo', $request->id_ano_lectivo);
         }
         // dd($matriculados->get());
 
@@ -351,7 +352,8 @@ class RelatorioController extends Controller
 
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("relatorio-matriculados.pdf", "I");
+        $mpdf->Output("Alunos Matriculados-$data[curso]-$data[ciclo].pdf", "I");
+
 
     }
 
@@ -445,7 +447,7 @@ class RelatorioController extends Controller
        
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("relatorio-propinas_aluno.pdf", "I");
+        $mpdf->Output("relatorio-pagamentos-$response[ano_lectivo]-$response[mes]-$response[classe] ª.pdf", "I");
 
     }
 

@@ -107,8 +107,8 @@ class ListadSelecionado extends Controller
         $html = view("admin/pdfs/listas/selecionados/index", $data);
 
         $mpdf->writeHTML($html);
+        $mpdf->Output("candidatos-aceitos-$data[curso]- $data[classe].pdf", "I");
      
-        $mpdf->Output("candidatos-aceitos.pdf", "I");
     }
     // public function index(Estudante $Ralunos, $anoLectivo, $curso)
     // {

@@ -17,7 +17,7 @@ background-position: top left;
              background-image-resize: 2;
              background-image-resolution: from-image;
 ">
-    >
+    
              <div class="header">
    
   
@@ -32,9 +32,10 @@ background-position: top left;
   
 
 </div>
-<div class="box-logo-escola">
-    <img src="{{ $cabecalho->vc_logo }}" alt="" class="logo-escola">
-    </div>
+
+
+
+
 <div class="titulo">Cartão de Estudante</div>
 
     <div class="nome">Nome: <span class="valor">{{ $matricula->vc_primeiroNome }}

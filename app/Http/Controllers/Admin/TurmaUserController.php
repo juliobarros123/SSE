@@ -72,7 +72,7 @@ class TurmaUserController extends Controller
         $this->Logger->Log('info', 'Gerou lista de professores');
         $html = view("admin/pdfs/turma-professor/index", $data);
         $mpdf->writeHTML($html);
-        $mpdf->Output("listasdDiplomados.pdf", "I");
+        $mpdf->Output("Lista de professores-".$data['turma']->vc_nomedaTurma."-".$data['turma']->vc_nomeCurso.".pdf", "I");
     }
 
 
