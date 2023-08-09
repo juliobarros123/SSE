@@ -116,7 +116,8 @@
                                     @endif
                                     @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso) && $turma->vc_classe > 9)
                                         @php
-                                            $rec = fh_nota_recurso($matricula->processo, $disciplina->id);
+                                                                       $rec = fh_nota_recurso_v2($aluno->processo, $disciplina->id,$turma->it_idClasse);
+
                                         @endphp
                                         <div class="col-md-4">
                                             REC=<span style="color:<?php echo $rec >= 10 ? 'blue' : 'red'; ?>">{{ $rec }}</span>

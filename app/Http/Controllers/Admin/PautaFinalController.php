@@ -46,7 +46,7 @@ class PautaFinalController extends Controller
         return $disciplinas;
     }
 
-    public function gerar($slug_turma,$formato)
+    public function gerar($slug_turma, $formato)
     {
         try {
             // dd($slug_turma);
@@ -56,22 +56,30 @@ class PautaFinalController extends Controller
 
                 //   dd( $turma->id);
                 $turma_alunos = fha_turma_alunos($slug_turma);
-                $data['disciplinas']= fha_turmas_disciplinas_dcc( $turma->id);
-              
+                $data['disciplinas'] = fha_turmas_disciplinas_dcc($turma->id);
+
                 //  dd( $disciplinas );
                 $data['turma'] = $turma;
                 // dd(  $data['turma']);
                 $data['cabecalho'] = fh_cabecalho();
                 $data['alunos'] = $turma_alunos;
+
+                if(fh_cabecalho()->vc_tipo_escola=="Técnico"){
+                    $data['alunos'] = $turma_alunos->take(7);
+
+                }
+                
                 // dd( $data['turma_alunos']);
                 // dd( $data['cabecalho']);
                 // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
                 $data['css'] = file_get_contents('css/lista/style-2.css');
                 // Dados para a tabela
                 $data['titulo'] = "Pauta Anual" . $data['turma']->vc_nomedaTurma . '-' . $data['turma']->vc_classe . 'ª Classe' . '-' . $data['turma']->vc_shortName . '-' . $data['turma']->ya_inicio . '_' . $data['turma']->ya_fim;
-                $mpdf = new \Mpdf\Mpdf([  'mode' => 'utf-8',
-                'margin_top' => 5,
-    'format' => "$formato-L"]);
+                $mpdf = new \Mpdf\Mpdf([
+                    'mode' => 'utf-8',
+                    'margin_top' => 5,
+                    'format' => "$formato-L"
+                ]);
                 // dd(   $data['titulo']);
                 $mpdf->SetFont("arial");
                 $mpdf->setHeader();
@@ -80,10 +88,9 @@ class PautaFinalController extends Controller
                 // if ( $data['turma']->vc_classe <= 9 && $data['cabecalho']->vc_tipo_escola == "Geral") {
                 //     $html = view("admin.pdfs.pauta.anual", $data);
                 // } else if($data['turma']->vc_classe >=10 && $data['cabecalho']->vc_tipo_escola == "Técnico")  {
-                if($turma->vc_classe==13){
+                if ($turma->vc_classe == 13) {
                     $html = view("admin.pdfs.pauta.tecnico.anual_13", $data);
-
-                }else{
+                } else {
                     // dd("1");
                     $html = view("admin.pdfs.pauta.tecnico.anual", $data);
 
@@ -99,7 +106,7 @@ class PautaFinalController extends Controller
                 return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado']);
 
 
-            endif;  
+            endif;
             // return view('admin.pdfs.pauta_final.index',$response);
         } catch (Exception $ex) {
             dd($ex);

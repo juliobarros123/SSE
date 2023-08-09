@@ -768,6 +768,8 @@ function fha_coordenador_comissao()
     $funcionario = fh_funcionarios()->where('funcionarios.vc_funcao', 'Chefe da Comissão Geral')->first();
     if ($funcionario) {
         return $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome;
+    }else{
+        return '';
     }
 }
 function fh_disciplinas()
@@ -1067,7 +1069,7 @@ function fhap_media_trimestre_disciplinas($processo, $trimestre, $id_classe, $id
         $nota = fha_media_trimestral_geral($processo, $disciplina->id, [$trimestre], $id_ano_lectivo);
         array_push($notas, $nota);
     }
-// dd($notas);
+    // dd($notas);
     $nota = media($notas);
     return fh_arredondar($nota);
 
@@ -1221,7 +1223,7 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
         //     $nota_recurso = fh_nota_recurso($processo, $id_disciplina);
         //     // dd($nota_recurso );
         // }
-        $nota_recurso = fh_nota_recurso($processo, $id_disciplina);
+        $nota_recurso =  fh_nota_recurso_v2($processo, $disciplina->id,$matricula->it_idClasse);
     } else {
         $nota_recurso = "0";
     }
@@ -1302,7 +1304,7 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
 
         }
 
-       
+
 
         // dd($classes);
 
@@ -1321,12 +1323,12 @@ function fha_ca($processo, $id_disciplina, $trimestre_array, $id_classe)
         // // dd( $media);
         // if ($classe_corrente->vc_classe == 10) {
         //     dd("p", $classe->vc_classe,$matricula  );
-          
+
         // }
         if ($matricula) {
-          
+
             $ca = fha_media_trimestral_geral($processo, $id_disciplina, ['I', 'II', 'III'], $matricula->it_idAnoLectivo);
-          
+
         } else {
             $ca = 0;
         }
@@ -1528,6 +1530,24 @@ function fh_notas_recursos()
 
     return $notas_recursos;
 }
+function fh_nota_recurso_v2($processo, $id_disciplina, $id_classe)
+{
+    $aluno = fha_aluno_processo($processo);
+    $count = fha_disciplina_terminal($id_disciplina, $id_classe, $aluno->id_curso);
+    if ($count) {
+ 
+       $disciplina= Disciplinas::find($id_disciplina);
+
+        $notaRecurso = fh_notas_recursos()->where('nota_recursos.id_aluno', $aluno->id)->where('nota_recursos.id_disciplina', $id_disciplina)->orderBy('id', 'desc')->first();
+        if ($notaRecurso) {
+            return $notaRecurso->nota;
+        } else {
+            return "0";
+        }
+    } else {
+        return "0";
+    }
+}
 function fh_nota_recurso($processo, $id_disciplina)
 {
     $aluno = fha_aluno_processo($processo);
@@ -1589,7 +1609,7 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
     // dd( $n_negativas );
     foreach ($disciplinas as $disciplina) {
         if ($classe->vc_classe > 9) {
-            $nota_recurso = fh_nota_recurso($processo, $disciplina->id);
+            $nota_recurso = fh_nota_recurso_v2($processo, $disciplina->id,$classe->id);
         } else {
             $nota_recurso = "0";
         }

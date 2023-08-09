@@ -209,7 +209,8 @@
 
                     @if (fha_disciplina_terminal($disciplina->id, $turma->it_idClasse, $turma->it_idCurso) && $turma->vc_classe > 9)
                         @php
-                            $rec = fh_nota_recurso($aluno->processo, $disciplina->id);
+                                                       $rec = fh_nota_recurso_v2($aluno->processo, $disciplina->id,$turma->it_idClasse);
+
                         @endphp
 
                         <td colspan="1" class="td" style="{{ $rec >=  nota_positiva($turma->vc_classe) ? 'color:blue' : 'color:red' }}">
