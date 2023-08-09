@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('titulo')</title>
     {{-- Favicons --}}
-    <link href="{{asset('/'.$caminhoLogo')}}" rel="icon">
+    <link href="{{asset('/'.icon_escola()')}}" rel="icon">
     {{-- EndFavicons --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tell the browser to be responsive to screen width -->
@@ -98,7 +98,7 @@
                 <!-- Brand Logo -->
                 <a href="{{ url('/') }}" class="brand-link">
                     @isset($cab)
-                        <img src="{{asset($caminhoLogo)}}" alt="Logo"
+                        <img src="{{asset(icon_escola())}}" alt="Logo"
                             class=" brand-image img-circle bg-white elevation-3">
                         <span class="brand-text font-weight-light">Gestão<b> {{ $cab->vc_acronimo }}</b>
                         @else

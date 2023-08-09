@@ -71,7 +71,11 @@ function id_cabecalho_user($id_user)
 }
 function fh_cabecalho()
 {
-    return Cabecalho::find(Auth::User()->id_cabecalho);
+    if (Auth::User()) {
+        return Cabecalho::find(Auth::User()->id_cabecalho);
+    } else {
+        return Cabecalho::get()->first();
+    }
 }
 function gerarProcesso()
 {
@@ -654,6 +658,11 @@ function fh_idades_admissao_2()
 
 
 }
+function icon_escola()
+{
+// dd(fh_cabecalho());
+    return fh_cabecalho()->vc_logo;
+}
 function fh_idades_admissao()
 {
 
@@ -768,7 +777,7 @@ function fha_coordenador_comissao()
     $funcionario = fh_funcionarios()->where('funcionarios.vc_funcao', 'Chefe da Comissão Geral')->first();
     if ($funcionario) {
         return $funcionario->vc_primeiroNome . ' ' . $funcionario->vc_ultimoNome;
-    }else{
+    } else {
         return '';
     }
 }
@@ -1223,7 +1232,7 @@ function fha_media_trimestral_geral($processo, $id_disciplina, $trimestre_array,
         //     $nota_recurso = fh_nota_recurso($processo, $id_disciplina);
         //     // dd($nota_recurso );
         // }
-        $nota_recurso =  fh_nota_recurso_v2($processo, $disciplina->id,$matricula->it_idClasse);
+        $nota_recurso = fh_nota_recurso_v2($processo, $disciplina->id, $matricula->it_idClasse);
     } else {
         $nota_recurso = "0";
     }
@@ -1535,8 +1544,8 @@ function fh_nota_recurso_v2($processo, $id_disciplina, $id_classe)
     $aluno = fha_aluno_processo($processo);
     $count = fha_disciplina_terminal($id_disciplina, $id_classe, $aluno->id_curso);
     if ($count) {
- 
-       $disciplina= Disciplinas::find($id_disciplina);
+
+        $disciplina = Disciplinas::find($id_disciplina);
 
         $notaRecurso = fh_notas_recursos()->where('nota_recursos.id_aluno', $aluno->id)->where('nota_recursos.id_disciplina', $id_disciplina)->orderBy('id', 'desc')->first();
         if ($notaRecurso) {
@@ -1609,7 +1618,7 @@ function fhap_aluno_resultato_pauta($processo, $id_curso, $id_classe, $id_ano_le
     // dd( $n_negativas );
     foreach ($disciplinas as $disciplina) {
         if ($classe->vc_classe > 9) {
-            $nota_recurso = fh_nota_recurso_v2($processo, $disciplina->id,$classe->id);
+            $nota_recurso = fh_nota_recurso_v2($processo, $disciplina->id, $classe->id);
         } else {
             $nota_recurso = "0";
         }

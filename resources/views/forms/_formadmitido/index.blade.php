@@ -1,7 +1,7 @@
 <div class="panel panel-default active">
     <div class="d-flex justify-content-center">
         <a href="{{url('/')}}" class="brand-link">
-            <img src="{{asset("/$caminhoLogo")}}" alt="Logo" height="100"
+            <img src="{{asset("/icon_escola()")}}" alt="Logo" height="100"
                 class=" brand-image img-circle bg-white elevation-3">
 
             </span></a>

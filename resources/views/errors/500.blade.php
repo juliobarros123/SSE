@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>500</title>
     {{-- Favicons --}}
-    <link href="/{{$caminhoLogo}}" rel="icon">
+    <link href="/{{icon_escola()}}" rel="icon">
     {{-- EndFavicons --}}
 
     <!-- Tell the browser to be responsive to screen width -->

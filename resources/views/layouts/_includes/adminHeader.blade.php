@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('titulo')</title>
     {{-- Favicons --}}
-    <link href="{{ asset('/' . $caminhoLogo) }}" rel="icon">
+    <link href="{{ asset('/' . icon_escola()) }}" rel="icon">
     {{-- EndFavicons --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tell the browser to be responsive to screen width -->
@@ -147,44 +147,47 @@
                         </div> --}}
 
                     </li>
-                    
+
                     <li class="nav-item dropdown ">
-                       
-                        <a class="nav-link   nav-item-user d-flex align-items-center text-white " href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-                   
-                            aria-haspopup="true" aria-expanded="false">
-                            
+
+                        <a class="nav-link   nav-item-user d-flex align-items-center text-white " href="#"
+                            id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+
                             {{-- <span class="badge badge-danger badge-counter" id="qt-nova-not"></span> --}}
-                           
-                                {{ obter_iniciais(Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido) }}
-                          
+
+                            {{ obter_iniciais(Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido) }}
+
                         </a>
-                  
+
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in "
                             aria-labelledby="alertsDropdown" style="min-width: 20rem;">
                             <div class=" ">
                                 <div class="card-body text-center">
-                                  <img src="{{asset(Auth::user()->profile_photo_path)}}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                  <h5 class="my-3 text-dark"> {{ Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido }}</h5>
-                                  <p class="mb-1 text-dark">{{ Auth::user()->vc_email }}</p>
+                                    <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="avatar"
+                                        class="rounded-circle img-fluid" style="width: 150px;">
+                                    <h5 class="my-3 text-dark">
+                                        {{ Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido }}</h5>
+                                    <p class="mb-1 text-dark">{{ Auth::user()->vc_email }}</p>
 
-                                  
-                                  <p class="mb-1 text-dark">{{ Auth::user()->vc_tipoUtilizador }}</p>
-                               
-                                  <div class="d-flex justify-content-center mb-2">
-                                    <a  href="{{ route('admin.users.editar', Auth::User()->slug) }}" class="btn btn-primary bg-secondary">Edita Perfil</a>
-                                    <a type="button" class="btn btn-primary ms-1   bg-danger" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >Sair</a>
-                                  </div>
+
+                                    <p class="mb-1 text-dark">{{ Auth::user()->vc_tipoUtilizador }}</p>
+
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <a href="{{ route('admin.users.editar', Auth::User()->slug) }}"
+                                            class="btn btn-primary bg-secondary">Edita Perfil</a>
+                                        <a type="button" class="btn btn-primary ms-1   bg-danger"
+                                            href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sair</a>
+                                    </div>
                                 </div>
-                              </div>
-                              <form id="logout-form" action="{{ route('logout') }}"
-                              method="POST">
-                              @csrf
-                          </form>
-            
-            
-                          
+                            </div>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                            </form>
+
+
+
                             {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a> --}}
                         </div>
                     </li>
@@ -323,15 +326,38 @@
                     Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
 
 
+               
                 <li class="nav-item has-treeview ">
-                    <a href="{{ url('candidatos/pesquisar') }}" class="nav-link ">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
                         <p>
                             Candidatos
 
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
 
+                        
+                            <li class="nav-item">
+                                <a href="{{ url('candidatos/novo_candidato') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Cadastrar</p>
+                                </a>
+                            </li>
+                    
+                        <li class="nav-item">
+                            <a href="{{ url('candidatos/pesquisar') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lista de candidatos</p>
+                            </a>
+                        </li>
+
+
+
+
+
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview ">
                     <a href="{{ url('admin/alunos/pesquisar') }}" class="nav-link">
                         <i class="nav-icon fas fa-chalkboard"></i>
@@ -904,7 +930,7 @@
                             Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                             Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                             Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
-                            Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica' )
+                            Auth::user()->vc_tipoUtilizador == 'Sub Directoria Pedagógica')
                         <li class="nav-item">
                             <a href="{{ url('admin/atribuicoes/cadastrar') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>

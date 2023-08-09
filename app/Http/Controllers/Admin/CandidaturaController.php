@@ -91,7 +91,7 @@ class CandidaturaController extends Controller
 //        foreach (fh_candidatos()->get() as $c){
 // Candidatura::find($c->id)->update(['tokenKey'=>gerarCodigo()]);
 
-//        }
+        //        }
 
         if (session()->get('filtro_candidato')) {
             if (!$request->id_curso) {
@@ -287,7 +287,7 @@ class CandidaturaController extends Controller
             // dd($response['classes']);
             $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('idadesdecandidaturas.id', 'desc')->first();
             // $response['anoLectivo'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
-        //   dd(   $response['idadesdecandidaturas']);
+            //   dd(   $response['idadesdecandidaturas']);
             if (!$response['idadesdecandidaturas']) {
                 return redirect()->route('errors.permissao')->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
 
@@ -297,8 +297,8 @@ class CandidaturaController extends Controller
             // dd($response['provincias']);
             return view('site/candidatura', $response);
         } else {
-            $response['erro']="Erro. Por favor, cadastra o último número de processo registrado na escola.";
-            return view('errors.geral',$response);
+            $response['erro'] = "Erro. Por favor, cadastra o último número de processo registrado na escola.";
+            return view('errors.geral', $response);
             // return redirect()->back()->with('feedb', ['type' => 'error', 'sms' => 'Erro. Por favor, cadastra o último número de processo registrado na escola.']);
 
         }
@@ -404,6 +404,34 @@ class CandidaturaController extends Controller
      * @param  \App\Models\Candidatura  $candidatura
      * @return \Illuminate\Http\Response
      */
+    public function novo_candidato()
+    {
+        if (fh_processo_actual()->count()) {
+
+            //envia os cursos e classes para popular os selects
+            $response['cursos'] = fh_cursos()->get();
+            // dd(   $response['cursos']);
+            $response['classes'] = fh_classes()->get();
+            // dd($response['classes']);
+            $response['idadesdecandidaturas'] = fh_idades_admissao()->orderby('idadesdecandidaturas.id', 'desc')->first();
+            // $response['anoLectivo'] = AnoLectivo::where([['it_estado_anoLectivo', 1]])->orderby('id', 'desc')->first();
+            //   dd(   $response['idadesdecandidaturas']);
+            if (!$response['idadesdecandidaturas']) {
+                return redirect()->route('errors.permissao')->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
+
+            }
+            $response['cabecalho'] = fh_cabecalho();
+            $response['provincias'] = fh_provincias()->get();
+            // dd($response['provincias']);
+            return view('admin.candidatura.novo.index', $response);
+        } else {
+            $response['erro'] = "Erro. Por favor, cadastra o último número de processo registrado na escola.";
+            return view('errors.geral', $response);
+            // return redirect()->back()->with('feedb', ['type' => 'error', 'sms' => 'Erro. Por favor, cadastra o último número de processo registrado na escola.']);
+
+        }
+
+    }
     public function imprimirFicha($slug)
     {
         $response['candidato'] = fh_candidato_slug($slug);
@@ -430,9 +458,18 @@ class CandidaturaController extends Controller
         // dd( $response['candidato']);
         $response['cursos'] = fh_cursos()->get();
         $response['classes'] = fh_classes()->get();
-        $response['idadesdecandidaturas'] = fh_idadedeCandidatura()->where('id_ano_lectivo',  $response['candidato']->id_ano_lectivo)->get();
+
+        // $idadesdecandidaturas = fh_idades_admissao_2()
+        // ->where('id_ano_lectivo', $candidato->id_ano_lectivo)
+        // ->first();
+
+        $response['idadesdecandidaturas'] = fh_idades_admissao_2()->where('id_ano_lectivo', $response['candidato']->id_ano_lectivo)->get();
+        // dd( $response['idadesdecandidaturas']);
+        if (!$response['idadesdecandidaturas']->count()) {
+            return redirect()->route('errors.permissao')->with('feedback', ['type' => 'error', 'sms' => 'Erro. Por favor, Cadastra intervalo de idades admissível para este ano lectivo.']);
+        }
         $response['provincias'] = fh_provincias()->get();
-        // dd($response['provincias']);
+     
         return view('admin/candidatura/editar/index', $response);
         // if ($response['candidato'] = Candidatura::where([['it_estado_candidato', 1]])->find($id)):
         //     $response['cursos'] = Curso::where([['it_estado_curso', 1], ['it_estadodoCurso', 1]])->get();
@@ -485,7 +522,7 @@ class CandidaturaController extends Controller
                 'it_telefone' => $request->it_telefone ? $request->it_telefone : '000' . cod(6),
                 'vc_email' => $request->vc_email,
                 'vc_municipio' => $request->vc_municipio,
-           
+
                 'vc_residencia' => $request->vc_residencia,
                 'vc_naturalidade' => $request->vc_naturalidade,
                 'vc_provincia' => $request->vc_provincia,
@@ -605,7 +642,7 @@ class CandidaturaController extends Controller
 
     public function filtro_cadidatos(Request $request)
     {
-    
+
         $anoLectivo = $request->vc_anolectivo;
         $curso = $request->vc_curso;
         // return redirect("candidaturas/listar/$anoLectivo/$curso");

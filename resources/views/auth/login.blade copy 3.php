@@ -11,7 +11,7 @@
                 <div class="col-md-7 col-lg-5">
                     <div class="login-wrap p-4 p-md-5">
                         <div class="icon d-flex align-items-center justify-content-center">
-                            <img rel="icon" src="{{ asset($caminhoLogo) }}" style="margin:auto;height:100%" />
+                            <img rel="icon" src="{{ asset(icon_escola()) }}" style="margin:auto;height:100%" />
 
                         </div>
                         <h3 class="text-center mb-4"> <b>

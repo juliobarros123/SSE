@@ -135,7 +135,7 @@
         </script>
     @endif
 @endif
-<script>
+{{-- <script>
     $('#id_curso').change(function() {
         var curso = $(this).find("option:selected").text();
         var url = "{{ url('/') }}"
@@ -172,8 +172,50 @@
 
 
     });
-</script>
+</script> --}}
+<script>
+    $('#id_curso_sem_todas').change(function() {
+        var curso = $(this).find("option:selected").text();
+        // console.log(curso);
+        // alert("ola");
+        var url = "{{ url('/') }}"
+        url = url + '/classes_por_curso/' + curso;
 
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: url,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            async: false,
+            success: function(classes) {
+
+                console.log(classes);
+                // alert("ola");
+                $("#id_classe").empty();
+                $("#id_classe").append('<option value="">Selecciona a Classe</option>');
+
+
+                $.each(classes, function(index, classe) {
+
+                    //  console.log(classe,)
+                    $("#id_classe").append('<option value="' + classe.id + ' " >' + classe
+                        .vc_classe +
+                        'ª Classe</option>');
+
+
+                });
+
+
+
+
+            }
+        });
+
+
+    });
+</script>
 <script>
     $('#id_provincia').change(function() {
         var provincia = $(this).val();

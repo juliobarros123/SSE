@@ -28,13 +28,14 @@
             </h3> --}}
           
    
-            <div class="  mb-2  rounded  rounded-sm d-flex justify-content-center ">
-               <a href="{{url('/')}}" > <img rel="icon" src="{{ asset($caminhoLogo) }}" class="logo" /></a> 
+            <div class="    rounded  rounded-sm d-flex justify-content-center ">
+               <a href="{{url('/')}}" > <img rel="icon" src="{{ asset(icon_escola()) }}" class="logo" /></a> 
             </div>
+            <h1 class="text-center"> <strong> {{ fh_cabecalho()->vc_escola }}</strong></h1>
             <h3 class="text-center">
 
-                Candidatura
-
+                Candidatura 
+               
             </h3>
             <div class="">
 

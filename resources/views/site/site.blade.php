@@ -13,7 +13,8 @@
             error
         @endisset
     </title>
-    <link rel="icon" type="image/x-icon" href="images/logotipo/logo.png" />
+    <link href="{{ asset('/' . icon_escola()) }}" rel="icon">
+
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('css/siteInicial/styles.css') }}" rel="stylesheet" />
@@ -26,7 +27,7 @@
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
             <div class="container">
                 <a class="navbar-brand js-scroll-trigger" href="#page-top">
-                    <img src='{{ asset("$caminhoLogo") }}' class="rounded float-start" width="80">
+                    <img src='{{ asset("icon_escola()") }}' class="rounded float-start" width="80">
                     {{ $cabecalho->vc_escola }}
                 </a>
 

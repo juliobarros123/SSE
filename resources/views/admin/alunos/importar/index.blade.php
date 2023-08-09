@@ -13,6 +13,9 @@
 
     <div class="card">
         <div class="card-body">
+            <h5>Essa área é para aquelas alunos que já têm processo<br>
+
+            </h5>
             <form method="POST" class="row m-2" action="{{ route('admin.alunos.cadastrar') }}">
                 @csrf
                 @include('site.forms._formAluno.index')

@@ -4,18 +4,18 @@
         <label for="vc_primeiroNome" class="form-label">Primeiro Nome <small class="campo-obrigatorio">*</small></label>
         <input type="text" class="form-control" name="vc_primeiroNome" class="form-control" id="vc_primeiroNome"
             autocomplete="off" placeholder="Primeiro Nome"
-            value="{{ isset($candidato) ? $candidato->vc_primeiroNome : ' ' }}" required />
+            value="{{ isset($candidato) ? $candidato->vc_primeiroNome : '' }}" required />
     </div>
     <div class="form-group col-md-4">
         <label for="vc_nomedoMeio" class="form-label">Nomes do Meio</label>
         <input type="text" class="form-control" name="vc_nomedoMeio" class="form-control" id="vc_nomedoMeio"
             autocomplete="off" placeholder="Nomes do Meio"
-            value="{{ isset($candidato) ? $candidato->vc_nomedoMeio : ' ' }}" />
+            value="{{ isset($candidato) ? $candidato->vc_nomedoMeio : '' }}" />
     </div>
     <div class="form-group col-md-4">
         <label for="vc_apelido" class="form-label">Último Nome <small class="campo-obrigatorio">*</small></label>
         <input type="text" class="form-control" name="vc_apelido" id="vc_apelido" class="form-control"
-            autocomplete="off" placeholder="Ultimo Nome" value="{{ isset($candidato) ? $candidato->vc_apelido : ' ' }}"
+            autocomplete="off" placeholder="Ultimo Nome" value="{{ isset($candidato) ? $candidato->vc_apelido : '' }}"
             required />
     </div>
 
@@ -24,13 +24,13 @@
         <label for="vc_nomePai" class="form-label">Nome do Pai </label>
         <input type="text" class="form-control" name="vc_nomePai" class="form-control" id="vc_nomePai"
             autocomplete="off" placeholder="Nome do Pai"
-            value="{{ isset($candidato) ? $candidato->vc_nomePai : ' ' }}" />
+            value="{{ isset($candidato) ? $candidato->vc_nomePai : '' }}" />
     </div>
     <div class="form-group col-md-4">
         <label for="vc_nomeMae" class="form-label">Nome da Mãe </label>
         <input type="text" class="form-control" name="vc_nomeMae" class="form-control" id="vc_nomeMae"
             autocomplete="off" placeholder="Nome da Mãe"
-            value="{{ isset($candidato) ? $candidato->vc_nomeMae : ' ' }}" />
+            value="{{ isset($candidato) ? $candidato->vc_nomeMae : '' }}" />
     </div>
 
 
@@ -56,11 +56,11 @@
 
     @if (isset($candidato))
         @php
-       
+    //    dd($candidato);
             $idadesdecandidaturas = fh_idades_admissao_2()
                 ->where('id_ano_lectivo', $candidato->id_ano_lectivo)
                 ->first();
-                // dd(   $idadesdecandidaturas);
+                // dd(   fh_idades_admissao_2()->get());
         @endphp
     @else
         @php
@@ -74,7 +74,7 @@
                 <label for="dt_dataNascimento" class="form-label">Data de Nascimento <small
                         class="campo-obrigatorio">*</small></label>
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
-                    value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" max="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limiteaesquerda)); ?>"
+                    value="{{ isset($candidato) ? $candidato->dt_dataNascimento : '' }}" max="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limiteaesquerda)); ?>"
                     min="<?php echo date('Y-m-d', strtotime($idadesdecandidaturas->dt_limitemaxima)); ?>" required />
                 <span>Dos
                     {{ calcularIdade($idadesdecandidaturas->dt_limiteaesquerda) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda) }})
@@ -89,7 +89,7 @@
                 <label for="dt_dataNascimento" class="form-label">Data de Nascimento <small
                         class="campo-obrigatorio">*</small></label>
                 <input type="date" class="form-control" name="dt_dataNascimento" id="dt_dataNascimento"
-                    value="{{ isset($candidato) ? $candidato->dt_dataNascimento : ' ' }}" required />
+                    value="{{ isset($candidato) ? $candidato->dt_dataNascimento : '' }}" required />
 
                 <span>Dos
                     {{ calcularIdade($idadesdecandidaturas->dt_limiteaesquerda) }}({{ converterDataSemHora($idadesdecandidaturas->dt_limiteaesquerda) }})
@@ -124,7 +124,7 @@
     <div class="form-group col-md-4">
         <label for="vc_bi" class="form-label">B.I/Cédula</label>
         <input type="text" class="form-control" class="form-control"
-            value="{{ isset($candidato) ? $candidato->vc_bi : ' ' }}" name="vc_bi" {{-- id="vc_bi" --}}
+            value="{{ isset($candidato) ? $candidato->vc_bi : '' }}" name="vc_bi" {{-- id="vc_bi" --}}
             minlength="14" maxlength="14" min="14" max="14" placeholder="Nº do Bilhete de B.I/Cédula"
             autocomplete="off" />
     </div>
@@ -132,7 +132,7 @@
         <label for="dt_emissao" class="form-label">Data de Emissão do Bilhete de
             Identidade </label>
         <input type="date" class="form-control" class="form-control" name="dt_emissao" id="dt_emissao"
-            max="<?php echo date('Y-m-d'); ?>" value="{{ isset($candidato) ? $candidato->dt_emissao : ' ' }}" />
+            max="<?php echo date('Y-m-d'); ?>" value="{{ isset($candidato) ? $candidato->dt_emissao : '' }}" />
     </div>
 
     <div class="form-group col-md-4">
@@ -181,7 +181,7 @@
     </div>
 
     <div class="form-group col-sm-4">
-        <label for="" class="form-label">Municipio</label>
+        <label for="" class="form-label">Municipio<small class="campo-obrigatorio  ">*</small></label>
         <select class="form-control select-dinamico " name="vc_municipio" id="id_municipio" required>
             <option value="{{ isset($candidato) ? $candidato->vc_municipio : '' }}" selected>
                 {{ isset($candidato) ? $candidato->vc_municipio : 'Selecione o Municipio:' }}</option>
@@ -207,7 +207,7 @@
         <label for="id_curso" class="form-label">Curso à se Candidatar <small
                 class="campo-obrigatorio">*</small></label>
         {{-- @dump($cursos) --}}
-        <select class="form-control" name="id_curso" id="id_curso" required>
+        <select class="form-control" name="id_curso" id="id_curso_sem_todas" required>
             @isset($candidato)
                 <option value="{{ $candidato->id_curso }}">{{ $candidato->vc_nomeCurso }}</option>
             @else

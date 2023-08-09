@@ -466,6 +466,8 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
 
 
     //candidatura inicio
+    Route::get('candidatos/novo_candidato', ['as' => 'admin.candidatos.novo_candidato', 'uses' => 'Admin\CandidaturaController@novo_candidato']);
+
     Route::get('candidatos/pesquisar', ['as' => 'admin.candidatos.pesquisar', 'uses' => 'Admin\CandidaturaController@pesquisar']);
     // Route::get('candidatos/recebecandidaturas', ['as' => 'admin.candidatos.recebecandidaturas', 'uses' => 'Admin\CandidaturaController@recebecandidaturas']);
     Route::any('candidatos/recebecandidaturas', ['as' => 'admin.candidatos.recebecandidaturas', 'uses' => 'Admin\CandidaturaController@recebecandidaturas']);

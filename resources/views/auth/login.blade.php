@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('titulo', 'P.A.E')
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/auth/style.css') }}">
 
@@ -9,7 +10,8 @@
                     <div class="col-md-5 p-0">
                         <div class="login-wrap pl-3 pr-3">
                             <div class="icon d-flex align-items-center justify-content-center">
-                                <img rel="icon" src="{{ asset($caminhoLogo) }}" style="margin:auto;height:100%" />
+                                <img rel="icon" src="{{ asset(icon_escola()) }}" style="margin:auto;height:100%" />
+                                {{-- <img rel="icon" src="{{ asset(icon_escola()) }}" style="margin:auto;height:100%" /> --}}
 
                             </div>
                             <h3 class="text-center mb-4"> {{ $cab->vc_escola }} - {{ $cab->vc_acronimo }}</h3>

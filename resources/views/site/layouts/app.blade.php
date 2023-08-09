@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Administração Escolar</title>
     {{-- <link rel="stylesheet" href="{{ asset('/vendor/boostrap/bootstrap.min.css') }}"> --}}
+    <link href="{{ asset('/' . icon_escola()) }}" rel="icon">
+
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
 </head>
@@ -13,10 +15,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         @php
-            $matricula=ultimo_ano(session()->get('aluno_login')['processo']);
-           $nome= $matricula->vc_primeiroNome.' '.$matricula->vc_apelido;
+            $matricula = ultimo_ano(session()->get('aluno_login')['processo']);
+            $nome = $matricula->vc_primeiroNome . ' ' . $matricula->vc_apelido;
         @endphp
-        <a class="navbar-brand" href="{{ route('painel.alunos') }}">{{$nome}} ({{ fh_cabecalho()->vc_acronimo }}-{{$matricula->vc_classe}}ª Classe)</a>
+        <a class="navbar-brand" href="{{ route('painel.alunos') }}">{{ $nome }}
+            ({{ fh_cabecalho()->vc_acronimo }}-{{ $matricula->vc_classe }}ª Classe)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,24 +33,24 @@
                     <a class="nav-link" href="{{ route('painel.alunos.pauta') }}">Pauta</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('painel.alunos.professores')}}">Professores</a>
+                    <a class="nav-link" href="{{ route('painel.alunos.professores') }}">Professores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('painel.alunos.cartoes_pagamento')}}">Cartão de pagamento</a>
+                    <a class="nav-link" href="{{ route('painel.alunos.cartoes_pagamento') }}">Cartão de pagamento</a>
                 </li>
-           
+
                 <li class="nav-item">
-                    
+
                     <a class="nav-link text-danger" href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Sair
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
-           
-      
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                @csrf
-            </form>
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Sair
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                    </form>
                 </li>
 
             </ul>
@@ -56,13 +59,13 @@
 
     <div class="container mt-5">
         @isset($sms)
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="card-title text-danger">{{$sms}} </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="card-title text-danger">{{ $sms }} </div>
+                </div>
             </div>
-        </div>  
         @endisset
-     
+
         @yield('conteudo')
 
         <script src="{{ asset('js/aluno/jquery-3.5.1.slim.min.js') }}"></script>
@@ -71,18 +74,18 @@
         <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
         @if (session('feedback'))
-        {{-- @dump(session('feedback')); --}}
-    
-        @if (isset(session('feedback')['type']))
-            <script>
-                Swal.fire(
-                    '{{ session('feedback')['sms'] }}',
-                    '',
-                    '{{ session('feedback')['type'] }}'
-                )
-            </script>
+            {{-- @dump(session('feedback')); --}}
+
+            @if (isset(session('feedback')['type']))
+                <script>
+                    Swal.fire(
+                        '{{ session('feedback')['sms'] }}',
+                        '',
+                        '{{ session('feedback')['type'] }}'
+                    )
+                </script>
+            @endif
         @endif
-    @endif
 
         {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

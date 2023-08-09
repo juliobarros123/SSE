@@ -28,12 +28,10 @@ background-position: top left;
             {{ $cabecalho->vc_republica }} <br>{{ $cabecalho->vc_ministerio }}
             <br>{{ $cabecalho->vc_escola }}
 
-
         </h3>
 
 
     </div>
-
 
 
 
@@ -63,7 +61,7 @@ background-position: top left;
 
     <div class="curso">Curso:<span class="valor">{{ $matricula->vc_nomeCurso }}
         </span> </div>
-    <div class="box-imagem"><img src="<?php echo $matricula->vc_imagem; ?>" class="foto"> </div>
+
 
 
     <div class="visa-container ">
