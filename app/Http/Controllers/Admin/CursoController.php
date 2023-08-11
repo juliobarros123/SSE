@@ -41,9 +41,9 @@ class CursoController extends Controller
         $dados_Auth = Auth::user()->vc_primemiroNome . ' ' . Auth::user()->vc_apelido . ' Com o nivel de ' . Auth::user()->vc_tipoUtilizador . ' ';
         $this->Logger->Log('info', $dados_Auth . $mensagem);
     }
- 
 
-    
+
+
     public function index()
     {
 
@@ -72,25 +72,25 @@ class CursoController extends Controller
     {
         $storeData = $request->all();
         $storeData['id_cabecalho'] = Auth::User()->id_cabecalho;
-
-        //$cursos = Curso::where('vc_nomeCurso', '=',  $request->vc_nomeCurso)->first();
-        //if($cursos === null){
         try {
+            $curso = fh_cursos()->where('cursos.vc_nomeCurso', $request->vc_nomeCurso)->first();
+            if (!$curso):
+                $show = Curso::create($storeData);
+                $this->loggerData("Adicionou Um Curso " . $request->vc_nomeCurso);
 
-            $show = Curso::create($storeData);
-            
+                return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Curso Cadastrado com Sucesso']);
 
-            $this->loggerData("Adicionou Um Curso " . $request->vc_nomeCurso);
+            else:
+                return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Curso já existe']);
+            endif;
 
-        }
-        //}else{
-        catch (QueryException $th) {
-            return redirect()->back()->with('curso.existe', '1');
+        } catch (QueryException $th) {
+            return redirect()->back()->with('feedback', ['type' => 'error', 'sms' => 'Ocorreu um erro inesperado, verifica os dados se estão corretos']);
+
         }
 
         //}
         //$this->Logger->Log('info', 'Adicionou Um Curso');
-        return redirect('Admin/cursos/index/index')->with('status', '1');
     }
 
     /**
@@ -139,7 +139,7 @@ class CursoController extends Controller
 
         // $updateData 
         try {
-            $request=$request->except(['_token','_method']);
+            $request = $request->except(['_token', '_method']);
             // dd($request);
             Curso::where('cursos.slug', $slug)->update($request);
             $this->loggerData("Actualizou Um Curso " . $request['vc_nomeCurso']);
@@ -150,7 +150,7 @@ class CursoController extends Controller
 
         }
 
-       
+
     }
 
 
@@ -170,8 +170,8 @@ class CursoController extends Controller
     {
         try {
 
-            $response = Curso::where('slug',$id)->first();
-            Curso::where('slug',$id)->delete();
+            $response = Curso::where('slug', $id)->first();
+            Curso::where('slug', $id)->delete();
             $this->loggerData("Eliminou Um Curso " . $response->vc_nomeCurso);
             return redirect()->back()->with('feedback', ['type' => 'success', 'sms' => 'Curso eliminado com Sucesso']);
 
