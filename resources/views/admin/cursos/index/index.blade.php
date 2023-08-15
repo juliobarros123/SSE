@@ -6,7 +6,7 @@
 
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Lista de curso</h3>
+            <h3>Lista de cursos</h3>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
                 <th>ACÇÕES</th>
             </tr>
         </thead>
-        <tbody class="bg-white text-center">
+        <tbody class="bg-white ">
             @foreach ($cursos as $curso)
                 <tr>
 

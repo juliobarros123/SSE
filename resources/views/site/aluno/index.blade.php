@@ -22,10 +22,10 @@
             {{-- @dump($item) --}}
             <div class="card">
 
-                <img src="{{asset('images/300.png')}}" alt="Disciplina 1" class="card-img-top">
+                {{-- <img src="{{asset('images/300.png')}}" alt="Disciplina 1" class="card-img-top"> --}}
                 <div class="card-body">
                  
-                        <p class="card-text">Disciplinas: {{$item->vc_nome}}</p>
+                        <p class="card-text"> {{$item->vc_nome}}</p>
                       
                 </div>
             </div>

@@ -618,10 +618,7 @@ function fh_cursos()
     if (Auth::User()->vc_tipoUtilizador == 'Professor') {
         return fh_turmas_professores()->select('cursos.*')
             ->where('users.id', Auth::User()->id);
-    }
-    if (Auth::User()->desenvolvedor == 2) {
-        return Curso::orderBy('id', 'desc');
-    } else {
+    }else{
         return Curso::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
 
