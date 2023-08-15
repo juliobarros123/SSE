@@ -8189,9 +8189,9 @@ h1, h2, h3, h4, h5,
   .login-wrap h3 {
     font-weight: 300; }
   .login-wrap .icon {
-    width: 80px;
-    height: 80px;
-    background: #1089ff;
+    width: 197px;
+    height: 67px;
+    /* background: #1089ff; */
     border-radius: 50%;
     font-size: 30px;
     margin: 0 auto;

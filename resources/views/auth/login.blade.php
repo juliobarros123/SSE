@@ -8,9 +8,12 @@
             <div class="container p-2">
                 <div class="row justify-content-center">
                     <div class="col-md-5 p-0">
-                        <div class="login-wrap pl-3 pr-3">
+                        <div class="login-wrap pl-3 pr-3 pt-3">
                             <div class="icon d-flex align-items-center justify-content-center">
-                                <img rel="icon" src="{{ asset(icon_escola()) }}" style="margin:auto;height:100%" />
+                                <img rel="icon" src="{{ asset(icon_escola()) }}" style="    margin: auto;
+                                height: 73%;
+                                width: 107px;
+                            " />
                                 {{-- <img rel="icon" src="{{ asset(icon_escola()) }}" style="margin:auto;height:100%" /> --}}
 
                             </div>
