@@ -49,7 +49,7 @@
                 @php
                     
                     $cont = $pagamentos->where('mes', $mes)->count();
-                    
+             
                 @endphp
                 <tr>
                     <td style="text-align: center">

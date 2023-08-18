@@ -42,6 +42,30 @@
     
     
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="mes" class="form-label">Meses:</label>
+                        <select name="mes" id="mes" class="form-control">
+                            <option value="Todos">Todos</option>
+                            @foreach (fh_meses() as $mes)
+                                <option value="{{ $mes }}">
+                                    {{ $mes }}
+                                </option>
+                            @endforeach
+                        </select>
+    
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="id_classe" class="form-label">Classe:</label>
+                        <select name="id_classe" id="id_classe" class="form-control">
+                            <option value="Todas">Todas</option>
+                            @foreach (fh_classes()->get() as $classe)
+                                <option value="{{ $classe->id }}">
+                                    {{ $classe->vc_classe }}ª classe
+                                </option>
+                            @endforeach
+                        </select>
+    
+                    </div>
                  
     
 

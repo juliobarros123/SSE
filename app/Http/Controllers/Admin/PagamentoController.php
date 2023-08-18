@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classe;
 use App\Models\Pagamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,7 @@ class PagamentoController extends Controller
     public function lista(Request $request)
     {
         // dd($request);
+        $response['classe']="Todas";
         if (session()->get('pagamentos_lista')) {
 
             if (!$request->id_ano_lectivo) {
@@ -47,12 +49,18 @@ class PagamentoController extends Controller
                 $pagamentos_lista = session()->get('pagamentos_lista');
                 $request->mes = $pagamentos_lista['mes'];
             }
+            if (!$request->id_classe) {
+                $propinas_aluno_relatorio = session()->get('propinas_aluno_relatorio');
+                $request->id_classe = $propinas_aluno_relatorio['id_classe'];
+            }
             // dd($request->ciclo);
 
         }
         $pagamentos_lista = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
-            'mes' => $request->mes
+            'mes' => $request->mes,
+            'id_classe' => $request->id_classe
+
         ];
         storeSession('pagamentos_lista', $pagamentos_lista);
         $pagamentos = fh_pagamentos();
@@ -68,6 +76,15 @@ class PagamentoController extends Controller
             // $mes = fha_obterNumeroMes($request->mes);
             // dd($mes);
             $pagamentos = $pagamentos->where('pagamentos.mes', $request->mes);
+        }
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            // dd(  $matriculas->get(),$request->id_curso);
+            // $id_classe = fha_obterNumeroid_classe($request->id_classe);
+            // dd($id_classe);
+
+            $pagamentos = $pagamentos->where('tipo_pagamentos.id_classe', $request->id_classe);
+
+            $response['classe'] = Classe::find($request->id_classe)->vc_classe;
         }
         $pagamentos = $pagamentos->get();
         // dd( $pagamentos);

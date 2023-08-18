@@ -5,7 +5,7 @@
 @section('conteudo')
     <div class="card mt-3">
         <div class="card-body">
-            <h3>Lista de Pagamentos do mês de <strong> {{$mes}}</strong></h3>
+            <h3>Lista de Pagamentos do mês de <strong> {{$mes}}</strong> para {{$classe}}.ª</h3>
         </div>
     </div>
 

@@ -29,11 +29,11 @@
                     <select name="tipo" class="form-control select-dinamico " required>
                         <option value="" selected disabled>Selecciona o Tipo de Pagamento</option>
                         <option value="Mensalidades">Mensalidades</option>
-                        <option value="Taxa de Matrícula">Taxa de Matrícula</option>
+                        {{-- <option value="Taxa de Matrícula">Taxa de Matrícula</option>
                         <option value="Material Didático">Material Didático</option>
                         <option value="Uniforme Escolar">Uniforme Escolar</option>
                         <option value="Taxa de Transporte">Taxa de Transporte</option>
-                        <option value="Taxa de Atividades Extracurriculares">Taxa de Atividades Extracurriculares</option>
+                        <option value="Taxa de Atividades Extracurriculares">Taxa de Atividades Extracurriculares</option> --}}
                     </select>
                 </div>
 

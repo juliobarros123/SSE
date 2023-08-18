@@ -101,12 +101,13 @@
                                     ]) }}"
                                     class="text-white btn btn-dark ">Fatura</a>
                             @else
+
                                 <a href="{{ route('pagamentos.pagar_mensalidade', [
                                     'slug_tipo_pagamento' => $tipo_pagamento->slug,
                                     'processo' => $matricula->processo,
                                     'slug_ano_lectivo' => fh_anos_lectivos()->where('anoslectivos.id', $matricula->it_idAnoLectivo)->first()->slug,
                                     'mes' => $mes_extenso,
-                                    'valor_final'=>  $multa+$tipo_pagamento->valor
+                                    'valor_final'=>  $multa
                                 ]) }}"
                                     type="submit" class="text-white btn btn-success mb-1">Pagar</a>
                             @endif
