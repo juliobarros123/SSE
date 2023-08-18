@@ -81,7 +81,7 @@ class Funcionario extends Controller
                 $imagem->move($dir, $nomeImagem);
                 $dados["vc_foto"] = "images/funcionarios" . "/" . $nomeImagem;
             } else {
-                $dados["vc_foto"] = "images/funcionarios" . "/" . "avatar.png";
+                $dados["vc_foto"] = "images/funcionarios" . "/" . "modelo.png";
             }
             $dados["id_cabecalho"] = Auth::User()->id_cabecalho;
             ModelsFuncionario::create($dados);

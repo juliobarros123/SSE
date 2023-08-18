@@ -11,14 +11,14 @@
 
     @if (Auth::user()->vc_tipoUtilizador != 'Visitante')
         <div class="d-flex justify-content-end mb-3">
-            <a class="btn btn-dark" href="{{ url('/admin/atribuicoes/cadastrar') }}">
-                <strong class="text-light">Atribuir Turma</strong>
-            </a>
 
             @if (Auth::user()->vc_tipoUtilizador == 'Administrador' ||
                     Auth::user()->vc_tipoUtilizador == 'Director Geral' ||
                     Auth::user()->vc_tipoUtilizador == 'Coordenação Pedagógica' ||
                     Auth::user()->vc_tipoUtilizador == 'Preparador')
+                <a class="btn btn-dark" href="{{ url('/admin/atribuicoes/cadastrar') }}">
+                    <strong class="text-light">Atribuir Turma</strong>
+                </a>
             @endif
         </div>
     @endif

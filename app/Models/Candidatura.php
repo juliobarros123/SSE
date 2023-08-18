@@ -60,7 +60,7 @@ class Candidatura extends Model
         'dt_emissao',
         'vc_localEmissao',
         'vc_EscolaAnterior',
-        'ya_anoConclusao', 
+        'ya_anoConclusao',
         'vc_vezesdCandidatura',
         'it_estado_candidato',
         'tokenKey',
@@ -81,7 +81,8 @@ class Candidatura extends Model
         'QUIM_N',
         'estado_de_pagamento',
         'media',
-        'state'
+        'state',
+        'tipo_candidato'
     ];
 
 

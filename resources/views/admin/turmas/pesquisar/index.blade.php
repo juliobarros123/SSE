@@ -15,7 +15,7 @@
         <div class="card-body">
             <form action="{{ route('admin.turmas.ver') }}" class="row" method="POST">
                 @csrf
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="vc_anolectivo" class="form-label">Ano Lectivo:</label>
 
 {{-- 
@@ -42,13 +42,25 @@
 
 
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="id_curso" class="form-label">Curso:</label>
                     <select name="id_curso" id="id_curso" class="form-control">
                         <option value="Todos" >Todos</option>
                         @foreach ($cursos as $curso)
                             <option value="{{ $curso->id }}">
                                 {{ $curso->vc_nomeCurso }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="id_classe" class="form-label">Classe:</label>
+                    <select name="id_classe" id="id_classe" class="form-control" required>
+                        <option value="Todas" >Todas</option>
+                        @foreach (fh_classes()->get() as $classe)
+                            <option value="{{ $classe->id }}">
+                                {{ $classe->vc_classe }}ª classe
                             </option>
                         @endforeach
                     </select>

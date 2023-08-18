@@ -233,9 +233,6 @@ class AlunnoController extends Controller
             $alunos = $alunos->where('candidatos.id_curso', $request->id_curso);
         }
         if ($request->id_classe != 'Todas' && $request->id_classe) {
-            // dd($candidados->get(),$request->id_classe);
-
-
             $alunos = $alunos->where('candidatos.id_classe', $request->id_classe);
         }
         $data = [

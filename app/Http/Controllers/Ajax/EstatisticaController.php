@@ -44,7 +44,7 @@ class EstatisticaController extends Controller
         $candidatos = array();
         ;
         foreach (fh_anos_lectivos()->get() as $ano_lectivo) {
-            $cont_candidatos = fh_candidatos()->where('candidatos.id_ano_lectivo', $ano_lectivo->id)->count();
+            $cont_candidatos = fh_candidatos()->where('candidatos.tipo_candidato', 'Comum')->where('candidatos.id_ano_lectivo', $ano_lectivo->id)->count();
             array_push($candidatos, $cont_candidatos);
             array_push($anos_lectivos, "$ano_lectivo->ya_inicio/$ano_lectivo->ya_fim");
         }

@@ -62,49 +62,49 @@ class TurmaController extends Controller
     }
 
 
-public function imprimir_crendencias(Estudante $estudantes, $slug)
-{
-    $turma_alunos = fha_turma_alunos($slug);
-    //    dd($turma_alunos);
+    public function imprimir_crendencias(Estudante $estudantes, $slug)
+    {
+        $turma_alunos = fha_turma_alunos($slug);
+        //    dd($turma_alunos);
 
 
-    //Metodo que gera as listas da turmas
-    $data['turma'] = fh_turmas_slug($slug)->first();
-    // dd(  $data['turma']);
-    $data['cabecalho'] = fh_cabecalho();
-    $data['turma_alunos'] = $turma_alunos;
-    // dd( $data['turma_alunos']);
-    // dd( $data['cabecalho']);
-    // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
-    $data['css'] = file_get_contents('css/lista/style-2.css');
-    // Dados para a tabela
+        //Metodo que gera as listas da turmas
+        $data['turma'] = fh_turmas_slug($slug)->first();
+        // dd(  $data['turma']);
+        $data['cabecalho'] = fh_cabecalho();
+        $data['turma_alunos'] = $turma_alunos;
+        // dd( $data['turma_alunos']);
+        // dd( $data['cabecalho']);
+        // /*   $data['bootstrap'] = file_get_contents('css/listas/bootstrap.min.css');
+        $data['css'] = file_get_contents('css/lista/style-2.css');
+        // Dados para a tabela
 
-    // Carregar a view
+        // Carregar a view
 
 
-    // Parâmetros da view
+        // Parâmetros da view
 
-    $mpdf = new \Mpdf\Mpdf([
-        'mode' => 'utf-8',
-        'margin_top' => 5,
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'margin_top' => 5,
 
-    ]);
+        ]);
 
-    $mpdf->SetFont("arial");
-    $mpdf->setHeader();
-    $mpdf->defaultfooterline = 0;
+        $mpdf->SetFont("arial");
+        $mpdf->setHeader();
+        $mpdf->defaultfooterline = 0;
 
-    $mpdf->setFooter('{PAGENO}');
+        $mpdf->setFooter('{PAGENO}');
 
-    $this->loggerData("Imprimiu Lista de credências da Turma " . $data['turma']->vc_nomedaTurma);
+        $this->loggerData("Imprimiu Lista de credências da Turma " . $data['turma']->vc_nomedaTurma);
 
-    $html = view("admin/pdfs/listas/alunos-credencias/index", $data);
-    // return  $html;
-    $mpdf->writeHTML($html);
+        $html = view("admin/pdfs/listas/alunos-credencias/index", $data);
+        // return  $html;
+        $mpdf->writeHTML($html);
 
-    $mpdf->Output("Lista-de-credências-".$data['turma']->vc_nomeTurma.".pdf", "I");
+        $mpdf->Output("Lista-de-credências-" . $data['turma']->vc_nomeTurma . ".pdf", "I");
 
-}
+    }
 
     public function turmas()
     {
@@ -154,6 +154,10 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
                 $filtro_turma = session()->get('filtro_turma');
                 $request->id_ano_lectivo = $filtro_turma['id_ano_lectivo'];
             }
+            if (!$request->id_classe) {
+                $filtro_turma = session()->get('filtro_turma');
+                $request->id_classe = $filtro_turma['id_classe'];
+            }
         }
         $turmas = fh_turmas_2();
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
@@ -165,12 +169,17 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
             // dd(  $turmas->get(),$request->id_curso);
             $turmas = $turmas->where('turmas.it_idCurso', $request->id_curso);
         }
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            $turmas = $turmas->where('turmas.it_idClasse', $request->id_classe);
+        }
         $response['turmas'] = $turmas->get();
         $anolectivo = fh_anos_lectivos()->where('anoslectivos.id', $request->id_ano_lectivo)->first();
         // $anolectivo = fha_ano_lectivo_publicado();
         $data = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe
+
         ];
         storeSession('filtro_turma', $data);
         //    dd( $response['anolectivo']);
@@ -190,9 +199,9 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
         $dados['cursos'] = fh_cursos()->get();
         $dados['ano_letivos'] = fh_anos_lectivos()->get();
 
-        $dados['view_turma']=1;
-      
-     
+        $dados['view_turma'] = 1;
+
+
         return view('admin.turmas.cadastrar.index', $dados);
     }
 
@@ -258,7 +267,7 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
             $dados['cursos'] = fh_cursos()->get();
             $dados['ano_letivos'] = fh_anos_lectivos()->get();
 
-            $dados['view_turma']=1;
+            $dados['view_turma'] = 1;
 
             return view('admin.turmas.editar.index', $dados);
         else:
@@ -331,7 +340,7 @@ public function imprimir_crendencias(Estudante $estudantes, $slug)
         // return  $html;
         $mpdf->writeHTML($html);
 
-        $mpdf->Output("Lista-de-alunos-".$data['turma']->vc_nomeTurma.".pdf", "I");
+        $mpdf->Output("Lista-de-alunos-" . $data['turma']->vc_nomeTurma . ".pdf", "I");
 
 
     }

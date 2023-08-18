@@ -53,14 +53,14 @@ class TurmaUserController extends Controller
     public function professores($slug)
     {
 
-        $data['professores'] = fh_turmas_professores()->where('turmas.slug',$slug)->get();
-//  dd($data['professores']);
+        $data['professores'] = fh_turmas_professores()->where('turmas.slug', $slug)->get();
+        //  dd($data['professores']);
         // dd($data);
         $data['turma'] = fh_turmas_slug($slug)->first();
         // dd( $data['turma']);
-        $data['disciplinas'] =  fha_turmas_disciplinas_dcc($data['turma']->id);
-     
-// dd($data['disciplinas']);
+        $data['disciplinas'] = fha_turmas_disciplinas_dcc($data['turma']->id);
+
+        // dd($data['disciplinas']);
         $data['cabecalho'] = fh_cabecalho();
         $data["css"] = file_get_contents('css/lista/style-2.css');
 
@@ -72,7 +72,7 @@ class TurmaUserController extends Controller
         $this->Logger->Log('info', 'Gerou lista de professores');
         $html = view("admin/pdfs/turma-professor/index", $data);
         $mpdf->writeHTML($html);
-        $mpdf->Output("Lista de professores-".$data['turma']->vc_nomedaTurma."-".$data['turma']->vc_nomeCurso.".pdf", "I");
+        $mpdf->Output("Lista de professores-" . $data['turma']->vc_nomedaTurma . "-" . $data['turma']->vc_nomeCurso . ".pdf", "I");
     }
 
 
@@ -94,6 +94,10 @@ class TurmaUserController extends Controller
                 $filtro_turma_user = session()->get('filtro_turma_user');
                 $request->id_ano_lectivo = $filtro_turma_user['id_ano_lectivo'];
             }
+            if (!$request->id_classe) {
+                $filtro_turma_user = session()->get('filtro_turma_user');
+                $request->id_classe = $filtro_turma_user['id_classe'];
+            }
         }
         if ($request->id_ano_lectivo != 'Todos' && $request->id_ano_lectivo) {
 
@@ -104,9 +108,14 @@ class TurmaUserController extends Controller
             // dd(  $atribuicoes->get(),$request->id_curso);
             $atribuicoes = $atribuicoes->where('turmas.it_idCurso', $request->id_curso);
         }
+        if ($request->id_classe != 'Todas' && $request->id_classe) {
+            $atribuicoes = $atribuicoes->where('turmas.it_idClasse', $request->id_classe);
+        }
+
         $data = [
             'id_ano_lectivo' => $request->id_ano_lectivo,
             'id_curso' => $request->id_curso,
+            'id_classe' => $request->id_classe
         ];
         storeSession('filtro_turma_user', $data);
         $response['atribuicoes'] = $atribuicoes->get();
