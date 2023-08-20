@@ -171,6 +171,7 @@ class Funcionario extends Controller
 
     public function cartao_imprimir($slug)
     {
+        // dd(''.fha_fundo('Funcionario')?fha_fundo('Funcionario'):'images/cartao/funcionario/cartao.jpg');
         $funcionario = fh_funcionarios()->where('funcionarios.slug', $slug)->first();
         // dd($funcionario);
         if ($funcionario):

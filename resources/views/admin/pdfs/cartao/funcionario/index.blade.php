@@ -1,5 +1,3 @@
-        
-        
         <!DOCTYPE html>
         <html lang="pt-pt">
 
@@ -16,7 +14,8 @@
 
 
         <body
-            style="background-image: url('images/cartao/funcionario/cartao.jpg');;background-position: top left;
+            style="background-image: url(<?php echo fha_fundo('Funcionario')?fha_fundo('Funcionario'):'images/cartao/funcionario/cartao.jpg';?>);
+            background-position: top left;
         background-repeat: no-repeat;
         background-image-resize: 1;
         background-image-resolution: from-image;">

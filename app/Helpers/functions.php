@@ -11,6 +11,7 @@ use App\Models\Candidatura;
 use App\Models\Classe;
 use App\Models\DireitorTurma;
 use App\Models\Disciplinas;
+use App\Models\FundoCartao;
 use App\Models\IdadedeCandidatura;
 use App\Models\InfoCerficado;
 use App\Models\Municipio;
@@ -520,6 +521,27 @@ function fh_componentes()
         ->select('cursos.*', 'classes.*', 'componentes.*');
 
 }
+function fh_fundos_cartoes()
+{
+    return FundoCartao::where('fundo_cartaos.id_cabecalho', Auth::User()->id_cabecalho)
+
+        ->select('fundo_cartaos.*')->orderBy('fundo_cartaos.id', 'desc');
+
+}
+function fha_fundo($entidade)
+{
+    
+        $fundo = fh_fundos_cartoes()->
+            where('fundo_cartaos.entidade', $entidade)->first();
+    if ($fundo) {
+        return $fundo->fundo;
+    } else {
+        return null;
+
+    }
+
+
+}
 
 function fh_componentes_disciplinas()
 {
@@ -618,7 +640,7 @@ function fh_cursos()
     if (Auth::User()->vc_tipoUtilizador == 'Professor') {
         return fh_turmas_professores()->select('cursos.*')
             ->where('users.id', Auth::User()->id);
-    }else{
+    } else {
         return Curso::orderBy('id', 'desc')->where('id_cabecalho', Auth::User()->id_cabecalho);
     }
 
@@ -657,7 +679,7 @@ function fh_idades_admissao_2()
 }
 function icon_escola()
 {
-// dd(fh_cabecalho());
+    // dd(fh_cabecalho());
     return fh_cabecalho()->vc_logo;
 }
 function fh_idades_admissao()
@@ -2263,6 +2285,52 @@ function upload_img($request, $input, $caminho)
 function ola()
 {
     return "ola tudo bem";
+}
+function upload_img_sem_storage($request, $input, $caminho)
+{
+
+
+    if (isset($request[$input]) && $request[$input]->isValid()) {
+
+        // Define um aleatório para o arquivo baseado no timestamps atual
+        $name = uniqid(date('HisYmd'));
+
+        // Recupera a extensão do arquivo
+        $extension = $request[$input]->extension();
+
+        // Define finalmente o nome
+        $nameFile = "{$name}.{$extension}";
+
+
+        // Faz o upload:
+        // $upload = $request[$input]->storeAs($caminho, $nameFile);
+        $requestImage = $request[$input];
+        //    dd($requestImage);
+        $upload = $requestImage->move(public_path($caminho), $nameFile);
+
+        //    dd($upload,"O",$nameFile);
+
+        //            $upload = substr($upload, 7, strlen($upload));
+        // Se tiver funcionado o arquivo foi armazenado em storage/app/public/categories/nomedinamicoarquivo.extensao
+
+        // Verifica se NÃO deu certo o upload ( Redireciona de volta )
+
+        if (!$upload) {
+
+            return -1;
+        } else {
+            return "$caminho/$nameFile";
+            //         $size= getimagesize('storage/'.$upload);
+
+            //  return ['caminho'=>$upload,'altura'=>$size[0],'largura'=>$size[1],'bits'=>$size["bits"],'mime'=>$size["mime"]];
+
+        }
+    } else {
+        return '';
+        // $size= getimagesize('storage/timeline/capa/capa.jpg');
+        // return ['caminho'=>'timeline/capa/capa.jpg','altura'=>$size[0],'largura'=>$size[1],'bits'=>$size["bits"],'mime'=>$size["mime"]];
+
+    }
 }
 function deixouCadeiraDesteAno($cadeiras, $detalhes_turma)
 {

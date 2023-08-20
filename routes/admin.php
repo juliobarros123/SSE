@@ -1134,6 +1134,14 @@ Route::middleware(['auth:sanctum', 'restrictCandidatoAccess'])->group(function (
             Route::put('/actualizar/{slug}', ['as' => 'admin.documentos.componentes-disciplinas.actualizar', 'uses' => 'Admin\ComponenteDisciplinaController@actualizar'])->middleware('access.controll.administrador');
             Route::get('/editar/{slug}', ['as' => 'admin.documentos.componentes-disciplinas.editar', 'uses' => 'Admin\ComponenteDisciplinaController@editar'])->middleware('access.controll.administrador');
         });
+        Route::group(['prefix' => 'fundos_cartoes/'], function () {
+            Route::post('/cadastrar', ['as' => 'admin.fundos_cartoes.cadastrar', 'uses' => 'Admin\FundoCartaoController@cadastrar']);
+            Route::get('/criar', ['as' => 'admin.fundos_cartoes.criar', 'uses' => 'Admin\FundoCartaoController@criar']);
+            Route::get('', ['as' => 'admin.fundos_cartoes', 'uses' => 'Admin\FundoCartaoController@index']);
+            Route::get('/eliminar/{slug}', ['as' => 'admin.fundos_cartoes.eliminar', 'uses' => 'Admin\FundoCartaoController@eliminar'])->middleware('access.controll.administrador');
+            Route::put('/actualizar/{slug}', ['as' => 'admin.fundos_cartoes.actualizar', 'uses' => 'Admin\FundoCartaoController@actualizar'])->middleware('access.controll.administrador');
+            Route::get('/editar/{slug}', ['as' => 'admin.fundos_cartoes.editar', 'uses' => 'Admin\FundoCartaoController@editar'])->middleware('access.controll.administrador');
+        });
         Route::group(['prefix' => 'infos_certificado'], function () {
             Route::get('/criar', ['as' => 'admin.documentos.infos_certificado.criar', 'uses' => 'Admin\InfoCerficadoController@criar']);
             Route::post('/cadastrar', ['as' => 'admin.documentos.infos_certificado.cadastrar', 'uses' => 'Admin\InfoCerficadoController@cadastrar']);

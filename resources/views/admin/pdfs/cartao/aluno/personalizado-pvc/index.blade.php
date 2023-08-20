@@ -12,7 +12,7 @@
 </head>
 
 <body
-    style="background-image: url('images/cartao/aluno/personalizado-pvc/cartao-personalizado.jpg');
+    style="background-image: url(<?php echo fha_fundo('Aluno')?fha_fundo('Aluno'):'images/cartao/aluno/personalizado-pvc/cartao-personalizado.jpg';?>);
 background-position: top left;
              background-repeat: no-repeat;
              background-image-resize: 2;
